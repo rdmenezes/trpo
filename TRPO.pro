@@ -11,8 +11,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    utoolbarview.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    utoolbarview.h
 
 FORMS    += mainwindow.ui
+
+
