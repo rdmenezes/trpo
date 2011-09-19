@@ -2,13 +2,16 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QKeyEvent>
+#include <QPropertyAnimation>
+
+#include "utoolbarview.h"
 
 namespace Ui {
     class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -20,6 +23,12 @@ protected:
 
 private:
     Ui::MainWindow *ui;
+
+    UToolbarView *toolbar;
+
+    void showHelp();
+    void showStartupHint();
+    void showToolbar();
 };
 
 #endif // MAINWINDOW_H
