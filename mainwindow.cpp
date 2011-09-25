@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     ui->mainToolBar->setHidden(true);
-
+    this->setWindowTitle("IDEF0 Diagram Builder");
 
     toolbar = new UToolbarView(this);
 
