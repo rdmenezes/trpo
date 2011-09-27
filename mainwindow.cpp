@@ -11,6 +11,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     toolbar = new UToolbarView(this);
 
+
+    boxes = new QVector<UBox *>();
+    arrows = new QVector<UArrow *>();
+
+
     QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(this);
     effect->setOpacity(0.3);
     ui->centralWidget->setGraphicsEffect(effect);
@@ -43,6 +48,19 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     }
 }
 
+void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
+
+    if (event->button() == Qt::LeftButton) {
+        if (toolbar->currentTool() == UToolBox) {
+
+            QPoint point = event->pos();
+            UBox *box = new UBox(this, point);
+
+            boxes->append(box);
+        }
+    }
+}
+
 void MainWindow::showStartupHint() {
 
 }
@@ -54,5 +72,7 @@ void MainWindow::showHelp() {
 }
 
 void MainWindow::showToolbar() {
+
+    toolbar->raise();
     toolbar->setHidden(!toolbar->isHidden());
 }

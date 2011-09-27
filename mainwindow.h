@@ -3,11 +3,16 @@
 
 #include <QMainWindow>
 #include <QKeyEvent>
+#include <QMouseEvent>
 #include <QPropertyAnimation>
+
+#include <QVector>
 
 #include <QGraphicsOpacityEffect>
 
 #include "utoolbarview.h"
+#include "ubox.h"
+#include "uarrow.h"
 
 namespace Ui {
     class MainWindow;
@@ -23,12 +28,16 @@ public:
 protected:
     void changeEvent(QEvent *e);
 
+    void keyPressEvent(QKeyEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
 private:
     Ui::MainWindow *ui;
 
     UToolbarView *toolbar;
 
-    void keyPressEvent(QKeyEvent *event);
+    QVector<UBox *> *boxes;
+    QVector<UArrow *> *arrows;
 
     void showHelp();
     void showStartupHint();
