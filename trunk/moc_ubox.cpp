@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'ubox.h'
 **
-** Created: Tue Sep 27 21:35:45 2011
+** Created: Tue Sep 27 23:16:25 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!

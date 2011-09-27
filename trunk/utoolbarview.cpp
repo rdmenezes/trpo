@@ -3,11 +3,11 @@
 UToolbarView::UToolbarView(QWidget *parent) :
     QWidget(parent) {
 
-    superView = parent;
+    this->superView = parent;
 
     this->setHidden(true);
 
-    int itemsCount = 3;
+    int itemsCount = 4;
     int height = 128;
     int width = itemsCount * height;
 
@@ -19,6 +19,8 @@ UToolbarView::UToolbarView(QWidget *parent) :
     this->setGeometry(frame);
 
     this->setItems();
+
+    this->tool = UToolSelect;
 }
 
 void UToolbarView::paintEvent(QPaintEvent *event) {
@@ -34,5 +36,31 @@ void UToolbarView::paintEvent(QPaintEvent *event) {
 }
 
 void UToolbarView::setItems() {
+    QPushButton *hand = new QPushButton(QString("Hand"), this);
+    hand->setGeometry(4, 4, 120, 120);
 
+    QPushButton *select = new QPushButton(QString("Select"), this);
+    select->setGeometry(4 + 128, 4, 120, 120);
+
+    QPushButton *box = new QPushButton(QString("Box"), this);
+    box->setGeometry(4 + 128 * 2, 4, 120, 120);
+
+    QPushButton *arrow = new QPushButton(QString("Arrow"), this);
+    arrow->setGeometry(4 + 128 * 3, 4, 120, 120);
+
+    connect(box, SIGNAL(clicked()), this, SLOT(selectTool()));
+}
+
+UTool UToolbarView::currentTool() {
+    return this->tool;
+}
+
+void UToolbarView::selectTool() {
+
+    if (this->tool != UToolBox) {
+        this->tool = UToolBox;
+    }
+    else {
+        this->tool = UToolSelect;
+    }
 }
