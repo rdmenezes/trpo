@@ -6,26 +6,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>306</width>
-    <height>300</height>
+    <width>386</width>
+    <height>289</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Help</string>
   </property>
-  <widget class="QTextEdit" name="helpView">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>291</width>
-     <height>281</height>
-    </rect>
-   </property>
-   <property name="readOnly">
-    <bool>true</bool>
-   </property>
-  </widget>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QTextEdit" name="helpView">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>
