@@ -38,7 +38,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_F1) {
          showHelp();
     }
-    else if (event->key() == 16777248) {
+    else if (event->key() == Qt::Key_Shift) {
         showToolbar();
     }
 }
