@@ -35,8 +35,8 @@ void MainWindow::changeEvent(QEvent *e) {
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
     printf("%d\n", event->key());
-    if (event->key() == 16777264) {
-        // showHelp();
+    if (event->key() == Qt::Key_F1) {
+         showHelp();
     }
     else if (event->key() == 16777248) {
         showToolbar();
@@ -47,8 +47,10 @@ void MainWindow::showStartupHint() {
 
 }
 
+#include "helpwindow.h"
 void MainWindow::showHelp() {
-
+   HelpWindow a;
+   a.exec();
 }
 
 void MainWindow::showToolbar() {
