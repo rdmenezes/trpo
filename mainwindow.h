@@ -5,6 +5,8 @@
 #include <QKeyEvent>
 #include <QPropertyAnimation>
 
+#include <QGraphicsOpacityEffect>
+
 #include "utoolbarview.h"
 
 namespace Ui {
@@ -20,11 +22,13 @@ public:
 
 protected:
     void changeEvent(QEvent *e);
-    void keyPressEvent(QKeyEvent *event);
+
 private:
     Ui::MainWindow *ui;
 
     UToolbarView *toolbar;
+
+    void keyPressEvent(QKeyEvent *event);
 
     void showHelp();
     void showStartupHint();

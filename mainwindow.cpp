@@ -11,6 +11,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     toolbar = new UToolbarView(this);
 
+    QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(this);
+    effect->setOpacity(0.3);
+    ui->centralWidget->setGraphicsEffect(effect);
+
     showStartupHint();
 }
 
@@ -31,11 +35,11 @@ void MainWindow::changeEvent(QEvent *e) {
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
     printf("%d\n", event->key());
-    if (event->key() == Qt::Key_F1) {
-        showHelp();
+    if (event->key() == 16777264) {
+        // showHelp();
     }
     else if (event->key() == 16777248) {
-        // showToolbar();
+        showToolbar();
     }
 }
 
@@ -43,12 +47,10 @@ void MainWindow::showStartupHint() {
 
 }
 
-#include "helpwindow.h"
 void MainWindow::showHelp() {
-   HelpWindow * a=new HelpWindow();
-   a->exec();
+
 }
 
 void MainWindow::showToolbar() {
-
+    toolbar->setHidden(!toolbar->isHidden());
 }
