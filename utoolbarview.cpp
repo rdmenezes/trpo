@@ -7,7 +7,7 @@ UToolbarView::UToolbarView(QWidget *parent) :
 
     this->setHidden(true);
 
-    int itemsCount = 4;
+    int itemsCount = 5;
     int height = 128;
     int width = itemsCount * height;
 
@@ -48,7 +48,14 @@ void UToolbarView::setItems() {
     QPushButton *arrow = new QPushButton(QString("Arrow"), this);
     arrow->setGeometry(4 + 128 * 3, 4, 120, 120);
 
+    QPushButton *eraser = new QPushButton(QString("Eraser"), this);
+    eraser->setGeometry(4 + 128 * 4, 4, 120, 120);
+
+    connect(hand, SIGNAL(clicked()), this, SLOT(selectTool()));
+    connect(select, SIGNAL(clicked()), this, SLOT(selectTool()));
     connect(box, SIGNAL(clicked()), this, SLOT(selectTool()));
+    connect(arrow, SIGNAL(clicked()), this, SLOT(selectTool()));
+    connect(eraser, SIGNAL(clicked()), this, SLOT(selectTool()));
 }
 
 UTool UToolbarView::currentTool() {
@@ -61,6 +68,6 @@ void UToolbarView::selectTool() {
         this->tool = UToolBox;
     }
     else {
-        this->tool = UToolSelect;
+        this->tool = UToolEraser;
     }
 }

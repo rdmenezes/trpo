@@ -20,3 +20,7 @@ HEADERS += mainwindow.h \
     helpwindow.h
 FORMS += mainwindow.ui \
     helpwindow.ui
+
+
+#define YES (unsigned char)1
+#define NO (unsigned char)0

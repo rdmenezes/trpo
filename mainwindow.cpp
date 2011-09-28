@@ -58,6 +58,9 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
 
             boxes->append(box);
         }
+        else if (toolbar->currentTool() == UToolEraser) {
+
+        }
     }
 }
 
@@ -65,7 +68,6 @@ void MainWindow::showStartupHint() {
 
 }
 
-#include "helpwindow.h"
 void MainWindow::showHelp() {
    HelpWindow a;
    a.exec();
@@ -75,4 +77,12 @@ void MainWindow::showToolbar() {
 
     toolbar->raise();
     toolbar->setHidden(!toolbar->isHidden());
+}
+
+
+void MainWindow::elementDidClicked(QWidget *element) {
+    if (toolbar->currentTool() == UToolEraser) {
+        UBox *box = (UBox *)element;
+        box->removeBox();
+    }
 }
