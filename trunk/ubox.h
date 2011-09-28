@@ -20,15 +20,24 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event);
-    void mouseDoubleClickEvent (QMouseEvent *event);
+
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    void mouseDoubleClickEvent (QMouseEvent *event);
 
     void keyPressEvent(QKeyEvent *event);
+
+    void editText();
+    void commitChanges();
 
     QLabel *label;
     MainWindow *superView;
 
     QTextEdit *text;
+
+    bool isPressed;
+    QPoint dragStart;
 
 signals:
 
