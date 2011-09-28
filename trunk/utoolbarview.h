@@ -10,7 +10,8 @@ typedef enum U_TOOL_ENUM {
     UToolHand = 1,
     UToolSelect,
     UToolBox,
-    UToolArrow
+    UToolArrow,
+    UToolEraser
 } UTool;
 
 class UToolbarView : public QWidget {

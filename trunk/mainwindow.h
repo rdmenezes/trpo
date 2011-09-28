@@ -13,6 +13,7 @@
 #include "utoolbarview.h"
 #include "ubox.h"
 #include "uarrow.h"
+#include "helpwindow.h"
 
 namespace Ui {
     class MainWindow;
@@ -24,6 +25,8 @@ class MainWindow : public QMainWindow {
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+    void elementDidClicked(QWidget *element);
 
 protected:
     void changeEvent(QEvent *e);
