@@ -9,7 +9,7 @@ UBox::UBox(QWidget *parent, QPoint where) :
 
     this->superView = (MainWindow *)parent;
 
-    this->setGeometry(where.x(), where.y(), 170, 100);
+    this->setGeometry(where.x() - 90, where.y() - 50, 180, 100);
 
     this->label = new QLabel(QString("label"), this);
 
@@ -36,35 +36,61 @@ void UBox::paintEvent(QPaintEvent *event) {
     QWidget::paintEvent(event);
 }
 
+
+void UBox::mousePressEvent(QMouseEvent *event) {
+    isPressed = true;
+    dragStart = event->pos();
+    this->raise();
+}
+
+void UBox::mouseMoveEvent(QMouseEvent *event) {
+
+    if (isPressed) {
+        QRect position = QRect(this->geometry().topLeft() + event->pos() - dragStart,
+                               this->geometry().size());
+        this->setGeometry(position);
+    }
+}
+
 void UBox::mouseReleaseEvent(QMouseEvent *event) {
 
     event = 0x0;
-    this->superView->elementDidClicked(this);
+    isPressed = false;
+
+    this->superView->elementWasClicked(this);
 }
 
-void UBox::mouseDoubleClickEvent (QMouseEvent *event) {
+void UBox::mouseDoubleClickEvent(QMouseEvent *event) {
 
     event = 0x0;
-
-    this->label->setHidden(true);
-
-    text = new QTextEdit(label->text(), this);
-    text->setGeometry(label->geometry());
-    text->setHidden(false);
+    editText();
 }
 
 void UBox::keyPressEvent(QKeyEvent *event) {
 
     if (event->key() == Qt::Key_Escape) {
-        label->setText(text->toPlainText());
-        text->setHidden(true);
-        delete text;
-        //text = 0x0;
-
-        label->setHidden(false);
+        commitChanges();
     }
 }
 
 void UBox::removeBox() {
     this->destroy(true, true);
+}
+
+void UBox::editText() {
+    this->label->setHidden(true);
+
+    text = new QTextEdit(label->text(), this);
+    text->setGeometry(label->geometry());
+    text->setHidden(false);
+    text->selectAll();
+    text->setFocus();
+}
+
+void UBox::commitChanges() {
+    label->setText(text->toPlainText());
+    text->setHidden(true);
+    delete text;
+
+    label->setHidden(false);
 }

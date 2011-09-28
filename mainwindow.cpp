@@ -39,7 +39,7 @@ void MainWindow::changeEvent(QEvent *e) {
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
-    printf("%d\n", event->key());
+
     if (event->key() == Qt::Key_F1) {
          showHelp();
     }
@@ -80,7 +80,7 @@ void MainWindow::showToolbar() {
 }
 
 
-void MainWindow::elementDidClicked(QWidget *element) {
+void MainWindow::elementWasClicked(QWidget *element) {
     if (toolbar->currentTool() == UToolEraser) {
         UBox *box = (UBox *)element;
         box->removeBox();

@@ -36,11 +36,12 @@ void UToolbarView::paintEvent(QPaintEvent *event) {
 }
 
 void UToolbarView::setItems() {
+
     QPushButton *hand = new QPushButton(QString("Hand"), this);
-    hand->setGeometry(4, 4, 120, 120);
+    hand->setGeometry(4 + 128 * 0, 4, 120, 120);
 
     QPushButton *select = new QPushButton(QString("Select"), this);
-    select->setGeometry(4 + 128, 4, 120, 120);
+    select->setGeometry(4 + 128 * 1, 4, 120, 120);
 
     QPushButton *box = new QPushButton(QString("Box"), this);
     box->setGeometry(4 + 128 * 2, 4, 120, 120);
@@ -70,4 +71,6 @@ void UToolbarView::selectTool() {
     else {
         this->tool = UToolEraser;
     }
+
+    this->setHidden(true);
 }

@@ -26,7 +26,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void elementDidClicked(QWidget *element);
+    void elementWasClicked(QWidget *element);
 
 protected:
     void changeEvent(QEvent *e);
