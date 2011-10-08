@@ -4,9 +4,9 @@
 #include <QWidget>
 #include <QPainter>
 #include <QLabel>
+#include <QTextEdit>
 
 class MainWindow;
-class QTextEdit;
 
 class UBox : public QWidget {
     Q_OBJECT

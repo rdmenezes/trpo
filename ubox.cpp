@@ -1,8 +1,6 @@
 #include "ubox.h"
 #include "mainwindow.h"
 
-#include <QTextEdit>
-
 
 UBox::UBox(QWidget *parent, QPoint where) :
     QWidget(parent) {
