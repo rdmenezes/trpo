@@ -2,6 +2,9 @@
 #define UARROW_H
 
 #include <QObject>
+#include <QVector>
+
+class UArrowSegment;
 
 class UArrow : public QObject {
     Q_OBJECT
@@ -11,6 +14,9 @@ public:
 signals:
 
 public slots:
+
+protected:
+    QVector<UArrowSegment *> segments;
 
 };
 

@@ -3,6 +3,9 @@
 
 #include <QWidget>
 
+
+class MainWindow;
+
 class UArrowSegment : public QWidget {
     Q_OBJECT
 public:
@@ -11,6 +14,9 @@ public:
 signals:
 
 public slots:
+
+protected:
+    MainWindow *superView;
 
 };
 

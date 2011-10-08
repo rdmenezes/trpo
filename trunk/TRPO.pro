@@ -11,12 +11,24 @@ SOURCES += main.cpp \
     uarrow.cpp \
     uarrowsegment.cpp \
     ubox.cpp \
-    helpwindow.cpp
+    helpwindow.cpp \
+    uarrowshaft.cpp \
+    uarrowhead.cpp \
+    uarrowlink.cpp
 HEADERS += mainwindow.h \
     utoolbarview.h \
     uarrow.h \
     uarrowsegment.h \
     ubox.h \
-    helpwindow.h
+    helpwindow.h \
+    uarrowshaft.h \
+    uarrowhead.h \
+    uarrowlink.h
 FORMS += mainwindow.ui \
     helpwindow.ui
+
+
+
+
+
+
