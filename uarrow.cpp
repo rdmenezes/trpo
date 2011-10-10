@@ -9,6 +9,8 @@ UArrow::UArrow(QWidget *parent, QWidget *slot) : QObject() {
     
     superView = (MainWindow *)parent;
     
-    UArrowShaft *shaft = new UArrowShaft(parent, slot);
+    segments = new QVector<UArrowSegment *>();
     
+    UArrowShaft *shaft = new UArrowShaft(parent, slot);
+    segments->append(shaft);
 }
