@@ -20,10 +20,18 @@ class UToolbarView : public QWidget {
 private:
     void setItems();
 
+private slots:
+    void selectHand();
+    void selectSelect();
+    void selectBox();
+    void selectArrow();
+    void selectEraser();
+
 public:
     explicit UToolbarView(QWidget *parent = 0);
 
     UTool currentTool();
+    void selectTool(UTool selectedTool);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -36,8 +44,6 @@ public:
 
 signals:
 
-public slots:
-    void selectTool();
 };
 
 #endif // UTOOLBARVIEW_H

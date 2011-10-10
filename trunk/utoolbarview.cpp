@@ -52,25 +52,38 @@ void UToolbarView::setItems() {
     QPushButton *eraser = new QPushButton(QString("Eraser"), this);
     eraser->setGeometry(4 + 128 * 4, 4, 120, 120);
 
-    connect(hand, SIGNAL(clicked()), this, SLOT(selectTool()));
-    connect(select, SIGNAL(clicked()), this, SLOT(selectTool()));
-    connect(box, SIGNAL(clicked()), this, SLOT(selectTool()));
-    connect(arrow, SIGNAL(clicked()), this, SLOT(selectTool()));
-    connect(eraser, SIGNAL(clicked()), this, SLOT(selectTool()));
+    connect(hand, SIGNAL(clicked()), this, SLOT(selectHand()));
+    connect(select, SIGNAL(clicked()), this, SLOT(selectSelect()));
+    connect(box, SIGNAL(clicked()), this, SLOT(selectBox()));
+    connect(arrow, SIGNAL(clicked()), this, SLOT(selectArrow()));
+    connect(eraser, SIGNAL(clicked()), this, SLOT(selectEraser()));
 }
 
 UTool UToolbarView::currentTool() {
     return this->tool;
 }
 
-void UToolbarView::selectTool() {
-
-    if (this->tool != UToolBox) {
-        this->tool = UToolBox;
-    }
-    else {
-        this->tool = UToolEraser;
-    }
-
+void UToolbarView::selectTool(UTool selectedTool) {
+    this->tool = selectedTool;
     this->setHidden(true);
+}
+
+void UToolbarView::selectHand() {
+    this->selectTool(UToolHand);
+}
+
+void UToolbarView::selectSelect() {
+    this->selectTool(UToolSelect);
+}
+
+void UToolbarView::selectBox() {
+    this->selectTool(UToolBox);
+}
+
+void UToolbarView::selectArrow() {
+    this->selectTool(UToolArrow);
+}
+
+void UToolbarView::selectEraser() {
+    this->selectTool(UToolEraser);
 }
