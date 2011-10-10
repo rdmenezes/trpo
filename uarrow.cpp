@@ -1,5 +1,14 @@
 #include "uarrow.h"
 
-UArrow::UArrow(QObject *parent) :
-    QObject(parent) {
+#include "uarrowsegment.h"
+#include "uarrowshaft.h"
+#include "uarrowhead.h"
+#include "uarrowlink.h"
+
+UArrow::UArrow(QWidget *parent, QWidget *slot) : QObject() {
+    
+    superView = (MainWindow *)parent;
+    
+    UArrowShaft *shaft = new UArrowShaft(parent, slot);
+    
 }

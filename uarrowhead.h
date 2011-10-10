@@ -5,7 +5,7 @@
 
 class UArrowHead : public UArrowSegment {
 public:
-    UArrowHead();
+    UArrowHead(QWidget *parent, QWidget *slot);
 };
 
 #endif // UARROWHEAD_H

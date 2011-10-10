@@ -6,7 +6,7 @@
 
 class UArrowShaft : public UArrowSegment {
 public:
-    UArrowShaft();
+    UArrowShaft(QWidget *parent, QWidget *slot);
 };
 
 #endif // UARROWSHAFT_H
