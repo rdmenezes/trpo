@@ -7,8 +7,11 @@ UBox::UBox(QWidget *parent, QPoint where) :
 
     this->superView = (MainWindow *)parent;
 
-    this->setGeometry(where.x() - 90, where.y() - 50, 180, 100);
-
+    QPoint newPos = QPoint(where.x() - 90, where.y() - 50);
+    this->setGeometry(newPos.x() - newPos.x() % superView->cellLength(),
+                      newPos.y() - newPos.y() % superView->cellLength(),
+                      180, 100);
+    
     this->label = new QLabel(QString("label"), this);
 
     this->label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -28,7 +31,7 @@ void UBox::paintEvent(QPaintEvent *event) {
     pen.setWidth(2);
     painter.setPen(pen);
 
-    painter.setBrush(QColor("#ffffff"));
+    painter.setBrush(QColor(255, 255, 255, 222));
     painter.drawRect(frame);
 
     QWidget::paintEvent(event);
@@ -44,9 +47,10 @@ void UBox::mousePressEvent(QMouseEvent *event) {
 void UBox::mouseMoveEvent(QMouseEvent *event) {
 
     if (isPressed) {
-        QRect position = QRect(this->geometry().topLeft() + event->pos() - dragStart,
-                               this->geometry().size());
-        this->setGeometry(position);
+        QPoint newPos = this->geometry().topLeft() + event->pos() - dragStart;
+        
+        this->move(newPos.x() - newPos.x() % superView->cellLength(),
+                   newPos.y() - newPos.y() % superView->cellLength());
     }
 }
 

@@ -51,6 +51,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
 
     if (event->button() == Qt::LeftButton) {
+        
         if (toolbar->currentTool() == UToolBox) {
 
             QPoint point = event->pos();
@@ -60,6 +61,12 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
         }
         else if (toolbar->currentTool() == UToolEraser) {
 
+        }
+        else if (toolbar->currentTool() == UToolArrow) {
+            
+        }
+        else if (toolbar->currentTool() == UToolSelect) {
+            
         }
     }
 }
@@ -81,8 +88,26 @@ void MainWindow::showToolbar() {
 
 
 void MainWindow::elementWasClicked(QWidget *element) {
+    
     if (toolbar->currentTool() == UToolEraser) {
         UBox *box = (UBox *)element;
         box->removeBox();
     }
+    else if (toolbar->currentTool() == UToolArrow) {
+        QWidget *slot = element;
+        UArrow *arrow = new UArrow(this, slot);
+        arrows->append(arrow);
+    }
+}
+
+void MainWindow::slotWasClicked(QWidget *slot) {
+    
+    if (toolbar->currentTool() == UToolArrow) {
+        UArrow *arrow = new UArrow(this, slot);
+        arrows->append(arrow);
+    }
+}
+
+int MainWindow::cellLength() {
+    return 20;
 }

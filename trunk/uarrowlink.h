@@ -5,7 +5,7 @@
 
 class UArrowLink : public UArrowSegment {
 public:
-    UArrowLink();
+    UArrowLink(QWidget *parent, QWidget *slot);
 };
 
 #endif // UARROWLINK_H

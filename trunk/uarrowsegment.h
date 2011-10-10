@@ -9,7 +9,7 @@ class MainWindow;
 class UArrowSegment : public QWidget {
     Q_OBJECT
 public:
-    explicit UArrowSegment(QWidget *parent = 0);
+    explicit UArrowSegment(QWidget *parent, QWidget *slot);
 
 signals:
 

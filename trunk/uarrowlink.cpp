@@ -1,4 +1,6 @@
 #include "uarrowlink.h"
 
-UArrowLink::UArrowLink() {
+UArrowLink::UArrowLink(QWidget *parent, QWidget *slot) : UArrowSegment(parent, slot) {
+    
+    
 }

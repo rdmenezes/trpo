@@ -1,4 +1,5 @@
 #include "uarrowhead.h"
 
-UArrowHead::UArrowHead() {
+UArrowHead::UArrowHead(QWidget *parent, QWidget *slot) : UArrowSegment(parent, slot) {
+    
 }

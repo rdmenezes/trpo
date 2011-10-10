@@ -27,6 +27,9 @@ public:
     ~MainWindow();
 
     void elementWasClicked(QWidget *element);
+    void slotWasClicked(QWidget *slot);
+    
+    int cellLength();
 
 protected:
     void changeEvent(QEvent *e);
