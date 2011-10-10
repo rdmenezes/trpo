@@ -20,7 +20,7 @@ signals:
 public slots:
 
 protected:
-    QVector<UArrowSegment *> segments;
+    QVector<UArrowSegment *> *segments;
 
 };
 

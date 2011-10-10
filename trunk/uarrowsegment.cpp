@@ -6,6 +6,6 @@ UArrowSegment::UArrowSegment(QWidget *parent, QWidget *slot) :
 
     this->superView = (MainWindow *)parent;
 
-
+    slot = 0x0;
 
 }
