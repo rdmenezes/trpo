@@ -3,17 +3,9 @@
 
 #include <QMainWindow>
 #include <QKeyEvent>
-#include <QMouseEvent>
 #include <QPropertyAnimation>
 
-#include <QVector>
-
-#include <QGraphicsOpacityEffect>
-
 #include "utoolbarview.h"
-#include "ubox.h"
-#include "uarrow.h"
-#include "helpwindow.h"
 
 namespace Ui {
     class MainWindow;
@@ -26,24 +18,13 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void elementWasClicked(QWidget *element);
-    void slotWasClicked(QWidget *slot);
-    
-    int cellLength();
-
 protected:
     void changeEvent(QEvent *e);
-
-    void keyPressEvent(QKeyEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
 
 private:
     Ui::MainWindow *ui;
 
     UToolbarView *toolbar;
-
-    QVector<UBox *> *boxes;
-    QVector<UArrow *> *arrows;
 
     void showHelp();
     void showStartupHint();

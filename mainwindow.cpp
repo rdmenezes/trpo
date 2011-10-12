@@ -11,15 +11,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     toolbar = new UToolbarView(this);
 
-
-    boxes = new QVector<UBox *>();
-    arrows = new QVector<UArrow *>();
-
-
-    QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(this);
-    effect->setOpacity(0.3);
-    ui->centralWidget->setGraphicsEffect(effect);
-
     showStartupHint();
 }
 
@@ -38,36 +29,13 @@ void MainWindow::changeEvent(QEvent *e) {
     }
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *event) {
-
-    if (event->key() == Qt::Key_F1) {
-         showHelp();
+void QWidget::keyPressEvent(QKeyEvent *event) {
+    printf("%d\n", event->key());
+    if (event->key() == 16777264) {
+        // showHelp();
     }
-    else if (event->key() == Qt::Key_Shift) {
-        showToolbar();
-    }
-}
-
-void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
-
-    if (event->button() == Qt::LeftButton) {
-        
-        if (toolbar->currentTool() == UToolBox) {
-
-            QPoint point = event->pos();
-            UBox *box = new UBox(this, point);
-
-            boxes->append(box);
-        }
-        else if (toolbar->currentTool() == UToolEraser) {
-
-        }
-        else if (toolbar->currentTool() == UToolArrow) {
-            
-        }
-        else if (toolbar->currentTool() == UToolSelect) {
-            
-        }
+    else if (event->key() == 16777248) {
+        // showToolbar();
     }
 }
 
@@ -76,38 +44,9 @@ void MainWindow::showStartupHint() {
 }
 
 void MainWindow::showHelp() {
-   HelpWindow a;
-   a.exec();
+
 }
 
 void MainWindow::showToolbar() {
 
-    toolbar->raise();
-    toolbar->setHidden(!toolbar->isHidden());
-}
-
-
-void MainWindow::elementWasClicked(QWidget *element) {
-    
-    if (toolbar->currentTool() == UToolEraser) {
-        UBox *box = (UBox *)element;
-        box->removeBox();
-    }
-    else if (toolbar->currentTool() == UToolArrow) {
-        QWidget *slot = element;
-        UArrow *arrow = new UArrow(this, slot);
-        arrows->append(arrow);
-    }
-}
-
-void MainWindow::slotWasClicked(QWidget *slot) {
-    
-    if (toolbar->currentTool() == UToolArrow) {
-        UArrow *arrow = new UArrow(this, slot);
-        arrows->append(arrow);
-    }
-}
-
-int MainWindow::cellLength() {
-    return 20;
 }
