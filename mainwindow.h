@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QKeyEvent>
 #include <QPropertyAnimation>
-
+#include <QBoxLayout>
 
 namespace Ui {
     class MainWindow;
@@ -20,6 +20,7 @@ public:
 protected:
     void changeEvent(QEvent *e);
     void keyPressEvent(QKeyEvent *event);
+    void mousePressEvent(QMouseEvent * event);
 private:
     Ui::MainWindow *ui;
 
