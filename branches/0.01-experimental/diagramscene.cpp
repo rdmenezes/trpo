@@ -7,7 +7,7 @@
 DiagramScene::DiagramScene(QObject *parent) :
     QGraphicsScene(parent)
 {
-
+  m_tooltype=TT_BLOCK;
 }
 
 void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
