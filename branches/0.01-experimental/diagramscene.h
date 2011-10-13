@@ -10,6 +10,7 @@ public:
     explicit DiagramScene(QObject *parent = 0);
 
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void keyPressEvent(QKeyEvent * event);
 signals:
 
 public slots:
