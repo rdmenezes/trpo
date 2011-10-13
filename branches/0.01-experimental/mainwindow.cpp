@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     scene->setSceneRect(0,0,view->contentsRect().width()
     ,view->contentsRect().height()
     );
-
+    scene->setView(view);
 }
 
 MainWindow::~MainWindow() {

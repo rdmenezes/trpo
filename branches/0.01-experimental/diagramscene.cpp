@@ -15,9 +15,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QPointF pos=event->buttonDownScenePos(event->button());
     if (this->items(pos).size()==0)
     {
-     QTextEdit * txte=new QTextEdit();
-     txte->setGeometry(pos.x(),pos.y(),100,100);
-     this->addWidget(txte);
+
     }
     else
     {
@@ -32,6 +30,16 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
       HelpWindow d;
       d.exec();
       handled=true;
+  }
+  if (event->key()==Qt::Key_Shift)
+  {
+
+      QPointF  panel_pos;
+      QPoint local_pos=m_view->mapFromGlobal(QCursor::pos());
+      panel_pos=m_view->mapToScene(local_pos);
+      QTextEdit * txte=new QTextEdit();
+      txte->setGeometry(panel_pos.x(),panel_pos.y(),100,100);
+      this->addWidget(txte);
   }
   if (!handled)
       this->QGraphicsScene::keyPressEvent(event);
