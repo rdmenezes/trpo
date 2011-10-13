@@ -1,4 +1,8 @@
 #include "diagramscene.h"
+#include "helpwindow.h"
+#include <QTextEdit>
+#include <QGraphicsSceneMouseEvent>
+#include <QKeyEvent>
 
 DiagramScene::DiagramScene(QObject *parent) :
     QGraphicsScene(parent)
@@ -8,7 +12,27 @@ DiagramScene::DiagramScene(QObject *parent) :
 
 void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    this->addText("Hello world!");
-    this->addLine(0,0,this->width(),this->height());
-    int a=1+1;
+    QPointF pos=event->buttonDownScenePos(event->button());
+    if (this->items(pos).size()==0)
+    {
+     QTextEdit * txte=new QTextEdit();
+     txte->setGeometry(pos.x(),pos.y(),100,100);
+     this->addWidget(txte);
+    }
+    else
+    {
+        this->QGraphicsScene::mousePressEvent(event);
+    }
+}
+void DiagramScene::keyPressEvent(QKeyEvent * event)
+{
+  bool handled=false;
+  if (event->key()==Qt::Key_F1)
+  {
+      HelpWindow d;
+      d.exec();
+      handled=true;
+  }
+  if (!handled)
+      this->QGraphicsScene::keyPressEvent(event);
 }
