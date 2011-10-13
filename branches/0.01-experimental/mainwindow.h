@@ -5,7 +5,6 @@
 #include <QKeyEvent>
 #include <QPropertyAnimation>
 
-#include "utoolbarview.h"
 
 namespace Ui {
     class MainWindow;
@@ -20,15 +19,12 @@ public:
 
 protected:
     void changeEvent(QEvent *e);
-
+    void keyPressEvent(QKeyEvent *event);
 private:
     Ui::MainWindow *ui;
 
-    UToolbarView *toolbar;
 
     void showHelp();
-    void showStartupHint();
-    void showToolbar();
 };
 
 #endif // MAINWINDOW_H

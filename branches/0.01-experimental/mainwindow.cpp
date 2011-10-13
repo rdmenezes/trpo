@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "helpwindow.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -6,12 +7,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    ui->mainToolBar->setHidden(true);
     this->setWindowTitle("IDEF0 Diagram Builder");
 
-    toolbar = new UToolbarView(this);
 
-    showStartupHint();
+
 }
 
 MainWindow::~MainWindow() {
@@ -29,24 +28,21 @@ void MainWindow::changeEvent(QEvent *e) {
     }
 }
 
-void QWidget::keyPressEvent(QKeyEvent *event) {
-    printf("%d\n", event->key());
-    if (event->key() == 16777264) {
-        // showHelp();
+void MainWindow::keyPressEvent(QKeyEvent *event) {
+    bool handled=false;
+    if (event->key() == Qt::Key_F1) {
+        showHelp();
+        handled=true;
     }
-    else if (event->key() == 16777248) {
-        // showToolbar();
-    }
+    if (!handled)
+        this->QMainWindow::keyPressEvent(event);
 }
 
-void MainWindow::showStartupHint() {
 
-}
 
 void MainWindow::showHelp() {
-
+   HelpWindow d(this);
+   d.exec();
 }
 
-void MainWindow::showToolbar() {
 
-}
