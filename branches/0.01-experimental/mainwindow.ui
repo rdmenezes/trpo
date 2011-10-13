@@ -16,6 +16,12 @@
     <height>600</height>
    </size>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>900</width>
+    <height>600</height>
+   </size>
+  </property>
   <property name="palette">
    <palette>
     <active>
@@ -148,6 +154,9 @@
      </disabled>
     </palette>
    </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -155,7 +164,7 @@
      <x>0</x>
      <y>0</y>
      <width>900</width>
-     <height>22</height>
+     <height>19</height>
     </rect>
    </property>
   </widget>

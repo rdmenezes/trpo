@@ -7,8 +7,10 @@ TARGET = TRPO
 TEMPLATE = app
 SOURCES += main.cpp \
     mainwindow.cpp \
-    helpwindow.cpp
+    helpwindow.cpp \
+    diagramscene.cpp
 HEADERS += mainwindow.h \
-    helpwindow.h
+    helpwindow.h \
+    diagramscene.h
 FORMS += mainwindow.ui \
     helpwindow.ui
