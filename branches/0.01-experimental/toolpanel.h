@@ -51,6 +51,10 @@ protected:
         \param[in] event   parameters
      */
     void paintEvent(QPaintEvent * event);
+    /*! Event, that occures when mouse is being pressed
+        \param[in] ev event
+     */
+    void mousePressEvent(QMouseEvent *event);
 signals:
 
 public slots:
