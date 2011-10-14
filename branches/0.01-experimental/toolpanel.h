@@ -18,6 +18,14 @@ class DiagramScene; //!< Class of referenced scene
 #define PANEL_BORDER 2
 //Panel round radius
 #define PANEL_ROUND_RADIUS 3
+//Panel icon offset
+#define PANEL_Y_OFFSET 4
+//First panel offset
+#define PANEL_FIRST_X_OFFSET 4
+//Panel offset created by each icon
+#define PANEL_X_OFFSET 55
+//Panel icon size
+#define PANEL_ICON_SIZE 50
 
 /*! \class ToolPanel
     Describes a tool panel, that responses for tools changing
@@ -27,6 +35,11 @@ class ToolPanel : public QWidget
 Q_OBJECT
 private:
     DiagramScene *     m_scene;  //!< Tool reference, that will be changed
+    /*! Draws an icon by index
+        \param[in] p painter
+        \param[in] i index of picture
+    */
+    void drawIconByIndex(QPainter * p,int i);
 public:
     /*! Creates a tool panel with specified geometry. Also needs a pointer
         to changing variable

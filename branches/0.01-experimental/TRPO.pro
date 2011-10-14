@@ -17,3 +17,4 @@ HEADERS += mainwindow.h \
     tooltype.h
 FORMS += mainwindow.ui \
     helpwindow.ui
+RESOURCES += data.qrc
