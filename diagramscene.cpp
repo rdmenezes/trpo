@@ -4,6 +4,7 @@
 #include <QTextEdit>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
+#include <QGraphicsProxyWidget>
 
 DiagramScene::DiagramScene(QObject *parent) :
     QGraphicsScene(parent)
@@ -18,7 +19,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     //Do in case of nothing found
     if (this->items(pos).size()==0)
     {
-
+      setTool(TT_BLOCK);
     }
     //Propagate key pressing event
     else
@@ -30,6 +31,8 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
 {
   bool handled=false;
   //In case when F1 pressed show help
+  if (m_panel)
+     handled=processKeyToolSelect(event);
   if (event->key()==Qt::Key_F1)
   {
       HelpWindow d;
@@ -58,7 +61,7 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
       {
        //Add tool panel
        m_panel=new ToolPanel(m_view);
-       this->addWidget(m_panel);
+       m_panel_in_scene=this->addWidget(m_panel);
        //Set parameters and update
        m_panel->setGeometry(panel_pos.x(),panel_pos.y(),PANEL_WIDTH,PANEL_HEIGHT);
        m_panel->update();
@@ -73,4 +76,29 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
   }
   if (!handled)
       this->QGraphicsScene::keyPressEvent(event);
+}
+
+
+void DiagramScene::setTool(ToolType t)
+{
+    Q_ASSERT( m_panel );
+    m_tooltype=t;
+
+    this->removeItem(m_panel_in_scene);
+
+    m_panel=NULL;
+    m_panel_in_scene=NULL;
+}
+
+bool DiagramScene::processKeyToolSelect(QKeyEvent * event)
+{
+    int       keys[6]={Qt::Key_1,Qt::Key_2,Qt::Key_3,Qt::Key_4,Qt::Key_5,Qt::Key_6};
+    ToolType types[6]={TT_SELECT,TT_ERASER,TT_BLOCK,TT_ARROW,TT_ANNOTATION_LINE,
+                       TT_ANNOTATION_LABEL};
+    for (int i=0;i<6;i++)
+    {
+        if (event->key()==keys[i])
+            this->setTool(types[i]);
+    }
+    return false;
 }
