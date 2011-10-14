@@ -1,0 +1,10 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+     <file alias="1.png">select.png</file>
+     <file alias="2.png">eraser.png</file>
+	 <file alias="3.png">block.png</file>
+	 <file alias="4.png">arrow.png</file>
+	 <file alias="5.png">annotation_line.png</file>
+	 <file alias="6.png">label.png</file>
+ </qresource>
+</RCC>

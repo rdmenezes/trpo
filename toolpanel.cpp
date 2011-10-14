@@ -49,4 +49,21 @@ void ToolPanel::paintEvent(QPaintEvent *)
  painter.drawRoundedRect(QRect(0,0,
                              this->width()-PANEL_BORDER,this->height()-PANEL_BORDER
                              ),PANEL_ROUND_RADIUS,PANEL_ROUND_RADIUS);
+
+ painter.setBrush(Qt::NoBrush);
+ for (int i=1;i<7;i++)
+     drawIconByIndex(&painter,i);
+}
+
+void ToolPanel::drawIconByIndex(QPainter * p,int i)
+{
+    QString name(":/");
+    name+=QString::number(i);
+    name+=".png";
+    QImage img(name);
+    int y=PANEL_Y_OFFSET;
+    int x=PANEL_FIRST_X_OFFSET+PANEL_X_OFFSET*(i-1);
+
+    p->drawImage(QPoint(x,y),img);
+    p->drawRect(QRect(x,y,PANEL_ICON_SIZE,PANEL_ICON_SIZE));
 }
