@@ -21,7 +21,13 @@ Q_OBJECT
 private:
     QGraphicsView *   m_view;      //!< View widget pointer for data
     ToolType          m_tooltype;  //!< Selected type of tool
-    ToolPanel     *   m_panel;     //!< A pointer to panel
+    ToolPanel            *   m_panel;     //!< A pointer to panel
+    QGraphicsProxyWidget *   m_panel_in_scene; //!< A pointer to panel
+    /*! Process tool selection by keys
+        \param[in] event event
+        \return true, if handled
+    */
+    bool processKeyToolSelect(QKeyEvent * event);
 public:
     /*! Declares diagram scene
         \param[in] parent not used
@@ -39,10 +45,11 @@ public:
         \param[in] v parent widget
     */
     inline void setView(QGraphicsView * v) { m_view=v; }
-    /*! Sets a tool for working with diagram
+    /*! Sets a tool for working with diagram.
+        \note Makes panel disappear, so must be called at end of living of panel
         \param[in] t tool type
     */
-    inline void setTool(ToolType t)  {m_tooltype=t; }
+    void setTool(ToolType t);
 signals:
 
 public slots:
