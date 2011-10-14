@@ -6,11 +6,14 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow) {
+    ui(new Ui::MainWindow)
+{
+    //Setup UI
     ui->setupUi(this);
-
+    //Set window Title
     this->setWindowTitle("IDEF0 Diagram Builder");
 
+    //Setup graphic interface
     DiagramScene * scene=new DiagramScene();
     QGraphicsView * view=new QGraphicsView(scene,this);
     view->setGeometry(0,0,
@@ -43,20 +46,13 @@ void MainWindow::changeEvent(QEvent *e) {
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
     bool handled=false;
+    //If Pressed F1 show help
     if (event->key() == Qt::Key_F1) {
         showHelp();
         handled=true;
     }
     if (!handled)
         this->QMainWindow::keyPressEvent(event);
-}
-
-void MainWindow::mousePressEvent(QMouseEvent * event)
-{
-     bool handled=false;
-
-     if (!handled)
-         this->QMainWindow::mousePressEvent(event);
 }
 
 
