@@ -67,3 +67,26 @@ void ToolPanel::drawIconByIndex(QPainter * p,int i)
     p->drawImage(QPoint(x,y),img);
     p->drawRect(QRect(x,y,PANEL_ICON_SIZE,PANEL_ICON_SIZE));
 }
+
+void ToolPanel::mousePressEvent(QMouseEvent *event)
+{
+    ToolType result=TT_SELECT;
+    bool handled=false;
+    //Scan for buttons
+    {
+    ToolType types[6]={TT_SELECT,TT_ERASER,TT_BLOCK,TT_ARROW,TT_ANNOTATION_LINE,
+                       TT_ANNOTATION_LABEL};
+    for (int i=0;i<6;i++)
+    {
+      int dy=event->pos().y()-PANEL_Y_OFFSET;
+      int dx=event->pos().x()-PANEL_FIRST_X_OFFSET-PANEL_X_OFFSET*i;
+      if (dx>=0  && dy>=0 && dx<=PANEL_ICON_SIZE && dy<=PANEL_ICON_SIZE)
+      {
+          result=types[i];
+          handled=true;
+      }
+    }
+    }
+    if (handled)
+        m_scene->setTool(result);
+}
