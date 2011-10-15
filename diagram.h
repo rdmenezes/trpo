@@ -5,6 +5,7 @@
  */
 #include <QPair>
 #include <QVector>
+#include <QRectF>
 #include <time.h>
 #ifndef DIAGRAM_H
 #define DIAGRAM_H
@@ -122,6 +123,11 @@ public:
             \param[in] box amount of boxes
          */
         void addBox(BoxItem * box);
+        /*! Determines, whether block can be placed or not
+            \param[in] rect   bounding rect geometry
+            \param[in] pointer NULL if don't check
+         */
+        bool canBePlaced(const QRectF & rect, BoxItem * pointer=NULL);
         /*! Gets an index id for box
          */
         int getBoxID() const;

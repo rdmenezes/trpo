@@ -5,6 +5,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
 #include <QGraphicsProxyWidget>
+#include <QFontMetricsF>
 
 DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
     QGraphicsScene(parent)
@@ -12,6 +13,26 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
   m_diag=d;
   m_tooltype=TT_BLOCK;
   m_panel=NULL;
+  //Compute size of default block
+  //Get small size label
+  QFont fnt=this->font();
+  fnt.setPointSize(10);
+  QFontMetrics mtr1(fnt);
+  QRect number_size=mtr1.boundingRect("9");
+  //Get size of default text
+  QFontMetrics mtr2(this->font());
+  QRect label_size=mtr2.boundingRect(DEFAULT_BLOCK_TEXT);
+  m_default_block_size.setX(0);
+  m_default_block_size.setY(0);
+  m_default_block_size.setWidth(
+                                ((label_size.width()>number_size.width())?
+                                label_size.width():number_size.width())
+                                +BLOCK_SPACE_X*2
+                               );
+  m_default_block_size.setHeight(
+                                 label_size.height()+
+                                 (number_size.height()+BLOCK_SPACE_Y)*2
+                                );
 }
 
 void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -20,11 +41,22 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     //Do in case of nothing found
     if (this->items(pos).size()==0)
     {
-
+      if (m_tooltype==TT_BLOCK)
+          addBlock(event);
     }
     //Propagate key pressing event
     else
     {
+     bool isWidgetClicked=false;
+     QList<QGraphicsItem *> lst=this->items(pos);
+     for (int i=0;i<lst.size();i++)
+     {
+         if (lst[i]->type()==QGraphicsProxyWidget::Type)
+             isWidgetClicked=true;
+     }
+     if (isWidgetClicked)
+        this->QGraphicsScene::mousePressEvent(event);
+     else
         this->QGraphicsScene::mousePressEvent(event);
     }
 }
@@ -102,4 +134,27 @@ bool DiagramScene::processKeyToolSelect(QKeyEvent * event)
             this->setTool(types[i]);
     }
     return false;
+}
+
+QRectF DiagramScene::getDefaultBlockSize(const QPointF & pos)
+{
+  QRectF result;
+  result.setX(pos.x()-m_default_block_size.width()/2);
+  result.setY(pos.y()-m_default_block_size.height()/2);
+  result.setWidth(m_default_block_size.width());
+  result.setHeight(m_default_block_size.height());
+  return result;
+}
+
+void DiagramScene::addBlock(QGraphicsSceneMouseEvent *event)
+{
+ if (m_diag->canAddBoxes())
+ {
+  if (m_diag->canBePlaced(getDefaultBlockSize(event->scenePos())))
+  {
+   BoxItem * b=new BoxItem(event->scenePos(),this);
+   this->addItem(b);
+   m_diag->addBox(b);
+  }
+ }
 }

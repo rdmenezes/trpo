@@ -27,6 +27,8 @@ class DiagramScene; //!< Class of referenced scene
 //Panel icon size
 #define PANEL_ICON_SIZE 50
 
+
+
 /*! \class ToolPanel
     Describes a tool panel, that responses for tools changing
 */
