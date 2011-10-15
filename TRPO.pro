@@ -9,12 +9,18 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     helpwindow.cpp \
     diagramscene.cpp \
-    toolpanel.cpp
+    toolpanel.cpp \
+    boxitem.cpp \
+    diagram.cpp \
+    diagramset.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
     toolpanel.h \
-    tooltype.h
+    tooltype.h \
+    boxitem.h \
+    diagram.h \
+    diagramset.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc
