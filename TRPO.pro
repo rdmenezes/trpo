@@ -12,7 +12,8 @@ SOURCES += main.cpp \
     toolpanel.cpp \
     boxitem.cpp \
     diagram.cpp \
-    diagramset.cpp
+    diagramset.cpp \
+    collision.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
@@ -20,7 +21,8 @@ HEADERS += mainwindow.h \
     tooltype.h \
     boxitem.h \
     diagram.h \
-    diagramset.h
+    diagramset.h \
+    collision.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc
