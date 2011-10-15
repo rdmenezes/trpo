@@ -6,9 +6,10 @@
 #include <QKeyEvent>
 #include <QGraphicsProxyWidget>
 
-DiagramScene::DiagramScene(QObject *parent) :
+DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
     QGraphicsScene(parent)
 {
+  m_diag=d;
   m_tooltype=TT_BLOCK;
   m_panel=NULL;
 }
@@ -19,7 +20,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     //Do in case of nothing found
     if (this->items(pos).size()==0)
     {
-      setTool(TT_BLOCK);
+
     }
     //Propagate key pressing event
     else

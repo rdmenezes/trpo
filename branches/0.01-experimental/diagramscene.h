@@ -9,6 +9,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include "tooltype.h"
+#include "diagram.h"
 /*! A class of panel for tool selection
  */
 class ToolPanel;
@@ -23,6 +24,7 @@ private:
     ToolType          m_tooltype;  //!< Selected type of tool
     ToolPanel            *   m_panel;     //!< A pointer to panel
     QGraphicsProxyWidget *   m_panel_in_scene; //!< A pointer to panel
+    Diagram              *   m_diag; //!< Diagram data
     /*! Process tool selection by keys
         \param[in] event event
         \return true, if handled
@@ -30,9 +32,10 @@ private:
     bool processKeyToolSelect(QKeyEvent * event);
 public:
     /*! Declares diagram scene
+        \param[in] d      diagram
         \param[in] parent not used
      */
-    explicit DiagramScene(QObject *parent = 0);
+    explicit DiagramScene(Diagram * d,QObject *parent = 0);
     /*! Event, that occures when mouse is being pressed
         \param[in] ev event
      */
