@@ -10,6 +10,11 @@
 #include <QGraphicsView>
 #include "tooltype.h"
 #include "diagram.h"
+#include "boxitem.h"
+//Defines a default block space
+#define BLOCK_SPACE_Y 3
+//Defines a block space x
+#define BLOCK_SPACE_X 3
 /*! A class of panel for tool selection
  */
 class ToolPanel;
@@ -20,11 +25,12 @@ class DiagramScene : public QGraphicsScene
 {
 Q_OBJECT
 private:
-    QGraphicsView *   m_view;      //!< View widget pointer for data
-    ToolType          m_tooltype;  //!< Selected type of tool
-    ToolPanel            *   m_panel;     //!< A pointer to panel
-    QGraphicsProxyWidget *   m_panel_in_scene; //!< A pointer to panel
-    Diagram              *   m_diag; //!< Diagram data
+    QGraphicsView *          m_view;               //!< View widget pointer for data
+    ToolType                 m_tooltype;           //!< Selected type of tool
+    ToolPanel            *   m_panel;              //!< A pointer to panel
+    QGraphicsProxyWidget *   m_panel_in_scene;     //!< A pointer to panel
+    Diagram              *   m_diag;               //!< Diagram data
+    QRectF                   m_default_block_size; //!< Default block size tool
     /*! Process tool selection by keys
         \param[in] event event
         \return true, if handled
@@ -53,6 +59,16 @@ public:
         \param[in] t tool type
     */
     void setTool(ToolType t);
+    /*! Computes a default block sizes;
+     */
+    QRectF getDefaultBlockSize(const QPointF & pos);
+    /*! Returns a diagram
+     */
+    Diagram * diagram() { return m_diag; }
+    /*! Adds a block at specified place
+        \param[in] event event data
+     */
+    void addBlock(QGraphicsSceneMouseEvent *event);
 signals:
 
 public slots:
