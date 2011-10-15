@@ -8,29 +8,31 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    //Creates a diaram set
+    m_set=new DiagramSet();
     //Setup UI
     ui->setupUi(this);
     //Set window Title
-    this->setWindowTitle("IDEF0 Diagram Builder");
+    this->setWindowTitle("IDEF0 Diagram Editor");
 
     //Setup graphic interface
-    DiagramScene * scene=new DiagramScene();
+    DiagramScene * scene=new DiagramScene(m_set->get(0));
     QGraphicsView * view=new QGraphicsView(scene,this);
     view->setGeometry(0,0,
                       this->contentsRect().width(),
                       this->contentsRect().height()
-                      -ui->mainToolBar->height()
                       -ui->menuBar->height()
                       );
     this->setCentralWidget(view);
     scene->setSceneRect(0,0,view->contentsRect().width()
-    ,view->contentsRect().height()
+    ,view->contentsRect().height()-ui->menuBar->height()
     );
     scene->setView(view);
 }
 
 MainWindow::~MainWindow() {
     delete ui;
+    delete m_set;
 }
 
 void MainWindow::changeEvent(QEvent *e) {

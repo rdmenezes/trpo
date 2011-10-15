@@ -7,7 +7,7 @@
 
 #include <QMainWindow>
 #include <QKeyEvent>
-
+#include "diagramset.h"
 //User interface
 namespace Ui {
     class MainWindow;
@@ -35,6 +35,7 @@ protected:
      */
     void keyPressEvent(QKeyEvent *event);
 private:
+    DiagramSet *   m_set; //!< Set of diagrams
     Ui::MainWindow *ui;  //!< UI
     /*! Shows a help dialog
      */

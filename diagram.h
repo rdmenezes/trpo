@@ -14,7 +14,27 @@ class BoxItem;
  */
 class ParentLocation: public QPair<int,int>
 {
-  private:
+  public:
+           /*! Default constructor
+            */
+           inline ParentLocation() {}
+           /*! Creates  a new location
+                \param[in] diag diagram
+                \param[in] block block
+            */
+           inline ParentLocation(int diag,int block)
+           {
+               first=diag;
+               second=block;
+           }
+           /*! Copy constructor
+               \param[in] o other
+           */
+           inline ParentLocation(const ParentLocation & o)
+           {
+             first=o.first;
+             second=o.second;
+           }
            /*! Returns a diagram id for parent
             */
            inline int diagramID() const { return first;}
@@ -63,7 +83,7 @@ class NumberChangeHistory
 };
 /*! Defines a max blocks in diagram
  */
-#define DIAGRAM_MAX_BLOCKS 6
+#define DIAGRAM_MAX_BLOCKS 7
 /*! Declares a diagram blocks
  */
 class Diagram
@@ -78,6 +98,9 @@ private:
         /*! History data
          */
         NumberChangeHistory     m_history;
+        /*! An id of diagram
+         */
+        int m_id;
         /*! Sets a boxes to NULL
          */
         void nullifyBoxes();
@@ -96,11 +119,20 @@ public:
          */
         bool canAddBoxes() const;
         /*! Adds a new Box
+            \param[in] box amount of boxes
          */
         void addBox(BoxItem * box);
         /*! Gets an index id for box
          */
         int getBoxID() const;
+        /*! Returns a diagram id
+            \return diagram id
+         */
+        inline int getID() const { return m_id; }
+        /*! Sets a diagram id
+            \param[in] id diargam id
+         */
+        inline void setID(int id) { m_id=id;}
 };
 
 #endif // DIAGRAM_H
