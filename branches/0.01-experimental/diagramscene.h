@@ -31,6 +31,7 @@ private:
     QGraphicsProxyWidget *   m_panel_in_scene;     //!< A pointer to panel
     Diagram              *   m_diag;               //!< Diagram data
     QRectF                   m_default_block_size; //!< Default block size tool
+    QRectF                   m_default_number_size; //!< Default number size for block
     /*! Process tool selection by keys
         \param[in] event event
         \return true, if handled
@@ -42,6 +43,10 @@ private:
         \param[in] newid  new block id
     */
     void processChangeBlockID(BoxItem * block, char previd, char newid);
+    /*! Processes removing of items
+        \param[in] items clicked items
+     */
+    void processRemoving(const QList<QGraphicsItem *> & items);
 public:
     /*! Declares diagram scene
         \param[in] d      diagram
@@ -68,6 +73,9 @@ public:
     /*! Computes a default block sizes;
      */
     QRectF getDefaultBlockSize(const QPointF & pos);
+    /*! Returns a defulat block numer size
+     */
+    const QRectF & getDefaultBlockNumberSize() const;
     /*! Returns a diagram
      */
     Diagram * diagram() { return m_diag; }

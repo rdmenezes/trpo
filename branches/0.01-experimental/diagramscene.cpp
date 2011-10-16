@@ -19,7 +19,8 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
   QFont fnt=this->font();
   fnt.setPointSize(10);
   QFontMetrics mtr1(fnt);
-  QRect number_size=mtr1.boundingRect("9");
+  m_default_number_size=mtr1.boundingRect("9");
+  QRectF & number_size=m_default_number_size;
   //Get size of default text
   QFontMetrics mtr2(this->font());
   QRect label_size=mtr2.boundingRect(DEFAULT_BLOCK_TEXT);
@@ -36,6 +37,10 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
                                 );
 }
 
+const QRectF & DiagramScene::getDefaultBlockNumberSize() const
+{
+    return this->m_default_number_size;
+}
 void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QPointF pos=event->buttonDownScenePos(event->button());
@@ -58,7 +63,11 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
      if (isWidgetClicked)
         this->QGraphicsScene::mousePressEvent(event);
      else
-        this->QGraphicsScene::mousePressEvent(event);
+     {
+       if (m_tooltype==TT_ERASER)
+             processRemoving(lst);
+       else this->QGraphicsScene::mousePressEvent(event);
+     }
     }
 }
 void DiagramScene::keyPressEvent(QKeyEvent * event)
@@ -198,3 +207,16 @@ void DiagramScene::processChangeBlockID(BoxItem * block, char previd, char newid
  }
  m_diag->setBlockID(block,newid);
 }
+
+void DiagramScene::processRemoving(const QList<QGraphicsItem *> & items)
+ {
+    for (int i=0;i<items.size();i++)
+    {
+        if (items[i]->type()==BoxItem::USERTYPE)
+        {
+            char id=static_cast<BoxItem *>(items[i])->id();
+            m_diag->removeBlock(id);
+            this->removeItem(items[i]);
+        }
+    }
+ }
