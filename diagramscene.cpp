@@ -319,6 +319,9 @@ void DiagramScene::determineDraggingBoxAction(BoxItem * item,const QPointF & pos
   {
       m_dragstate=DS_BLOCK_MOVE;
       m_draggingblock=item;
+      QRectF rct=item->boundingRect();
+      m_blockmovingparams[0]=((qreal)pos.x()-rct.left())/rct.width();
+      m_blockmovingparams[1]=((qreal)pos.y()-rct.top())/rct.height();
   }
 }
 
@@ -371,11 +374,11 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
 {
     this->QGraphicsScene::mouseReleaseEvent(event);
+    QPointF pos=event->scenePos();
+    QRectF oldrect=m_draggingblock->boundingRect();
     if (m_dragstate==DS_BLOCK_RESIZE)
     {
         //Compute new rectangle
-        QRectF oldrect=m_draggingblock->boundingRect();
-        QPointF pos=event->scenePos();
 #define WHATDO(X,Y,Z)   if (m_resizingblockcorner == X) \
                         {   Y (oldrect,pos); Z (oldrect,pos);}
         WHATDO(BC_LOWERLEFT,resizeLower,resizeLeft);
@@ -388,12 +391,30 @@ void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
         bool can_placed=m_diag->canBePlaced(oldrect,m_draggingblock);
         if( !too_small && can_placed)
         {
-           m_draggingblock->frameRect()=oldrect;
-           m_draggingblock->regenerate();
+           m_draggingblock->setRect(oldrect);
            this->update();
         }
         m_dragstate=DS_NONE;
         m_draggingblock=NULL;
         m_resizingblockcorner=BC_LOWERLEFT;
+    }
+    if (m_dragstate==DS_BLOCK_MOVE)
+    {
+       qreal x=pos.x()-m_blockmovingparams[0]*oldrect.width();
+       qreal y=pos.y()-m_blockmovingparams[1]*oldrect.height();
+       if (x<0) x=0;
+       if (y<0) y=0;
+       if (x+oldrect.width()>this->width()) x=this->width()-oldrect.width();
+       if (y+oldrect.height()>this->height()) y=this->height()-oldrect.height();
+       QRectF newrect(x,y,oldrect.width(),oldrect.height());
+       bool can_placed=m_diag->canBePlaced(newrect,m_draggingblock);
+       if(can_placed)
+       {
+          m_draggingblock->setRect(newrect);
+          this->update();
+       }
+       m_dragstate=DS_NONE;
+       m_draggingblock=NULL;
+       m_resizingblockcorner=BC_LOWERLEFT;
     }
 }
