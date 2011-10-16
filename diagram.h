@@ -166,6 +166,9 @@ public:
         /*! Sets a blocks id
          */
         void setBlockID(BoxItem * item, char pos);
+        /*! Removes a block with id
+         */
+        inline void removeBlock(int id) { m_boxes[id]=NULL; }
 };
 
 #endif // DIAGRAM_H

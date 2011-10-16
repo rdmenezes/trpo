@@ -74,3 +74,4 @@ void BoxItem::keyPressEvent(QKeyEvent *event)
        }
     }
 }
+
