@@ -1,6 +1,9 @@
 #include "boxitem.h"
 #include "diagramscene.h"
+#include "keytest.h"
 #include <QFontMetrics>
+
+
 BoxItem::BoxItem(const QPointF & pos,DiagramScene * scene)
 {
  m_rect=scene->getDefaultBlockSize(pos);
@@ -49,3 +52,25 @@ int BoxItem::type() const
     return BoxItem::USERTYPE;
 }
 
+void BoxItem::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key()==Qt::Key_Left)
+    {
+        static_cast<DiagramScene *>(this->scene())->decrementBlockID(this);
+    }
+    else if (event->key()==Qt::Key_Right)
+    {
+        static_cast<DiagramScene *>(this->scene())->incrementBlockID(this);
+    }
+    else
+    {
+       if (isTextEditKey(event))
+       {
+           this->QGraphicsItem::keyPressEvent(event);
+       }
+       else
+       {
+           this->QGraphicsItem::keyPressEvent(event);
+       }
+    }
+}

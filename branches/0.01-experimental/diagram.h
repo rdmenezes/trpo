@@ -51,9 +51,10 @@ class ParentLocation: public QPair<int,int>
             */
            inline void setBlockID(int id)  { second=id;}
 };
-/*! Interval, between history clearing
+/*! Interval, between history clearing in seconds
  */
-#define HISTORY_CLEAR_INTERVAL 5
+#define HISTORY_CLEAR_INTERVAL 2
+class Diagram;
 /*! Class, that handles changes of numbers in blocks, used to undo
     needless swaps, when changing number
 */
@@ -70,17 +71,24 @@ class NumberChangeHistory
     /*! History is a vector of changes
      */
     QVector<SwapEntry> m_history;
+    /*! Declares a last time change
+     */
+    clock_t            m_time;
  public:
+    /*! Constructs a history
+     */
+    NumberChangeHistory();
     /*! Undos a swapping if swapped was before HISTORY_CLEAR_INTERVAL reached
         \param[in] item      item that value is changing now
         \param[in] old_value value, that is changed
+        \param[in] diag      diagram
      */
-    void undoIfSwapped(BoxItem * item,char old_value);
+    void undoIfSwapped(BoxItem * item,char old_value,Diagram * diag);
     /*! Adds new swap in history
         \param[in] one first swap
         \param[in] two second swap
      */
-    void addNewSwap(const SwapEntry & one, const SwapEntry & two);
+    void addNewSwap(const ChangeEntry & one, const ChangeEntry & two);
 };
 /*! Defines a max blocks in diagram
  */
@@ -139,6 +147,25 @@ public:
             \param[in] id diargam id
          */
         inline void setID(int id) { m_id=id;}
+        /*! Returns a block by id
+            \param[in] id block id
+         */
+        BoxItem * getBlockByID(int id);
+        /*! Undos a swapping if swapped was before HISTORY_CLEAR_INTERVAL reached
+            \param[in] item      item that value is changing now
+            \param[in] old_value value, that is changed
+         */
+        void undoIfSwapped(BoxItem * item,char old_value);
+        /*! Adds new swap in history
+            \param[in] item1 first item
+            \param[in] new1  new value of first item
+            \param[in] item2 second item
+            \param[in] new2  new value of second item
+         */
+        void addNewSwap(BoxItem * item1, char new1,BoxItem * item2,char new2);
+        /*! Sets a blocks id
+         */
+        void setBlockID(BoxItem * item, char pos);
 };
 
 #endif // DIAGRAM_H
