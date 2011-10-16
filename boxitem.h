@@ -8,6 +8,7 @@
 
 #include <QGraphicsItem>
 #include <QRectF>
+#include <QRect>
 //Class of scene
 class DiagramScene;
 
@@ -28,7 +29,7 @@ private:
         QString  m_viewed_string;
         /*! rendered string position
          */
-        QPointF  m_string_pos;
+        QRect  m_string_pos;
         /*! Number position
          */
         QPointF  m_number_pos;

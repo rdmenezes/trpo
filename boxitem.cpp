@@ -3,7 +3,7 @@
 #include "keytest.h"
 #include "labeledit.h"
 #include <QFontMetrics>
-
+#include <QRect>
 
 BoxItem::BoxItem(const QPointF & pos,DiagramScene * scene)
 {
@@ -11,16 +11,15 @@ BoxItem::BoxItem(const QPointF & pos,DiagramScene * scene)
  m_real_string=DEFAULT_BLOCK_TEXT;
  m_viewed_string=DEFAULT_BLOCK_TEXT;
  m_id=scene->diagram()->getBoxID();
- QFontMetrics metrics(scene->font());
- QRect size=metrics.boundingRect(m_real_string);
- m_string_pos.setX(m_rect.center().x()-size.width()/2);
- m_string_pos.setY(m_rect.center().y()+size.height()/4);
- QFont fnt(scene->font());
- fnt.setPointSize(10);
- QFontMetrics metrics2(fnt);
- QRect numbersize=metrics2.boundingRect(QString::number(m_id));
+ //Get small label position;
+ QRectF numbersize=scene->getDefaultBlockNumberSize();
  m_number_pos.setX(m_rect.right()-numbersize.width());
  m_number_pos.setY(m_rect.bottom());
+ //Compute bounding rect
+ QFontMetrics metrics(scene->font());
+ m_string_pos=metrics.boundingRect(m_rect.x(),m_rect.y()+1,m_rect.width(),
+                                   m_rect.height()-numbersize.height(),
+                                   Qt::AlignCenter,m_viewed_string);
 }
 
 QRectF BoxItem::boundingRect() const
@@ -104,5 +103,62 @@ void BoxItem::updateString(const QString & text)
 
 void BoxItem::regenerate()
 {
-
+   QRectF       numrect=static_cast<DiagramScene *>(this->scene())->getDefaultBlockNumberSize();
+   QRect        rect(m_rect.x(),m_rect.y(),m_rect.width(),m_rect.height());
+   QFontMetrics metrics(scene()->font());
+   QRect basic_rect=metrics.boundingRect(rect,Qt::AlignCenter,m_real_string);
+   //printf("%d %d %d %d\n",basic_rect.x(),basic_rect.y(),basic_rect.width(),basic_rect.height());
+   m_number_pos.setX(m_rect.x()+m_rect.width()-numrect.width());
+   m_number_pos.setY(m_rect.y()+m_rect.height());
+   if (basic_rect.width()<=m_rect.width() &&
+       basic_rect.height()<=m_rect.height()-numrect.height()
+       )
+   {
+     m_viewed_string=m_real_string;
+   }
+   else
+   {
+       //printf("Worked other lap");
+       QStringList rows=m_real_string.split("\n",
+                                            QString::KeepEmptyParts,
+                                            Qt::CaseSensitive);
+       m_viewed_string="";
+       bool exit=false;
+       int i=0;
+       for (i=0;(i<rows.size()) && !exit;i++)
+       {
+         QString old_v_string=m_viewed_string;        
+         QString row_string_elided=metrics.elidedText(rows[i],Qt::ElideRight,
+                                                      m_rect.width());
+         if (metrics.boundingRect(rect,Qt::AlignCenter,row_string_elided).width()>m_rect.width())
+             row_string_elided="";
+         //Add new string
+         m_viewed_string+=row_string_elided;
+         m_viewed_string+="\n";
+         if (metrics.boundingRect(rect,Qt::AlignCenter,m_viewed_string).height()
+             >
+             m_rect.height()-numrect.height())
+         {
+             m_viewed_string=old_v_string;
+             exit=true;
+             if (i!=0)
+                 rows[i]="...";
+             else
+                 rows[i]="";
+         }
+         else rows[i]=row_string_elided;
+       }
+       printf("%s",rows[0].toStdString().c_str());
+       m_viewed_string=rows[0];
+       if (i!=1) m_viewed_string+="\n";
+       for (int j=1;j<i;j++)
+       {
+           m_viewed_string+=rows[j];
+           if (j!=i-1)
+                m_viewed_string+="\n";
+       }
+   }
+   m_string_pos=metrics.boundingRect(m_rect.x(),m_rect.y()+1,m_rect.width(),
+                                     m_rect.height()-numrect.height(),
+                                     Qt::AlignCenter,m_viewed_string);
 }
