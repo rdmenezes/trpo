@@ -11,6 +11,8 @@
 #define DIAGRAM_H
 //Box item
 class BoxItem;
+//Annotation label item
+class ALabelItem;
 /*! Declares a location of parent block
  */
 class ParentLocation: public QPair<int,int>
@@ -107,6 +109,9 @@ private:
         /*! History data
          */
         NumberChangeHistory     m_history;
+        /*! Vector  of annotation labels
+         */
+        QVector<ALabelItem *>   m_alabels;
         /*! An id of diagram
          */
         int m_id;
