@@ -75,6 +75,9 @@ public:
     /*! Returns a bounding rectangle of item
      */
     QRectF boundingRect() const;
+    /*! Gives access to rect for changing
+     */
+    inline QRectF & frameRect() { return m_rect; }
     /*! Updates an item string
      */
     void updateString(const QString & text);
