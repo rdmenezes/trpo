@@ -38,6 +38,10 @@ private:
         /*! Box id
          */
         char     m_id;
+        /*! Propagates a label editing
+            \param[in] event event editing
+         */
+        void addLabelEdit(QKeyEvent * event);
 public:
           /*! Describes a key press event
            */
@@ -70,6 +74,9 @@ public:
     /*! Returns a bounding rectangle of item
      */
     QRectF boundingRect() const;
+    /*! Updates an item string
+     */
+    void updateString(const QString & text);
     /*! Paint event reaction
         \param[in] painter painter drawing
         \param[in] option options

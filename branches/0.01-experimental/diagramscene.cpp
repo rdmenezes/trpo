@@ -1,6 +1,7 @@
 #include "diagramscene.h"
 #include "helpwindow.h"
 #include "toolpanel.h"
+#include "labeledit.h"
 #include <QTextEdit>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
@@ -35,6 +36,10 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
                                  label_size.height()+
                                  (number_size.height()+BLOCK_SPACE_Y)*2
                                 );
+  //Sets a no edit state
+  m_edit_state=TES_NONE;
+  m_label_editor=NULL;
+  m_label_editor_in_scene=NULL;
 }
 
 const QRectF & DiagramScene::getDefaultBlockNumberSize() const
@@ -47,7 +52,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     //Do in case of nothing found
     if (this->items(pos).size()==0)
     {
-      if (m_tooltype==TT_BLOCK)
+      if (m_tooltype==TT_BLOCK && m_edit_state==TES_NONE)
           addBlock(event);
     }
     //Propagate key pressing event
@@ -64,7 +69,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         this->QGraphicsScene::mousePressEvent(event);
      else
      {
-       if (m_tooltype==TT_ERASER)
+       if (m_tooltype==TT_ERASER && m_edit_state==TES_NONE)
              processRemoving(lst);
        else this->QGraphicsScene::mousePressEvent(event);
      }
@@ -220,3 +225,12 @@ void DiagramScene::processRemoving(const QList<QGraphicsItem *> & items)
         }
     }
  }
+
+void DiagramScene::toggleEditStateOff()
+{
+    this->m_edit_state=TES_NONE;
+    this->m_label_editor->releaseKeyboard();
+    this->removeItem(m_label_editor_in_scene);
+    m_label_editor=NULL;
+    m_label_editor_in_scene=NULL;
+}
