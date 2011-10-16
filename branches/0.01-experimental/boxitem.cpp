@@ -162,3 +162,9 @@ void BoxItem::regenerate()
                                      m_rect.height()-numrect.height(),
                                      Qt::AlignCenter,m_viewed_string);
 }
+
+void BoxItem::setRect(const QRectF & rect)
+{
+    m_rect=rect;
+    regenerate();
+}

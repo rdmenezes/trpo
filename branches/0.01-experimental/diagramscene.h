@@ -63,6 +63,7 @@ private:
     DragState                m_dragstate;          //!< Dragging state work
     BoxItem              *   m_draggingblock;      //!< Dragged block
     BlockCorner              m_resizingblockcorner; //!< Resizing corner of block
+    qreal                    m_blockmovingparams[2]; //!< Defines an x and y relevance to moving
     /*! Process tool selection by keys
         \param[in] event event
         \return true, if handled

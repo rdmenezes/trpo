@@ -78,6 +78,9 @@ public:
     /*! Gives access to rect for changing
      */
     inline QRectF & frameRect() { return m_rect; }
+    /*! Sets a new rectangle
+     */
+    void setRect(const QRectF & rect);
     /*! Updates an item string
      */
     void updateString(const QString & text);
