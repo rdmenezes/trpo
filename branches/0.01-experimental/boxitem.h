@@ -39,6 +39,9 @@ private:
         /*! Box id
          */
         char     m_id;
+        /*! Location of child diagram (-1 is default)
+         */
+        int m_childdiagram;
         /*! Propagates a label editing
             \param[in] event event editing
          */
@@ -92,6 +95,14 @@ public:
     void paint(QPainter *painter,
                const QStyleOptionGraphicsItem *option,
                QWidget *widget);
+    /*! Returns a child diagram
+        \return id
+     */
+    inline int childDiagram() const { return m_childdiagram;}
+    /*! Sets a childdiagram
+        \param[in]  id diagram id
+     */
+    inline void setChildDiagram(int id) { m_childdiagram=id; }
 };
 
 #endif // BOXITEM_H
