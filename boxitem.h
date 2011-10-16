@@ -39,6 +39,10 @@ private:
          */
         char     m_id;
 public:
+          /*! Describes a key press event
+           */
+          void keyPressEvent(QKeyEvent *event);
+public:
     /*! Declares a type of item
      */
     enum ItemType
@@ -54,7 +58,7 @@ public:
     /*! Sets an item id
         \param[in] id id
     */
-    inline void setID(int id) { m_id=id; }
+    inline void setID(int id) { m_id=id; update(); }
     /*! Creates an item position at scene
         \param[in] pos    position of creation of box
         \param[in] scene  scene data

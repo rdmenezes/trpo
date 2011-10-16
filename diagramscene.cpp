@@ -6,6 +6,7 @@
 #include <QKeyEvent>
 #include <QGraphicsProxyWidget>
 #include <QFontMetricsF>
+#include <QApplication>
 
 DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
     QGraphicsScene(parent)
@@ -108,6 +109,20 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
       handled=true;
   }
   if (!handled)
+  {
+     QPoint viewpos=m_view->mapFromGlobal(QCursor::pos());
+     QPointF scenepos=m_view->mapToScene(viewpos);
+     QList<QGraphicsItem *> items=this->items(scenepos);
+     for (int i=0;(i<items.size()) && !handled;i++)
+     {
+         if (items[i]->type()==BoxItem::USERTYPE)
+         {
+             static_cast<BoxItem *>(items[i])->keyPressEvent(event);
+             handled=true;
+         }
+     }
+  }
+  if (!handled)
       this->QGraphicsScene::keyPressEvent(event);
 }
 
@@ -157,4 +172,29 @@ void DiagramScene::addBlock(QGraphicsSceneMouseEvent *event)
    m_diag->addBox(b);
   }
  }
+}
+
+void DiagramScene::decrementBlockID(BoxItem * block)
+{
+ int previd=block->id();
+ int newid=((block->id()==0)?DIAGRAM_MAX_BLOCKS:previd)-1;
+ processChangeBlockID(block,previd,newid);
+}
+
+void DiagramScene::incrementBlockID(BoxItem * block)
+{
+ int previd=block->id();
+ int newid=(block->id()==DIAGRAM_MAX_BLOCKS-1)?0:(previd+1);
+ processChangeBlockID(block,previd,newid);
+}
+
+void DiagramScene::processChangeBlockID(BoxItem * block, char previd, char newid)
+{
+ m_diag->undoIfSwapped(block,previd);
+ if (m_diag->getBlockByID(newid))
+ {
+        BoxItem * oldblock=m_diag->getBlockByID(newid);
+        m_diag->addNewSwap(oldblock,previd,block,newid);
+ }
+ m_diag->setBlockID(block,newid);
 }

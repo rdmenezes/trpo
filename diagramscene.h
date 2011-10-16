@@ -36,6 +36,12 @@ private:
         \return true, if handled
     */
     bool processKeyToolSelect(QKeyEvent * event);
+    /*! Processes changing block id
+        \param[in] block block, whose id is changing
+        \param[in] previd previous block id
+        \param[in] newid  new block id
+    */
+    void processChangeBlockID(BoxItem * block, char previd, char newid);
 public:
     /*! Declares diagram scene
         \param[in] d      diagram
@@ -69,6 +75,14 @@ public:
         \param[in] event event data
      */
     void addBlock(QGraphicsSceneMouseEvent *event);
+    /*! Decrements block id
+        \param[in] block block
+     */
+    void decrementBlockID(BoxItem * block);
+    /*! Increments block id
+        \param[in] block block
+     */
+    void incrementBlockID(BoxItem * block);
 signals:
 
 public slots:

@@ -13,7 +13,8 @@ SOURCES += main.cpp \
     boxitem.cpp \
     diagram.cpp \
     diagramset.cpp \
-    collision.cpp
+    collision.cpp \
+    keytest.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
@@ -22,7 +23,8 @@ HEADERS += mainwindow.h \
     boxitem.h \
     diagram.h \
     diagramset.h \
-    collision.h
+    collision.h \
+    keytest.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc
