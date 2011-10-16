@@ -1,6 +1,7 @@
 #include "boxitem.h"
 #include "diagramscene.h"
 #include "keytest.h"
+#include "labeledit.h"
 #include <QFontMetrics>
 
 
@@ -64,9 +65,24 @@ void BoxItem::keyPressEvent(QKeyEvent *event)
     }
     else
     {
-       if (isTextEditKey(event))
+       DiagramScene * myscene=static_cast<DiagramScene *>(this->scene());
+       if (isTextEditKey(event) &&
+           myscene->editState()==TES_NONE)
        {
-           this->QGraphicsItem::keyPressEvent(event);
+           LabelEdit  * field=new LabelEdit(myscene,this);
+           QRect tmp(m_rect.x(),m_rect.y(),m_rect.width(),m_rect.height());
+           field->setGeometry(tmp);
+           field->setFont(myscene->font());
+           if (m_real_string!=DEFAULT_BLOCK_TEXT)
+            field->setPlainText(m_real_string);
+           //Move to end cursor
+           QTextCursor c=field->textCursor();
+           c.movePosition(QTextCursor::End);
+           field->setTextCursor(c);
+           QGraphicsProxyWidget * proxy=this->scene()->addWidget(field);
+           myscene->toggleEditStateOn(field,proxy);
+           field->grabKeyboard();
+           field->keyPressEvent(event);
        }
        else
        {
@@ -75,3 +91,18 @@ void BoxItem::keyPressEvent(QKeyEvent *event)
     }
 }
 
+void BoxItem::updateString(const QString & text)
+{
+   if (!text.isEmpty())
+   {
+        m_real_string=text;
+        m_viewed_string=text;
+        regenerate();
+        update();
+   }
+}
+
+void BoxItem::regenerate()
+{
+
+}

@@ -14,7 +14,8 @@ SOURCES += main.cpp \
     diagram.cpp \
     diagramset.cpp \
     collision.cpp \
-    keytest.cpp
+    keytest.cpp \
+    labeledit.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
@@ -24,7 +25,8 @@ HEADERS += mainwindow.h \
     diagram.h \
     diagramset.h \
     collision.h \
-    keytest.h
+    keytest.h \
+    labeledit.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc
