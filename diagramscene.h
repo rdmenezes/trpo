@@ -8,6 +8,7 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QGraphicsSceneDragDropEvent>
 #include "tooltype.h"
 #include "diagram.h"
 #include "boxitem.h"
@@ -20,6 +21,21 @@ enum TextEditState
 {
    TES_NONE,
    TES_EDIT
+};
+
+enum DragState
+{
+    DS_NONE,
+    DS_BLOCK_RESIZE,
+    DS_BLOCK_MOVE
+};
+
+enum BlockCorner
+{
+    BC_UPPERLEFT,
+    BC_UPPERRIGHT,
+    BC_LOWERLEFT,
+    BC_LOWERRIGHT
 };
 /*! A class of panel for tool selection
  */
@@ -44,6 +60,9 @@ private:
     TextEditState            m_edit_state;         //!< Text edit state
     LabelEdit            *   m_label_editor;       //!< A current label editor
     QGraphicsProxyWidget *   m_label_editor_in_scene; //!< A label editor in scene
+    DragState                m_dragstate;          //!< Dragging state work
+    BoxItem              *   m_draggingblock;      //!< Dragged block
+    BlockCorner              m_resizingblockcorner; //!< Resizing corner of block
     /*! Process tool selection by keys
         \param[in] event event
         \return true, if handled
@@ -59,6 +78,20 @@ private:
         \param[in] items clicked items
      */
     void processRemoving(const QList<QGraphicsItem *> & items);
+    /*! Determines dragging box action
+        \param[in] item item data
+        \param[in] pos  position
+     */
+    void determineDraggingBoxAction(BoxItem * item,const QPointF & pos);
+protected:
+    /*! Handles a beginning of dragging item
+        \param[in] event event data
+     */
+    void  blockResizeMoveEnter ( QGraphicsSceneMouseEvent * event );
+    /*! Handles an ending for dragging item
+        \param[in] event event data
+     */
+    void  blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event );
 public:
     /*! Declares diagram scene
         \param[in] d      diagram
@@ -69,6 +102,10 @@ public:
         \param[in] ev event
      */
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    /*! Event, that occures when mouse is being pressed
+        \param[in] ev event
+     */
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     /*! Event, that occures when key is being pressed
         \param[in] ev event
     */

@@ -40,6 +40,10 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
   m_edit_state=TES_NONE;
   m_label_editor=NULL;
   m_label_editor_in_scene=NULL;
+  //Sets a no dragging state
+  m_dragstate=DS_NONE;
+  m_draggingblock=NULL;
+  m_resizingblockcorner=BC_LOWERLEFT;
 }
 
 const QRectF & DiagramScene::getDefaultBlockNumberSize() const
@@ -71,6 +75,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
      {
        if (m_tooltype==TT_ERASER && m_edit_state==TES_NONE)
              processRemoving(lst);
+       else if (m_tooltype==TT_SELECT) blockResizeMoveEnter(event);
        else this->QGraphicsScene::mousePressEvent(event);
      }
     }
@@ -233,4 +238,162 @@ void DiagramScene::toggleEditStateOff()
     this->removeItem(m_label_editor_in_scene);
     m_label_editor=NULL;
     m_label_editor_in_scene=NULL;
+}
+
+void  DiagramScene::blockResizeMoveEnter ( QGraphicsSceneMouseEvent * event )
+{
+   QList<QGraphicsItem *> lst=items(event->scenePos());
+   bool isWidgetClicked=false;
+   for (int i=0;i<lst.size();i++)
+   {
+       if (lst[i]->type()==QGraphicsProxyWidget::Type)
+           isWidgetClicked=true;
+   }
+   if (isWidgetClicked || lst.size()==0)
+      this->QGraphicsScene::mousePressEvent(event);
+   else
+   {
+        for(int i=0;i<lst.size();i++)
+        {
+          if (lst[i]->type()==BoxItem::USERTYPE)
+          {
+                determineDraggingBoxAction(static_cast<BoxItem *>(lst[i]),
+                                           event->scenePos()
+                                           );
+          }
+        }
+   }
+}
+
+#define CORNER_PRECISE 7
+void DiagramScene::determineDraggingBoxAction(BoxItem * item,const QPointF & pos)
+{
+  bool handled=false;
+  if (   pos.x()-item->boundingRect().x() < CORNER_PRECISE
+         &&  pos.y()-item->boundingRect().y() < CORNER_PRECISE
+         &&  !handled
+     )
+  {
+     handled=true;
+     m_dragstate=DS_BLOCK_RESIZE;
+     m_draggingblock=item;
+     m_resizingblockcorner=BC_UPPERLEFT;
+  }
+  //printf("Check for upper right: %d %d %d %d\n",(int)(item->boundingRect().right())
+  //       ,pos.x(),pos.y(),item->boundingRect().y()
+  //        );
+  if (   item->boundingRect().right()-pos.x() < CORNER_PRECISE
+         &&  pos.y()-item->boundingRect().y() < CORNER_PRECISE
+         &&  !handled
+     )
+  {
+     handled=true;
+     m_dragstate=DS_BLOCK_RESIZE;
+     m_draggingblock=item;
+     m_resizingblockcorner=BC_UPPERRIGHT;
+  }
+  if (   pos.x()-item->boundingRect().x() < CORNER_PRECISE
+         &&  item->boundingRect().bottom()-pos.y() < CORNER_PRECISE
+         &&  !handled
+     )
+  {
+     handled=true;
+     m_dragstate=DS_BLOCK_RESIZE;
+     m_draggingblock=item;
+     m_resizingblockcorner=BC_LOWERLEFT;
+  }
+  //printf("Check for upper right: %d %d %d %d\n",(int)(item->boundingRect().right())
+  //       ,pos.x(),item->boundingRect().bottom(),pos.y()
+  //       );
+  if (   item->boundingRect().right()-pos.x() < CORNER_PRECISE
+         &&  item->boundingRect().bottom()-pos.y() < CORNER_PRECISE
+         &&  !handled
+     )
+  {
+     handled=true;
+     m_dragstate=DS_BLOCK_RESIZE;
+     m_draggingblock=item;
+     m_resizingblockcorner=BC_LOWERRIGHT;
+  }
+  if (!handled)
+  {
+      m_dragstate=DS_BLOCK_MOVE;
+      m_draggingblock=item;
+  }
+}
+
+void resizeLeft(QRectF & oldrect, QPointF & pos)
+{
+    if (pos.x()>=oldrect.right())
+    {
+        qreal rt=oldrect.right();
+        oldrect.setWidth(pos.x()-oldrect.left());
+        oldrect.setLeft(rt);
+    } else oldrect.setLeft(pos.x());
+}
+
+void resizeRight(QRectF & oldrect, QPointF & pos)
+{
+    if (pos.x()<=oldrect.left())
+    {
+        qreal oldleft=oldrect.left();
+        oldrect.setX(pos.x());
+        oldrect.setWidth(oldleft-pos.x());
+    } else oldrect.setWidth(pos.x()-oldrect.left());
+}
+void resizeLower(QRectF & oldrect, QPointF & pos)
+{
+    if (pos.y()<=oldrect.top())
+    {
+        qreal oldtop=oldrect.top();
+        oldrect.setY(pos.y());
+        oldrect.setHeight(oldtop-pos.y());
+    } else oldrect.setHeight(pos.y()-oldrect.top());
+}
+
+void resizeUpper(QRectF & oldrect, QPointF & pos)
+{
+   if (pos.y()>=oldrect.bottom())
+   {
+      qreal oldbottom=oldrect.bottom();
+      oldrect.setHeight(pos.y()-oldrect.top());
+      oldrect.setY(oldbottom);
+   } else oldrect.setY(pos.y());
+}
+
+
+void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (m_tooltype==TT_SELECT)
+        blockResizeMoveLeave(event);
+}
+
+void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
+{
+    this->QGraphicsScene::mouseReleaseEvent(event);
+    if (m_dragstate==DS_BLOCK_RESIZE)
+    {
+        //Compute new rectangle
+        QRectF oldrect=m_draggingblock->boundingRect();
+        QPointF pos=event->scenePos();
+#define WHATDO(X,Y,Z)   if (m_resizingblockcorner == X) \
+                        {   Y (oldrect,pos); Z (oldrect,pos);}
+        WHATDO(BC_LOWERLEFT,resizeLower,resizeLeft);
+        WHATDO(BC_LOWERRIGHT,resizeLower,resizeRight);
+        WHATDO(BC_UPPERLEFT,resizeUpper,resizeLeft);
+        WHATDO(BC_UPPERRIGHT,resizeUpper,resizeRight);
+#undef  WHATDO
+        QRectF labelsize=this->getDefaultBlockNumberSize();
+        bool too_small=oldrect.height()<=labelsize.height() || oldrect.width()<=labelsize.width();
+        bool can_placed=m_diag->canBePlaced(oldrect,m_draggingblock);
+        if( !too_small && can_placed)
+        {
+           m_draggingblock->frameRect()=oldrect;
+           m_draggingblock->regenerate();
+           this->update();
+        }
+        m_dragstate=DS_NONE;
+        m_draggingblock=NULL;
+        m_resizingblockcorner=BC_LOWERLEFT;
+    }
 }
