@@ -11,6 +11,7 @@ BoxItem::BoxItem(const QPointF & pos,DiagramScene * scene)
  m_real_string=DEFAULT_BLOCK_TEXT;
  m_viewed_string=DEFAULT_BLOCK_TEXT;
  m_id=scene->diagram()->getBoxID();
+ m_childdiagram=-1;
  //Get small label position;
  QRectF numbersize=scene->getDefaultBlockNumberSize();
  m_number_pos.setX(m_rect.right()-numbersize.width());
