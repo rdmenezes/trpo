@@ -9,7 +9,7 @@
 #include <QGraphicsItem>
 #include <QRectF>
 #include <QRect>
-
+#include <QKeyEvent>
 //Describes an annotation label item
 #define DEFAULT_ALABEL_TEXT "Some commentary"
 
@@ -34,8 +34,16 @@ public:
         USERTYPE=QGraphicsItem::UserType+10
     };
 
-
-    ALabelItem();
+    /*! Constrcts a label item
+        \param[in] rect bounding rectangle
+     */
+    ALabelItem(const QRectF & rect);
+    /*! Tries setting rect to label item
+     */
+    void setRect(const QRectF & rect);
+    /*! Returns a type of annotation label item
+     */
+    int type() const;
     /*! Returns a bounding rectangle of item
      */
     QRectF boundingRect() const;
@@ -47,6 +55,14 @@ public:
     void paint(QPainter *painter,
                const QStyleOptionGraphicsItem *option,
                QWidget *widget);
+    /*! Handles a text editing
+        \param[in] event event of editing
+     */
+    void keyPressEvent(QKeyEvent *event);
+    /*! Tries setting a  new text
+        \param[in] text new text
+     */
+    void trySetText(const QString & text);
 signals:
 
 public slots:

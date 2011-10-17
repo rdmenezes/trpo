@@ -27,7 +27,8 @@ enum DragState
 {
     DS_NONE,
     DS_BLOCK_RESIZE,
-    DS_BLOCK_MOVE
+    DS_BLOCK_MOVE,
+    DS_ALABEL_MOVE
 };
 
 enum BlockCorner
@@ -64,6 +65,8 @@ private:
     BoxItem              *   m_draggingblock;      //!< Dragged block
     BlockCorner              m_resizingblockcorner; //!< Resizing corner of block
     qreal                    m_blockmovingparams[2]; //!< Defines an x and y relevance to moving
+    QRectF                   m_alabel_block_size;   //!< Size of annotation label
+    ALabelItem           *   m_moving_label;        //!< Moving annotation label
     /*! Process tool selection by keys
         \param[in] event event
         \return true, if handled
@@ -123,9 +126,13 @@ public:
     /*! Computes a default block sizes;
      */
     QRectF getDefaultBlockSize(const QPointF & pos);
-    /*! Returns a defulat block numer size
+    /*! Returns a default block numer size
      */
     const QRectF & getDefaultBlockNumberSize() const;
+    /*! Returns a default annotation label size
+        \param[in] pos  center position of label
+     */
+    QRectF getDefaultAnnotationLabelSize(const QPointF & pos);
     /*! Returns a diagram
      */
     Diagram * diagram() { return m_diag; }
@@ -133,6 +140,10 @@ public:
         \param[in] event event data
      */
     void addBlock(QGraphicsSceneMouseEvent *event);
+    /*! Adds an annotation at specified place
+        \param[in] event event data
+     */
+    void addAnnotationLabel(QGraphicsSceneMouseEvent *event);
     /*! Decrements block id
         \param[in] block block
      */

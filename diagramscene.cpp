@@ -2,6 +2,7 @@
 #include "helpwindow.h"
 #include "toolpanel.h"
 #include "labeledit.h"
+#include "alabelitem.h"
 #include <QTextEdit>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
@@ -36,6 +37,10 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
                                  label_size.height()+
                                  (number_size.height()+BLOCK_SPACE_Y)*2
                                 );
+  //Compute a size of default label
+  QRect tmp_alabel=mtr2.boundingRect(DEFAULT_ALABEL_TEXT);
+  m_alabel_block_size=QRectF(tmp_alabel.x(),tmp_alabel.y(),
+                             tmp_alabel.width()+2, tmp_alabel.height()+2);
   //Sets a no edit state
   m_edit_state=TES_NONE;
   m_label_editor=NULL;
@@ -44,6 +49,7 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
   m_dragstate=DS_NONE;
   m_draggingblock=NULL;
   m_resizingblockcorner=BC_LOWERLEFT;
+  m_moving_label=NULL;
 }
 
 const QRectF & DiagramScene::getDefaultBlockNumberSize() const
@@ -58,6 +64,8 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     {
       if (m_tooltype==TT_BLOCK && m_edit_state==TES_NONE)
           addBlock(event);
+      if (m_tooltype==TT_ANNOTATION_LABEL && m_edit_state==TES_NONE)
+          addAnnotationLabel(event);
     }
     //Propagate key pressing event
     else
@@ -139,6 +147,11 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
              static_cast<BoxItem *>(items[i])->keyPressEvent(event);
              handled=true;
          }
+         if (items[i]->type()==ALabelItem::USERTYPE)
+         {
+             static_cast<ALabelItem *>(items[i])->keyPressEvent(event);
+             handled=true;
+         }
      }
   }
   if (!handled)
@@ -180,16 +193,38 @@ QRectF DiagramScene::getDefaultBlockSize(const QPointF & pos)
   return result;
 }
 
+QRectF DiagramScene::getDefaultAnnotationLabelSize(const QPointF & pos)
+{
+  QRectF result;
+  result.setX(pos.x()-m_alabel_block_size.width()/2);
+  result.setY(pos.y()-m_alabel_block_size.height()/2);
+  result.setWidth(m_alabel_block_size.width());
+  result.setHeight(m_alabel_block_size.height());
+  return result;
+}
+
 void DiagramScene::addBlock(QGraphicsSceneMouseEvent *event)
 {
  if (m_diag->canAddBoxes())
  {
-  if (m_diag->canBePlaced(getDefaultBlockSize(event->scenePos())))
+  QRectF size=getDefaultBlockSize(event->scenePos());
+  if (m_diag->canBePlaced(size,(BoxItem*)NULL))
   {
    BoxItem * b=new BoxItem(event->scenePos(),this);
    this->addItem(b);
    m_diag->addBox(b);
   }
+ }
+}
+
+void DiagramScene::addAnnotationLabel(QGraphicsSceneMouseEvent *event)
+{
+ QRectF size=getDefaultAnnotationLabelSize(event->scenePos());
+ if (m_diag->canBePlaced(size,(ALabelItem*)NULL))
+ {
+     ALabelItem * a=new ALabelItem(size);
+     this->addItem(a);
+     m_diag->addAnnotationLabel(a);
  }
 }
 
@@ -228,6 +263,11 @@ void DiagramScene::processRemoving(const QList<QGraphicsItem *> & items)
             m_diag->removeBlock(id);
             this->removeItem(items[i]);
         }
+        if (items[i]->type()==ALabelItem::USERTYPE)
+        {
+            m_diag->removeAnnotationLabel(static_cast<ALabelItem *>(items[i]));
+            this->removeItem(items[i]);
+        }
     }
  }
 
@@ -239,6 +279,7 @@ void DiagramScene::toggleEditStateOff()
     m_label_editor=NULL;
     m_label_editor_in_scene=NULL;
 }
+
 
 void  DiagramScene::blockResizeMoveEnter ( QGraphicsSceneMouseEvent * event )
 {
@@ -260,6 +301,16 @@ void  DiagramScene::blockResizeMoveEnter ( QGraphicsSceneMouseEvent * event )
                 determineDraggingBoxAction(static_cast<BoxItem *>(lst[i]),
                                            event->scenePos()
                                            );
+          }
+          if (lst[i]->type()==ALabelItem::USERTYPE)
+          {
+              m_dragstate=DS_ALABEL_MOVE;
+              QPointF pos=event->scenePos();
+              ALabelItem * item=static_cast<ALabelItem *>(lst[i]);
+              m_moving_label=item;
+              QRectF       rct=item->boundingRect();
+              m_blockmovingparams[0]=(pos.x()-rct.left())/rct.width();
+              m_blockmovingparams[1]=(pos.y()-rct.top())/rct.height();
           }
         }
    }
@@ -375,9 +426,9 @@ void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
 {
     this->QGraphicsScene::mouseReleaseEvent(event);
     QPointF pos=event->scenePos();
-    QRectF oldrect=m_draggingblock->boundingRect();
     if (m_dragstate==DS_BLOCK_RESIZE)
     {
+         QRectF oldrect=m_draggingblock->boundingRect();
         //Compute new rectangle
 #define WHATDO(X,Y,Z)   if (m_resizingblockcorner == X) \
                         {   Y (oldrect,pos); Z (oldrect,pos);}
@@ -400,6 +451,7 @@ void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
     }
     if (m_dragstate==DS_BLOCK_MOVE)
     {
+       QRectF oldrect=m_draggingblock->boundingRect();
        qreal x=pos.x()-m_blockmovingparams[0]*oldrect.width();
        qreal y=pos.y()-m_blockmovingparams[1]*oldrect.height();
        if (x<0) x=0;
@@ -416,5 +468,24 @@ void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
        m_dragstate=DS_NONE;
        m_draggingblock=NULL;
        m_resizingblockcorner=BC_LOWERLEFT;
+    }
+    if (m_dragstate==DS_ALABEL_MOVE)
+    {
+        QRectF oldrect=m_moving_label->boundingRect();
+        qreal x=pos.x()-m_blockmovingparams[0]*oldrect.width();
+        qreal y=pos.y()-m_blockmovingparams[1]*oldrect.height();
+        if (x<0) x=0;
+        if (y<0) y=0;
+        if (x+oldrect.width()>this->width()) x=this->width()-oldrect.width();
+        if (y+oldrect.height()>this->height()) y=this->height()-oldrect.height();
+        QRectF newrect(x,y,oldrect.width(),oldrect.height());
+        bool can_placed=m_diag->canBePlaced(newrect,m_moving_label);
+        if(can_placed)
+        {
+           m_moving_label->setRect(newrect);
+           this->update();
+        }
+        m_dragstate=DS_NONE;
+        m_moving_label=NULL;
     }
 }
