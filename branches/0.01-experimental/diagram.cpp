@@ -1,6 +1,8 @@
 #include "diagram.h"
 #include "boxitem.h"
 #include "collision.h"
+#include "alabelitem.h"
+
 Diagram::Diagram()
 {
     m_parent=ParentLocation(-1,-1);
@@ -54,7 +56,24 @@ void Diagram::addBox(BoxItem * box)
   this->m_boxes[box->id()]=box;
 }
 
-bool Diagram::canBePlaced(const QRectF & rect, BoxItem * pointer)
+void Diagram::addAnnotationLabel(ALabelItem * label)
+{
+  this->m_alabels<<label;
+}
+
+void Diagram::removeAnnotationLabel(ALabelItem * label)
+{
+    for (int i=0;i<m_alabels.size();i++)
+    {
+        if (m_alabels[i]==label)
+        {
+            m_alabels.remove(i);
+            --i;
+        }
+    }
+}
+
+bool Diagram::testForNoBlockCollision(const QRectF & rect, QGraphicsItem * pointer)
 {
     //Scan blocks
     for (int i=0;i<DIAGRAM_MAX_BLOCKS;i++)
@@ -67,6 +86,36 @@ bool Diagram::canBePlaced(const QRectF & rect, BoxItem * pointer)
     }
     return true;
 }
+
+bool Diagram::testForNoALabelCollision(const QRectF &rect, QGraphicsItem *pointer)
+{
+    //Scan annotation label
+    for (int i=0;i<m_alabels.size();i++)
+    {
+        if (m_alabels[i]!=NULL && m_alabels[i]!=pointer)
+        {
+            if (collides(rect,m_alabels[i]->boundingRect()))
+                return false;
+        }
+    }
+    return true;
+}
+
+bool Diagram::canBePlaced(const QRectF &rect, QGraphicsItem *pointer)
+{
+  return testForNoALabelCollision(rect,pointer)
+          && testForNoBlockCollision(rect,pointer);
+}
+
+bool Diagram::canBePlaced(const QRectF &rect, ALabelItem *pointer)
+{
+    return canBePlaced(rect,(QGraphicsItem*)pointer);
+}
+bool Diagram::canBePlaced(const QRectF & rect, BoxItem * pointer)
+{
+    return canBePlaced(rect,(QGraphicsItem*)pointer);
+}
+
 
 BoxItem * Diagram::getBlockByID(int id)
 {

@@ -9,6 +9,8 @@
 #include <time.h>
 #ifndef DIAGRAM_H
 #define DIAGRAM_H
+//Graphics item
+class QGraphicsItem;
 //Box item
 class BoxItem;
 //Annotation label item
@@ -118,6 +120,15 @@ private:
         /*! Sets a boxes to NULL
          */
         void nullifyBoxes();
+        /*! Determines, whether item, doesn't collide with blocks
+         */
+        bool testForNoBlockCollision(const QRectF & rect,QGraphicsItem * pointer);
+        /*! Determines, whether item, doesn't collide with blocks
+         */
+        bool testForNoALabelCollision(const QRectF & rect,QGraphicsItem * pointer);
+        /*! Determines, whether item can be placed
+         */
+        bool canBePlaced(const QRectF & rect, QGraphicsItem * pointer);
 public:
         /*! Inits an empty diagram
          */
@@ -133,14 +144,23 @@ public:
          */
         bool canAddBoxes() const;
         /*! Adds a new Box
-            \param[in] box amount of boxes
+            \param[in] box box to be added
          */
         void addBox(BoxItem * box);
+        /*! Adds a new Annotation Label
+            \param[in] label annotation label  to be added
+         */
+        void addAnnotationLabel(ALabelItem * label);
         /*! Determines, whether block can be placed or not
             \param[in] rect   bounding rect geometry
             \param[in] pointer NULL if don't check
          */
         bool canBePlaced(const QRectF & rect, BoxItem * pointer=NULL);
+        /*! Determines, whether block can be placed or not
+            \param[in] rect   bounding rect geometry
+            \param[in] pointer NULL if don't check
+         */
+        bool canBePlaced(const QRectF & rect, ALabelItem * pointer=NULL);
         /*! Gets an index id for box
          */
         int getBoxID() const;
@@ -172,8 +192,13 @@ public:
          */
         void setBlockID(BoxItem * item, char pos);
         /*! Removes a block with id
+            \param[in] id id of removing block
          */
         inline void removeBlock(int id) { m_boxes[id]=NULL; }
+        /*! Removes an annotation label
+            \param[in] label label item
+         */
+        void removeAnnotationLabel(ALabelItem * label);
 };
 
 #endif // DIAGRAM_H
