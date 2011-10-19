@@ -73,6 +73,18 @@ public:
         /*! Deattaches a block from a point
          */
         inline void deattachFromBlock() { m_block=NULL; }
+        /*! Detects, whether point is starting point for a segments
+         */
+        bool isBeginPoint();
+        /*! Detects, whether point is ending point for a segments
+         */
+        bool isEndingPoint();
+        /*! Detects, whether point is invalid
+         */
+        bool mustBeDecomposed();
+        /*! Detects, whether point is separated
+         */
+        bool isSeparated();
         /*! Destructor
          */
         ~ArrowPoint();
