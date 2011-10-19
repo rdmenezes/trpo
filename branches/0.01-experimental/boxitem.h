@@ -9,6 +9,7 @@
 #include <QGraphicsItem>
 #include <QRectF>
 #include <QRect>
+#include "moverange.h"
 //Class of scene
 class DiagramScene;
 //Arrow points
@@ -155,6 +156,10 @@ public:
      */
     bool canAddPointReference(ArrowPoint * point,
                               BlockEnteringType enter);
+    /*! Returns a range for a point
+        \param[in] point point
+     */
+    MoveRange getRange(ArrowPoint * point);
 };
 
 #endif // BOXITEM_H
