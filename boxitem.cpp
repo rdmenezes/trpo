@@ -247,3 +247,15 @@ bool BoxItem::canAddPointReference(ArrowPoint * point,
   if (bis==BIS_RIGHT)                return enter==BET_OUTPUT && canAddToSide(bis);
   return false;
 }
+
+MoveRange BoxItem::getRange(ArrowPoint * point)
+{
+  BoxItemSide bis=sideOfPoint(point);
+  if (bis==BIS_LEFT)
+      return createVerticalRange(m_rect.top(),m_rect.bottom(),m_rect.left());
+  if (bis==BIS_RIGHT)
+      return createVerticalRange(m_rect.top(),m_rect.bottom(),m_rect.right());
+  if (bis==BIS_TOP)
+      return createHorizontalRange(m_rect.left(),m_rect.right(),m_rect.top());
+  return createHorizontalRange(m_rect.left(),m_rect.right(),m_rect.bottom());
+}

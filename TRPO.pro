@@ -19,7 +19,8 @@ SOURCES += main.cpp \
     alabelitem.cpp \
     alineitem.cpp \
     arrowsegment.cpp \
-    arrowpoint.cpp
+    arrowpoint.cpp \
+    moverange.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
@@ -34,7 +35,8 @@ HEADERS += mainwindow.h \
     alabelitem.h \
     alineitem.h \
     arrowsegment.h \
-    arrowpoint.h
+    arrowpoint.h \
+    moverange.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc
