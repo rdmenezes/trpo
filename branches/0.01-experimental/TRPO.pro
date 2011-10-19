@@ -16,7 +16,10 @@ SOURCES += main.cpp \
     collision.cpp \
     keytest.cpp \
     labeledit.cpp \
-    alabelitem.cpp
+    alabelitem.cpp \
+    alineitem.cpp \
+    arrowsegment.cpp \
+    arrowpoint.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
@@ -28,7 +31,10 @@ HEADERS += mainwindow.h \
     collision.h \
     keytest.h \
     labeledit.h \
-    alabelitem.h
+    alabelitem.h \
+    alineitem.h \
+    arrowsegment.h \
+    arrowpoint.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc

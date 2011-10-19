@@ -2,6 +2,9 @@
 #include "boxitem.h"
 #include "collision.h"
 #include "alabelitem.h"
+#include "alineitem.h"
+#include "arrowpoint.h"
+#include "arrowsegment.h"
 
 Diagram::Diagram()
 {
@@ -181,4 +184,57 @@ void Diagram::setBlockID(BoxItem * item, char pos)
     m_boxes[pos]=item;
     item->setID(pos);
 }
+
+void Diagram::addAnnotationLine(ALineItem * line)
+{
+    m_alines<<line;
+}
+
+void Diagram::addArrowPoint(ArrowPoint *point)
+{
+    m_arrow_points<<point;
+}
+
+void Diagram::addArrowSegment(ArrowSegment * segment)
+{
+    m_arrow_segments<<segment;
+}
+
+void Diagram::removeAnnotationLine(ALineItem * line)
+{
+   for (int i=0;i<m_alines.size();i++)
+   {
+      if (m_alines[i]==line)
+      {
+        m_alines.remove(i);
+        --i;
+      }
+   }
+}
+
+void Diagram::removeArrowPoint(ArrowPoint * point)
+{
+   for (int i=0;i<m_arrow_points.size();i++)
+   {
+      if (m_arrow_points[i]==point)
+      {
+        m_arrow_points.remove(i);
+        delete m_arrow_points[i];
+        --i;
+      }
+   }
+}
+
+void Diagram::removeArrowSegment(ArrowSegment * segment)
+{
+   for (int i=0;i<m_arrow_segments.size();i++)
+   {
+      if (m_arrow_segments[i]==segment)
+      {
+        m_arrow_segments.remove(i);
+        --i;
+      }
+   }
+}
+
 
