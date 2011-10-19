@@ -2,8 +2,11 @@
 #include "diagramscene.h"
 #include "keytest.h"
 #include "labeledit.h"
+#include "arrowpoint.h"
 #include <QFontMetrics>
 #include <QRect>
+#include <math.h>
+#include <string.h>
 
 BoxItem::BoxItem(const QPointF & pos,DiagramScene * scene)
 {
@@ -21,6 +24,8 @@ BoxItem::BoxItem(const QPointF & pos,DiagramScene * scene)
  m_string_pos=metrics.boundingRect(m_rect.x(),m_rect.y()+1,m_rect.width(),
                                    m_rect.height()-numbersize.height(),
                                    Qt::AlignCenter,m_viewed_string);
+  //Clears point references
+  memset(m_line_refs,0,sizeof(ArrowPoint*)*BLOCK_SIDES*MAX_LINE_REFERENCES);
 }
 
 QRectF BoxItem::boundingRect() const
@@ -168,4 +173,77 @@ void BoxItem::setRect(const QRectF & rect)
 {
     m_rect=rect;
     regenerate();
+}
+
+void BoxItem::clearPointReferences()
+{
+  for (int i=0;i<BLOCK_SIDES;i++)
+  {
+    for (int j=0;j<MAX_LINE_REFERENCES;j++)
+    {
+      if (m_line_refs[i][j])
+      {
+       m_line_refs[i][j]->deattachFromBlock();
+       m_line_refs[i][j]=NULL;
+      }
+    }
+  }
+}
+
+BoxItemSide BoxItem::sideOfPoint(ArrowPoint * point)
+{
+ QPointF center=this->m_rect.center();
+ qreal dx=point->x()-center.x();
+ qreal dy=point->y()-center.y();
+ qreal fdx=fabs(dx);
+ qreal fdy=fabs(dy);
+ BoxItemSide result=BIS_BOTTOM;
+ if (fdx>=fdy) {  if (dx<0) result=BIS_LEFT; else result=BIS_RIGHT;  }
+ else          {  if (dy<0) return result=BIS_TOP;   }
+ return result;
+}
+
+void BoxItem::removePointReference(ArrowPoint * point)
+{
+    for (int i=0;i<BLOCK_SIDES;i++)
+    {
+      for (int j=0;j<MAX_LINE_REFERENCES;j++)
+      {
+         if (m_line_refs[i][j]==point)
+               m_line_refs[i][j]=NULL;
+      }
+    }
+}
+
+void BoxItem::addPointReference(ArrowPoint * point)
+{
+    BoxItemSide bis=sideOfPoint(point);
+    bool handled=false;
+    for (int j=0;(j<MAX_LINE_REFERENCES) && (!handled); j++)
+    {
+        if (m_line_refs[bis][j]==NULL)
+        {
+            m_line_refs[bis][j]=point;
+            handled=true;
+        }
+    }
+    if (handled)
+        point->attachBlock(this);
+}
+
+bool BoxItem::canAddToSide(BoxItemSide side)
+{
+  int cnt=0;
+  for (int i=0;i<MAX_LINE_REFERENCES;i++) if (m_line_refs[side][i]!=NULL) ++cnt;
+  return cnt!=MAX_LINE_REFERENCES;
+}
+
+bool BoxItem::canAddPointReference(ArrowPoint * point,
+                                   BlockEnteringType enter)
+{
+  BoxItemSide bis=sideOfPoint(point);
+  if (bis==BIS_LEFT || bis==BIS_TOP) return enter==BET_INPUT && canAddToSide(bis);
+  if (bis==BIS_BOTTOM)               return canAddToSide(bis);
+  if (bis==BIS_RIGHT)                return enter==BET_OUTPUT && canAddToSide(bis);
+  return false;
 }
