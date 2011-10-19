@@ -11,7 +11,29 @@
 #include <QRect>
 //Class of scene
 class DiagramScene;
-
+//Arrow points
+class ArrowPoint;
+/*! \class BoxItemSide
+    Declares a box item side
+ */
+enum BoxItemSide
+{
+    BIS_LEFT=0,
+    BIS_RIGHT=1,
+    BIS_TOP=2,
+    BIS_BOTTOM=3
+};
+//Type of arrow, that enters inside the block
+enum BlockEnteringType
+{
+ BET_INPUT,   //! Point inputs into block
+ BET_OUTPUT   //! Point emerges from a block
+};
+//Maximum references to a side
+#define MAX_LINE_REFERENCES 3
+//Block sides (total)
+#define BLOCK_SIDES 4
+//Default block text
 #define DEFAULT_BLOCK_TEXT "Some action"
 
 /*! \class BoxItem
@@ -42,10 +64,16 @@ private:
         /*! Location of child diagram (-1 is default)
          */
         int m_childdiagram;
+        /*! Referenced points to a box
+         */
+        ArrowPoint * m_line_refs[BLOCK_SIDES][MAX_LINE_REFERENCES] ;
         /*! Propagates a label editing
             \param[in] event event editing
          */
         void addLabelEdit(QKeyEvent * event);
+        /*! Declares, whether point can be added to side
+         */
+        bool canAddToSide(BoxItemSide side);
 public:
           /*! Describes a key press event
            */
@@ -103,6 +131,30 @@ public:
         \param[in]  id diagram id
      */
     inline void setChildDiagram(int id) { m_childdiagram=id; }
+    /*! Clears all references
+     */
+    void clearPointReferences();
+    /*! Removes a point reference from item
+        \param[in] point
+     */
+    void removePointReference(ArrowPoint * point);
+    /*! Adds a point reference to a block
+        \param[in] point point to be added
+     */
+    void addPointReference(ArrowPoint * point);
+    /*! Determines, thich size of box this point
+        is belong to.
+        \param[in] point point
+        \return side
+     */
+    BoxItemSide sideOfPoint(ArrowPoint * point);
+    /*! Tests, whether it can add a point reference
+        \param[in] point point data
+        \param[in] enter entering type of point
+        \return true, if can
+     */
+    bool canAddPointReference(ArrowPoint * point,
+                              BlockEnteringType enter);
 };
 
 #endif // BOXITEM_H

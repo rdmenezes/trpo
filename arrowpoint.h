@@ -15,6 +15,8 @@ class Diagram;
 class ArrowSegment;
 //A line ,where data is placed
 class ALineItem;
+//A class of box item
+class BoxItem;
 
 class ArrowPoint : public QPointF
 {
@@ -22,6 +24,9 @@ private:
         /*! Describes a diagram data
         */
         Diagram * m_diag;
+        /*! Determines, whether  arrow point is attached to an item
+         */
+        BoxItem * m_block;
         /*!  Vector of segments, that output point is me
          */
         QVector<ArrowSegment *> m_in;
@@ -61,6 +66,13 @@ public:
         /*! Removes a point from diagram
          */
         void die();
+        /*! Attaches a block to a point
+            \param[in] block block to be attached
+         */
+        inline void attachBlock(BoxItem * b) {m_block=b;}
+        /*! Deattaches a block from a point
+         */
+        inline void deattachFromBlock() { m_block=NULL; }
         /*! Destructor
          */
         ~ArrowPoint();

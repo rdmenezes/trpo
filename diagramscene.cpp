@@ -463,6 +463,7 @@ void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
        if(can_placed)
        {
           m_draggingblock->setRect(newrect);
+          m_draggingblock->clearPointReferences();
           this->update();
        }
        m_dragstate=DS_NONE;
