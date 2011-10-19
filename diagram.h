@@ -15,6 +15,12 @@ class QGraphicsItem;
 class BoxItem;
 //Annotation label item
 class ALabelItem;
+//Annoation lint item
+class ALineItem;
+//Arrow points item
+class ArrowPoint;
+//Arrow segments item
+class ArrowSegment;
 /*! Declares a location of parent block
  */
 class ParentLocation: public QPair<int,int>
@@ -114,6 +120,15 @@ private:
         /*! Vector  of annotation labels
          */
         QVector<ALabelItem *>   m_alabels;
+        /*! Vector of annotation lines
+         */
+        QVector<ALineItem *>    m_alines;
+        /*! Vector of arrow points
+         */
+        QVector<ArrowPoint *>   m_arrow_points;
+        /*! Vector if arrow segments
+         */
+        QVector<ArrowSegment *> m_arrow_segments;
         /*! An id of diagram
          */
         int m_id;
@@ -199,6 +214,30 @@ public:
             \param[in] label label item
          */
         void removeAnnotationLabel(ALabelItem * label);
+        /*! Adds a new annotation line
+            \param[in] line annotation line
+         */
+        void addAnnotationLine(ALineItem * line);
+        /*! Adds a new arrow point
+            \param[in]  point arrow point
+         */
+        void addArrowPoint(ArrowPoint * point);
+        /*! Adds a new arrow segment
+            \param[in]  segment arrow segment
+         */
+        void addArrowSegment(ArrowSegment * segment);
+        /*! Removes an annotation line from diagram
+            \param[in] line  annotationline
+         */
+        void removeAnnotationLine(ALineItem * line);
+        /*! Removes an arrow point from diagram
+            \param[in] point arrow point
+         */
+        void removeArrowPoint(ArrowPoint * point);
+        /*! Removes an arrow segment from digram
+            \param[in] segment arrow segment
+         */
+        void  removeArrowSegment(ArrowSegment * segment);
 };
 
 #endif // DIAGRAM_H
