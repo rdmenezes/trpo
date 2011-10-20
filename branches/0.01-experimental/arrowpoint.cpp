@@ -61,3 +61,23 @@ bool ArrowPoint::hasOppositeSegment(QPointF * in, QPointF * out)
     }
     return false;
 }
+
+bool ArrowPoint::hasInputSegment(ArrowDirection * d)
+{
+    for (int i=0;i<m_in.size();i++)
+    {
+        if (m_in[i]->direction()==*d)
+            return true;
+    }
+    return false;
+}
+
+bool ArrowPoint::hasOutputSegment(ArrowDirection * d)
+{
+    for (int i=0;i<m_out.size();i++)
+    {
+        if (m_out[i]->direction()==*d)
+            return true;
+    }
+    return false;
+}

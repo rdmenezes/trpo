@@ -18,6 +18,8 @@ class ALineItem;
 //A class of box item
 class BoxItem;
 
+enum ArrowDirection;
+
 class ArrowPoint : public QPointF
 {
 private:
@@ -48,6 +50,14 @@ public:
         /*! Returns an output segments
          */
         inline const QVector<ArrowSegment *> & outputSegments() { return m_out; }
+        /*! Has a segment with direction
+            \param[in] d direction
+         */
+        bool hasInputSegment(ArrowDirection * d);
+        /*! Has a segment with direction
+            \param[in] d direction
+         */
+        bool hasOutputSegment(ArrowDirection * d);
         /*! Detects, whether has one input segment with exact direction
          */
         bool hasSameInputSegment(QPointF * in, QPointF * out);
