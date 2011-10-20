@@ -39,3 +39,25 @@ ArrowPoint::~ArrowPoint()
 {
 
 }
+
+bool ArrowPoint::hasSameInputSegment(QPointF * in, QPointF * out)
+{
+    if (m_in.count()!=1) return false;
+    ArrowDirection dir=direction(*in,*out);
+    if (m_in[0]->direction()==dir) return true;
+    else return false;
+}
+
+bool ArrowPoint::hasOppositeSegment(QPointF * in, QPointF * out)
+{
+    ArrowDirection dir=direction(*in,*out);
+    for (int i=0;i<m_in.size();i++)
+    {
+        ArrowDirection dir2=m_in[i]->direction();
+        if ( (dir==AD_LEFT && dir2==AD_RIGHT)  || (dir==AD_TOP && dir2==AD_BOTTOM))
+        {
+            return true;
+        }
+    }
+    return false;
+}

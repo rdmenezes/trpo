@@ -42,6 +42,18 @@ public:
             \param[in] y y point
          */
         ArrowPoint(qreal x, qreal y);
+        /*! Returns an input segments
+         */
+        inline const QVector<ArrowSegment *> & inputSegments() { return m_in; }
+        /*! Returns an output segments
+         */
+        inline const QVector<ArrowSegment *> & outputSegments() { return m_out; }
+        /*! Detects, whether has one input segment with exact direction
+         */
+        bool hasSameInputSegment(QPointF * in, QPointF * out);
+        /*! Detects, whether constructed segment has opposite direction with other
+         */
+        bool hasOppositeSegment(QPointF * in, QPointF * out);
         /*! Adds a new segment, which output point is me
             \param[in] segment new segment
          */
