@@ -13,6 +13,26 @@ class ArrowPoint;
 //A diagram data
 class Diagram;
 
+
+
+enum ArrowDirection
+{
+    AD_LEFT,
+    AD_RIGHT,
+    AD_TOP,
+    AD_BOTTOM,
+};
+
+/*! Determines a direction of arrow
+ */
+ArrowDirection direction(const QPointF & in,const QPointF & out);
+
+#define MIN_LENGTH_OF_SEGMENT 8
+/*! Determines whether constructed segment will be too small
+ */
+bool tooSmall(ArrowPoint * in, const QPointF & out);
+
+
 /*! \class ArrowSegment
     Describes an arrow segment, that connects two lines
  */
@@ -46,9 +66,16 @@ public:
              \param[in] diag diagram
          */
          inline void setDiagram(Diagram * diag) { m_diag=diag; }
+         /*! Determines self direction
+          */
+         ArrowDirection direction();
+         /*! Determines  a bounding rect
+          */
+         QRectF boundingRect();
          /*! Currently does nothing
           */
          ~ArrowSegment();
+
 };
 
 #endif // ARROWSEGMENT_H
