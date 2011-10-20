@@ -1,7 +1,7 @@
 #include "arrowsegment.h"
 #include "arrowpoint.h"
 #include "compare.h"
-
+#include <QPainter>
 ArrowSegment::ArrowSegment(ArrowPoint * in, ArrowPoint * out)
 {
   m_in=in;
@@ -62,4 +62,29 @@ QRectF ArrowSegment::boundingRect()
       result=QRectF(m_out->x()-D_LEFT,m_in->y(),D_LEFT+D_RIGHT,m_out->y()-m_in->y());
 
   return result;
+}
+
+
+#define ASEG_RADIUS 4
+
+void ArrowSegment::paint(QPainter *painter,
+                         const QStyleOptionGraphicsItem *option,
+                         QWidget *widget)
+{
+  (void)option,widget;
+  ArrowDirection mydir=direction();
+  QPointF din=*m_in,dout=*m_out;
+  if (mydir==AD_LEFT)
+  {din.setX(m_in->x()-ASEG_RADIUS);dout.setX(m_out->x()+ASEG_RADIUS);}
+  if (mydir==AD_RIGHT)
+  {din.setX(m_in->x()+ASEG_RADIUS);dout.setX(m_out->x()-ASEG_RADIUS);}
+  if (mydir==AD_TOP)
+  {din.setY(m_in->y()-ASEG_RADIUS);dout.setY(m_out->y()+ASEG_RADIUS);}
+  if (mydir==AD_BOTTOM)
+  {din.setY(m_in->y()+ASEG_RADIUS);dout.setY(m_out->y()-ASEG_RADIUS);}
+  if (m_in->isBeginPoint() || m_in->hasInputSegment(&mydir))
+  {din=*m_in;}
+  if (m_out->isEndingPoint() || m_out->hasOutputSegment(&mydir))
+  {dout=*m_out;}
+  painter->drawLine(din,dout);
 }

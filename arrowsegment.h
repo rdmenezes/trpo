@@ -72,6 +72,13 @@ public:
          /*! Determines  a bounding rect
           */
          QRectF boundingRect();
+         /*! Declares a painting event data
+             \param[in] painter painting data
+             \param[in] option
+             \param[in] widget
+          */
+         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                        QWidget *widget);
          /*! Currently does nothing
           */
          ~ArrowSegment();
