@@ -1,12 +1,18 @@
 #include "arrowpoint.h"
 #include "alineitem.h"
 #include "arrowsegment.h"
+#include "diagram.h"
 
 ArrowPoint::ArrowPoint(qreal x, qreal y): QPointF(x,y)
 {
     m_block=NULL;
 }
 
+
+void ArrowPoint::die()
+{
+    m_diag->removeArrowPoint(this);
+}
 
 bool ArrowPoint::isBeginPoint()  const { return m_out.size()==0; }
 bool ArrowPoint::isEndingPoint() const { return m_in.size()==0; }

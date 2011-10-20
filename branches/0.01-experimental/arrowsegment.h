@@ -23,6 +23,8 @@ enum ArrowDirection
     AD_BOTTOM,
 };
 
+QPointF  computeOutputPoint(const QPointF & pivot,ArrowDirection & dir);
+QPointF  computeInputPoint(const QPointF & pivot,ArrowDirection & dir);
 /*! Determines a direction of arrow
  */
 ArrowDirection direction(const QPointF & in,const QPointF & out);
@@ -32,7 +34,9 @@ ArrowDirection direction(const QPointF & in,const QPointF & out);
  */
 bool tooSmall(ArrowPoint * in, const QPointF & out);
 
-
+/*! Constructs a second point ofdirected line, that can be used to build a segment
+ */
+QPointF constructDirectedLine(const QPointF & point1,const QPointF & point2);
 /*! \class ArrowSegment
     Describes an arrow segment, that connects two lines
  */
@@ -48,6 +52,26 @@ private:
          /*!  Diagram data
           */
          Diagram    * m_diag;
+         /*! Draws output arc if self direction is left
+          */
+         void drawOALeft(const QPointF & pivot, ArrowSegment * seg,QPainter * painter);
+         /*! Draws output arc if self direction is right
+          */
+         void drawOARight(const QPointF & pivot, ArrowSegment * seg,QPainter * painter);
+         /*! Draws output arc if self direction is top
+          */
+         void drawOATop(const QPointF & pivot, ArrowSegment * seg,QPainter * painter);
+         /*! Draws output arc if self direction is bottom
+          */
+         void drawOABottom(const QPointF & pivot, ArrowSegment * seg,QPainter * painter);
+         /*! Draws output arc to a segment
+             \param[in] pivot output point
+             \param[in] mydir direction
+             \param[in] seg segment
+             \param[in] painter painter
+          */
+         void drawOutputArc(const QPointF & pivot, ArrowDirection mydir,
+                            ArrowSegment * seg,QPainter * painter);
 public:
          /*! Returns an input point
           */
