@@ -73,6 +73,12 @@ private:
          void drawOutputArc(const QPointF & pivot, ArrowDirection mydir,
                             ArrowSegment * seg,QPainter * painter);
 public:
+         /*! Declares a type of item
+          */
+         enum ItemType
+         {
+             USERTYPE=QGraphicsItem::UserType+2
+         };
          /*! Returns an input point
           */
          inline ArrowPoint * in() { return m_in; }
@@ -92,10 +98,10 @@ public:
          inline void setDiagram(Diagram * diag) { m_diag=diag; }
          /*! Determines self direction
           */
-         ArrowDirection direction();
+         ArrowDirection direction() const;
          /*! Determines  a bounding rect
           */
-         QRectF boundingRect();
+         QRectF boundingRect() const;
          /*! Declares a painting event data
              \param[in] painter painting data
              \param[in] option
@@ -106,6 +112,9 @@ public:
          /*! Currently does nothing
           */
          ~ArrowSegment();
+         /*! Returns a type of segment
+          */
+         int type() const;
 
 };
 

@@ -110,6 +110,10 @@ public:
         /*! Updates a point incident segments
          */
         void update();
+        /*! Sets a diagram
+            \param[in] p diagram
+         */
+        inline void setDiagram(Diagram * p) { m_diag=p;}
         /*! Destructor
          */
         ~ArrowPoint();

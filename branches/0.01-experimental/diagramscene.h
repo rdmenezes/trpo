@@ -97,6 +97,22 @@ private:
         \param[in] pos  position
      */
     void determineDraggingBoxAction(BoxItem * item,const QPointF & pos);
+    /*! Process arrow operation while clicking on blank space
+        \param[in] event event
+     */
+    void processArrowClickOnBlankSpace(QGraphicsSceneMouseEvent * event);
+    /*! Process arrow operation while clicking on block space
+        \param[in] event event
+     */
+    void processArrowClickOnBox(QGraphicsSceneMouseEvent * event,BoxItem * box);
+    /*! Process arrow operation while clicking on block space
+        \param[in] event event
+     */
+    void processArrowClickOnLine(QGraphicsSceneMouseEvent * event,ArrowSegment * seg);
+    /*! Process escape pressing on blank space
+        \param[in] pos position
+     */
+    void processArrowEscapePress(const QPointF & pos);
 protected:
     /*! Handles a beginning of dragging item
         \param[in] event event data
