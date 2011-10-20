@@ -25,22 +25,35 @@ void DiagramScene::processArrowClickOnBlankSpace(QGraphicsSceneMouseEvent * even
     else
     {
         QPointF point2=constructDirectedLine(*m_last_arrow_point,event->scenePos());
-        if (tooSmall(m_last_arrow_point,point2)) return;
-        ArrowPoint * p=new ArrowPoint(point2.x(),point2.y());
-        bool placementtest=m_diag->canPlaceSegment(m_last_arrow_point,p,NULL);
-        bool correctness=!(m_last_arrow_point->hasOppositeSegment(m_last_arrow_point,p));
-        if (placementtest && correctness)
+        bool samedir=m_last_arrow_point->hasSameInputSegment(m_last_arrow_point,&point2);
+        if (samedir)
         {
-            m_diag->addArrowPoint(p);
-            ArrowSegment * seg=new ArrowSegment(m_last_arrow_point,p);
-            m_diag->addArrowSegment(seg);
-            this->addItem(seg);
-            m_last_arrow_point->update();
-            seg->update();
-            m_last_arrow_point=p;
+           m_last_arrow_point->setX(point2.x());
+           m_last_arrow_point->setY(point2.y());
+           m_last_arrow_point->update();
         }
-        else delete p;
+        else processArrowCommonBuilding(event->scenePos());
     }
+}
+
+void DiagramScene::processArrowCommonBuilding(const QPointF & scenePos)
+{
+    QPointF point2=constructDirectedLine(*m_last_arrow_point,scenePos);
+    if (tooSmall(m_last_arrow_point,point2)) return;
+    ArrowPoint * p=new ArrowPoint(point2.x(),point2.y());
+    bool placementtest=m_diag->canPlaceSegment(m_last_arrow_point,p,NULL);
+    bool correctness=!(m_last_arrow_point->hasOppositeSegment(m_last_arrow_point,p));
+    if (placementtest && correctness)
+    {
+        m_diag->addArrowPoint(p);
+        ArrowSegment * seg=new ArrowSegment(m_last_arrow_point,p);
+        m_diag->addArrowSegment(seg);
+        this->addItem(seg);
+        m_last_arrow_point->update();
+        seg->update();
+        m_last_arrow_point=p;
+    }
+    else delete p;
 }
 
 void DiagramScene::processArrowClickOnBox(QGraphicsSceneMouseEvent * event,

@@ -97,6 +97,10 @@ private:
         \param[in] pos  position
      */
     void determineDraggingBoxAction(BoxItem * item,const QPointF & pos);
+    /*! Process common arrow building
+        \param[in] pos  pointf
+     */
+    void processArrowCommonBuilding(const QPointF & scenePos);
     /*! Process arrow operation while clicking on blank space
         \param[in] event event
      */

@@ -142,8 +142,9 @@ void ArrowSegment::paint(QPainter *painter,
   }
   //Draw output arcs
    const QVector<ArrowSegment *> segs=m_out->outputSegments();
+   QPointF tout=computeOutputPoint(*m_out,mydir);
    for (int i=0;i<segs.size();i++)
-       drawOutputArc(*m_out,mydir,segs[i],painter);
+       drawOutputArc(tout,mydir,segs[i],painter);
 }
 
 void ArrowSegment::drawOutputArc(const QPointF & pivot, ArrowDirection mydir,
