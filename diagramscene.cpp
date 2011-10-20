@@ -50,6 +50,9 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
   m_draggingblock=NULL;
   m_resizingblockcorner=BC_LOWERLEFT;
   m_moving_label=NULL;
+  //Sets a no arrow editing state
+  m_arrow_state=AES_NONE;
+  m_last_arrow_point=NULL;
 }
 
 const QRectF & DiagramScene::getDefaultBlockNumberSize() const
@@ -101,7 +104,7 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
       handled=true;
   }
   //In case when Shift presset add panel if not present
-  if (event->key()==Qt::Key_Shift)
+  if (event->key()==Qt::Key_Shift  && m_arrow_state!=AES_EDIT)
   {
       //Compute panel position
       QPointF  panel_pos;

@@ -38,6 +38,14 @@ enum BlockCorner
     BC_LOWERLEFT,
     BC_LOWERRIGHT
 };
+
+/*! Arrow Editing state
+ */
+enum ArrowEditState
+{
+    AES_NONE,
+    AES_EDIT
+};
 /*! A class of panel for tool selection
  */
 class ToolPanel;
@@ -67,6 +75,8 @@ private:
     qreal                    m_blockmovingparams[2]; //!< Defines an x and y relevance to moving
     QRectF                   m_alabel_block_size;   //!< Size of annotation label
     ALabelItem           *   m_moving_label;        //!< Moving annotation label
+    ArrowEditState           m_arrow_state;         //!< Arrow editing state
+    ArrowPoint           *   m_last_arrow_point;          //!< Last point added to scene
     /*! Process tool selection by keys
         \param[in] event event
         \return true, if handled
