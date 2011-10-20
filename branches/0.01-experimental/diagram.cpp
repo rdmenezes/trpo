@@ -297,3 +297,25 @@ bool Diagram::canBePlacedAroundPoints(const QRectF & rect, const QVector<ArrowPo
         correct=correct && refs[i]<MAX_LINE_REFERENCES;
     return correct;
 }
+
+bool Diagram::canPlaceSegment(ArrowPoint * point1, ArrowPoint * point2,
+                              BoxItem * block)
+{
+    for (int i=0;i<DIAGRAM_MAX_BLOCKS;i++)
+    {
+     if (m_boxes[i]!=NULL)
+     {
+       QRectF rect=m_boxes[i]->boundingRect();
+       bool result=collides(rect,*point1,*point2);
+       if (result && m_boxes[i]==block)
+            result=result && !boundaryCollides(rect,point1,point2);
+       if (result) return false;
+     }
+    }
+    for (int i=0;i<m_alabels.size();i++)
+    {
+        if (collides(m_alabels[i]->boundingRect(),*point1,*point2))
+            return false;
+    }
+    return true;
+}
