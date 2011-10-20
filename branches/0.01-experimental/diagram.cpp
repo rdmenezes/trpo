@@ -90,6 +90,22 @@ bool Diagram::testForNoBlockCollision(const QRectF & rect, QGraphicsItem * point
     return true;
 }
 
+bool Diagram::doesntCollideWithLines(const QRectF & rect)
+{
+    for (int i=0;i<m_arrow_segments.size();i++)
+    {
+        ArrowPoint * iin=m_arrow_segments[i]->in();
+        ArrowPoint * iout=m_arrow_segments[i]->out();
+        QPointF * in=m_arrow_segments[i]->in();
+        QPointF * out=m_arrow_segments[i]->out();
+        if (collides(rect,*in,*out) && !boundaryCollides(rect,iin,iout))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool Diagram::testForNoALabelCollision(const QRectF &rect, QGraphicsItem *pointer)
 {
     //Scan annotation label
@@ -112,11 +128,11 @@ bool Diagram::canBePlaced(const QRectF &rect, QGraphicsItem *pointer)
 
 bool Diagram::canBePlaced(const QRectF &rect, ALabelItem *pointer)
 {
-    return canBePlaced(rect,(QGraphicsItem*)pointer);
+    return canBePlaced(rect,(QGraphicsItem*)pointer) && doesntCollideWithLines(rect);
 }
 bool Diagram::canBePlaced(const QRectF & rect, BoxItem * pointer)
 {
-    return canBePlaced(rect,(QGraphicsItem*)pointer);
+    return canBePlaced(rect,(QGraphicsItem*)pointer) && doesntCollideWithLines(rect);
 }
 
 
@@ -237,4 +253,47 @@ void Diagram::removeArrowSegment(ArrowSegment * segment)
    }
 }
 
+QRectF enlarge(const QRectF & rect)
+{
+  return QRectF(rect.x()-QRECTF_ENLARGE_RANGE,rect.y()-QRECTF_ENLARGE_RANGE,
+                rect.width()+QRECTF_ENLARGE_RANGE*2,rect.height()+QRECTF_ENLARGE_RANGE*2);
+}
 
+QVector<ArrowPoint *> Diagram::getNearArrowPoints(const QRectF & rect)
+{
+    QVector<ArrowPoint *> result;
+    QRectF enl=enlarge(rect);
+    for (int i=0;i<m_arrow_points.count();i++)
+    {
+        QPointF * p=m_arrow_points[i];
+        if (p->x()>= enl.left() && p->x()<=enl.right() && p->y()<=enl.bottom()
+                                                       && p->x()<=enl.top())
+        {
+          if (m_arrow_points[i]->isBeginPoint() || m_arrow_points[i]->isEndingPoint())
+            result<<m_arrow_points[i];
+        }
+    }
+    return result;
+}
+
+bool Diagram::canBePlacedAroundPoints(const QRectF & rect, const QVector<ArrowPoint *> pts)
+{
+    unsigned int refs[BLOCK_SIDES]={0};
+    bool correct=true;
+    for (int i=0;(i<pts.size()) && correct;i++)
+    {
+        BoxItemSide bis=BoxItem::sideOfPoint(pts[i],rect);
+        if (bis==BIS_LEFT || bis==BIS_TOP)
+        {
+            if (pts[i]->isEndingPoint()) ++(refs[bis]); else correct=false;
+        }
+        if (bis==BIS_RIGHT)
+        {
+            if (pts[i]->isBeginPoint()) ++(refs[bis]); else correct=false;
+        }
+        if (bis==BIS_BOTTOM)  ++(refs[bis]);
+    }
+    for (int i=0;i<BLOCK_SIDES;i++)
+        correct=correct && refs[i]<MAX_LINE_REFERENCES;
+    return correct;
+}

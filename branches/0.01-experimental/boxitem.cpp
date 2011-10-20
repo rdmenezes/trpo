@@ -190,9 +190,9 @@ void BoxItem::clearPointReferences()
   }
 }
 
-BoxItemSide BoxItem::sideOfPoint(ArrowPoint * point)
+BoxItemSide BoxItem::sideOfPoint(ArrowPoint * point, const QRectF & m_rect)
 {
- QPointF center=this->m_rect.center();
+ QPointF center=m_rect.center();
  qreal dx=point->x()-center.x();
  qreal dy=point->y()-center.y();
  qreal fdx=fabs(dx);
@@ -201,6 +201,11 @@ BoxItemSide BoxItem::sideOfPoint(ArrowPoint * point)
  if (fdx>=fdy) {  if (dx<0) result=BIS_LEFT; else result=BIS_RIGHT;  }
  else          {  if (dy<0) return result=BIS_TOP;   }
  return result;
+}
+
+BoxItemSide BoxItem::sideOfPoint(ArrowPoint *point)
+{
+    return sideOfPoint(point,m_rect);
 }
 
 void BoxItem::removePointReference(ArrowPoint * point)
@@ -231,6 +236,7 @@ void BoxItem::addPointReference(ArrowPoint * point)
         point->attachBlock(this);
 }
 
+
 bool BoxItem::canAddToSide(BoxItemSide side)
 {
   int cnt=0;
@@ -258,4 +264,18 @@ MoveRange BoxItem::getRange(ArrowPoint * point)
   if (bis==BIS_TOP)
       return createHorizontalRange(m_rect.left(),m_rect.right(),m_rect.top());
   return createHorizontalRange(m_rect.left(),m_rect.right(),m_rect.bottom());
+}
+
+void BoxItem::attachAllPoints(const QVector<ArrowPoint *> pts)
+{
+  for (int i=0;i<pts.size();i++)
+  {
+      BoxItemSide bis=sideOfPoint(pts[i]);
+      if (bis==BIS_LEFT) pts[i]->setX(m_rect.left());
+      if (bis==BIS_RIGHT) pts[i]->setX(m_rect.right());
+      if (bis==BIS_TOP)    pts[i]->setY(m_rect.top());
+      if (bis==BIS_BOTTOM) pts[i]->setY(m_rect.bottom());
+      pts[i]->update();
+      addPointReference(pts[i]);
+  }
 }

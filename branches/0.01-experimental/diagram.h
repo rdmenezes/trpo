@@ -21,6 +21,7 @@ class ALineItem;
 class ArrowPoint;
 //Arrow segments item
 class ArrowSegment;
+
 /*! Declares a location of parent block
  */
 class ParentLocation: public QPair<int,int>
@@ -144,6 +145,9 @@ private:
         /*! Determines, whether item can be placed
          */
         bool canBePlaced(const QRectF & rect, QGraphicsItem * pointer);
+        /*! Determines, whether item can be placed, without collision with lines
+         */
+        bool doesntCollideWithLines(const QRectF & rect);
 public:
         /*! Inits an empty diagram
          */
@@ -238,6 +242,20 @@ public:
             \param[in] segment arrow segment
          */
         void  removeArrowSegment(ArrowSegment * segment);
+        /*! Returns a vector of near arrow points
+            \param[in] rect rectangle
+         */
+        QVector<ArrowPoint *> getNearArrowPoints(const QRectF & rect);
+        /*! Check whether block can be correctly placed around blocks
+            \param[in] rect rectangle block
+            \param[in] pts points
+         */
+        bool canBePlacedAroundPoints(const QRectF & rect, const QVector<ArrowPoint *> pts);
 };
+
+
+//Defines, how rectangle is enlarged
+#define QRECTF_ENLARGE_RANGE 2
+QRectF enlarge(const QRectF & rect);
 
 #endif // DIAGRAM_H

@@ -36,7 +36,8 @@ HEADERS += mainwindow.h \
     alineitem.h \
     arrowsegment.h \
     arrowpoint.h \
-    moverange.h
+    moverange.h \
+    compare.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc
