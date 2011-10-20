@@ -1,4 +1,5 @@
 #include "moverange.h"
+#include "compare.h"
 #include <math.h>
 MoveRange::MoveRange(qreal x, qreal y,qreal w, qreal h): QRectF(x,y,w,h)
 {
@@ -19,14 +20,7 @@ MoveRange createVerticalRange(qreal y1, qreal y2, qreal x)
 }
 
 
-#define PRECISION 0.0001
-/*! We don't use qFuzzyCompare, due to it's must check strictness and have
-    some issues with comparing zero values
- */
-inline bool fuzzyCompare(qreal a,qreal b)
-{
-    return fabs(a-b)<0.0001;
-}
+
 
 bool MoveRange::isWithin(QPointF * p)
 {

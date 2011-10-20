@@ -75,16 +75,19 @@ public:
         inline void deattachFromBlock() { m_block=NULL; }
         /*! Detects, whether point is starting point for a segments
          */
-        bool isBeginPoint();
+        bool isBeginPoint() const;
         /*! Detects, whether point is ending point for a segments
          */
-        bool isEndingPoint();
+        bool isEndingPoint() const;
         /*! Detects, whether point is invalid
          */
-        bool mustBeDecomposed();
+        bool mustBeDecomposed() const;
         /*! Detects, whether point is separated
          */
-        bool isSeparated();
+        bool isSeparated() const;
+        /*! Updates a point incident segments
+         */
+        void update();
         /*! Destructor
          */
         ~ArrowPoint();

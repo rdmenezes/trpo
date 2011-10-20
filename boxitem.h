@@ -148,6 +148,12 @@ public:
         \param[in] point point
         \return side
      */
+    static BoxItemSide sideOfPoint(ArrowPoint * point, const QRectF & m_rect);
+    /*! Determines, thich size of box this point
+        is belong to.
+        \param[in] point point
+        \return side
+     */
     BoxItemSide sideOfPoint(ArrowPoint * point);
     /*! Tests, whether it can add a point reference
         \param[in] point point data
@@ -156,6 +162,10 @@ public:
      */
     bool canAddPointReference(ArrowPoint * point,
                               BlockEnteringType enter);
+    /*! Attaches all points from vector
+        \param[in] pts, a vector, whose points are attached
+     */
+    void attachAllPoints(const QVector<ArrowPoint *> pts);
     /*! Returns a range for a point
         \param[in] point point
      */

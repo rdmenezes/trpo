@@ -29,6 +29,12 @@ private:
           */
          Diagram    * m_diag;
 public:
+         /*! Returns an input point
+          */
+         inline ArrowPoint * in() { return m_in; }
+         /*! Returns an output point
+          */
+         inline ArrowPoint * out() { return m_out; }
          /*! Describes a segment
              \param[in] in   input  point
              \param[in] out  output point

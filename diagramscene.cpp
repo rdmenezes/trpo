@@ -210,9 +210,14 @@ void DiagramScene::addBlock(QGraphicsSceneMouseEvent *event)
   QRectF size=getDefaultBlockSize(event->scenePos());
   if (m_diag->canBePlaced(size,(BoxItem*)NULL))
   {
-   BoxItem * b=new BoxItem(event->scenePos(),this);
-   this->addItem(b);
-   m_diag->addBox(b);
+   QVector<ArrowPoint *> list=m_diag->getNearArrowPoints(size);
+   if (m_diag->canBePlacedAroundPoints(size,list))
+   {
+    BoxItem * b=new BoxItem(event->scenePos(),this);
+    this->addItem(b);
+    m_diag->addBox(b);
+    b->attachAllPoints(list);
+   }
   }
  }
 }
@@ -442,8 +447,14 @@ void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
         bool can_placed=m_diag->canBePlaced(oldrect,m_draggingblock);
         if( !too_small && can_placed)
         {
+         QVector<ArrowPoint *> lst=m_diag->getNearArrowPoints(oldrect);
+         if (m_diag->canBePlacedAroundPoints(oldrect,lst))
+         {
+           m_draggingblock->clearPointReferences();
            m_draggingblock->setRect(oldrect);
+           m_draggingblock->attachAllPoints(lst);
            this->update();
+         }
         }
         m_dragstate=DS_NONE;
         m_draggingblock=NULL;
