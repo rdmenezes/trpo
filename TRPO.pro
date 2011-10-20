@@ -20,7 +20,8 @@ SOURCES += main.cpp \
     alineitem.cpp \
     arrowsegment.cpp \
     arrowpoint.cpp \
-    moverange.cpp
+    moverange.cpp \
+    diagramscenearrowhandling.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \

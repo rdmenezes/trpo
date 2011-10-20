@@ -33,7 +33,7 @@ ArrowDirection direction(const QPointF & in,const QPointF & out)
     return AD_TOP;
 }
 
-ArrowDirection ArrowSegment::direction()
+ArrowDirection ArrowSegment::direction() const
 {
     return ::direction(*m_in,*m_out);
 }
@@ -47,15 +47,15 @@ bool tooSmall(ArrowPoint * in, const QPointF & out)
 }
 
 #define D_LEFT 4
-#define D_RIGHT 3
-QRectF ArrowSegment::boundingRect()
+#define D_RIGHT 4
+QRectF ArrowSegment::boundingRect() const
 {
   ArrowDirection dir=direction();
   QRectF result;
   if (dir==AD_LEFT)
-      result=QRectF(m_in->x(),m_in->y()-D_LEFT,m_out->x()-m_in->x(),D_LEFT+D_RIGHT);
-  if (dir==AD_RIGHT)
       result=QRectF(m_out->x(),m_in->y()-D_LEFT,m_in->x()-m_out->x(),D_LEFT+D_RIGHT);
+  if (dir==AD_RIGHT)
+      result=QRectF(m_in->x(),m_in->y()-D_LEFT,m_out->x()-m_in->x(),D_LEFT+D_RIGHT);
   if (dir==AD_TOP)
       result=QRectF(m_out->x()-D_LEFT,m_out->y(),D_LEFT+D_RIGHT,m_in->y()-m_out->y());
   if (dir==AD_BOTTOM)
@@ -85,7 +85,7 @@ QPointF  computeOutputPoint(const QPointF & pivot,ArrowDirection & dir)
   return result;
 }
 
-#define D_ARROW_X 5
+#define D_ARROW_X 7
 #define D_ARROW_Y 3
 void ArrowSegment::paint(QPainter *painter,
                          const QStyleOptionGraphicsItem *option,
@@ -100,27 +100,43 @@ void ArrowSegment::paint(QPainter *painter,
   if (m_out->isEndingPoint() || m_out->hasOutputSegment(&mydir))
   {dout=*m_out;}
   painter->drawLine(din,dout);
+  printf("=====Segment=====\n");
+  printf("Direction: %d\n",(int)mydir);
+  printf("Draw: (%lf,%lf)->(%lf,%lf)\n",(double)(din.x()),(double)(din.y()),
+                                        (double)(dout.x()),(double)(dout.y()));
+  printf("Real: (%lf,%lf)->(%lf,%lf)\n",(double)(m_in->x()),(double)(m_in->y()),
+                                        (double)(m_out->x()),(double)(m_out->y()));
+  QRectF box=boundingRect();
+  printf("Rect: (%lf,%lf)->(%lf,%lf)\n",(double)(box.left()),(double)(box.top()),
+                                        (double)(box.right()),(double)(box.bottom()));
   //Draw a fork on end
   if (m_out->isEndingPoint())
   {
       QPointF aseg1(m_out->x()+D_ARROW_X,m_in->y()+D_ARROW_Y);
       QPointF aseg2(m_out->x()+D_ARROW_X,m_in->y()-D_ARROW_Y);
       if (mydir==AD_RIGHT)
-      {aseg1.setX(m_out->x()-D_ARROW_X); aseg2.setX(m_out->x()-D_ARROW_X);}
-      if (mydir=AD_TOP)
       {
-        aseg1=*m_out;
+        aseg1.setX(m_out->x()-D_ARROW_X);
+        aseg2.setX(m_out->x()-D_ARROW_X);
+      }
+      if (mydir==AD_TOP)
+      {
+        aseg1=aseg2=*m_out;
         aseg1.setY(m_out->y()+D_ARROW_X);
+        aseg2.setY(m_out->y()+D_ARROW_X);
         aseg1.setX(aseg1.x()+D_ARROW_Y);
-        aseg1.setX(aseg1.x()-D_ARROW_Y);
+        aseg2.setX(aseg2.x()-D_ARROW_Y);
       }
-      if (mydir=AD_BOTTOM)
+      if (mydir==AD_BOTTOM)
       {
-        aseg1=*m_out;
+        aseg1=aseg2=*m_out;
         aseg1.setY(m_out->y()-D_ARROW_X);
+        aseg2.setY(m_out->y()-D_ARROW_X);
         aseg1.setX(aseg1.x()+D_ARROW_Y);
-        aseg1.setX(aseg1.x()-D_ARROW_Y);
+        aseg2.setX(aseg2.x()-D_ARROW_Y);
       }
+      printf("Fork points: (%lf,%lf),(%lf,%lf) \n",(double)(aseg1.x()),(double)(aseg1.y()),
+                                                   (double)(aseg2.x()),(double)(aseg2.y()));
       painter->drawLine(*m_out,aseg1);
       painter->drawLine(*m_out,aseg2);
   }
@@ -234,3 +250,9 @@ QPointF constructDirectedLine(const QPointF & point1,const QPointF & point2)
   if (dir==AD_LEFT || dir==AD_RIGHT) return QPointF(point2.x(),point1.y());
   return QPointF(point1.x(),point2.y());
 }
+
+int ArrowSegment::type() const
+{
+    return ArrowSegment::USERTYPE;
+}
+

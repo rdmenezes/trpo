@@ -209,11 +209,14 @@ void Diagram::addAnnotationLine(ALineItem * line)
 void Diagram::addArrowPoint(ArrowPoint *point)
 {
     m_arrow_points<<point;
+    point->setDiagram(this);
+
 }
 
 void Diagram::addArrowSegment(ArrowSegment * segment)
 {
     m_arrow_segments<<segment;
+    segment->setDiagram(this);
 }
 
 void Diagram::removeAnnotationLine(ALineItem * line)

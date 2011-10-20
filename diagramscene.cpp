@@ -3,6 +3,7 @@
 #include "toolpanel.h"
 #include "labeledit.h"
 #include "alabelitem.h"
+#include "arrowsegment.h"
 #include <QTextEdit>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
@@ -69,6 +70,8 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
           addBlock(event);
       if (m_tooltype==TT_ANNOTATION_LABEL && m_edit_state==TES_NONE)
           addAnnotationLabel(event);
+      if (m_tooltype==TT_ARROW)
+          processArrowClickOnBlankSpace(event);
     }
     //Propagate key pressing event
     else
@@ -79,6 +82,11 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
      {
          if (lst[i]->type()==QGraphicsProxyWidget::Type)
              isWidgetClicked=true;
+         if (m_tooltype==TT_ARROW && lst[i]->type()==BoxItem::USERTYPE
+                                  && m_arrow_state==AES_EDIT)
+             this->processArrowClickOnBox(event,static_cast<BoxItem *>(lst[i]));
+         if (m_tooltype==TT_ARROW && lst[i]->type()==ArrowSegment::USERTYPE)
+             this->processArrowClickOnLine(event,static_cast<ArrowSegment *>(lst[i]));
      }
      if (isWidgetClicked)
         this->QGraphicsScene::mousePressEvent(event);
@@ -97,6 +105,14 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
   //In case when F1 pressed show help
   if (m_panel)
      handled=processKeyToolSelect(event);
+  if (event->key()==Qt::Key_Escape && m_tooltype==TT_ARROW && m_arrow_state==AES_EDIT)
+  {
+      //Compute position
+      QPointF  pos;
+      QPoint local_pos=m_view->mapFromGlobal(QCursor::pos());
+      pos=m_view->mapToScene(local_pos);
+      this->processArrowEscapePress(pos);
+  }
   if (event->key()==Qt::Key_F1)
   {
       HelpWindow d;

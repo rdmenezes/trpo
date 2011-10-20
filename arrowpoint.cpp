@@ -14,8 +14,8 @@ void ArrowPoint::die()
     m_diag->removeArrowPoint(this);
 }
 
-bool ArrowPoint::isBeginPoint()  const { return m_out.size()==0; }
-bool ArrowPoint::isEndingPoint() const { return m_in.size()==0; }
+bool ArrowPoint::isBeginPoint()  const { return m_in.size()==0; }
+bool ArrowPoint::isEndingPoint() const { return m_out.size()==0; }
 
 bool ArrowPoint::mustBeDecomposed() const { return isEndingPoint() && m_out.size()>1; }
 bool ArrowPoint::isSeparated()      const { return isBeginPoint() && isEndingPoint(); }
