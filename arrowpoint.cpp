@@ -14,6 +14,17 @@ bool ArrowPoint::isEndingPoint() const { return m_in.size()==0; }
 bool ArrowPoint::mustBeDecomposed() const { return isEndingPoint() && m_out.size()>1; }
 bool ArrowPoint::isSeparated()      const { return isBeginPoint() && isEndingPoint(); }
 
+
+void ArrowPoint::addInputSegment(ArrowSegment *segment)
+{
+    m_in<<segment;
+}
+
+void ArrowPoint::addOutputSegment(ArrowSegment * segment)
+{
+    m_out<<segment;
+}
+
 void ArrowPoint::update()
 {
  for (int i=0;i<m_lines.size();i++)
