@@ -109,7 +109,7 @@ void DiagramScene::processArrowClickOnBox(QGraphicsSceneMouseEvent * event,
      else delete p;
    }
 }
-#define NEAR_BOUNDARY 5
+#define NEAR_BOUNDARY 7
 
 inline bool nearToPoint(QPointF & pivot, QPointF & test)
 {
@@ -120,7 +120,38 @@ inline bool nearToPoint(QPointF & pivot, QPointF & test)
 void DiagramScene::processArrowClickOnLine(QGraphicsSceneMouseEvent * event,
                                            ArrowSegment * seg)
 {
+  QPointF pos=event->scenePos();
+  if (m_arrow_state==AES_NONE)
+  {
+      bool neato=nearToPoint(*(seg->out()),pos);
+      bool isend=seg->out()->isEndingPoint();
+      if (neato && isend)
+      {
+          m_last_arrow_point=seg->out();
+          m_arrow_state=AES_EDIT;
+      }
+      else
+      {
+          bool  constructedInSegIsTooSmall=nearToPoint(*(seg->in()),pos);
+          bool  constructedOutSegIsTooSmall=nearToPoint(*(seg->out()),pos);
+          if  (constructedInSegIsTooSmall || constructedOutSegIsTooSmall) return;
+          m_last_arrow_point=new ArrowPoint(pos.x(),pos.y());
+          ArrowSegment * seg_in=new ArrowSegment(seg->in(),m_last_arrow_point);
+          ArrowSegment * seg_out=new ArrowSegment(m_last_arrow_point,seg->out());
+          seg->in()->tryRemoveSegment(seg);
+          seg->out()->tryRemoveSegment(seg);
+          seg->die();
+          m_diag->addArrowSegment(seg_in);
+          m_diag->addArrowSegment(seg_out);
+          this->addItem(seg_in);
+          this->addItem(seg_out);
+          m_arrow_state=AES_EDIT;
+      }
+  }
+  else
+  {
 
+  }
 }
 
 void DiagramScene::processArrowPointingToBlock(ArrowPoint * p, BoxItem * box)

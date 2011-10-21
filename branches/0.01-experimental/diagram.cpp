@@ -204,6 +204,7 @@ void Diagram::setBlockID(BoxItem * item, char pos)
 void Diagram::addAnnotationLine(ALineItem * line)
 {
     m_alines<<line;
+    line->setDiagram(this);
 }
 
 void Diagram::addArrowPoint(ArrowPoint *point)
