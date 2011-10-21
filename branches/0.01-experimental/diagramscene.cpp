@@ -352,6 +352,10 @@ void DiagramScene::processRemoving(const QList<QGraphicsItem *> & items)
             m_diag->removeAnnotationLabel(static_cast<ALabelItem *>(items[i]));
             this->removeItem(items[i]);
         }
+        if (items[i]->type()==ArrowSegment::USERTYPE)
+        {
+          removeArrowSegment(static_cast<ArrowSegment *>(items[i]));
+        }
     }
  }
 
