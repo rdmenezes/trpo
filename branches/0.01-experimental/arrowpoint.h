@@ -54,6 +54,9 @@ public:
             \param[in] d direction
          */
         bool hasInputSegment(ArrowDirection * d);
+        /*! Tests, whether it has the same directed segment
+         */
+        bool hasSameDirectedSegment(QPointF * in, QPointF * out);
         /*! Has a segment with direction
             \param[in] d direction
          */
@@ -88,6 +91,10 @@ public:
         /*! Removes a point from diagram
          */
         void die();
+        /*! Returns attached block
+            \param[in] block block data
+         */
+        inline BoxItem * attachedBlock() { return m_block; }
         /*! Attaches a block to a point
             \param[in] block block to be attached
          */

@@ -310,7 +310,9 @@ bool Diagram::canPlaceSegment(ArrowPoint * point1, ArrowPoint * point2,
      {
        QRectF rect=m_boxes[i]->boundingRect();
        bool result=collides(rect,*point1,*point2);
-       if (result && m_boxes[i]==block)
+       if (result && (m_boxes[i]==block
+                  || point1->attachedBlock()==m_boxes[i]
+                  || point2->attachedBlock()==m_boxes[i]))
             result=result && !boundaryCollides(rect,point1,point2);
        if (result) return false;
      }
