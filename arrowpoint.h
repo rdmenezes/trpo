@@ -97,7 +97,7 @@ public:
             \param[in] segment segment data
             \return true, on success false, if can't be
          */
-        bool tryRemoveSegment(ArrowSegment * segment);
+        bool tryRemoveSegment(ArrowSegment * segment,bool correct_arcs=true);
         /*! Removes an annotation from segment
             \param[in] line line, that will be removed
          */
@@ -151,6 +151,9 @@ public:
             \param[in] exc excluded segment (NULL to handle all)
          */
         bool canMoveTo(const QPointF & pos, ArrowSegment * exc=NULL);
+        /*! Returns a lines.
+         */
+        inline QVector<ALineItem * > & annotationLines() { return m_lines; }
 };
 
 #endif // ARROWPOINT_H

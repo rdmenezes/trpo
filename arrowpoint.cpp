@@ -111,7 +111,7 @@ bool ArrowPoint::hasOutputSegment(ArrowDirection * d)
     return false;
 }
 
-bool ArrowPoint::tryRemoveSegment(ArrowSegment * segment)
+bool ArrowPoint::tryRemoveSegment(ArrowSegment * segment, bool correct_arcs)
 {
     QVector<int> poses_in_in;
     QVector<int> poses_in_out;
@@ -145,22 +145,27 @@ bool ArrowPoint::tryRemoveSegment(ArrowSegment * segment)
       for (int i=0;i<poses_in_in.size();i++)
       {
         int index=poses_in_in[i]-i;
-        if (m_in[index]->in()==this) m_in[index]->setIn(NULL);
-        if (m_in[index]->out()==this) m_in[index]->setOut(NULL);
+        if (correct_arcs)
+        {
+         if (m_in[index]->in()==this) m_in[index]->setIn(NULL);
+         if (m_in[index]->out()==this) m_in[index]->setOut(NULL);
+        }
         m_in.remove(index);
       }
       for (int i=0;i<poses_in_out.size();i++)
       {
         int index=poses_in_out[i]-i;
+        if (correct_arcs)
+        {
         if (m_out[index]->in()==this) m_out[index]->setIn(NULL);
         if (m_out[index]->out()==this) m_out[index]->setOut(NULL);
+        }
         m_out.remove(index);
       }
       if (canDie)
       {
           for (int i=0;i<m_lines.size();i++)
               m_lines[i]->die();
-          this->die();
       }
       return true;
     }

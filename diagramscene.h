@@ -101,6 +101,10 @@ private:
         \param[in] pos  position
      */
     void determineDraggingBoxAction(BoxItem * item,const QPointF & pos);
+    /*! Removes arrow segment
+        \param[in] seg segment
+     */
+    void removeArrowSegment(ArrowSegment * seg);
     /*! Enables arrow moving action
         \param[in] pos position
         \param[in] seg segment

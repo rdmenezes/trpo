@@ -1,6 +1,7 @@
 #include "diagramscene.h"
 #include "arrowpoint.h"
 #include "arrowsegment.h"
+#include "alineitem.h"
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
 #include <math.h>
@@ -516,4 +517,27 @@ void DiagramScene::arrowMoveLeave(const QPointF &pos)
  }
  m_dragstate=DS_NONE;
  m_moving_segment=NULL;
+}
+
+void DiagramScene::removeArrowSegment(ArrowSegment * seg)
+{
+  ArrowPoint * in=seg->in();
+  ArrowPoint * out=seg->out();
+  if (seg->in()->tryRemoveSegment(seg,false))
+  {
+    if (seg->out()->tryRemoveSegment(seg,false))
+    {
+        seg->die();
+        if (in->isSeparated())
+        {
+            in->die();
+        }
+        if (out->isSeparated())
+        {
+            out->die();
+        }
+        update();
+    }
+    else in->addOutputSegment(seg);;
+  }
 }
