@@ -12,8 +12,11 @@
 #include <QFontMetricsF>
 #include <QApplication>
 
-
-#define MERGE_TEST_1
+//Unit-tests for arrow joining
+//#define MERGE_TEST_1
+//#define MERGE_TEST_2
+//#define MERGE_TEST_3
+//#define MERGE_TEST_4
 
 DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
     QGraphicsScene(parent)
@@ -66,6 +69,29 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
 
     ArrowPoint * p2=new ArrowPoint(300,200);
     ArrowPoint * p3=new ArrowPoint(400,200);
+#endif
+#ifdef MERGE_TEST_2
+    ArrowPoint * p0=new ArrowPoint(200,200);
+    ArrowPoint * p1=new ArrowPoint(250,200);
+
+    ArrowPoint * p2=new ArrowPoint(300,200);
+    ArrowPoint * p3=new ArrowPoint(300,300);
+#endif
+#ifdef MERGE_TEST_3
+    ArrowPoint * p0=new ArrowPoint(200,200);
+    ArrowPoint * p1=new ArrowPoint(200,300);
+
+    ArrowPoint * p2=new ArrowPoint(300,300);
+    ArrowPoint * p3=new ArrowPoint(350,300);
+#endif
+#ifdef MERGE_TEST_4
+    ArrowPoint * p0=new ArrowPoint(200,200);
+    ArrowPoint * p1=new ArrowPoint(200,300);
+
+    ArrowPoint * p2=new ArrowPoint(300,300);
+    ArrowPoint * p3=new ArrowPoint(300,200);
+#endif
+#if  defined MERGE_TEST_1 || defined MERGE_TEST_2 || defined MERGE_TEST_3 || defined MERGE_TEST_4
     m_diag->addArrowPoint(p0);
     m_diag->addArrowPoint(p1);
     m_diag->addArrowPoint(p2);
