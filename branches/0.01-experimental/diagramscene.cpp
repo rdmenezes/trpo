@@ -4,12 +4,16 @@
 #include "labeledit.h"
 #include "alabelitem.h"
 #include "arrowsegment.h"
+#include "arrowpoint.h"
 #include <QTextEdit>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
 #include <QGraphicsProxyWidget>
 #include <QFontMetricsF>
 #include <QApplication>
+
+
+#define MERGE_TEST_1
 
 DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
     QGraphicsScene(parent)
@@ -54,6 +58,25 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
   //Sets a no arrow editing state
   m_arrow_state=AES_NONE;
   m_last_arrow_point=NULL;
+
+  //Conditional test situation
+#ifdef MERGE_TEST_1
+    ArrowPoint * p0=new ArrowPoint(200,200);
+    ArrowPoint * p1=new ArrowPoint(250,200);
+
+    ArrowPoint * p2=new ArrowPoint(300,200);
+    ArrowPoint * p3=new ArrowPoint(400,200);
+    m_diag->addArrowPoint(p0);
+    m_diag->addArrowPoint(p1);
+    m_diag->addArrowPoint(p2);
+    m_diag->addArrowPoint(p3);
+    ArrowSegment * seg1=new ArrowSegment(p0,p1);
+    ArrowSegment * seg2=new ArrowSegment(p2,p3);
+    m_diag->addArrowSegment(seg1);
+    m_diag->addArrowSegment(seg2);
+    addItem(seg1); addItem(seg2);
+    update();
+#endif
 }
 
 const QRectF & DiagramScene::getDefaultBlockNumberSize() const

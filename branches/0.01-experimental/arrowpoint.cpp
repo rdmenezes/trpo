@@ -16,6 +16,7 @@ void ArrowPoint::die()
     if (m_block)
         m_block->removePointReference(this);
     m_diag->removeArrowPoint(this);
+    delete this;
 }
 
 bool ArrowPoint::canBeRemoved()
