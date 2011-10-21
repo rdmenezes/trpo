@@ -132,9 +132,20 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
          if (lst[i]->type()==QGraphicsProxyWidget::Type)
              isWidgetClicked=true;
          if (m_tooltype==TT_ARROW && lst[i]->type()==BoxItem::USERTYPE)
+         {
              this->processArrowClickOnBox(event,static_cast<BoxItem *>(lst[i]));
+             return;
+         }
          if (m_tooltype==TT_ARROW && lst[i]->type()==ArrowSegment::USERTYPE)
+         {
              this->processArrowClickOnLine(event,static_cast<ArrowSegment *>(lst[i]));
+             return;
+         }
+         if (m_tooltype==TT_SELECT && lst[i]->type()==ArrowSegment::USERTYPE)
+         {
+             this->enterArrowMove(event->scenePos(),static_cast<ArrowSegment *>(lst[i]));
+             return;
+         }
      }
      if (isWidgetClicked)
         this->QGraphicsScene::mousePressEvent(event);
@@ -332,6 +343,7 @@ void DiagramScene::processRemoving(const QList<QGraphicsItem *> & items)
         if (items[i]->type()==BoxItem::USERTYPE)
         {
             char id=static_cast<BoxItem *>(items[i])->id();
+            static_cast<BoxItem *>(items[i])->clearPointReferences();
             m_diag->removeBlock(id);
             this->removeItem(items[i]);
         }
@@ -490,8 +502,10 @@ void resizeUpper(QRectF & oldrect, QPointF & pos)
 
 void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (m_tooltype==TT_SELECT)
+    if (m_tooltype==TT_SELECT && (m_dragstate==DS_BLOCK_MOVE || m_dragstate==DS_BLOCK_RESIZE))
         blockResizeMoveLeave(event);
+    if (m_tooltype==TT_SELECT  && m_dragstate==DS_ARROW_MOVE)
+        arrowMoveLeave(event->scenePos());
 }
 
 void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )

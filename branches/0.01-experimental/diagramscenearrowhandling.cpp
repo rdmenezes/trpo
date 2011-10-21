@@ -448,3 +448,72 @@ void DiagramScene::processArrowMerge(const QPointF & pos, ArrowSegment * seg, Ar
   }
 
 }
+
+void DiagramScene::enterArrowMove(const QPointF & pos,ArrowSegment * seg)
+{
+  (void)pos;
+  m_dragstate=DS_ARROW_MOVE;
+  m_moving_segment=seg;
+}
+
+
+bool testForIncidentCollision(Diagram * diag,ArrowPoint * p,ArrowPoint * pos)
+{
+ const QVector<ArrowSegment *> & in=p->inputSegments();
+ const QVector<ArrowSegment *> & out=p->outputSegments();
+ for (int i=0;i<in.size();i++)
+ {
+   if (!diag->canPlaceSegment(in[i]->in(),pos))
+   {
+      return false;
+   }
+ }
+ for (int i=0;i<out.size();i++)
+ {
+   if (!diag->canPlaceSegment(pos,out[i]->out()))
+   {
+      return false;
+   }
+ }
+ return true;
+}
+
+void DiagramScene::arrowMoveLeave(const QPointF &pos)
+{
+ QPointF p1(m_moving_segment->in()->x(),m_moving_segment->in()->y());
+ QPointF p2(m_moving_segment->out()->x(),m_moving_segment->out()->y());
+ ArrowDirection dir=m_moving_segment->direction();
+ if (dir==AD_LEFT || dir==AD_RIGHT) { p1.setY(pos.y()); p2.setY(pos.y()); }
+ else { p1.setX(pos.x()); p2.setX(pos.x());}
+ ArrowPoint * tmp1=new ArrowPoint(p1.x(),p1.y());
+ ArrowPoint * tmp2=new ArrowPoint(p1.x(),p2.y());
+ bool canPlace=m_diag->canPlaceSegment(tmp1,tmp2);
+ bool canMove1=true,canMove2=true;
+ canMove1=m_moving_segment->in()->canMoveTo(p1,m_moving_segment);
+ canMove2=m_moving_segment->out()->canMoveTo(p2,m_moving_segment);
+ if (canPlace && canMove1 && canMove2)
+ {
+     bool canMoveLeft=testForIncidentCollision(m_diag,m_moving_segment->in(),tmp1);
+     bool canMoveRight=testForIncidentCollision(m_diag,m_moving_segment->in(),tmp2);
+     //Check, whether moving every point makes collision with blocks
+     delete tmp1;
+     delete tmp2;
+     if (canMoveLeft && canMoveRight)
+     {
+        m_moving_segment->in()->setX(p1.x());
+        m_moving_segment->in()->setY(p1.y());
+        m_moving_segment->out()->setX(p2.x());
+        m_moving_segment->out()->setY(p2.y());
+        m_moving_segment->in()->update();
+        m_moving_segment->out()->update();
+        update();
+     }
+     else
+     {
+         delete tmp1;
+         delete tmp2;
+     }
+ }
+ m_dragstate=DS_NONE;
+ m_moving_segment=NULL;
+}

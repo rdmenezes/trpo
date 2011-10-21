@@ -42,8 +42,9 @@ private:
             \param[out] result policy
             \param[in]  point  that determines restrictions
             \param[in]  dir    direction
+            \param[in]  reversed reversed data
          */
-        void generatePolicy(MoveRange & result,ArrowPoint * pivot,ArrowDirection dir);
+        void generatePolicy(MoveRange & result,ArrowPoint * pivot,ArrowDirection dir,bool reversed);
 public:
         /*! Detects, whether has annotations
          */

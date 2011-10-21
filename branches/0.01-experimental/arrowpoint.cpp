@@ -186,7 +186,7 @@ MoveRange ArrowPoint::moveRange(ArrowSegment * exc)
       if (m_in[i]!=exc)
       {
         ArrowDirection dir=m_in[i]->direction();
-        generatePolicy(result,m_in[i]->in(),dir);
+        generatePolicy(result,m_in[i]->in(),dir,false);
       }
     }
     for (int i=0;i<m_out.size();i++)
@@ -194,21 +194,28 @@ MoveRange ArrowPoint::moveRange(ArrowSegment * exc)
       if (m_out[i]!=exc)
       {
         ArrowDirection dir=m_out[i]->direction();
-        generatePolicy(result,m_out[i]->out(),dir);
+        generatePolicy(result,m_out[i]->out(),dir,true);
       }
     }
-
+    if (m_block)
+    {
+        MoveRange m=m_block->getRange(this);
+        if (result.top()>m.top()) result.setTop(m.top());
+        if (result.bottom()<m.bottom()) result.setBottom(m.bottom());
+        if (result.left()>m.left()) result.setLeft(m.left());
+        if (result.right()<m.right()) result.setRight(m.right());
+    }
     return result;
 }
 
-void ArrowPoint::generatePolicy(MoveRange & result,ArrowPoint * pivot,ArrowDirection dir)
+void ArrowPoint::generatePolicy(MoveRange & result,ArrowPoint * pivot,ArrowDirection dir, bool reversed)
  {
     if (dir==AD_LEFT || dir==AD_RIGHT)
     {
         qreal yrestriction=pivot->y();
         result.setTop(yrestriction);
         result.setBottom(yrestriction);
-        if (dir==AD_LEFT)
+        if (dir==AD_LEFT || (dir==AD_RIGHT && reversed))
         {
             qreal right_restrx=pivot->x();
             if (result.right()>right_restrx) result.setRight(right_restrx);
@@ -224,7 +231,7 @@ void ArrowPoint::generatePolicy(MoveRange & result,ArrowPoint * pivot,ArrowDirec
         qreal xrestriction=pivot->x();
         result.setLeft(xrestriction);
         result.setRight(xrestriction);
-        if (dir==AD_TOP)
+        if (dir==AD_TOP || (dir==AD_BOTTOM && reversed))
         {
             qreal bottom_restrx=pivot->y();
             if (result.bottom()>bottom_restrx) result.setBottom(bottom_restrx);
