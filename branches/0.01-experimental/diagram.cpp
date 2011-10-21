@@ -103,6 +103,15 @@ bool Diagram::doesntCollideWithLines(const QRectF & rect)
             return false;
         }
     }
+    for (int i=0;i<m_alines.size();i++)
+    {
+        QPointF * p1=m_alines[i]->begin();
+        QPointF * p2=m_alines[i]->end();
+        if (collides(rect,*p1,*p2) && !boundaryCollides(rect,p1,p2))
+        {
+             return false;
+        }
+    }
     return true;
 }
 
@@ -323,6 +332,17 @@ bool Diagram::canPlaceSegment(ArrowPoint * point1, ArrowPoint * point2,
             return false;
     }
     return true;
+}
+
+
+bool Diagram::canPlaceAnnotationLine(const QPointF * point1,const QPointF * point2)
+{
+    ArrowPoint * p1=new ArrowPoint(point1->x(),point1->y());
+    ArrowPoint * p2=new ArrowPoint(point2->x(),point2->y());
+    bool collides=canPlaceSegment(p1,p2,NULL);
+    delete p1;
+    delete p2;
+    return collides;
 }
 
 Diagram::~Diagram()

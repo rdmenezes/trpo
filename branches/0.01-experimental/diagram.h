@@ -186,6 +186,12 @@ public:
             \param[in] block   block, which will colliding with
          */
         bool canPlaceSegment(ArrowPoint * point1, ArrowPoint * point2, BoxItem * block=NULL);
+        /*! Determines, whether annotation line can be placed ot not
+            \param[in] point1  first point
+            \param[in] point2  second point
+         */
+        bool canPlaceAnnotationLine(const QPointF * point1,const QPointF * point);
+
         /*! Gets an index id for box
          */
         int getBoxID() const;
