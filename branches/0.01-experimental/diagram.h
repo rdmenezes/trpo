@@ -257,6 +257,9 @@ public:
             \param[in] pts points
          */
         bool canBePlacedAroundPoints(const QRectF & rect, const QVector<ArrowPoint *> pts);
+        /*! Destructor
+         */
+        ~Diagram();
 };
 
 

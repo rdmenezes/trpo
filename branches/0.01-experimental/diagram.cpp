@@ -324,3 +324,9 @@ bool Diagram::canPlaceSegment(ArrowPoint * point1, ArrowPoint * point2,
     }
     return true;
 }
+
+Diagram::~Diagram()
+{
+  for (int i=0;i<m_arrow_points.size();i++)
+      delete m_arrow_points[i];
+}

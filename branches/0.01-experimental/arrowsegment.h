@@ -85,6 +85,12 @@ public:
          /*! Returns an output point
           */
          inline ArrowPoint * out() { return m_out; }
+         /*! Sets an input point
+          */
+         inline void setIn(ArrowPoint * p) {m_in=p;}
+         /*! Sets an output point
+          */
+         inline void setOut(ArrowPoint * p) {m_out=p;}
          /*! Describes a segment
              \param[in] in   input  point
              \param[in] out  output point
@@ -115,6 +121,9 @@ public:
          /*! Returns a type of segment
           */
          int type() const;
+         /*! Kills a segment
+          */
+         void die();
 
 };
 
