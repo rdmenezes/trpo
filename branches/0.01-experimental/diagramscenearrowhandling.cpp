@@ -8,9 +8,10 @@
 void DiagramScene::processArrowEscapePress(const QPointF & pos)
 {
   (void)pos;
+  bool handled=false;
   if (m_last_arrow_point->isSeparated())
-      m_last_arrow_point->die();
-  if (m_last_arrow_point->canBeRemoved())
+  {  m_last_arrow_point->die(); handled=true; }
+  if (!handled && m_last_arrow_point->canBeRemoved())
   {
       ArrowSegment * out=m_last_arrow_point->outputSegments()[0];
       ArrowSegment * in=m_last_arrow_point->outputSegments()[0];
@@ -20,6 +21,7 @@ void DiagramScene::processArrowEscapePress(const QPointF & pos)
       in->setOut(out->out());
       out->die();
       in->update();
+      handled=true;
   }
   m_arrow_state=AES_NONE;
   m_last_arrow_point=NULL;
@@ -156,22 +158,29 @@ void DiagramScene::processArrowClickOnLine(QGraphicsSceneMouseEvent * event,
   {
       if (!m_last_arrow_point->isIncident(seg))
       {
-       processArrowJoin(pos,seg);
+       processArrowJoinSegments(pos,seg);
       }
       return;
   }
 }
 
-void DiagramScene::processArrowJoin(const QPointF & pos, ArrowSegment * seg)
+void DiagramScene::processArrowJoinSegments(const QPointF & pos, ArrowSegment * seg)
 {
   QPointF realpos=constructDirectedLine(*m_last_arrow_point,pos);
   QRectF rect=seg->boundingRect();
   if (realpos.x()>rect.right() || realpos.x()<rect.left() || realpos.y()<rect.top()
       || realpos.y()>rect.bottom()) return;
   ArrowDirection dir=direction(*m_last_arrow_point,realpos);
-  if (m_last_arrow_point->hasOppositeSegment(m_last_arrow_point,&realpos)) return;
+  {
+   bool hasopposed=m_last_arrow_point->hasOppositeSegment(m_last_arrow_point,&realpos);
+   if (hasopposed)
+      return;
+  }
   if (nearToPoint(*(seg->in()),realpos) && seg->in()->isBeginPoint())
   {
+      bool hasop2=seg->in()->hasOppositeSegment(m_last_arrow_point,&realpos);
+      if (hasop2)
+           return;
       QPointF endpos(seg->in()->x(),seg->in()->y());
       ArrowDirection segdir=seg->direction();
 
@@ -194,7 +203,49 @@ void DiagramScene::processArrowJoin(const QPointF & pos, ArrowSegment * seg)
   {
         if (nearToPoint(*(seg->in()),realpos) || nearToPoint(*(seg->out()),realpos))
             return;
+        if ( (seg->direction()==AD_LEFT && dir==AD_LEFT)
+             || (seg->direction()==AD_LEFT && dir==AD_RIGHT)
+             || (seg->direction()==AD_RIGHT && dir==AD_LEFT)
+             || (seg->direction()==AD_RIGHT && dir==AD_RIGHT))
+            return ;
+        if ( (seg->direction()==AD_TOP && dir==AD_TOP)
+             || (seg->direction()==AD_TOP && dir==AD_BOTTOM)
+             || (seg->direction()==AD_BOTTOM && dir==AD_TOP)
+             || (seg->direction()==AD_BOTTOM && dir==AD_BOTTOM))
+            return ;
+        if  (seg->direction()==AD_TOP && seg->direction()==AD_BOTTOM)
+            realpos.setX(seg->in()->x());
+        if  (seg->direction()==AD_LEFT && seg->direction()==AD_RIGHT)
+            realpos.setY(seg->in()->y());
+        ArrowPoint * tmp=new ArrowPoint(realpos.x(),realpos.y());
+        if (m_diag->canPlaceSegment(m_last_arrow_point,tmp,NULL))
+        {
+         processArrowJoin(realpos,seg);
+         m_last_arrow_point=NULL;
+         m_arrow_state=AES_NONE;
+        }
+        delete tmp;
   }
+}
+
+void DiagramScene::processArrowJoin(const QPointF & pos,ArrowSegment * seg)
+{
+ ArrowPoint * p0=seg->in();
+ ArrowPoint * p1=new ArrowPoint(pos.x(),pos.y());
+ ArrowPoint * p2=seg->out();
+ ArrowSegment * seg_p1=new ArrowSegment(p0,p1);
+ ArrowSegment * seg_p2=new ArrowSegment(p1,p2);
+ ArrowSegment * seg_p3=new ArrowSegment(m_last_arrow_point,p1);
+ m_diag->addArrowSegment(seg_p1);
+ m_diag->addArrowSegment(seg_p2);
+ m_diag->addArrowSegment(seg_p3);
+ this->addItem(seg_p1);
+ this->addItem(seg_p2);
+ this->addItem(seg_p3);
+ p0->tryRemoveSegment(seg);
+ p2->tryRemoveSegment(seg);
+ seg->die();
+ p1->update();
 }
 
 void DiagramScene::processArrowPointingToBlock(ArrowPoint * p, BoxItem * box)
