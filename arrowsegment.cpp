@@ -1,7 +1,10 @@
 #include "arrowsegment.h"
 #include "arrowpoint.h"
+#include "diagram.h"
 #include "compare.h"
 #include <QPainter>
+#include <QGraphicsScene>
+
 ArrowSegment::ArrowSegment(ArrowPoint * in, ArrowPoint * out)
 {
   m_in=in;
@@ -50,6 +53,7 @@ bool tooSmall(ArrowPoint * in, const QPointF & out)
 #define D_RIGHT 4
 QRectF ArrowSegment::boundingRect() const
 {
+  if (!m_in || !m_out) return QRectF();
   ArrowDirection dir=direction();
   QRectF result;
   if (dir==AD_LEFT)
@@ -91,6 +95,7 @@ void ArrowSegment::paint(QPainter *painter,
                          const QStyleOptionGraphicsItem *option,
                          QWidget *widget)
 {
+  if (!m_in || !m_out) return;
   (void)option,widget;
   ArrowDirection mydir=direction();
   QPointF din=computeInputPoint(*m_in,mydir),dout=computeOutputPoint(*m_out,mydir);
@@ -257,3 +262,8 @@ int ArrowSegment::type() const
     return ArrowSegment::USERTYPE;
 }
 
+void ArrowSegment::die()
+{
+  m_diag->removeArrowSegment(this);
+  this->scene()->removeItem(this);
+}

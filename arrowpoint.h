@@ -91,6 +91,10 @@ public:
         /*! Removes a point from diagram
          */
         void die();
+        /*! Tests, whether point can be removed, if two lines has same direction
+            and it's only one
+         */
+        bool canBeRemoved();
         /*! Returns attached block
             \param[in] block block data
          */

@@ -3,13 +3,24 @@
 #include "arrowsegment.h"
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
-
+#include <math.h>
 
 void DiagramScene::processArrowEscapePress(const QPointF & pos)
 {
   (void)pos;
   if (m_last_arrow_point->isSeparated())
       m_last_arrow_point->die();
+  if (m_last_arrow_point->canBeRemoved())
+  {
+      ArrowSegment * out=m_last_arrow_point->outputSegments()[0];
+      ArrowSegment * in=m_last_arrow_point->outputSegments()[0];
+      m_last_arrow_point->tryRemoveSegment(out);
+      m_last_arrow_point->tryRemoveSegment(in);
+      m_last_arrow_point->die();
+      in->setOut(out->out());
+      out->die();
+      in->update();
+  }
   m_arrow_state=AES_NONE;
   m_last_arrow_point=NULL;
 }
@@ -97,6 +108,13 @@ void DiagramScene::processArrowClickOnBox(QGraphicsSceneMouseEvent * event,
      }
      else delete p;
    }
+}
+#define NEAR_BOUNDARY 5
+
+inline bool nearToPoint(QPointF & pivot, QPointF & test)
+{
+    return  fabs(pivot.x()-test.x())<NEAR_BOUNDARY
+             && fabs(pivot.y()-test.y())<NEAR_BOUNDARY;
 }
 
 void DiagramScene::processArrowClickOnLine(QGraphicsSceneMouseEvent * event,
