@@ -70,7 +70,10 @@ bool ArrowPoint::hasOppositeSegment(QPointF * in, QPointF * out)
     for (int i=0;i<m_in.size();i++)
     {
         ArrowDirection dir2=m_in[i]->direction();
-        if ( (dir==AD_LEFT && dir2==AD_RIGHT)  || (dir==AD_TOP && dir2==AD_BOTTOM))
+        if ( (dir==AD_LEFT && dir2==AD_RIGHT)
+            || (dir2==AD_LEFT && dir==AD_RIGHT)
+            || (dir==AD_TOP && dir2==AD_BOTTOM)
+            || (dir2==AD_TOP && dir==AD_BOTTOM))
         {
             return true;
         }
@@ -160,5 +163,16 @@ bool ArrowPoint::tryRemoveSegment(ArrowSegment * segment)
       }
       return true;
     }
+    return false;
+}
+
+bool ArrowPoint::isIncident(ArrowSegment * s)
+{
+    for (int i=0;i<m_in.size();i++)
+        if (m_in[i]==s)
+            return true;
+    for (int i=0;i<m_out.size();i++)
+        if (m_out[i]==s)
+            return true;
     return false;
 }

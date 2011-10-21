@@ -146,11 +146,29 @@ void DiagramScene::processArrowClickOnLine(QGraphicsSceneMouseEvent * event,
           this->addItem(seg_in);
           this->addItem(seg_out);
           m_arrow_state=AES_EDIT;
+          return;
       }
   }
-  else
+  if (m_arrow_state==AES_EDIT)
   {
-
+      bool neato=nearToPoint(*(seg->in()),pos);
+      bool isbegin=seg->in()->isBeginPoint();
+      if (neato && isbegin)
+      {
+          if  (m_last_arrow_point->isIncident(seg)) return;
+          bool canPlace=m_diag->canPlaceSegment(m_last_arrow_point,seg->in(),NULL);
+          if (canPlace)
+          {
+              ArrowSegment * nseg=new ArrowSegment(m_last_arrow_point,seg->in());
+              m_diag->addArrowSegment(nseg);
+              this->addItem(nseg);
+              seg->in()->update();
+              m_last_arrow_point->update();
+              m_last_arrow_point=NULL;
+              m_arrow_state=AES_NONE;
+          }
+      }
+      return;
   }
 }
 
