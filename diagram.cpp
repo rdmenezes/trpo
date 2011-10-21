@@ -239,7 +239,6 @@ void Diagram::removeArrowPoint(ArrowPoint * point)
       if (m_arrow_points[i]==point)
       {
         m_arrow_points.remove(i);
-        delete m_arrow_points[i];
         --i;
       }
    }
