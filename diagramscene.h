@@ -97,6 +97,21 @@ private:
         \param[in] pos  position
      */
     void determineDraggingBoxAction(BoxItem * item,const QPointF & pos);
+    /*! Adds arrow, pointing to block
+        \param[in] p   new point
+        \param[om] box block
+     */
+    void addArrowPointingToBlock(ArrowPoint * p,BoxItem * box);
+    /*! Prolongs arrow to block edge
+        \param[in] p    point
+        \param[in] box  block
+     */
+    void prolongArrowToBlockEdge(ArrowPoint * p,BoxItem * box);
+    /*! Processes arrow addition, pointing to block
+        \param[in] p position
+        \param[in] box  box
+     */
+    void processArrowPointingToBlock(ArrowPoint * p, BoxItem * box);
     /*! Process common arrow building
         \param[in] pos  pointf
      */

@@ -2,6 +2,7 @@
 #include "alineitem.h"
 #include "arrowsegment.h"
 #include "diagram.h"
+#include "boxitem.h"
 
 ArrowPoint::ArrowPoint(qreal x, qreal y): QPointF(x,y)
 {
@@ -11,6 +12,8 @@ ArrowPoint::ArrowPoint(qreal x, qreal y): QPointF(x,y)
 
 void ArrowPoint::die()
 {
+    if (m_block)
+        m_block->removePointReference(this);
     m_diag->removeArrowPoint(this);
 }
 
@@ -65,6 +68,15 @@ bool ArrowPoint::hasOppositeSegment(QPointF * in, QPointF * out)
             return true;
         }
     }
+    return false;
+}
+
+bool ArrowPoint::hasSameDirectedSegment(QPointF * in, QPointF * out)
+{
+    ArrowDirection dir=direction(*in,*out);
+    for (int i=0;i<m_out.size();i++)
+        if (m_out[i]->direction()==dir)
+            return true;
     return false;
 }
 

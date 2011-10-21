@@ -82,8 +82,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
      {
          if (lst[i]->type()==QGraphicsProxyWidget::Type)
              isWidgetClicked=true;
-         if (m_tooltype==TT_ARROW && lst[i]->type()==BoxItem::USERTYPE
-                                  && m_arrow_state==AES_EDIT)
+         if (m_tooltype==TT_ARROW && lst[i]->type()==BoxItem::USERTYPE)
              this->processArrowClickOnBox(event,static_cast<BoxItem *>(lst[i]));
          if (m_tooltype==TT_ARROW && lst[i]->type()==ArrowSegment::USERTYPE)
              this->processArrowClickOnLine(event,static_cast<ArrowSegment *>(lst[i]));
