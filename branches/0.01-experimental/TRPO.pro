@@ -21,7 +21,8 @@ SOURCES += main.cpp \
     arrowsegment.cpp \
     arrowpoint.cpp \
     moverange.cpp \
-    diagramscenearrowhandling.cpp
+    diagramscenearrowhandling.cpp \
+    diagramscenesaveload.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
