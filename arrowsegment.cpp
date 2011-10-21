@@ -267,3 +267,5 @@ void ArrowSegment::die()
   m_diag->removeArrowSegment(this);
   this->scene()->removeItem(this);
 }
+
+

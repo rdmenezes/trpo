@@ -50,6 +50,10 @@ public:
         /*! Returns an output segments
          */
         inline const QVector<ArrowSegment *> & outputSegments() { return m_out; }
+        /*! Determines, whether segment is incident to point
+            \param[in] p point
+         */
+        bool isIncident(ArrowSegment * s);
         /*! Has a segment with direction
             \param[in] d direction
          */
