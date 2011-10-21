@@ -25,6 +25,18 @@ enum ArrowDirection
 
 QPointF  computeOutputPoint(const QPointF & pivot,ArrowDirection & dir);
 QPointF  computeInputPoint(const QPointF & pivot,ArrowDirection & dir);
+
+/*! Determines, whether two sequential segments can be merged
+    \param[in] last_point first point of adding segment
+    \param[in] endpoint  beginning of seconde segment
+    \param[in] segdir    second segment direction
+    \param[in] mydir     own segment direction
+    \param[in] test      point ,where it must be moved
+ */
+bool canBeMerged(ArrowPoint * last_point,const QPointF & endpoint,
+                 ArrowDirection segdir, ArrowDirection mydir,QPointF & test );
+
+
 /*! Determines a direction of arrow
  */
 ArrowDirection direction(const QPointF & in,const QPointF & out);

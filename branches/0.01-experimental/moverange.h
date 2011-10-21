@@ -24,7 +24,7 @@ public:
     /*! Tests whether point is within range
         \param[in] p point
      */
-    bool isWithin(QPointF * p);
+    bool isWithin(const QPointF & p);
     /*! Reduces a range by other range
      */
     void reduce(const MoveRange & range);

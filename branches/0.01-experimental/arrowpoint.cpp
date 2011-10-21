@@ -176,3 +176,68 @@ bool ArrowPoint::isIncident(ArrowSegment * s)
             return true;
     return false;
 }
+
+MoveRange ArrowPoint::moveRange(ArrowSegment * exc)
+{
+    MoveRange result(-1E+6,-1E+6,2E+6,2E+6);
+    for (int i=0;i<m_in.size();i++)
+    {
+      if (m_in[i]!=exc)
+      {
+        ArrowDirection dir=m_in[i]->direction();
+        generatePolicy(result,m_in[i]->in(),dir);
+      }
+    }
+    for (int i=0;i<m_out.size();i++)
+    {
+      if (m_out[i]!=exc)
+      {
+        ArrowDirection dir=m_out[i]->direction();
+        generatePolicy(result,m_out[i]->out(),dir);
+      }
+    }
+
+    return result;
+}
+
+void ArrowPoint::generatePolicy(MoveRange & result,ArrowPoint * pivot,ArrowDirection dir)
+ {
+    if (dir==AD_LEFT || dir==AD_RIGHT)
+    {
+        qreal yrestriction=pivot->y();
+        result.setTop(yrestriction);
+        result.setBottom(yrestriction);
+        if (dir==AD_LEFT)
+        {
+            qreal right_restrx=pivot->x();
+            if (result.right()>right_restrx) result.setRight(right_restrx);
+        }
+        else
+        {
+            qreal left_restrx=pivot->x();
+            if (result.left()<left_restrx) result.setLeft(left_restrx);
+        }
+    }
+    else
+    {
+        qreal xrestriction=pivot->x();
+        result.setLeft(xrestriction);
+        result.setRight(xrestriction);
+        if (dir==AD_TOP)
+        {
+            qreal bottom_restrx=pivot->y();
+            if (result.bottom()>bottom_restrx) result.setBottom(bottom_restrx);
+        }
+        else
+        {
+            qreal top_restrx=pivot->y();
+            if (result.top()<top_restrx) result.setTop(top_restrx);
+        }
+    }
+ }
+
+bool ArrowPoint::canMoveTo(const QPointF & pos, ArrowSegment * exc)
+{
+     MoveRange r=moveRange(exc);
+     return r.isWithin(pos);
+}
