@@ -246,6 +246,22 @@ public:
     /*! Toggles editing state off
      */
     void toggleEditStateOff();
+
+    /*! Tries to save a diagram to file
+        \param[in] filename name of file
+        \return true on success
+     */
+    bool save(const QString & filename);
+    /*! Tries to save a diagram to file
+        \param[in] filename name of file
+        \return true on success
+     */
+    bool load(const QString & filename);
+    /*! Exports a diagram to file
+        \param[in] filename name of file
+        \return true on success
+     */
+    bool exportTo(const QString & filename);
 signals:
 
 public slots:
