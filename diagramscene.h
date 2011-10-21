@@ -28,7 +28,8 @@ enum DragState
     DS_NONE,
     DS_BLOCK_RESIZE,
     DS_BLOCK_MOVE,
-    DS_ALABEL_MOVE
+    DS_ALABEL_MOVE,
+    DS_ARROW_MOVE
 };
 
 enum BlockCorner
@@ -79,6 +80,7 @@ private:
     ALabelItem           *   m_moving_label;        //!< Moving annotation label
     ArrowEditState           m_arrow_state;         //!< Arrow editing state
     ArrowPoint           *   m_last_arrow_point;          //!< Last point added to scene
+    ArrowSegment         *   m_moving_segment;      //!< Segment that can be moved
     /*! Process tool selection by keys
         \param[in] event event
         \return true, if handled
@@ -99,6 +101,15 @@ private:
         \param[in] pos  position
      */
     void determineDraggingBoxAction(BoxItem * item,const QPointF & pos);
+    /*! Enables arrow moving action
+        \param[in] pos position
+        \param[in] seg segment
+     */
+    void enterArrowMove(const QPointF & pos,ArrowSegment * seg);
+    /*! Leaves arrow moving action
+        \param[in] pos position
+     */
+    void arrowMoveLeave(const QPointF & pos);
     /*! Processes arrow joining
      */
     void processArrowJoin(const QPointF & pos,ArrowSegment * seg);
