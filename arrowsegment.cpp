@@ -268,4 +268,40 @@ void ArrowSegment::die()
   this->scene()->removeItem(this);
 }
 
+bool canBeMerged(ArrowPoint * last_point,const QPointF & endpoint,
+                 ArrowDirection segdir, ArrowDirection mydir,QPointF & test )
+{
+  bool result=false;
+  test=QPointF(last_point->x(),last_point->y());
+  if (segdir==AD_LEFT)
+  {
+      if (mydir==AD_LEFT)                        { test.setY(endpoint.y());}
+      if (mydir==AD_TOP || mydir==AD_BOTTOM)     { test.setX(endpoint.x());}
+      if (mydir!=AD_RIGHT)
+        result=last_point->canMoveTo(test);
+  }
+  if (segdir==AD_RIGHT)
+  {
+      if (mydir==AD_RIGHT)                       { test.setY(endpoint.y());}
+      if (mydir==AD_TOP || mydir==AD_BOTTOM)     { test.setX(endpoint.x());}
+      if (mydir!=AD_LEFT)
+        result=last_point->canMoveTo(test);
+  }
+  if (segdir==AD_TOP)
+  {
+      if (mydir==AD_TOP)                         { test.setX(endpoint.x());}
+      if (mydir==AD_LEFT || mydir==AD_RIGHT)     { test.setY(endpoint.y());}
+      if (mydir!=AD_BOTTOM)
+        result=last_point->canMoveTo(test);
+  }
+  if (segdir==AD_BOTTOM)
+  {
+      if (mydir==AD_BOTTOM)                         { test.setX(endpoint.x());}
+      if (mydir==AD_LEFT || mydir==AD_RIGHT)        { test.setY(endpoint.y());}
+      if (mydir!=AD_TOP)
+        result=last_point->canMoveTo(test);
+  }
+  return result;
+}
+
 

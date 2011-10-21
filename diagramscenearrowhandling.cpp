@@ -44,7 +44,7 @@ void DiagramScene::processArrowClickOnBlankSpace(QGraphicsSceneMouseEvent * even
            m_last_arrow_point->setY(point2.y());
            bool canPlace=m_diag->canPlaceSegment(m_last_arrow_point->inputSegments()[0]->in(),
                                                          m_last_arrow_point);
-           if (canPlace)
+           if (!canPlace)
            {
                m_last_arrow_point->setX(tmp.x());
                m_last_arrow_point->setY(tmp.y());
@@ -135,6 +135,9 @@ void DiagramScene::processArrowClickOnLine(QGraphicsSceneMouseEvent * event,
           bool  constructedInSegIsTooSmall=nearToPoint(*(seg->in()),pos);
           bool  constructedOutSegIsTooSmall=nearToPoint(*(seg->out()),pos);
           if  (constructedInSegIsTooSmall || constructedOutSegIsTooSmall) return;
+          ArrowDirection d=seg->direction();
+          if (d==AD_LEFT || d==AD_RIGHT) pos.setY(seg->in()->y());
+          if (d==AD_BOTTOM || d==AD_TOP) pos.setX(seg->in()->x());
           m_last_arrow_point=new ArrowPoint(pos.x(),pos.y());
           ArrowSegment * seg_in=new ArrowSegment(seg->in(),m_last_arrow_point);
           ArrowSegment * seg_out=new ArrowSegment(m_last_arrow_point,seg->out());
@@ -151,24 +154,46 @@ void DiagramScene::processArrowClickOnLine(QGraphicsSceneMouseEvent * event,
   }
   if (m_arrow_state==AES_EDIT)
   {
-      bool neato=nearToPoint(*(seg->in()),pos);
-      bool isbegin=seg->in()->isBeginPoint();
-      if (neato && isbegin)
+      if (!m_last_arrow_point->isIncident(seg))
       {
-          if  (m_last_arrow_point->isIncident(seg)) return;
-          bool canPlace=m_diag->canPlaceSegment(m_last_arrow_point,seg->in(),NULL);
-          if (canPlace)
-          {
-              ArrowSegment * nseg=new ArrowSegment(m_last_arrow_point,seg->in());
-              m_diag->addArrowSegment(nseg);
-              this->addItem(nseg);
-              seg->in()->update();
-              m_last_arrow_point->update();
-              m_last_arrow_point=NULL;
-              m_arrow_state=AES_NONE;
-          }
+       processArrowJoin(pos,seg);
       }
       return;
+  }
+}
+
+void DiagramScene::processArrowJoin(const QPointF & pos, ArrowSegment * seg)
+{
+  QPointF realpos=constructDirectedLine(*m_last_arrow_point,pos);
+  QRectF rect=seg->boundingRect();
+  if (realpos.x()>rect.right() || realpos.x()<rect.left() || realpos.y()<rect.top()
+      || realpos.y()>rect.bottom()) return;
+  ArrowDirection dir=direction(*m_last_arrow_point,realpos);
+  if (m_last_arrow_point->hasOppositeSegment(m_last_arrow_point,&realpos)) return;
+  if (nearToPoint(*(seg->in()),realpos) && seg->in()->isBeginPoint())
+  {
+      QPointF endpos(seg->in()->x(),seg->in()->y());
+      ArrowDirection segdir=seg->direction();
+
+      QPointF resultingmove;
+      if (canBeMerged(m_last_arrow_point,endpos,segdir,dir,resultingmove))
+      {
+          ArrowPoint * tmp=new ArrowPoint(resultingmove.x(),resultingmove.y());
+          bool canPlace=m_diag->canPlaceSegment(tmp,seg->in(),NULL);
+          delete tmp;
+          if (canPlace)
+          {
+              processArrowMerge(resultingmove,seg,&dir,&segdir);
+              m_arrow_state=AES_NONE;
+              m_last_arrow_point=NULL;
+              return;
+          }
+      }
+  }
+  else //Join arrow
+  {
+        if (nearToPoint(*(seg->in()),realpos) || nearToPoint(*(seg->out()),realpos))
+            return;
   }
 }
 
@@ -228,4 +253,115 @@ void DiagramScene::addArrowPointingToBlock(ArrowPoint * p,BoxItem * box)
     m_last_arrow_point=NULL;
     box->addPointReference(p);
 
+}
+
+
+bool threeSegmentsOnLineCanRemoveTwoPoints(ArrowPoint * m_last_arrow_point,
+                                           ArrowSegment * seg,
+                                           ArrowDirection * mydir,
+                                           ArrowDirection * segdir)
+{
+ //Define all removing points
+ ArrowPoint * p1=m_last_arrow_point;
+ ArrowPoint * p2=seg->in();
+ bool  sameDirectedWithAddedSegment=p1->hasInputSegment(mydir);
+ bool  hasOneInputSegmentAndNoAnnotationsAndNoForks=p1->inputSegments().count()==1 &&
+                                                   (!p1->hasAnnotations()) &&
+                                                    p1->outputSegments().count()==0;
+ bool  sameDirectedAddedAndNext= *mydir==*segdir;
+ bool  hasOneOutputSegmentAndNoAnnotationsAndForks=p2->inputSegments().count()==0 &&
+                                                   !(p2->hasAnnotations()) &&
+                                                   p2->outputSegments().count()<=1;
+
+ return sameDirectedWithAddedSegment && hasOneInputSegmentAndNoAnnotationsAndNoForks
+        && sameDirectedAddedAndNext && hasOneOutputSegmentAndNoAnnotationsAndForks;
+}
+
+void mergeThreeSegmentsInOne(DiagramScene * scene,
+                             ArrowPoint * m_last_arrow_point,
+                             ArrowSegment * seg
+                             )
+{
+  ArrowPoint * p0=m_last_arrow_point->inputSegments()[0]->in();
+  ArrowPoint * p1=m_last_arrow_point;
+  ArrowPoint * p2=seg->in();
+  ArrowPoint * p3=seg->out();
+  ArrowSegment * s1=m_last_arrow_point->inputSegments()[0];
+  ArrowSegment * s3=seg;
+  //Add new segment
+  ArrowSegment * new_segment=new ArrowSegment(p0,p3);
+  scene->addItem(new_segment);
+  scene->diagram()->addArrowSegment(new_segment);
+  p0->tryRemoveSegment(s1);
+  p3->tryRemoveSegment(s3);
+  s1->die();
+  s3->die();
+  p1->die();
+  p2->die();
+  p0->update();
+  p3->update();
+}
+
+void DiagramScene::processArrowMerge(const QPointF & pos, ArrowSegment * seg, ArrowDirection * mydir, ArrowDirection  * segdir)
+{
+  bool handled=false;
+  m_last_arrow_point->setX(pos.x());
+  m_last_arrow_point->setY(pos.y());
+  if (threeSegmentsOnLineCanRemoveTwoPoints(m_last_arrow_point,seg,mydir,segdir))
+  {
+    handled=true;
+    mergeThreeSegmentsInOne(this,m_last_arrow_point,seg);
+  }
+  /*
+  if (m_last_arrow_point->hasSameInputSegment(const_cast<QPointF*>(&pos),seg->in()) && !m_last_arrow_point->hasAnnotations())
+  {
+     if (*segdir==*mydir && seg->in()->outputSegments().size()==1 && !(seg->in()->hasAnnotations()))
+     {
+        ArrowPoint * p=m_last_arrow_point->inputSegments()[0]->in();
+        ArrowPoint * last=seg->out();
+        ArrowSegment * newseg=new ArrowSegment(p,last);
+        //Construct one long segment
+        m_diag->addArrowSegment(newseg);
+        this->addItem(newseg);
+        m_last_arrow_point->inputSegments()[0]->die();
+        this->update();
+        seg->in()->die();
+        seg->die();
+        m_last_arrow_point->die();
+     }
+     else
+     {
+      if (m_last_arrow_point->inputSegments().count()!=0)
+      {
+         ArrowSegment * newseg=m_last_arrow_point->inputSegments()[0];
+         newseg->setOut(seg->in());
+         m_last_arrow_point->die();
+         newseg->update();
+       }
+      else common=true;
+     }
+  }
+  else
+  {
+     if (*segdir==*mydir && seg->in()->outputSegments().count()==1 && !seg->in()->hasAnnotations())
+     {
+        ArrowSegment * nseg=new ArrowSegment(m_last_arrow_point,seg->out());
+        seg->out()->tryRemoveSegment(seg);
+        seg->in()->die();
+        seg->die();
+        m_diag->addArrowSegment(nseg);
+        this->addItem(nseg);
+        m_last_arrow_point->update();
+     }
+     else common=true;
+  }
+  if (common)
+  {
+        ArrowSegment * nseg=new ArrowSegment(m_last_arrow_point,seg->in());
+        m_diag->addArrowSegment(nseg);
+        this->addItem(nseg);
+        m_last_arrow_point->update();
+        nseg->out()->update();
+  }
+  */
 }

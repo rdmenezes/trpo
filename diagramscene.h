@@ -46,6 +46,8 @@ enum ArrowEditState
     AES_NONE,
     AES_EDIT
 };
+
+enum ArrowDirection;
 /*! A class of panel for tool selection
  */
 class ToolPanel;
@@ -97,6 +99,18 @@ private:
         \param[in] pos  position
      */
     void determineDraggingBoxAction(BoxItem * item,const QPointF & pos);
+    /*! Proecessed arrow merge
+        \param[in] pos  last arrow position, that will move to
+        \param[in] seg  segment
+        \param[in] mydir direction of adding segment
+        \param[in] segdir  direction of segment
+     */
+    void processArrowMerge(const QPointF & pos, ArrowSegment * seg, ArrowDirection * mydir, ArrowDirection  * segdir);
+    /*! Processes arrow joining
+        \param[in] p position
+        \param[in] seg segment
+     */
+    void processArrowJoin(const QPointF & pos, ArrowSegment * seg);
     /*! Adds arrow, pointing to block
         \param[in] p   new point
         \param[om] box block

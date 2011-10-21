@@ -22,15 +22,21 @@ MoveRange createVerticalRange(qreal y1, qreal y2, qreal x)
 
 
 
-bool MoveRange::isWithin(QPointF * p)
+bool MoveRange::isWithin(const QPointF & p)
 {
+  if (  (p.x()>=left() || fuzzyCompare(p.x(),left()))
+        && (p.x()<=right() || fuzzyCompare(p.x(),right()))
+         && (p.y()>=top() || fuzzyCompare(p.y(),top()))
+         && (p.y()<=bottom() || fuzzyCompare(p.y(),bottom()))
+       )
+      return true;
   if (fuzzyCompare(top(),bottom()) )
   {
-    return fuzzyCompare(top(),p->y()) &&   left()<=p->x() && right()>=p->x();
+    return fuzzyCompare(top(),p.y()) &&   left()<=p.x() && right()>=p.x();
   }
   if (fuzzyCompare(left(),right()) )
   {
-    return fuzzyCompare(left(),p->x()) &&   top()<=p->y() && bottom()>=p->y();
+    return fuzzyCompare(left(),p.x()) &&   top()<=p.y() && bottom()>=p.y();
   }
   return false;
 }

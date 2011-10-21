@@ -8,7 +8,7 @@
 
 #include <QPointF>
 #include <QVector>
-
+#include "moverange.h"
 //A diagram, where it's placed
 class Diagram;
 //An arrow segment, where data is placed
@@ -38,7 +38,16 @@ private:
         /*!   Attached annotation lines
         */
         QVector<ALineItem * >  m_lines;
+        /*! Generates moving restriction policy
+            \param[out] result policy
+            \param[in]  point  that determines restrictions
+            \param[in]  dir    direction
+         */
+        void generatePolicy(MoveRange & result,ArrowPoint * pivot,ArrowDirection dir);
 public:
+        /*! Detects, whether has annotations
+         */
+        bool hasAnnotations() { return m_lines.size()!=0; }
         /*! Constructs a new arrow point
             \param[in] x x point
             \param[in] y y point
@@ -132,6 +141,15 @@ public:
         /*! Destructor
          */
         ~ArrowPoint();
+        /*! Returns a moving range for a point
+            \param[in] exc - excluded segment (NULL to handle all)
+         */
+        MoveRange moveRange(ArrowSegment * exc=NULL);
+        /*! Determines, whether point can move to
+            \param[in] pos new position
+            \param[in] exc excluded segment (NULL to handle all)
+         */
+        bool canMoveTo(const QPointF & pos, ArrowSegment * exc=NULL);
 };
 
 #endif // ARROWPOINT_H
