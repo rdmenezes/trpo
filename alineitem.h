@@ -37,6 +37,8 @@ private:
          */
         ArrowPoint * binded();
 public:
+         inline QPointF * begin() { return m_bindedpoint;}
+         inline QPointF * end()   { return &m_freepoint; }
          /*! Constructs an annotation line, not binded into any of points
             \param[in] bindedpoint free binded point (first)
             \param[in] freepoint   free point (second)

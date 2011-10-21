@@ -40,13 +40,13 @@ bool collides(const QRectF & r,const QPointF & p1, const QPointF & p2)
     return x && y;
 }
 
-inline const ArrowPoint * boundaryCollides1D(qreal x1min, qreal x1max,
-                                             const ArrowPoint * p1,
-                                             const ArrowPoint * p2,
-                                             qreal (ArrowPoint::*get)() const)
+inline const QPointF * boundaryCollides1DQ(qreal x1min, qreal x1max,
+                                             const QPointF * p1,
+                                             const QPointF * p2,
+                                             qreal (QPointF::*get)() const)
 {
-   const ArrowPoint * x2min=p1;
-   const ArrowPoint * x2max=p2;
+   const QPointF * x2min=p1;
+   const QPointF * x2max=p2;
    qreal        x2minval=(p1->*get)();
    qreal        x2maxval=(p2->*get)();
 
@@ -55,12 +55,27 @@ inline const ArrowPoint * boundaryCollides1D(qreal x1min, qreal x1max,
        x2min=p2; x2max=p1;
        x2minval=(p2->*get)(); x2maxval=(p1->*get)();
    }
-   const ArrowPoint * result=NULL;
+   const QPointF * result=NULL;
    if (fuzzyCompare(x1min,x2maxval)) result=x2max;
    if (fuzzyCompare(x1max,x2minval)) result=x2min;
    return result;
 }
-inline bool compareInRange(const ArrowPoint * p, qreal x1min, qreal x1max,
+
+inline bool compareInRange(const QPointF * p, qreal x1min, qreal x1max,
+                            qreal (QPointF::*get)() const)
+{
+  bool result=false;
+  if (p)
+  {
+      if (x1min<=(p->*get)() && x1max>=(p->*get)())
+      {
+         result=true;
+      }
+  }
+  return result;
+}
+
+inline bool compareInRangeA(const ArrowPoint * p, qreal x1min, qreal x1max,
                             qreal (ArrowPoint::*get)() const)
 {
   bool result=false;
@@ -74,18 +89,30 @@ inline bool compareInRange(const ArrowPoint * p, qreal x1min, qreal x1max,
   }
   return result;
 }
-
-bool boundaryCollides(const QRectF & r, const ArrowPoint * p1, const ArrowPoint * p2)
+bool boundaryCollides(const QRectF & r, const QPointF * p1, const QPointF * p2)
 {
   //Determine, whether collision is on x
-  const ArrowPoint * tx=boundaryCollides1D(r.left(),r.right(),p1,p2,&ArrowPoint::x);
-  bool result=compareInRange(tx,r.top(),r.bottom(),&ArrowPoint::y);
+  const QPointF * tx=boundaryCollides1DQ(r.left(),r.right(),p1,p2,&QPointF::x);
+  bool result=compareInRange(tx,r.top(),r.bottom(),&QPointF::y);
   //Determine, whether collision is on y
   if (!result)
   {
-      const ArrowPoint * ty=boundaryCollides1D(r.top(),r.bottom(),p1,p2,&ArrowPoint::y);
-      result=compareInRange(ty,r.left(),r.right(),&ArrowPoint::x);
+      const QPointF  * ty=boundaryCollides1DQ(r.top(),r.bottom(),p1,p2,&QPointF::y);
+      result=compareInRange(ty,r.left(),r.right(),&QPointF::x);
   }
   return result;
 }
 
+bool boundaryCollides(const QRectF & r, const ArrowPoint * p1, const ArrowPoint * p2)
+{
+  //Determine, whether collision is on x
+  const ArrowPoint * tx=static_cast<const ArrowPoint *>(boundaryCollides1DQ(r.left(),r.right(),p1,p2,&ArrowPoint::x));
+  bool result=compareInRangeA(tx,r.top(),r.bottom(),&ArrowPoint::y);
+  //Determine, whether collision is on y
+  if (!result)
+  {
+      const ArrowPoint * ty=static_cast<const ArrowPoint *>(boundaryCollides1DQ(r.top(),r.bottom(),p1,p2,&ArrowPoint::y));
+      result=compareInRangeA(ty,r.left(),r.right(),&ArrowPoint::x);
+  }
+  return result;
+}
