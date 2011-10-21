@@ -101,7 +101,7 @@ public:
         /*! Removes an annotation from segment
             \param[in] line line, that will be removed
          */
-        bool removeAnnotation(ALineItem * line);
+        void removeAnnotation(ALineItem * line);
         /*! Removes a point from diagram
          */
         void die();

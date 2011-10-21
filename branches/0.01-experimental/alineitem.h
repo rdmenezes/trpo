@@ -51,6 +51,15 @@ public:
             \param[in] diag diagram
           */
          inline  void setDiagram(Diagram * diag) { m_diagram=diag; }
+         /*! Determines  a bounding rect
+          */
+         QRectF boundingRect() const;
+         /*! Deattaches an item from line
+          */
+         void deattachFromLine();
+         /*! Is attached to line
+          */
+         inline bool isAttachedToLine() const { return m_isbindedtoline; }
          /*! Kills a line item, removing it from any of places
           */
          void die();
