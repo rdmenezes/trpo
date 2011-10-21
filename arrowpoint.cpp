@@ -186,6 +186,8 @@ bool ArrowPoint::isIncident(ArrowSegment * s)
 MoveRange ArrowPoint::moveRange(ArrowSegment * exc)
 {
     MoveRange result(-1E+6,-1E+6,2E+6,2E+6);
+    if (m_lines.size()!=0)
+        return MoveRange(x(),y(),0,0);
     for (int i=0;i<m_in.size();i++)
     {
       if (m_in[i]!=exc)
@@ -253,4 +255,16 @@ bool ArrowPoint::canMoveTo(const QPointF & pos, ArrowSegment * exc)
 {
      MoveRange r=moveRange(exc);
      return r.isWithin(pos);
+}
+
+void ArrowPoint::removeAnnotation(ALineItem * line)
+{
+    for (int i=0;i<m_lines.size();i++)
+    {
+        if (m_lines[i]==line)
+        {
+            m_lines.remove(i);
+            --i;
+        }
+    }
 }
