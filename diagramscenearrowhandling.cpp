@@ -302,66 +302,98 @@ void mergeThreeSegmentsInOne(DiagramScene * scene,
   p3->update();
 }
 
+bool canRemoveLastArrowPointPreviousAndAddedOnLine(ArrowPoint * m_last_arrow_point,
+                                                   ArrowDirection * mydir)
+{
+ ArrowPoint * p1=m_last_arrow_point;
+ bool  sameDirectedWithAddedSegment=p1->hasInputSegment(mydir);
+ bool  hasOneInputSegmentAndNoAnnotationsAndNoForks=p1->inputSegments().count()==1 &&
+                                                    (!p1->hasAnnotations()) &&
+                                                    p1->outputSegments().count()==0;
+
+
+ return sameDirectedWithAddedSegment
+         && hasOneInputSegmentAndNoAnnotationsAndNoForks;
+}
+
+void mergePreviousAndAdded(DiagramScene * scene,
+                           ArrowPoint * m_last_arrow_point,
+                           ArrowSegment * seg)
+{
+ ArrowPoint * p0=m_last_arrow_point->inputSegments()[0]->in();
+ ArrowPoint * p1=m_last_arrow_point;
+ ArrowPoint * p2=seg->in();
+ ArrowSegment * s1=m_last_arrow_point->inputSegments()[0];
+ //Add new segment
+ ArrowSegment * new_segment=new ArrowSegment(p0,p2);
+ scene->addItem(new_segment);
+ scene->diagram()->addArrowSegment(new_segment);
+ s1->die();
+ p1->die();
+ p0->update();
+ p2->update();
+}
+
+bool canMergeAddedAndNext(ArrowSegment * seg,
+                          ArrowDirection * mydir,
+                          ArrowDirection * segdir)
+{
+    //Define all removing points
+    ArrowPoint * p2=seg->in();
+    bool  sameDirectedAddedAndNext= *mydir==*segdir;
+    bool  hasOneOutputSegmentAndNoAnnotationsAndForks=p2->inputSegments().count()==0 &&
+                                                      !(p2->hasAnnotations()) &&
+                                                      p2->outputSegments().count()<=1;
+
+    return sameDirectedAddedAndNext && hasOneOutputSegmentAndNoAnnotationsAndForks;
+}
+
+void mergeAddedAndNext(DiagramScene * scene,
+                       ArrowPoint * m_last_arrow_point,
+                       ArrowSegment * seg)
+{
+  ArrowPoint * p0=m_last_arrow_point;
+  ArrowPoint * p1=seg->in();
+  ArrowPoint * p2=seg->out();
+  ArrowSegment * s3=seg;
+  //Add new segment
+  ArrowSegment * new_segment=new ArrowSegment(p0,p2);
+  scene->addItem(new_segment);
+  scene->diagram()->addArrowSegment(new_segment);
+  s3->die();
+  p1->die();
+  p0->update();
+  p2->update();
+}
+
 void DiagramScene::processArrowMerge(const QPointF & pos, ArrowSegment * seg, ArrowDirection * mydir, ArrowDirection  * segdir)
 {
   bool handled=false;
   m_last_arrow_point->setX(pos.x());
   m_last_arrow_point->setY(pos.y());
-  if (threeSegmentsOnLineCanRemoveTwoPoints(m_last_arrow_point,seg,mydir,segdir))
+  if (threeSegmentsOnLineCanRemoveTwoPoints(m_last_arrow_point,seg,mydir,segdir)
+      && !handled)
   {
     handled=true;
     mergeThreeSegmentsInOne(this,m_last_arrow_point,seg);
   }
-  /*
-  if (m_last_arrow_point->hasSameInputSegment(const_cast<QPointF*>(&pos),seg->in()) && !m_last_arrow_point->hasAnnotations())
+  if (canRemoveLastArrowPointPreviousAndAddedOnLine(m_last_arrow_point,mydir)
+      && !handled)
   {
-     if (*segdir==*mydir && seg->in()->outputSegments().size()==1 && !(seg->in()->hasAnnotations()))
-     {
-        ArrowPoint * p=m_last_arrow_point->inputSegments()[0]->in();
-        ArrowPoint * last=seg->out();
-        ArrowSegment * newseg=new ArrowSegment(p,last);
-        //Construct one long segment
-        m_diag->addArrowSegment(newseg);
-        this->addItem(newseg);
-        m_last_arrow_point->inputSegments()[0]->die();
-        this->update();
-        seg->in()->die();
-        seg->die();
-        m_last_arrow_point->die();
-     }
-     else
-     {
-      if (m_last_arrow_point->inputSegments().count()!=0)
-      {
-         ArrowSegment * newseg=m_last_arrow_point->inputSegments()[0];
-         newseg->setOut(seg->in());
-         m_last_arrow_point->die();
-         newseg->update();
-       }
-      else common=true;
-     }
+   handled=true;
+   mergePreviousAndAdded(this,m_last_arrow_point,seg);
   }
-  else
+  if (canMergeAddedAndNext(seg,mydir,segdir))
   {
-     if (*segdir==*mydir && seg->in()->outputSegments().count()==1 && !seg->in()->hasAnnotations())
-     {
-        ArrowSegment * nseg=new ArrowSegment(m_last_arrow_point,seg->out());
-        seg->out()->tryRemoveSegment(seg);
-        seg->in()->die();
-        seg->die();
-        m_diag->addArrowSegment(nseg);
-        this->addItem(nseg);
-        m_last_arrow_point->update();
-     }
-     else common=true;
+   handled=true;
+   mergeAddedAndNext(this,m_last_arrow_point,seg);
   }
-  if (common)
+  if (!handled)
   {
-        ArrowSegment * nseg=new ArrowSegment(m_last_arrow_point,seg->in());
-        m_diag->addArrowSegment(nseg);
-        this->addItem(nseg);
-        m_last_arrow_point->update();
-        nseg->out()->update();
+    ArrowSegment * newseg=new ArrowSegment(m_last_arrow_point,seg->in());
+    m_diag->addArrowSegment(newseg);
+    this->addItem(newseg);
+    newseg->update();
   }
-  */
+
 }
