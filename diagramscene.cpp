@@ -61,17 +61,7 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
   m_edit_state=TES_NONE;
   m_label_editor=NULL;
   m_label_editor_in_scene=NULL;
-  //Sets a no dragging state
-  m_dragstate=DS_NONE;
-  m_draggingblock=NULL;
-  m_resizingblockcorner=BC_LOWERLEFT;
-  m_moving_label=NULL;
-  //Sets a no arrow editing state
-  m_arrow_state=AES_NONE;
-  m_last_arrow_point=NULL;
-  //Sets a no annotation line editing state
-  m_aline_segment=NULL;
-  m_alds=ALDS_SPECIFIEDNONE;
+  this->clearElementStates();
 
   //Conditional test situation
 #ifdef MERGE_TEST_1
@@ -269,6 +259,10 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
       HelpWindow d;
       d.exec();
       handled=true;
+  }
+  if (event->key()==Qt::Key_F3)
+  {
+      this->clear();
   }
   //In case when Shift presset add panel if not present
   if (event->key()==Qt::Key_Shift
@@ -691,4 +685,29 @@ void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
         m_dragstate=DS_NONE;
         m_moving_label=NULL;
     }
+}
+
+
+void DiagramScene::clear()
+{
+ this->hideUI();
+ this->QGraphicsScene::clear();
+ this->m_diag->clear();
+ this->clearElementStates();
+ m_tooltype=TT_BLOCK;
+}
+
+void DiagramScene::clearElementStates()
+{
+ //Sets a no dragging state
+ m_dragstate=DS_NONE;
+ m_draggingblock=NULL;
+ m_resizingblockcorner=BC_LOWERLEFT;
+ m_moving_label=NULL;
+ //Sets a no arrow editing state
+ m_arrow_state=AES_NONE;
+ m_last_arrow_point=NULL;
+ //Sets a no annotation line editing state
+ m_aline_segment=NULL;
+ m_alds=ALDS_SPECIFIEDNONE;
 }
