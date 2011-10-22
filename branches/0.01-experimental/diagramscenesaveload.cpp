@@ -15,6 +15,8 @@ bool DiagramScene::load(const QString & filename)
 
 bool DiagramScene::exportTo(const QString & filename)
 {
+  //Данное действие необходимо выполнить, т.к. иначе на картинке останутся виджеты
+  this->hideUI();
   (void)filename;
   return rand()<RAND_MAX/2;
 }

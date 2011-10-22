@@ -314,6 +314,9 @@ public:
     /*! Determines whether panel is active
      */
     inline bool isPanelActive() { return m_panel!=NULL; }
+    /*! Hides UI (Panel and text edit, if needed)
+     */
+    void hideUI();
 signals:
 
 public slots:
