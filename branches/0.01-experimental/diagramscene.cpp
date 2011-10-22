@@ -159,10 +159,14 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
           addAnnotationLabel(event);
       if (m_tooltype==TT_ARROW)
           processArrowClickOnBlankSpace(event);
-      if (m_tooltype==TT_ANNOTATION_LINE && m_alds==ALDS_SPECIFIEDNONE)
-          processAnnotationLinePointOnBlank(pos);
-      if (m_tooltype==TT_ANNOTATION_LINE && m_alds==ALDS_SPECIFIEDFIRSTPOINT)
-          processAnnotationLineSecondPointOnBlank(pos);
+      if (m_tooltype==TT_ANNOTATION_LINE)
+      {
+          if (m_alds==ALDS_SPECIFIEDNONE)
+            processAnnotationLinePointOnBlank(pos);
+          else
+            processAnnotationLineSecondPointOnBlank(pos);
+      }
+
     }
     //Propagate key pressing event
     else

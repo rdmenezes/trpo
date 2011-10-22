@@ -45,10 +45,27 @@ void DiagramScene::processAnnotationLineSecondPointOnBlank(const QPointF & pos)
     ALineItem * aline=NULL;
     if (m_aline_segment)
     {
-      ArrowPoint * p=new ArrowPoint(second.x(),second.y());
+      ArrowPoint * p=new ArrowPoint(m_aline_firstpoint.x(),m_aline_firstpoint.y());
       m_diag->addArrowPoint(p);
-
+      ArrowSegment * seg1=new ArrowSegment(m_aline_segment->in(),p);
+      ArrowSegment * seg2=new ArrowSegment(p,m_aline_segment->out());
+      m_diag->addArrowSegment(seg1);
+      m_diag->addArrowSegment(seg2);
+      this->addItem(seg1);
+      this->addItem(seg2);
+      m_aline_segment->in()->tryRemoveSegment(m_aline_segment,false);
+      m_aline_segment->out()->tryRemoveSegment(m_aline_segment,false);
+      m_aline_segment->die();
+      aline=new ALineItem(p,second);
     }
+    if (!aline)
+         aline=new ALineItem(m_aline_firstpoint,second);
+    this->addItem(aline);
+    m_diag->addAnnotationLine(aline);
+    this->update();
+
+    m_alds=ALDS_SPECIFIEDNONE;
+    m_aline_segment=NULL;
  }
 }
 
