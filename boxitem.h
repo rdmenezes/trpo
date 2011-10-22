@@ -86,6 +86,7 @@ public:
     QRect &   accessStringPos()     { return m_string_pos;  }
     QPointF & accessNumberPos()     { return  m_number_pos; }
     QRectF &  accessRect()          { return m_rect; }
+    ArrowPoint *& getLineRef(int side,int pos)  { return m_line_refs[side][pos]; }
     inline BoxItem() {}
     /*! Declares a type of item
      */
