@@ -100,6 +100,9 @@ class NumberChangeHistory
         \param[in] two second swap
      */
     void addNewSwap(const ChangeEntry & one, const ChangeEntry & two);
+    /*! Clears a history
+     */
+    void clear();
 };
 /*! Defines a max blocks in diagram
  */
@@ -266,6 +269,9 @@ public:
             \param[in] pts points
          */
         bool canBePlacedAroundPoints(const QRectF & rect, const QVector<ArrowPoint *> pts);
+        /*! Clears a diagram
+         */
+        void clear();
         /*! Destructor
          */
         ~Diagram();

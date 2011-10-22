@@ -31,6 +31,7 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
   m_diag=d;
   m_tooltype=TT_BLOCK;
   m_panel=NULL;
+  m_panel_in_scene=NULL;
   //Compute size of default block
   //Get small size label
   QFont fnt=this->font();

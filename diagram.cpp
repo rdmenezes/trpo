@@ -152,8 +152,14 @@ BoxItem * Diagram::getBlockByID(int id)
 
 NumberChangeHistory::NumberChangeHistory()
 {
-    this->m_time=clock();
+    clear();
 }
+void NumberChangeHistory::clear()
+{
+    this->m_time=clock();
+    m_history.clear();
+}
+
 //Old value is reserved
 void NumberChangeHistory::undoIfSwapped(BoxItem * item,char old_value,Diagram * diag)
 {
@@ -347,6 +353,17 @@ bool Diagram::canPlaceAnnotationLine(const QPointF * point1,const QPointF * poin
 
 Diagram::~Diagram()
 {
-  for (int i=0;i<m_arrow_points.size();i++)
-      delete m_arrow_points[i];
+  clear();
+}
+
+void Diagram::clear()
+{
+ for (int i=0;i<m_arrow_points.size();i++)
+     delete m_arrow_points[i];
+ m_alabels.clear();
+ m_alines.clear();
+ m_arrow_points.clear();
+ m_arrow_segments.clear();
+ nullifyBoxes();
+ m_history.clear();
 }
