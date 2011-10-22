@@ -59,6 +59,14 @@ private:
             \param[out] path path
          */
         void drawBottom(QPainterPath & path);
+        /*! Draws a left type line item
+            \param[out] path path
+         */
+        void drawLeft(QPainterPath & path);
+        /*! Draws a left type line item
+            \param[out] path path
+         */
+        void drawRight(QPainterPath & path);
 public:
          inline QPointF * begin() { return m_bindedpoint;}
          inline QPointF * end()   { return &m_freepoint; }
