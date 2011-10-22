@@ -68,6 +68,12 @@ private:
          */
         void drawRight(QPainterPath & path);
 public:
+        /*! Declares a type of item
+         */
+        enum ItemType
+        {
+            USERTYPE=QGraphicsItem::UserType+3
+        };
          inline QPointF * begin() { return m_bindedpoint;}
          inline QPointF * end()   { return &m_freepoint; }
          /*! Constructs an annotation line, not binded into any of points
@@ -106,6 +112,9 @@ public:
          /*! Destructor
           */
          ~ALineItem();
+         /*! Returns a type of segment
+          */
+         int type() const;
 };
 
 #endif // ALINEITEM_H
