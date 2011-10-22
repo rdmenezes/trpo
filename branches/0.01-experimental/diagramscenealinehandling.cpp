@@ -9,17 +9,47 @@
 
 void DiagramScene::processAnnotationLineEscapePress(const QPointF & pos)
 {
-
+  (void)pos;
+  m_alds=ALDS_SPECIFIEDNONE;
+  m_aline_segment=NULL;
 }
 
 void DiagramScene::processAnnotationLinePointOnBlank(const QPointF & pos)
 {
-
+  m_alds=ALDS_SPECIFIEDFIRSTPOINT;
+  m_aline_segment=NULL;
+  m_aline_firstpoint=pos;
 }
 
+#define MINIMAL_LINE_LENGTH 5.0
 void DiagramScene::processAnnotationLineSecondPointOnBlank(const QPointF & pos)
 {
+ QPointF second=constructDirectedLine(m_aline_firstpoint,pos);
+ ArrowDirection dir=direction(m_aline_firstpoint,second);
+ bool error=false;
+ //Check, whether line oposes segment
+ if (m_aline_segment)
+ {
+    ArrowDirection dir2=m_aline_segment->direction();
+    bool equal= dir==dir2;
+    bool horizontaloppose= (dir==AD_LEFT && dir2==AD_RIGHT) || (dir2==AD_LEFT && dir==AD_RIGHT);
+    bool verticaloppose=   (dir==AD_TOP && dir2==AD_BOTTOM) || (dir2==AD_TOP && dir==AD_BOTTOM);
+    error= equal && horizontaloppose && verticaloppose;
+ }
+ bool toosmall = (fabs(m_aline_firstpoint.x()-second.x())+
+                  fabs(m_aline_firstpoint.y()-second.y()))<MINIMAL_LINE_LENGTH;
+ bool canPlace =  m_diag->canPlaceAnnotationLine(&m_aline_firstpoint,&second);
+ error= error || toosmall || canPlace;
+ if (error)
+ {
+    ALineItem * aline=NULL;
+    if (m_aline_segment)
+    {
+      ArrowPoint * p=new ArrowPoint(second.x(),second.y());
+      m_diag->addArrowPoint(p);
 
+    }
+ }
 }
 
 void DiagramScene::processAnnotationLineToBox(const QPointF & pos,BoxItem * box)
