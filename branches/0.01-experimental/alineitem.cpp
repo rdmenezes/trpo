@@ -71,17 +71,17 @@ void ALineItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     QPainterPath path;
     ArrowDirection dir=direction(*m_bindedpoint,m_freepoint);
     if (dir==AD_TOP) this->drawTop(path);
+    if (dir==AD_BOTTOM) this->drawBottom(path);
     painter->drawPath(path);
 }
 
-#define SWIRL_MOVE 4
 
 void ALineItem::drawTop(QPainterPath & path)
 {
   double midy=(m_bindedpoint->y()+m_freepoint.y())/2.0;
   {
    QPointF p0(m_bindedpoint->x()+D_RIGHT,m_bindedpoint->y());
-   QPointF p1(m_bindedpoint->x()-D_LEFT,midy);
+   QPointF p1(m_bindedpoint->x()-0.75*D_LEFT,midy);
    QPointF p2(m_bindedpoint->x()-0.5*D_LEFT,m_bindedpoint->y()*0.48+m_freepoint.y()*0.52);
    QPointF p3(m_bindedpoint->x(),midy);
    drawCubicCurve(p0,p1,p2,p3,0.50,0.75,path);
@@ -89,8 +89,27 @@ void ALineItem::drawTop(QPainterPath & path)
    {
     QPointF p0(m_bindedpoint->x(),midy);
     QPointF p1(m_bindedpoint->x()+0.5*D_RIGHT,m_bindedpoint->y()*0.52+m_freepoint.y()*0.48);
-    QPointF p2(m_bindedpoint->x()+D_RIGHT,midy);
+    QPointF p2(m_bindedpoint->x()+0.75*D_RIGHT,midy);
     QPointF p3(m_freepoint.x()-D_LEFT,m_freepoint.y());
+    drawCubicCurve(p0,p1,p2,p3,0.25,0.50,path);
+   }
+}
+
+void ALineItem::drawBottom(QPainterPath & path)
+{
+  double midy=(m_bindedpoint->y()+m_freepoint.y())/2.0;
+  {
+   QPointF p0(m_bindedpoint->x()-D_LEFT,m_freepoint.y());
+   QPointF p1(m_bindedpoint->x()+0.75*D_RIGHT,midy);
+   QPointF p2(m_bindedpoint->x()+0.5*D_RIGHT,m_bindedpoint->y()*0.52+m_freepoint.y()*0.48);
+   QPointF p3(m_bindedpoint->x(),midy);
+   drawCubicCurve(p0,p1,p2,p3,0.50,0.75,path);
+   }
+   {
+    QPointF p0(m_bindedpoint->x(),midy);
+    QPointF p1(m_bindedpoint->x()-0.5*D_LEFT,m_bindedpoint->y()*0.48+m_freepoint.y()*0.52);
+    QPointF p2(m_bindedpoint->x()-0.75*D_LEFT,midy);
+    QPointF p3(m_freepoint.x()+D_RIGHT,m_bindedpoint->y());
     drawCubicCurve(p0,p1,p2,p3,0.25,0.50,path);
    }
 }

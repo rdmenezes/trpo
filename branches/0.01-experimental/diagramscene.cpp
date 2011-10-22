@@ -21,6 +21,7 @@
 
 //Unit tests for annotation line item
 //#define   TOP_ALINE_TEST
+//#define BOTTOM_ALINE_TEST
 
 DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
     QGraphicsScene(parent)
@@ -112,6 +113,13 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
     this->addItem( new ALineItem(QPointF(250,200),QPointF(250,150)) );
     this->addItem( new ALineItem(QPointF(300,200),QPointF(300,100)) );
     this->addItem( new ALineItem(QPointF(350,200),QPointF(350,50)) );
+    this->update();
+#endif
+#ifdef BOTTOM_ALINE_TEST
+    this->addItem( new ALineItem(QPointF(200,190),QPointF(200,200)) );
+    this->addItem( new ALineItem(QPointF(250,150),QPointF(250,200)) );
+    this->addItem( new ALineItem(QPointF(300,100),QPointF(300,200)) );
+    this->addItem( new ALineItem(QPointF(350,50),QPointF(350,200)) );
     this->update();
 #endif
 }
