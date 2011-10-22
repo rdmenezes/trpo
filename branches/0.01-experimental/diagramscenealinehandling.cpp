@@ -71,7 +71,17 @@ void DiagramScene::processAnnotationLineSecondPointOnBlank(const QPointF & pos)
 
 void DiagramScene::processAnnotationLineToBox(const QPointF & pos,BoxItem * box)
 {
-
+  ArrowPoint * p=new ArrowPoint(pos.x(),pos.y());
+  BoxItemSide side=box->sideOfPoint(p);
+  QRectF rect=box->boundingRect();
+  if (side==BIS_LEFT) p->setX(rect.left());
+  if (side==BIS_RIGHT) p->setX(rect.right());
+  if (side==BIS_TOP)   p->setY(rect.top());
+  if (side==BIS_BOTTOM) p->setY(rect.bottom());
+  m_alds=ALDS_SPECIFIEDFIRSTPOINT;
+  m_aline_segment=NULL;
+  m_aline_firstpoint=QPointF(p->x(),p->y());
+  delete p;
 }
 
 void DiagramScene::processAnnotationLineToSegment(const QPointF & pos,

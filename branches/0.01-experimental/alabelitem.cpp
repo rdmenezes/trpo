@@ -39,6 +39,8 @@ void ALabelItem::setRect(const QRectF & rect)
 void ALabelItem::keyPressEvent(QKeyEvent *event)
 {
     DiagramScene * myscene=static_cast<DiagramScene *>(this->scene());
+    if (myscene->isPanelActive())
+         return;
     if (isTextEditKey(event) &&
         myscene->editState()==TES_NONE)
     {
