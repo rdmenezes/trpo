@@ -80,6 +80,13 @@ public:
            */
           void keyPressEvent(QKeyEvent *event);
 public:
+    //Functions for loading and saving
+    QString & accessRealString()    { return m_real_string; }
+    QString & accessmViewedString() { return m_viewed_string; }
+    QRect &   accessStringPos()     { return m_string_pos;  }
+    QPointF & accessNumberPos()     { return  m_number_pos; }
+    QRectF &  accessRect()          { return m_rect; }
+    inline BoxItem() {}
     /*! Declares a type of item
      */
     enum ItemType

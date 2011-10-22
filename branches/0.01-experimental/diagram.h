@@ -152,6 +152,27 @@ private:
          */
         bool doesntCollideWithLines(const QRectF & rect);
 public:
+        /*! Returns a total boxes
+         */
+        inline int getTotalBoxes() { return DIAGRAM_MAX_BLOCKS; }
+        /*! Returns a parent location
+         */
+        inline const ParentLocation & location() const { return m_parent; }
+        /*! Sets a parent location
+         */
+        inline void setParentLocation(const ParentLocation & loc) { m_parent=loc;}
+        /*! Returns an annotation labels
+         */
+        inline QVector<ALabelItem *> & annotationLabels() { return  m_alabels; }
+        /*! Returns an annotatione lines
+         */
+        inline QVector<ALineItem *> &  annotationLines() { return m_alines; }
+        /*! Returns an arrow points
+         */
+        inline QVector<ArrowPoint *> &  arrowPoints()    { return  m_arrow_points; }
+        /*! Returns an arrow segments
+         */
+        inline QVector<ArrowSegment *> & arrowSegments() { return m_arrow_segments; }
         /*! Inits an empty diagram
          */
         Diagram();

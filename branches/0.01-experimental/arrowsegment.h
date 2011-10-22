@@ -91,6 +91,14 @@ public:
          {
              USERTYPE=QGraphicsItem::UserType+2
          };
+         //Does nothing
+         inline ArrowSegment() {}
+         /*! Returns an input point
+          */
+         inline ArrowPoint *& accessIn() { return m_in; }
+         /*! Returns an output point
+          */
+         inline ArrowPoint *& accessOut() { return m_out; }
          /*! Returns an input point
           */
          inline ArrowPoint * in() { return m_in; }
