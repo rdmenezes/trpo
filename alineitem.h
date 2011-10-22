@@ -55,6 +55,10 @@ private:
             \param[out] path path
          */
         void drawTop(QPainterPath & path);
+        /*! Draws a bottom type line item
+            \param[out] path path
+         */
+        void drawBottom(QPainterPath & path);
 public:
          inline QPointF * begin() { return m_bindedpoint;}
          inline QPointF * end()   { return &m_freepoint; }
