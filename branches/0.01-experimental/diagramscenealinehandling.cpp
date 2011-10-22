@@ -38,8 +38,8 @@ void DiagramScene::processAnnotationLineSecondPointOnBlank(const QPointF & pos)
  }
  bool toosmall = (fabs(m_aline_firstpoint.x()-second.x())+
                   fabs(m_aline_firstpoint.y()-second.y()))<MINIMAL_LINE_LENGTH;
- bool canPlace =  m_diag->canPlaceAnnotationLine(&m_aline_firstpoint,&second);
- error= error || toosmall || canPlace;
+ bool cannotPlace =  !(m_diag->canPlaceAnnotationLine(&m_aline_firstpoint,&second));
+ error= error || toosmall || cannotPlace;
  if (error)
  {
     ALineItem * aline=NULL;
