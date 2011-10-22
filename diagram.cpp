@@ -311,7 +311,7 @@ bool Diagram::canBePlacedAroundPoints(const QRectF & rect, const QVector<ArrowPo
 }
 
 bool Diagram::canPlaceSegment(ArrowPoint * point1, ArrowPoint * point2,
-                              BoxItem * block)
+                              BoxItem * block, bool always_check_bounds)
 {
     for (int i=0;i<DIAGRAM_MAX_BLOCKS;i++)
     {
@@ -319,9 +319,9 @@ bool Diagram::canPlaceSegment(ArrowPoint * point1, ArrowPoint * point2,
      {
        QRectF rect=m_boxes[i]->boundingRect();
        bool result=collides(rect,*point1,*point2);
-       if (result && (m_boxes[i]==block
+       if ((result && (m_boxes[i]==block
                   || point1->attachedBlock()==m_boxes[i]
-                  || point2->attachedBlock()==m_boxes[i]))
+                  || point2->attachedBlock()==m_boxes[i])) || always_check_bounds)
             result=result && !boundaryCollides(rect,point1,point2);
        if (result) return false;
      }
@@ -339,7 +339,7 @@ bool Diagram::canPlaceAnnotationLine(const QPointF * point1,const QPointF * poin
 {
     ArrowPoint * p1=new ArrowPoint(point1->x(),point1->y());
     ArrowPoint * p2=new ArrowPoint(point2->x(),point2->y());
-    bool collides=canPlaceSegment(p1,p2,NULL);
+    bool collides=canPlaceSegment(p1,p2,NULL,true);
     delete p1;
     delete p2;
     return collides;
