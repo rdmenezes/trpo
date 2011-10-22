@@ -8,7 +8,7 @@
 
 #include <QGraphicsItem>
 #include <QPointF>
-
+#include <QPainterPath>
 //A point of line segment
 class ArrowPoint;
 //A diagram data
@@ -36,6 +36,25 @@ private:
         /*! Casts a point into binded point
          */
         ArrowPoint * binded();
+        /*! Draws a cubic curve by points
+            \param[in] p0   point
+            \param[in] p1   point
+            \param[in] p2   point
+            \param[in] p3   point
+            \param[in] t0   time, when p1 is reached
+            \param[in] t1   time, when p2 is reached
+            \param[out] path  path
+         */
+        void drawCubicCurve(const QPointF & p0,
+                            const QPointF & p1,
+                            const QPointF & p2,
+                            const QPointF & p3,
+                            double t0, double t1,
+                            QPainterPath & path);
+        /*! Draws a top type line item
+            \param[out] path path
+         */
+        void drawTop(QPainterPath & path);
 public:
          inline QPointF * begin() { return m_bindedpoint;}
          inline QPointF * end()   { return &m_freepoint; }
@@ -49,6 +68,13 @@ public:
             \param[in] freepoint    free point (second)
           */
          ALineItem(QPointF * bindedpoint,const QPointF & freepoint);
+         /*! Declares a painting event reaction
+             \param[in] painter painting data
+             \param[in] option
+             \param[in] widget
+          */
+         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                        QWidget *widget);
          /*! Sets a diagram for annotation line
             \param[in] diag diagram
           */

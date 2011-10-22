@@ -3,6 +3,7 @@
 #include "arrowsegment.h"
 #include "arrowpoint.h"
 #include <QGraphicsScene>
+#include <QPainter>
 
 ALineItem::ALineItem(const QPointF & bindedpoint,const QPointF & freepoint)
 {
@@ -60,4 +61,57 @@ QRectF ALineItem::boundingRect() const
       result=QRectF(m_out->x()-D_LEFT,m_in->y(),D_LEFT+D_RIGHT,m_out->y()-m_in->y());
 
   return result;
+}
+
+
+void ALineItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                      QWidget *widget)
+{
+    (void)option,widget;
+    QPainterPath path;
+    ArrowDirection dir=direction(*m_bindedpoint,m_freepoint);
+    if (dir==AD_TOP) this->drawTop(path);
+    painter->drawPath(path);
+}
+
+#define SWIRL_MOVE 4
+
+void ALineItem::drawTop(QPainterPath & path)
+{
+  double midy=(m_bindedpoint->y()+m_freepoint.y())/2.0;
+  {
+   QPointF p0(m_bindedpoint->x()+D_RIGHT,m_bindedpoint->y());
+   QPointF p1(m_bindedpoint->x()-D_LEFT,midy);
+   QPointF p2(m_bindedpoint->x()-0.5*D_LEFT,m_bindedpoint->y()*0.48+m_freepoint.y()*0.52);
+   QPointF p3(m_bindedpoint->x(),midy);
+   drawCubicCurve(p0,p1,p2,p3,0.50,0.75,path);
+   }
+   {
+    QPointF p0(m_bindedpoint->x(),midy);
+    QPointF p1(m_bindedpoint->x()+0.5*D_RIGHT,m_bindedpoint->y()*0.52+m_freepoint.y()*0.48);
+    QPointF p2(m_bindedpoint->x()+D_RIGHT,midy);
+    QPointF p3(m_freepoint.x()-D_LEFT,m_freepoint.y());
+    drawCubicCurve(p0,p1,p2,p3,0.25,0.50,path);
+   }
+}
+
+void ALineItem::drawCubicCurve(const QPointF & p0,
+                               const QPointF & p1,
+                               const QPointF & p2,
+                               const QPointF & p3,
+                               double t0, double t1,
+                               QPainterPath & path)
+{
+    double t01=1.0-t0,t11=1.0-t1;
+    double a0=t01*t01*t01,a1=3*t0*t01*t01,a2=3*t0*t0*t01,a3=t0*t0*t0;
+    double b0=t11*t11*t11,b1=3*t1*t11*t11,b2=3*t1*t1*t11,b3=t1*t1*t1;
+    QPointF F0=p1-p0*a0-p3*a3;
+    QPointF F1=p2-p0*b0-p3*b3;
+    double D=a1*b2-a2*b1;
+    QPointF D1=F0*b2-F1*a2;
+    QPointF D2=F1*a1-F0*b1;
+    D1/=D;
+    D2/=D;
+    path.moveTo(p0);
+    path.cubicTo(D1,D2,p3);
 }
