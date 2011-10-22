@@ -5,6 +5,7 @@
 #include "alabelitem.h"
 #include "arrowsegment.h"
 #include "arrowpoint.h"
+#include "alineitem.h"
 #include <QTextEdit>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
@@ -17,6 +18,9 @@
 //#define MERGE_TEST_2
 //#define MERGE_TEST_3
 //#define MERGE_TEST_4
+
+//Unit tests for annotation line item
+//#define   TOP_ALINE_TEST
 
 DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
     QGraphicsScene(parent)
@@ -102,6 +106,13 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
     m_diag->addArrowSegment(seg2);
     addItem(seg1); addItem(seg2);
     update();
+#endif
+#ifdef TOP_ALINE_TEST
+    this->addItem( new ALineItem(QPointF(200,200),QPointF(200,190)) );
+    this->addItem( new ALineItem(QPointF(250,200),QPointF(250,150)) );
+    this->addItem( new ALineItem(QPointF(300,200),QPointF(300,100)) );
+    this->addItem( new ALineItem(QPointF(350,200),QPointF(350,50)) );
+    this->update();
 #endif
 }
 

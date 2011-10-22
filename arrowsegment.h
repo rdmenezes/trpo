@@ -120,7 +120,7 @@ public:
          /*! Determines  a bounding rect
           */
          QRectF boundingRect() const;
-         /*! Declares a painting event data
+         /*! Declares a painting event reaction
              \param[in] painter painting data
              \param[in] option
              \param[in] widget
