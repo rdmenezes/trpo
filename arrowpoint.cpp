@@ -268,3 +268,8 @@ void ArrowPoint::removeAnnotation(ALineItem * line)
         }
     }
 }
+
+void ArrowPoint::attachAnnotation(ALineItem * line)
+{
+    m_lines<<line;
+}

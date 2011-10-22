@@ -51,22 +51,14 @@ private:
                             const QPointF & p3,
                             double t0, double t1,
                             QPainterPath & path);
-        /*! Draws a top type line item
+        /*! Draws a top and bottom type line item
             \param[out] path path
          */
-        void drawTop(QPainterPath & path);
-        /*! Draws a bottom type line item
+        void drawTopBottom(QPainterPath & path);
+        /*! Draws a left and right type line item
             \param[out] path path
          */
-        void drawBottom(QPainterPath & path);
-        /*! Draws a left type line item
-            \param[out] path path
-         */
-        void drawLeft(QPainterPath & path);
-        /*! Draws a left type line item
-            \param[out] path path
-         */
-        void drawRight(QPainterPath & path);
+        void drawLeftRight(QPainterPath & path);
 public:
         /*! Declares a type of item
          */
