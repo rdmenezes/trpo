@@ -239,6 +239,9 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
       pos=m_view->mapToScene(local_pos);
       this->processAnnotationLineEscapePress(pos);
   }
+  //TODO: Remove this part
+  if (event->key()==Qt::Key_G)
+      this->exportTo("test.png");
   if (event->key()==Qt::Key_F1)
   {
       HelpWindow d;
