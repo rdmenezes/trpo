@@ -40,7 +40,7 @@ void DiagramScene::processAnnotationLineSecondPointOnBlank(const QPointF & pos)
                   fabs(m_aline_firstpoint.y()-second.y()))<MINIMAL_LINE_LENGTH;
  bool cannotPlace =  !(m_diag->canPlaceAnnotationLine(&m_aline_firstpoint,&second));
  error= error || toosmall || cannotPlace;
- if (error)
+ if (!error)
  {
     ALineItem * aline=NULL;
     if (m_aline_segment)
@@ -87,7 +87,12 @@ void DiagramScene::processAnnotationLineToBox(const QPointF & pos,BoxItem * box)
 void DiagramScene::processAnnotationLineToSegment(const QPointF & pos,
                                                   ArrowSegment * seg)
 {
-
+  m_alds=ALDS_SPECIFIEDFIRSTPOINT;
+  m_aline_firstpoint=pos;
+  m_aline_segment=seg;
+  ArrowDirection dir=seg->direction();
+  if (dir==AD_TOP || dir==AD_BOTTOM) m_aline_firstpoint.setX(seg->in()->x());
+  if (dir==AD_LEFT || dir==AD_RIGHT) m_aline_firstpoint.setY(seg->in()->y());
 }
 
 void DiagramScene::enterAnnotationLineResize(const QPointF & pos,

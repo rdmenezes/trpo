@@ -184,8 +184,11 @@ public:
             \param[in] point1  first point
             \param[in] point2  second point
             \param[in] block   block, which will colliding with
+            \param[in] always_check_bounds determines, whether bounds needs to be checked
          */
-        bool canPlaceSegment(ArrowPoint * point1, ArrowPoint * point2, BoxItem * block=NULL);
+        bool canPlaceSegment(ArrowPoint * point1, ArrowPoint * point2,
+                             BoxItem * block=NULL,
+                             bool always_check_bounds=false );
         /*! Determines, whether annotation line can be placed ot not
             \param[in] point1  first point
             \param[in] point2  second point
