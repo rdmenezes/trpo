@@ -176,3 +176,11 @@ void ALineItem::drawCubicCurve(const QPointF & p0,
     path.moveTo(p0);
     path.cubicTo(D1,D2,p3);
 }
+
+/*! Returns a type of segment
+ */
+int ALineItem::type() const
+{
+    return ALineItem::USERTYPE;
+}
+

@@ -68,6 +68,9 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
   //Sets a no arrow editing state
   m_arrow_state=AES_NONE;
   m_last_arrow_point=NULL;
+  //Sets a no annotation line editing state
+  m_aline_segment=NULL;
+  m_alds=ALDS_SPECIFIEDNONE;
 
   //Conditional test situation
 #ifdef MERGE_TEST_1
@@ -156,6 +159,10 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
           addAnnotationLabel(event);
       if (m_tooltype==TT_ARROW)
           processArrowClickOnBlankSpace(event);
+      if (m_tooltype==TT_ANNOTATION_LINE && m_alds==ALDS_SPECIFIEDNONE)
+          processAnnotationLinePointOnBlank(pos);
+      if (m_tooltype==TT_ANNOTATION_LINE && m_alds==ALDS_SPECIFIEDFIRSTPOINT)
+          processAnnotationLineSecondPointOnBlank(pos);
     }
     //Propagate key pressing event
     else
@@ -176,9 +183,26 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
              this->processArrowClickOnLine(event,static_cast<ArrowSegment *>(lst[i]));
              return;
          }
+         if (m_tooltype==TT_ANNOTATION_LINE && lst[i]->type()==BoxItem::USERTYPE
+                                            && m_alds==ALDS_SPECIFIEDNONE)
+         {
+             this->processAnnotationLineToBox(event->scenePos(),static_cast<BoxItem *>(lst[i]));
+             return;
+         }
+         if (m_tooltype==TT_ANNOTATION_LINE && lst[i]->type()==ArrowSegment::USERTYPE
+                                            && m_alds==ALDS_SPECIFIEDNONE)
+         {
+             this->processAnnotationLineToSegment(event->scenePos(),static_cast<ArrowSegment *>(lst[i]));
+             return;
+         }
          if (m_tooltype==TT_SELECT && lst[i]->type()==ArrowSegment::USERTYPE)
          {
              this->enterArrowMove(event->scenePos(),static_cast<ArrowSegment *>(lst[i]));
+             return;
+         }
+         if (m_tooltype==TT_SELECT && lst[i]->type()==ALineItem::USERTYPE)
+         {
+             this->enterAnnotationLineResize(event->scenePos(),static_cast<ALineItem *>(lst[i]));
              return;
          }
      }
@@ -207,6 +231,14 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
       pos=m_view->mapToScene(local_pos);
       this->processArrowEscapePress(pos);
   }
+  if (event->key()==Qt::Key_Escape && m_tooltype==TT_ANNOTATION_LINE && m_alds==ALDS_SPECIFIEDFIRSTPOINT)
+  {
+      //Compute position
+      QPointF  pos;
+      QPoint local_pos=m_view->mapFromGlobal(QCursor::pos());
+      pos=m_view->mapToScene(local_pos);
+      this->processAnnotationLineEscapePress(pos);
+  }
   if (event->key()==Qt::Key_F1)
   {
       HelpWindow d;
@@ -214,7 +246,10 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
       handled=true;
   }
   //In case when Shift presset add panel if not present
-  if (event->key()==Qt::Key_Shift  && m_arrow_state!=AES_EDIT)
+  if (event->key()==Qt::Key_Shift
+      && m_arrow_state!=AES_EDIT
+      && m_alds!=ALDS_SPECIFIEDFIRSTPOINT
+      && m_dragstate==DS_NONE)
   {
       //Compute panel position
       QPointF  panel_pos;
@@ -391,6 +426,10 @@ void DiagramScene::processRemoving(const QList<QGraphicsItem *> & items)
         {
           removeArrowSegment(static_cast<ArrowSegment *>(items[i]));
         }
+        if (items[i]->type()==ALineItem::USERTYPE)
+        {
+            removeAnnotationLine(static_cast<ALineItem *>(items[i]));
+        }
     }
  }
 
@@ -545,6 +584,8 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         blockResizeMoveLeave(event);
     if (m_tooltype==TT_SELECT  && m_dragstate==DS_ARROW_MOVE)
         arrowMoveLeave(event->scenePos());
+    if (m_tooltype==TT_SELECT && m_dragstate==DS_ALINE_RESIZE)
+        leaveAnnotationLineResize(event->scenePos());
 }
 
 void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )

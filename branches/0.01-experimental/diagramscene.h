@@ -29,7 +29,8 @@ enum DragState
     DS_BLOCK_RESIZE,
     DS_BLOCK_MOVE,
     DS_ALABEL_MOVE,
-    DS_ARROW_MOVE
+    DS_ARROW_MOVE,
+    DS_ALINE_RESIZE
 };
 
 enum BlockCorner
@@ -46,6 +47,12 @@ enum ArrowEditState
 {
     AES_NONE,
     AES_EDIT
+};
+
+enum AnnotationLineDrawingState
+{
+    ALDS_SPECIFIEDNONE,
+    ALDS_SPECIFIEDFIRSTPOINT
 };
 
 enum ArrowDirection;
@@ -81,6 +88,48 @@ private:
     ArrowEditState           m_arrow_state;         //!< Arrow editing state
     ArrowPoint           *   m_last_arrow_point;          //!< Last point added to scene
     ArrowSegment         *   m_moving_segment;      //!< Segment that can be moved
+    //Arguments for adding annotation line
+    ArrowSegment         *   m_aline_segment;      //!< Segment, where is binded annotation
+    AnnotationLineDrawingState  m_alds;            //!< Annotation line drawing state
+    QPointF                  m_aline_firstpoint;   //!< Annotation line first point
+    //Arguments for resizing annotation line
+    ALineItem           *    m_resizing_aline;     //!< Resizing annotation line
+    /*! Enters into annotation line resizing state
+        \param[in] pos position
+        \param[in] item item, that is being analyzed
+     */
+    void leaveAnnotationLineResize(const QPointF & pos);
+    /*! Enters into annotation line resizing state
+        \param[in] pos position
+        \param[in] item item, that is being analyzed
+     */
+    void enterAnnotationLineResize(const QPointF & pos, ALineItem * item);
+    /*! Removes annotation line
+        \param[in] line annotation line to be removed
+     */
+    void removeAnnotationLine(ALineItem * line);
+    /*! Processes pressing annotation line to segment
+        \param[in] pos position
+        \param[in] seg segment
+     */
+    void processAnnotationLineToSegment(const QPointF & pos, ArrowSegment * seg);
+    /*! Processes pressing annotation line to box
+        \param[in] pos position
+        \param[in] box  box item
+     */
+    void processAnnotationLineToBox(const QPointF & pos,BoxItem * box);
+    /*! Processes pressing annotation line on blank space (setting second point)
+        \param[in] pos position
+     */
+    void processAnnotationLineSecondPointOnBlank(const QPointF & pos);
+    /*! Processes pressing annotation line on blank space (setting first point)
+        \param[in] pos position
+     */
+    void processAnnotationLinePointOnBlank(const QPointF & pos);
+    /*! Processes pressing annotation line, when escape is pressed
+        \param[in] pos position
+     */
+    void processAnnotationLineEscapePress(const QPointF & pos);
     /*! Process tool selection by keys
         \param[in] event event
         \return true, if handled
