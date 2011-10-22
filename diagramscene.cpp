@@ -144,6 +144,23 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
 #endif
 }
 
+void DiagramScene::hideUI()
+{
+ if (m_panel)
+ {
+     this->removeItem(m_panel_in_scene);
+ }
+ m_panel=NULL;
+ m_panel_in_scene=NULL;
+ if (m_edit_state==TES_EDIT)
+ {
+     this->removeItem(m_label_editor_in_scene);
+ }
+ m_edit_state=TES_NONE;
+ m_label_editor=NULL;
+ m_label_editor_in_scene=NULL;
+}
+
 const QRectF & DiagramScene::getDefaultBlockNumberSize() const
 {
     return this->m_default_number_size;
