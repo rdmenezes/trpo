@@ -22,6 +22,8 @@
 //Unit tests for annotation line item
 //#define   TOP_ALINE_TEST
 //#define BOTTOM_ALINE_TEST
+//#define LEFT_ALINE_TEST
+//#define RIGHT_ALINE_TEST
 
 DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
     QGraphicsScene(parent)
@@ -120,6 +122,20 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
     this->addItem( new ALineItem(QPointF(250,150),QPointF(250,200)) );
     this->addItem( new ALineItem(QPointF(300,100),QPointF(300,200)) );
     this->addItem( new ALineItem(QPointF(350,50),QPointF(350,200)) );
+    this->update();
+#endif
+#ifdef LEFT_ALINE_TEST
+    this->addItem( new ALineItem(QPointF(350,200),QPointF(340,200)) );
+    this->addItem( new ALineItem(QPointF(350,150),QPointF(300,150)) );
+    this->addItem( new ALineItem(QPointF(350,100),QPointF(250,100)) );
+    this->addItem( new ALineItem(QPointF(350,50),QPointF(150,50)) );
+    this->update();
+#endif
+#ifdef RIGHT_ALINE_TEST
+    this->addItem( new ALineItem(QPointF(340,200),QPointF(350,200)) );
+    this->addItem( new ALineItem(QPointF(300,150),QPointF(350,150)) );
+    this->addItem( new ALineItem(QPointF(250,100),QPointF(350,100)) );
+    this->addItem( new ALineItem(QPointF(150,50),QPointF(350,50)) );
     this->update();
 #endif
 }

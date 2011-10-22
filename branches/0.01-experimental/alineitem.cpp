@@ -70,8 +70,10 @@ void ALineItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     (void)option,widget;
     QPainterPath path;
     ArrowDirection dir=direction(*m_bindedpoint,m_freepoint);
-    if (dir==AD_TOP) this->drawTop(path);
+    if (dir==AD_TOP)    this->drawTop(path);
     if (dir==AD_BOTTOM) this->drawBottom(path);
+    if (dir==AD_LEFT)   this->drawLeft(path);
+    if (dir==AD_RIGHT)   this->drawRight(path);
     painter->drawPath(path);
 }
 
@@ -85,14 +87,14 @@ void ALineItem::drawTop(QPainterPath & path)
    QPointF p2(m_bindedpoint->x()-0.5*D_LEFT,m_bindedpoint->y()*0.48+m_freepoint.y()*0.52);
    QPointF p3(m_bindedpoint->x(),midy);
    drawCubicCurve(p0,p1,p2,p3,0.50,0.75,path);
-   }
-   {
+  }
+  {
     QPointF p0(m_bindedpoint->x(),midy);
     QPointF p1(m_bindedpoint->x()+0.5*D_RIGHT,m_bindedpoint->y()*0.52+m_freepoint.y()*0.48);
     QPointF p2(m_bindedpoint->x()+0.75*D_RIGHT,midy);
     QPointF p3(m_freepoint.x()-D_LEFT,m_freepoint.y());
     drawCubicCurve(p0,p1,p2,p3,0.25,0.50,path);
-   }
+  }
 }
 
 void ALineItem::drawBottom(QPainterPath & path)
@@ -104,14 +106,54 @@ void ALineItem::drawBottom(QPainterPath & path)
    QPointF p2(m_bindedpoint->x()+0.5*D_RIGHT,m_bindedpoint->y()*0.52+m_freepoint.y()*0.48);
    QPointF p3(m_bindedpoint->x(),midy);
    drawCubicCurve(p0,p1,p2,p3,0.50,0.75,path);
-   }
-   {
+  }
+  {
     QPointF p0(m_bindedpoint->x(),midy);
     QPointF p1(m_bindedpoint->x()-0.5*D_LEFT,m_bindedpoint->y()*0.48+m_freepoint.y()*0.52);
     QPointF p2(m_bindedpoint->x()-0.75*D_LEFT,midy);
     QPointF p3(m_freepoint.x()+D_RIGHT,m_bindedpoint->y());
     drawCubicCurve(p0,p1,p2,p3,0.25,0.50,path);
-   }
+  }
+}
+
+void ALineItem::drawLeft(QPainterPath & path)
+{
+ double midx=(m_bindedpoint->x()+m_freepoint.x())/2.0;
+ {
+  QPointF p0(m_bindedpoint->x(),m_freepoint.y()-D_LEFT);
+  QPointF p1(m_bindedpoint->x()*0.52+m_freepoint.x()*0.48,m_freepoint.y()-0.75*D_LEFT);
+  QPointF p2(m_bindedpoint->x()*0.48+m_freepoint.x()*0.52,m_freepoint.y()-0.50*D_LEFT);
+  QPointF p3(midx,m_bindedpoint->y());
+  drawCubicCurve(p0,p1,p2,p3,0.50,0.75,path);
+ }
+ {
+
+   QPointF p0(midx,m_freepoint.y());
+   QPointF p1(m_bindedpoint->x()*0.52+m_freepoint.x()*0.48,m_freepoint.y()+0.50*D_RIGHT);
+   QPointF p2(midx,m_freepoint.y()+0.75*D_RIGHT);
+   QPointF p3(m_freepoint.x(),m_freepoint.y()+D_RIGHT);
+   drawCubicCurve(p0,p1,p2,p3,0.25,0.50,path);
+ }
+}
+
+void ALineItem::drawRight(QPainterPath & path)
+{
+ double midx=(m_bindedpoint->x()+m_freepoint.x())/2.0;
+ {
+  QPointF p0(m_bindedpoint->x(),m_freepoint.y()+D_RIGHT);
+  QPointF p1(m_bindedpoint->x()*0.52+m_freepoint.x()*0.48,m_freepoint.y()+0.75*D_RIGHT);
+  QPointF p2(m_bindedpoint->x()*0.48+m_freepoint.x()*0.52,m_freepoint.y()+0.50*D_RIGHT);
+  QPointF p3(midx,m_bindedpoint->y());
+  drawCubicCurve(p0,p1,p2,p3,0.50,0.75,path);
+ }
+ {
+
+   QPointF p0(midx,m_freepoint.y());
+   QPointF p1(m_bindedpoint->x()*0.52+m_freepoint.x()*0.48,m_freepoint.y()-0.50*D_LEFT);
+   QPointF p2(midx,m_freepoint.y()-0.75*D_LEFT);
+   QPointF p3(m_freepoint.x(),m_freepoint.y()-D_LEFT);
+   drawCubicCurve(p0,p1,p2,p3,0.25,0.50,path);
+ }
 }
 
 void ALineItem::drawCubicCurve(const QPointF & p0,
