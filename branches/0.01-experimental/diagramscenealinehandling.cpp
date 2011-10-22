@@ -108,5 +108,12 @@ void DiagramScene::leaveAnnotationLineResize(const QPointF & pos)
 
 void DiagramScene::removeAnnotationLine(ALineItem * line)
 {
-
+ if (line->isAttachedToLine())
+ {
+     ArrowPoint * p=static_cast<ArrowPoint *>(line->begin());
+     p->removeAnnotation(line);
+ }
+ m_diag->removeAnnotationLine(line);
+ this->removeItem(line);
+ this->update();
 }
