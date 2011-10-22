@@ -27,13 +27,16 @@ private:
      */
     QRectF   m_rect;
 public:
+    inline QString & string() { return m_string; }
+    inline QRectF  & rect()   { return m_rect;   }
     /*! Declares a type of item
      */
     enum ItemType
     {
         USERTYPE=QGraphicsItem::UserType+10
     };
-
+    //Does nothing
+    inline ALabelItem() {}
     /*! Constrcts a label item
         \param[in] rect bounding rectangle
      */

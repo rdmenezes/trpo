@@ -60,6 +60,16 @@ private:
          */
         void drawLeftRight(QPainterPath & path);
 public:
+        /*! A free point, that is pointed into air
+         */
+        inline QPointF & accessFree() { m_freepoint; }
+        /*! A more complicated, binded point to line, or pushed into air
+            (if attached into block)
+         */
+        inline QPointF *& accessBinded() { m_bindedpoint; }
+        /*! Declares, whether an item binded into line
+         */
+        inline bool  &   accessIsBinded() { m_isbindedtoline; }
         /*! Declares a type of item
          */
         enum ItemType
@@ -68,6 +78,8 @@ public:
         };
          inline QPointF * begin() { return m_bindedpoint;}
          inline QPointF * end()   { return &m_freepoint; }
+         //Does nothing
+         inline ALineItem() {}
          /*! Constructs an annotation line, not binded into any of points
             \param[in] bindedpoint free binded point (first)
             \param[in] freepoint   free point (second)

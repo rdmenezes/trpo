@@ -46,6 +46,18 @@ private:
          */
         void generatePolicy(MoveRange & result,ArrowPoint * pivot,ArrowDirection dir,bool reversed);
 public:
+        /*! Determines, whether  arrow point is attached to an item
+         */
+        inline BoxItem *& accessBlock() { return m_block; }
+        /*!  Vector of segments, that output point is me
+         */
+        inline QVector<ArrowSegment *> & accessIn() { return m_in; }
+        /*!  Vector of segments, that input point is me
+         */
+        inline QVector<ArrowSegment *> & accessOut() { return m_out; }
+        /*!   Attached annotation lines
+        */
+        inline QVector<ALineItem * >  & accessLines() { return  m_lines; }
         /*! Detects, whether has annotations
          */
         bool hasAnnotations() { return m_lines.size()!=0; }
