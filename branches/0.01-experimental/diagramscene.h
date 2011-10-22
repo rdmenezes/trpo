@@ -213,6 +213,9 @@ private:
         \param[in] pos position
      */
     void processArrowEscapePress(const QPointF & pos);
+    /*! Clears states of element editing
+     */
+    void clearElementStates();
 protected:
     /*! Handles a beginning of dragging item
         \param[in] event event data
@@ -317,6 +320,9 @@ public:
     /*! Hides UI (Panel and text edit, if needed)
      */
     void hideUI();
+    /*! Clears a scene, removing all objects, and setting state variables to beginning
+     */
+    void clear();
 signals:
 
 public slots:
