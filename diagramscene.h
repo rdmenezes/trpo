@@ -311,6 +311,9 @@ public:
         \return true on success
      */
     bool exportTo(const QString & filename);
+    /*! Determines whether panel is active
+     */
+    inline bool isPanelActive() { return m_panel!=NULL; }
 signals:
 
 public slots:

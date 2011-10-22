@@ -307,6 +307,7 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
              static_cast<ALabelItem *>(items[i])->keyPressEvent(event);
              handled=true;
          }
+
      }
   }
   if (!handled)
@@ -330,12 +331,16 @@ bool DiagramScene::processKeyToolSelect(QKeyEvent * event)
     int       keys[6]={Qt::Key_1,Qt::Key_2,Qt::Key_3,Qt::Key_4,Qt::Key_5,Qt::Key_6};
     ToolType types[6]={TT_SELECT,TT_ERASER,TT_BLOCK,TT_ARROW,TT_ANNOTATION_LINE,
                        TT_ANNOTATION_LABEL};
+    bool handled=false;
     for (int i=0;i<6;i++)
     {
         if (event->key()==keys[i])
+        {
             this->setTool(types[i]);
+            handled=true;
+        }
     }
-    return false;
+    return handled;
 }
 
 QRectF DiagramScene::getDefaultBlockSize(const QPointF & pos)

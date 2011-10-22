@@ -60,6 +60,9 @@ int BoxItem::type() const
 
 void BoxItem::keyPressEvent(QKeyEvent *event)
 {
+    DiagramScene * myscene=static_cast<DiagramScene*>(this->scene());
+    if (myscene->isPanelActive())
+         return;
     if(event->key()==Qt::Key_Left)
     {
         static_cast<DiagramScene *>(this->scene())->decrementBlockID(this);
