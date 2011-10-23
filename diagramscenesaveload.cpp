@@ -60,17 +60,11 @@ bool DiagramScene::exportTo(const QString & filename)
   //(void)filename;
   //return rand()<RAND_MAX/2;
   
-  QImage image(scene->width(), scene->height(), QImage::Format_ARGB32_Premultiplied);
-  image.fill(NULL);
+  QImage image(this->width(), this->height(), QImage::Format_ARGB32_Premultiplied);
+  //image.fill(NULL); сцена прозрачная?
   QPainter painter(&image);
-  scene->render(&painter);
+  this->render(&painter);
 
-  QFile file(filename);
-  if (!file.open(QIODevice::WriteOnly)) {
-      QMessageBox::information(this, tr("Unable to open file"),
-                               file.errorString());
-      return;
-      }
   bool isSaved= image.save(&filename, "png");}
   return isSaved;
 }
