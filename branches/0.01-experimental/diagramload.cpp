@@ -148,7 +148,7 @@ void correctItems(DiagramLoadData * data)
  //Correct arrow points
  for (int i=0;i<dia->arrowPoints().size();i++)
  {
-   ArrowPoint * p=dia->arrowPoints()[0];
+   ArrowPoint * p=dia->arrowPoints()[i];
    p->setDiagram(dia);
    //Set Block
    BoxItem *& block=p->accessBlock();
@@ -156,32 +156,36 @@ void correctItems(DiagramLoadData * data)
    else block=NULL;
    //Set in
    QVector<ArrowSegment *> & in=p->accessIn();
-   for (int i=0;i<in.size();i++)
+   for (int j=0;j<in.size();j++)
    {
-       if (data->segments.contains(in[i])) in[i]=data->segments[in[i]];
+       if (data->segments.contains(in[j])) in[j]=data->segments[in[j]];
        else
        {
-           in.remove(i); --i;
+           in.remove(j); --j;
        }
    }
    //Set out
    QVector<ArrowSegment *> & out=p->accessOut();
-   for (int i=0;i<out.size();i++)
+   for (int j=0;j<out.size();j++)
    {
-       if (data->segments.contains(out[i])) out[i]=data->segments[out[i]];
+       if (data->segments.contains(out[j]))
+       {
+           out[j]=data->segments[out[j]];
+       }
        else
        {
-           out.remove(i); --i;
+           out.remove(j); --j;
        }
    }
    //Set lines
-   QVector<ALineItem *> lines=p->accessLines();
-   for (int i=0;i<lines.size();i++)
+   QVector<ALineItem *> & lines=p->accessLines();
+   for (int j=0;j<lines.size();j++)
    {
-       if (data->annotationlines.contains(lines[i]))  lines[i]=data->annotationlines[lines[i]];
+       if (data->annotationlines.contains(lines[j]))
+           lines[j]=data->annotationlines[lines[j]];
        else
        {
-           lines.remove(i); --i;
+           lines.remove(j); --j;
        }
    }
  }

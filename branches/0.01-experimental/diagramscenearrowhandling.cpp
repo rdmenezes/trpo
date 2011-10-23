@@ -242,6 +242,7 @@ void DiagramScene::processArrowJoin(const QPointF & pos,ArrowSegment * seg)
  ArrowSegment * seg_p1=new ArrowSegment(p0,p1);
  ArrowSegment * seg_p2=new ArrowSegment(p1,p2);
  ArrowSegment * seg_p3=new ArrowSegment(m_last_arrow_point,p1);
+ m_diag->addArrowPoint(p1);
  m_diag->addArrowSegment(seg_p1);
  m_diag->addArrowSegment(seg_p2);
  m_diag->addArrowSegment(seg_p3);
