@@ -110,6 +110,7 @@ void correctItems(DiagramLoadData * data)
  for (int i=0;i<dia->annotationLines().size();i++)
  {
      ALineItem * aline=dia->annotationLines()[i];
+     aline->setDiagram(dia);
      if (aline->isAttachedToLine())
      {
          ArrowPoint *&  ref=reinterpret_cast<ArrowPoint*&>(aline->accessBinded());
@@ -122,5 +123,57 @@ void correctItems(DiagramLoadData * data)
          }
      }
  }
-
+ //Correct arrow segments
+ for (int i=0;i<dia->arrowSegments().size();i++)
+ {
+     ArrowSegment * seg=dia->arrowSegments()[i];
+     seg->setDiagram(dia);
+     ArrowPoint *& refin=seg->accessIn();
+     if (data->points.contains(refin))
+         refin=data->points[refin];
+     else
+     {
+         refin=new ArrowPoint(0,0);
+         dia->arrowPoints()<<refin;
+     }
+     ArrowPoint *& refout=seg->accessOut();
+     if (data->points.contains(refout))
+         refout=data->points[refout];
+     else
+     {
+         refout=new ArrowPoint(0,0);
+         dia->arrowPoints()<<refout;
+     }
+ }
+ //Correct arrow points
+ for (int i=0;i<dia->arrowPoints().size();i++)
+ {
+   ArrowPoint * p=dia->arrowPoints()[0];
+   p->setDiagram(dia);
+   //Set Block
+   BoxItem *& block=p->accessBlock();
+   if (block && data->blocks.contains(block)) block=data->blocks[block];
+   else block=NULL;
+   //Set in
+   QVector<ArrowSegment *> & in=p->accessIn();
+   for (int i=0;i<in.size();i++)
+   {
+       if (data->segments.contains(in[i])) in[i]=data->segments[in[i]];
+       else  { in.remove(i); --i;}
+   }
+   //Set out
+   QVector<ArrowSegment *> & out=p->accessOut();
+   for (int i=0;i<out.size();i++)
+   {
+       if (data->segments.contains(out[i])) out[i]=data->segments[out[i]];
+       else  { out.remove(i); --i;}
+   }
+   //Set lines
+   QVector<ALineItem *> lines=p->accessLines();
+   for (int i=0;i<lines.size();i++)
+   {
+       if (data->annotationlines.contains(lines[i]))  lines[i]=data->annotationlines[lines[i]];
+       else { lines.remove(i); --i; }
+   }
+ }
 }

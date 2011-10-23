@@ -1,5 +1,8 @@
 #include "diagramscene.h"
 #include "diagramset.h"
+#include "arrowsegment.h"
+#include "alabelitem.h"
+#include "alineitem.h"
 #include <math.h>
 #include <QDomDocument>
 #include <QDomElement>
@@ -35,10 +38,19 @@ bool DiagramScene::load(const QString & filename)
   QDomElement root=doc.documentElement();
   if (root.tagName()!="set")
       return false;
-  this->hideUI();
   this->clear();
   this->diagram()->set()->load(&root);
-  return rand()<RAND_MAX/2;
+  for (int i=0;i<DIAGRAM_MAX_BLOCKS;i++)
+      if (this->diagram()->getBlockByID(i))
+         this->addItem(this->diagram()->getBlockByID(i));
+  for (int i=0;i<diagram()->annotationLabels().size();i++)
+      this->addItem(this->diagram()->annotationLabels()[i]);
+  for (int i=0;i<diagram()->annotationLines().size();i++)
+      this->addItem(this->diagram()->annotationLines()[i]);
+  for (int i=0;i<diagram()->arrowSegments().size();i++)
+      this->addItem(this->diagram()->arrowSegments()[i]);
+  this->update();
+  return true;
 }
 
 bool DiagramScene::exportTo(const QString & filename)
