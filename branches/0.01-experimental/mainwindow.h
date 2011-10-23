@@ -42,13 +42,12 @@ protected slots:
     void save();
     void saveAs();
     void exportDiagram();
-    
-private:
-    DiagramSet *   m_set; //!< Set of diagrams
-    Ui::MainWindow *ui;  //!< UI
     /*! Shows a help dialog
      */
     void showHelp();
+private:
+    DiagramSet *   m_set; //!< Set of diagrams
+    Ui::MainWindow *ui;  //!< UI
 };
 
 #endif // MAINWINDOW_H

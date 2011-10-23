@@ -31,8 +31,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ,view->contentsRect().height()-ui->menuBar->height()
     );
     scene->setView(view);
-    
-    path = 0;
+    //Set some signals
+    connect(ui->actionSave,SIGNAL(triggered()),this,SLOT(save()));
+    connect(ui->actionSave_as,SIGNAL(triggered()),this,SLOT(saveAs()));
+    connect(ui->actionOpen,SIGNAL(triggered()),this,SLOT(open()));
+    connect(ui->actionExport_to_PNF_Ctrl_E,SIGNAL(triggered()),this,SLOT(exportDiagram()));
+    connect(ui->actionShow_Help_F1,SIGNAL(triggered()),this,SLOT(showHelp()));
+    path = NULL;
 }
 
 MainWindow::~MainWindow() {
