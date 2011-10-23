@@ -316,6 +316,9 @@ public:
             \param[in] sete set
          */
         void save(QDomDocument * doc,QDomElement * sete);
+        /*! Loads a diagram
+         */
+        void load(QDomElement * diag);
         /*! Destructor
          */
         ~Diagram();
