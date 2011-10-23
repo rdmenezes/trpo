@@ -53,7 +53,7 @@ inline QString locationToString( ParentLocation & loc)
 inline ParentLocation stringToLocation( const QString & s)
 {
     QStringList lst=s.split(";");
-    if (s.size()!=2) return ParentLocation();
+    if (lst.size()!=2) return ParentLocation();
     bool ok=true;
     return ParentLocation(lst[0].toInt(&ok,10),lst[1].toInt(&ok,10));
 }

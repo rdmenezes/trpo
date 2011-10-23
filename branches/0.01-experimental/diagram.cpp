@@ -216,11 +216,15 @@ void Diagram::addNewSwap(BoxItem * item1, char new1,BoxItem * item2,char new2)
 
 void Diagram::setBlockID(BoxItem * item, char pos)
 {
-    for(int i=0;i<DIAGRAM_MAX_BLOCKS;i++)
+    if (item)
+    {
+     for(int i=0;i<DIAGRAM_MAX_BLOCKS;i++)
         if (m_boxes[i]==item)
               m_boxes[i]=NULL;
+    }
     m_boxes[pos]=item;
-    item->setID(pos);
+    if (item)
+        item->setID(pos);
 }
 
 void Diagram::addAnnotationLine(ALineItem * line)
