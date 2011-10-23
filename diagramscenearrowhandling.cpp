@@ -231,8 +231,13 @@ void DiagramScene::processArrowJoinSegments(const QPointF & pos, ArrowSegment * 
 
 void DiagramScene::processArrowJoin(const QPointF & pos,ArrowSegment * seg)
 {
+ QPointF newpos=pos;
+ if (seg->direction()==AD_LEFT || seg->direction()==AD_RIGHT)
+     newpos.setY(seg->in()->y());
+ if (seg->direction()==AD_TOP || seg->direction()==AD_BOTTOM)
+     newpos.setX(seg->in()->x());
  ArrowPoint * p0=seg->in();
- ArrowPoint * p1=new ArrowPoint(pos.x(),pos.y());
+ ArrowPoint * p1=new ArrowPoint(newpos.x(),newpos.y());
  ArrowPoint * p2=seg->out();
  ArrowSegment * seg_p1=new ArrowSegment(p0,p1);
  ArrowSegment * seg_p2=new ArrowSegment(p1,p2);

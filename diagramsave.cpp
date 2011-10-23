@@ -105,7 +105,7 @@ void ALineItem::save(QDomDocument * doc,QDomElement * diagram)
  if (m_isbindedtoline)
  {
      aline.setAttribute("binded","true");
-     aline.setAttribute("bindedptr",ptrToString(m_bindedpoint));
+     aline.setAttribute("binded_ptr",ptrToString(m_bindedpoint));
  }
  else
  {
