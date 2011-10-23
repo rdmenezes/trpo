@@ -96,7 +96,7 @@ QString pointfToString( const QPointF & p)
 QPointF stringToPointf( const QString & s)
 {
     QStringList lst=s.split(";");
-    if (s.size()!=2) return QPointF();
+    if (lst.size()!=2) return QPointF();
     bool ok=true;
     return QPointF(lst[0].toDouble(&ok),lst[1].toDouble(&ok));
 }
