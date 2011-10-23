@@ -34,6 +34,15 @@ protected:
         \param[in] event paremeters
      */
     void keyPressEvent(QKeyEvent *event);
+    
+    QString *path;
+    
+protected slots:
+    void open();
+    void save();
+    void saveAs();
+    void exportDiagram();
+    
 private:
     DiagramSet *   m_set; //!< Set of diagrams
     Ui::MainWindow *ui;  //!< UI

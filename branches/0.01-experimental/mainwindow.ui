@@ -164,7 +164,7 @@
      <x>0</x>
      <y>0</y>
      <width>900</width>
-     <height>19</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -187,22 +187,22 @@
   </widget>
   <action name="actionOpen">
    <property name="text">
-    <string>Open                &amp;Ctrl+O</string>
+    <string>Open                    &amp;Ctrl+O</string>
    </property>
   </action>
   <action name="actionSave">
    <property name="text">
-    <string>Save                 &amp;Ctrl+S</string>
+    <string>Save                      &amp;Ctrl+S</string>
    </property>
   </action>
   <action name="actionSave_as">
    <property name="text">
-    <string>Save as</string>
+    <string>Save as        &amp;Ctrl+Shift+S</string>
    </property>
   </action>
   <action name="actionExport_to_PNF_Ctrl_E">
    <property name="text">
-    <string>Export to PNG  &amp;Ctrl+E</string>
+    <string>Export to PNG       &amp;Ctrl+E</string>
    </property>
   </action>
   <action name="actionShow_Help_F1">
