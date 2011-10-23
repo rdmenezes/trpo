@@ -43,6 +43,9 @@ public:
     /*! Tests,whether diagrams are correct
      */
     bool areDiagramsCorrect();
+    /*! Loads an set of diagrams
+     */
+    void load(QDomElement * e);
     /*! Destructor
      */
     ~DiagramSet();

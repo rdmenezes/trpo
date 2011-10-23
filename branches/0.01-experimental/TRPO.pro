@@ -26,7 +26,8 @@ SOURCES += main.cpp \
     diagramscenesaveload.cpp \
     diagramscenealinehandling.cpp \
     diagramsave.cpp \
-    saveloadutils.cpp
+    saveloadutils.cpp \
+    diagramload.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \

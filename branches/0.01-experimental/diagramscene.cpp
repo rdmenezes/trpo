@@ -265,6 +265,11 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
       if (! (this->save("tmp.xml")))
       { QMessageBox::critical(NULL,"Can't save file","Can't save to \"tmp.xml\"");}
   }
+  if (event->key()==Qt::Key_F6)
+  {
+      if (! (this->load("tmp.xml")))
+      { QMessageBox::critical(NULL,"Can't load file","Can't load from \"tmp.xml\"");}
+  }
   if (event->key()==Qt::Key_F3)
   {
       this->clear();
