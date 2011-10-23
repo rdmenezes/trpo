@@ -159,21 +159,30 @@ void correctItems(DiagramLoadData * data)
    for (int i=0;i<in.size();i++)
    {
        if (data->segments.contains(in[i])) in[i]=data->segments[in[i]];
-       else  { in.remove(i); --i;}
+       else
+       {
+           in.remove(i); --i;
+       }
    }
    //Set out
    QVector<ArrowSegment *> & out=p->accessOut();
    for (int i=0;i<out.size();i++)
    {
        if (data->segments.contains(out[i])) out[i]=data->segments[out[i]];
-       else  { out.remove(i); --i;}
+       else
+       {
+           out.remove(i); --i;
+       }
    }
    //Set lines
    QVector<ALineItem *> lines=p->accessLines();
    for (int i=0;i<lines.size();i++)
    {
        if (data->annotationlines.contains(lines[i]))  lines[i]=data->annotationlines[lines[i]];
-       else { lines.remove(i); --i; }
+       else
+       {
+           lines.remove(i); --i;
+       }
    }
  }
 }

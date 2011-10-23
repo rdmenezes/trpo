@@ -89,7 +89,8 @@ void MainWindow::open() {
     
     QString temp = QFileDialog::getOpenFileName();
     if (!temp.isEmpty()) {
-        *path = temp;
+        if (path) delete path;
+        path = new QString(temp);
         
         QGraphicsView *view = (QGraphicsView *)this->centralWidget();
         DiagramScene *scene = (DiagramScene *)view->scene();
@@ -119,6 +120,7 @@ void MainWindow::saveAs() {
     
     QString temp = QFileDialog::getSaveFileName();
     if (!temp.isEmpty()) {
+        if (path) delete path;
         path = new QString(temp);
         this->save();
     }

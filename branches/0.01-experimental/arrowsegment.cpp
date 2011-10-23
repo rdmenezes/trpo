@@ -140,8 +140,8 @@ void ArrowSegment::paint(QPainter *painter,
         aseg1.setX(aseg1.x()+D_ARROW_Y);
         aseg2.setX(aseg2.x()-D_ARROW_Y);
       }
-      printf("Fork points: (%lf,%lf),(%lf,%lf) \n",(double)(aseg1.x()),(double)(aseg1.y()),
-                                                   (double)(aseg2.x()),(double)(aseg2.y()));
+      //printf("Fork points: (%lf,%lf),(%lf,%lf) \n",(double)(aseg1.x()),(double)(aseg1.y()),
+      //                                             (double)(aseg2.x()),(double)(aseg2.y()));
       painter->drawLine(*m_out,aseg1);
       painter->drawLine(*m_out,aseg2);
   }
