@@ -318,7 +318,7 @@ public:
         void save(QDomDocument * doc,QDomElement * sete);
         /*! Loads a diagram
          */
-        void load(QDomElement * diag);
+        void load(QDomElement * diag,DiagramSet * parent);
         /*! Destructor
          */
         ~Diagram();

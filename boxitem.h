@@ -18,6 +18,9 @@ class ArrowPoint;
 class QDomElement;
 //Dom document
 class QDomDocument;
+//Loading data
+class DiagramLoadData;
+
 /*! \class BoxItemSide
     Declares a box item side
  */

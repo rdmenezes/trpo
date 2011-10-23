@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     diagramscenealinehandling.cpp \
     diagramsave.cpp \
     saveloadutils.cpp \
-    diagramload.cpp
+    diagramload.cpp \
+    loadelements.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
@@ -45,7 +46,8 @@ HEADERS += mainwindow.h \
     arrowpoint.h \
     moverange.h \
     compare.h \
-    saveloadutils.h
+    saveloadutils.h \
+    loadelements.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc

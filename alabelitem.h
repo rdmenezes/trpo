@@ -17,6 +17,8 @@
 class QDomElement;
 //Dom document
 class QDomDocument;
+//Loading data
+class DiagramLoadData;
 
 /*! \class ALabelItem
 
