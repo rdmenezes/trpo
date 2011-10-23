@@ -16,7 +16,8 @@ class Diagram;
 class QDomElement;
 //Dom document
 class QDomDocument;
-
+//Loading data
+class DiagramLoadData;
 
 enum ArrowDirection
 {

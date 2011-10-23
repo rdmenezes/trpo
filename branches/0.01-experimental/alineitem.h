@@ -17,6 +17,8 @@ class Diagram;
 class QDomElement;
 //Dom document
 class QDomDocument;
+//Loading data
+class DiagramLoadData;
 
 /*! \class ALineItem
     Declares an annotation line item
@@ -66,14 +68,14 @@ private:
 public:
         /*! A free point, that is pointed into air
          */
-        inline QPointF & accessFree() { m_freepoint; }
+        inline QPointF & accessFree() { return m_freepoint; }
         /*! A more complicated, binded point to line, or pushed into air
             (if attached into block)
          */
-        inline QPointF *& accessBinded() { m_bindedpoint; }
+        inline QPointF *& accessBinded() { return m_bindedpoint; }
         /*! Declares, whether an item binded into line
          */
-        inline bool  &   accessIsBinded() { m_isbindedtoline; }
+        inline bool  &   accessIsBinded() { return m_isbindedtoline; }
         /*! Declares a type of item
          */
         enum ItemType
