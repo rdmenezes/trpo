@@ -8,6 +8,8 @@
 #ifndef DIAGRAMSET_H
 #define DIAGRAMSET_H
 
+class QDomDocument;
+
 /*! \class DiagramSet
     Describes a set of diagrams
  */
@@ -34,6 +36,13 @@ public:
         \return pointer to diagram
      */
     Diagram * get(int id);
+    /*! Saves itself to a document
+        \param[in] document to save to
+     */
+    void save(QDomDocument * doc);
+    /*! Tests,whether diagrams are correct
+     */
+    bool areDiagramsCorrect();
     /*! Destructor
      */
     ~DiagramSet();

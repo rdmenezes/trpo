@@ -13,6 +13,10 @@
 class ArrowPoint;
 //A diagram data
 class Diagram;
+//Dom element
+class QDomElement;
+//Dom document
+class QDomDocument;
 
 /*! \class ALineItem
     Declares an annotation line item
@@ -119,6 +123,11 @@ public:
          /*! Returns a type of segment
           */
          int type() const;
+         /*! Saves a line
+             \param[in] doc document
+             \param[in] diagram diagram
+          */
+         void save(QDomDocument * doc,QDomElement * diagram);
 };
 
 #endif // ALINEITEM_H

@@ -13,6 +13,11 @@
 //Describes an annotation label item
 #define DEFAULT_ALABEL_TEXT "Some commentary"
 
+//Dom element
+class QDomElement;
+//Dom document
+class QDomDocument;
+
 /*! \class ALabelItem
 
     Describes an annotation label item
@@ -66,6 +71,11 @@ public:
         \param[in] text new text
      */
     void trySetText(const QString & text);
+    /*! Saves a label
+        \param[in] doc document
+        \param[in] diag set
+     */
+    void save(QDomDocument * doc,QDomElement * diagram);
 signals:
 
 public slots:

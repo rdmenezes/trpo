@@ -12,7 +12,10 @@
 class ArrowPoint;
 //A diagram data
 class Diagram;
-
+//Dom element
+class QDomElement;
+//Dom document
+class QDomDocument;
 
 
 enum ArrowDirection
@@ -144,6 +147,11 @@ public:
          /*! Kills a segment
           */
          void die();
+         /*! Saves a segment
+             \param[in] doc document
+             \param[in] diagram diagram
+          */
+         void save(QDomDocument * doc,QDomElement * diagram);
 
 };
 

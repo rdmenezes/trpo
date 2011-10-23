@@ -14,6 +14,10 @@
 class DiagramScene;
 //Arrow points
 class ArrowPoint;
+//Dom element
+class QDomElement;
+//Dom document
+class QDomDocument;
 /*! \class BoxItemSide
     Declares a box item side
  */
@@ -178,6 +182,11 @@ public:
         \param[in] point point
      */
     MoveRange getRange(ArrowPoint * point);
+    /*! Saves a block
+        \param[in] doc document
+        \param[in] diag set
+     */
+    void save(QDomDocument * doc,QDomElement * diagram);
 };
 
 #endif // BOXITEM_H

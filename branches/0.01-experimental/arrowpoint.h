@@ -17,6 +17,10 @@ class ArrowSegment;
 class ALineItem;
 //A class of box item
 class BoxItem;
+//Dom element
+class QDomElement;
+//Dom document
+class QDomDocument;
 
 enum ArrowDirection;
 
@@ -166,6 +170,11 @@ public:
         /*! Returns a lines.
          */
         inline QVector<ALineItem * > & annotationLines() { return m_lines; }
+        /*! Saves a point
+            \param[in] doc document
+            \param[in] diagram diagram
+         */
+        void save(QDomDocument * doc,QDomElement * diagram);
 };
 
 #endif // ARROWPOINT_H
