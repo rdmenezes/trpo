@@ -21,7 +21,8 @@ class ALineItem;
 class ArrowPoint;
 //Arrow segments item
 class ArrowSegment;
-
+//A set of diagram
+class DiagramSet;
 /*! Declares a location of parent block
  */
 class ParentLocation: public QPair<int,int>
@@ -112,6 +113,9 @@ class NumberChangeHistory
 class Diagram
 {
 private:
+        /*! A diagram set, where it's belong to
+        */
+        DiagramSet      *       m_set;
         /*! Describes a parent data location
          */
         ParentLocation          m_parent;
@@ -173,6 +177,12 @@ public:
         /*! Returns an arrow segments
          */
         inline QVector<ArrowSegment *> & arrowSegments() { return m_arrow_segments; }
+        /*! Returns a diagram set
+         */
+        inline DiagramSet * set() { return m_set;}
+        /*! Sets a diagram set
+         */
+        inline void setDiagramSet(DiagramSet * set) { m_set=set; }
         /*! Inits an empty diagram
          */
         Diagram();
