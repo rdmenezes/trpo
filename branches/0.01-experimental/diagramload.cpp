@@ -20,4 +20,25 @@ void DiagramSet::load(QDomElement * e)
      if (m_max_id!=1)
          m_max_id=1;
  }
+ int diagram=0;
+ QDomNode n=e->firstChild();
+ while (diagram!=m_max_id || !(n.isNull()))
+ {
+   QDomElement diagel=n.toElement();
+   if (!diagel.isNull())
+   {
+       if (diagel.tagName() == "diagram")
+       {
+           if (! (m_set.contains(diagram))) m_set.insert(diagram,new Diagram());
+           m_set[diagram]->load(&diagel);
+           ++diagram;
+       }
+   }
+   n=n.nextSibling();
+ }
+}
+
+void Diagram::load(QDomElement * e)
+{
+
 }
