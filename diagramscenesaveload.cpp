@@ -2,6 +2,7 @@
 #include "diagramset.h"
 #include <math.h>
 #include <QDomDocument>
+#include <QDomElement>
 #include <QFile>
 #include <QTextStream>
 
@@ -22,7 +23,21 @@ bool DiagramScene::save(const QString & filename)
 
 bool DiagramScene::load(const QString & filename)
 {
-  (void)filename;
+  QDomDocument  doc("IDEFML");
+  QFile file(filename);
+  if (!file.open(QIODevice::ReadOnly))
+      return false;
+  if (!doc.setContent(&file))
+  {
+      file.close();
+      return false;
+  }
+  QDomElement root=doc.documentElement();
+  if (root.tagName()!="set")
+      return false;
+  this->hideUI();
+  this->clear();
+  this->diagram()->set()->load(&root);
   return rand()<RAND_MAX/2;
 }
 
