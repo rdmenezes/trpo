@@ -2,8 +2,8 @@
 # Project created by QtCreator 2011-09-19T16:07:38
 # -------------------------------------------------
 QT += core \
-    gui    \
-	xml
+    gui \
+    xml
 TARGET = TRPO
 TEMPLATE = app
 SOURCES += main.cpp \
@@ -24,7 +24,9 @@ SOURCES += main.cpp \
     moverange.cpp \
     diagramscenearrowhandling.cpp \
     diagramscenesaveload.cpp \
-    diagramscenealinehandling.cpp
+    diagramscenealinehandling.cpp \
+    diagramsave.cpp \
+    saveloadutils.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
@@ -41,7 +43,8 @@ HEADERS += mainwindow.h \
     arrowsegment.h \
     arrowpoint.h \
     moverange.h \
-    compare.h
+    compare.h \
+    saveloadutils.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc

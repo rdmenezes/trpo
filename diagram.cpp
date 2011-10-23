@@ -6,6 +6,13 @@
 #include "arrowpoint.h"
 #include "arrowsegment.h"
 
+bool Diagram::isCorrect()
+{
+    for (int i=0;i<DIAGRAM_MAX_BLOCKS;i++)
+        if (m_boxes[i]) return true;
+    return false;
+}
+
 Diagram::Diagram()
 {
     m_parent=ParentLocation(-1,-1);

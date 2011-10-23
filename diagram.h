@@ -23,6 +23,11 @@ class ArrowPoint;
 class ArrowSegment;
 //A set of diagram
 class DiagramSet;
+//Dom element
+class QDomElement;
+//Dom document
+class QDomDocument;
+
 /*! Declares a location of parent block
  */
 class ParentLocation: public QPair<int,int>
@@ -300,9 +305,17 @@ public:
             \param[in] pts points
          */
         bool canBePlacedAroundPoints(const QRectF & rect, const QVector<ArrowPoint *> pts);
+        /*! Tests, whether diagram is correct (has at least one block)
+         */
+        bool isCorrect();
         /*! Clears a diagram
          */
         void clear();
+        /*! Saves a diagram
+            \param[in] doc document
+            \param[in] sete set
+         */
+        void save(QDomDocument * doc,QDomElement * sete);
         /*! Destructor
          */
         ~Diagram();

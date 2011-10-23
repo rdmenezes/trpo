@@ -12,7 +12,7 @@
 #include <QGraphicsProxyWidget>
 #include <QFontMetricsF>
 #include <QApplication>
-
+#include <QMessageBox>
 //Unit-tests for arrow joining
 //#define MERGE_TEST_1
 //#define MERGE_TEST_2
@@ -259,6 +259,11 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
       HelpWindow d;
       d.exec();
       handled=true;
+  }
+  if (event->key()==Qt::Key_F5)
+  {
+      if (! (this->save("tmp.xml")))
+      { QMessageBox::critical(NULL,"Can't save file","Can't save to \"tmp.xml\"");}
   }
   if (event->key()==Qt::Key_F3)
   {
