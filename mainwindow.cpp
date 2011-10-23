@@ -3,6 +3,9 @@
 #include "ui_mainwindow.h"
 #include <QGraphicsView>
 #include "diagramscene.h"
+#include <QMessageBox>
+#include <QFileDialog>
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -28,6 +31,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ,view->contentsRect().height()-ui->menuBar->height()
     );
     scene->setView(view);
+    
+    path = 0;
 }
 
 MainWindow::~MainWindow() {
@@ -53,6 +58,18 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         showHelp();
         handled=true;
     }
+    else if (event->key() == Qt::Key_O && event->modifiers() == Qt::ControlModifier) {
+        this->open();
+    }
+    else if (event->key() == Qt::Key_S && event->modifiers() == Qt::ControlModifier) {
+        this->save();
+    }
+    else if (event->key() == Qt::Key_S && event->modifiers() == Qt::ControlModifier | Qt::ShiftModifier) {
+        this->saveAs();
+    }
+    else if (event->key() == Qt::Key_E && event->modifiers() == Qt::ControlModifier) {
+        this->exportDiagram();
+    }
     if (!handled)
         this->QMainWindow::keyPressEvent(event);
 }
@@ -63,4 +80,55 @@ void MainWindow::showHelp() {
    d.exec();
 }
 
+void MainWindow::open() {
+    
+    QString temp = QFileDialog::getOpenFileName();
+    if (!temp.isEmpty()) {
+        *path = temp;
+        
+        QGraphicsView *view = (QGraphicsView *)this->centralWidget();
+        DiagramScene *scene = (DiagramScene *)view->scene();
+        
+        if (!scene->load(*path)) {
+            QMessageBox(QMessageBox::Warning, QString("Error"), QString("Can't open file."));
+        }
+    }
+}
 
+void MainWindow::save() {
+    
+    if (path == 0) {
+        this->saveAs();
+    }
+    else {
+        QGraphicsView *view = (QGraphicsView *)this->centralWidget();
+        DiagramScene *scene = (DiagramScene *)view->scene();
+        
+        if (!scene->save(*path)) {
+            QMessageBox(QMessageBox::Warning, QString("Error"), QString("Can't save file."));
+        }
+    }
+}
+
+void MainWindow::saveAs() {
+    
+    QString temp = QFileDialog::getSaveFileName();
+    if (!temp.isEmpty()) {
+        *path = temp;
+        this->save();
+    }
+}
+
+void MainWindow::exportDiagram() {
+    
+    QString temp = QFileDialog::getSaveFileName();
+    if (!temp.isEmpty()) {
+        
+        QGraphicsView *view = (QGraphicsView *)this->centralWidget();
+        DiagramScene *scene = (DiagramScene *)view->scene();
+        
+        if (!scene->exportTo(temp)) {
+            QMessageBox(QMessageBox::Warning, QString("Error"), QString("Can't export diagram."));
+        }
+    }
+}
