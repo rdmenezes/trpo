@@ -57,14 +57,13 @@ bool DiagramScene::exportTo(const QString & filename)
 {
   //Данное действие необходимо выполнить, т.к. иначе на картинке останутся виджеты
   this->hideUI();
-  //(void)filename;
-  //return rand()<RAND_MAX/2;
-  
-  QImage image(this->width(), this->height(), QImage::Format_ARGB32_Premultiplied);
-  //image.fill(NULL); сцена прозрачная?
+  QImage image(this->width(), this->height(),QImage::Format_ARGB32);
+
+  image.fill(0xFFFFFFFF);
+
   QPainter painter(&image);
   this->render(&painter);
 
-  bool isSaved= image.save(&filename, "png");
+  bool isSaved= image.save(filename, "png");
   return isSaved;
 }
