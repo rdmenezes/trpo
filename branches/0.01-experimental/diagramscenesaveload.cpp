@@ -65,6 +65,6 @@ bool DiagramScene::exportTo(const QString & filename)
   QPainter painter(&image);
   this->render(&painter);
 
-  bool isSaved= image.save(&filename, "png");}
+  bool isSaved= image.save(&filename, "png");
   return isSaved;
 }
