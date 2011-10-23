@@ -2,7 +2,8 @@
 # Project created by QtCreator 2011-09-19T16:07:38
 # -------------------------------------------------
 QT += core \
-    gui
+    gui    \
+	xml
 TARGET = TRPO
 TEMPLATE = app
 SOURCES += main.cpp \

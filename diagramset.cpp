@@ -5,6 +5,7 @@ DiagramSet::DiagramSet()
     m_max_id=1;
     m_set.insert(0,new Diagram());
     m_set[0]->setID(0);
+    m_set[0]->setDiagramSet(this);
 }
 
 int DiagramSet::create(
