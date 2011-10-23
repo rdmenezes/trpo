@@ -57,6 +57,20 @@ bool DiagramScene::exportTo(const QString & filename)
 {
   //Данное действие необходимо выполнить, т.к. иначе на картинке останутся виджеты
   this->hideUI();
-  (void)filename;
-  return rand()<RAND_MAX/2;
+  //(void)filename;
+  //return rand()<RAND_MAX/2;
+  
+  QImage image(scene->width(), scene->height(), QImage::Format_ARGB32_Premultiplied);
+  image.fill(NULL);
+  QPainter painter(&image);
+  scene->render(&painter);
+
+  QFile file(filename);
+  if (!file.open(QIODevice::WriteOnly)) {
+      QMessageBox::information(this, tr("Unable to open file"),
+                               file.errorString());
+      return;
+      }
+  bool isSaved= image.save(&filename, "png");}
+  return isSaved;
 }
