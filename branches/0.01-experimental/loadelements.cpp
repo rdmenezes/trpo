@@ -101,7 +101,17 @@ void loadAnnotationLine(QDomElement * el,DiagramLoadData *  data)
 
 void loadAnnotationLabel(QDomElement * el,DiagramLoadData * data)
 {
-
+   QString name;
+   QRectF   rect;
+   QDomNamedNodeMap map=el->attributes();
+   if (map.contains("string"))
+       name=stringXMLToString(getAttr(map,"string"));
+   if (map.contains("rect"))
+       rect=stringToRectf(getAttr(map,"rect"));
+   ALabelItem * label=new ALabelItem();
+   label->string()=name;
+   label->rect()=rect;
+   data->diagram->annotationLabels()<<label;
 }
 
 void loadSegment(QDomElement * el,DiagramLoadData * data)
