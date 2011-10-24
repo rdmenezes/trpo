@@ -94,6 +94,8 @@ private:
     QPointF                  m_aline_firstpoint;   //!< Annotation line first point
     //Arguments for resizing annotation line
     ALineItem           *    m_resizing_aline;     //!< Resizing annotation line
+
+    void annnotationLabelMoveLeave(const QPointF & pos);
     /*! Enters into annotation line resizing state
         \param[in] pos position
         \param[in] item item, that is being analyzed

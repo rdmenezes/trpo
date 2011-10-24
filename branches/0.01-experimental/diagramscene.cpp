@@ -612,10 +612,32 @@ void resizeUpper(QRectF & oldrect, QPointF & pos)
 }
 
 
+void DiagramScene::annnotationLabelMoveLeave(const QPointF & pos)
+{
+ QRectF oldrect=m_moving_label->boundingRect();
+ qreal x=pos.x()-m_blockmovingparams[0]*oldrect.width();
+ qreal y=pos.y()-m_blockmovingparams[1]*oldrect.height();
+ if (x<0) x=0;
+ if (y<0) y=0;
+ if (x+oldrect.width()>this->width()) x=this->width()-oldrect.width();
+ if (y+oldrect.height()>this->height()) y=this->height()-oldrect.height();
+ QRectF newrect(x,y,oldrect.width(),oldrect.height());
+ bool can_placed=m_diag->canBePlaced(newrect,m_moving_label);
+ if(can_placed)
+ {
+  m_moving_label->setRect(newrect);
+  this->update();
+ }
+ m_dragstate=DS_NONE;
+ m_moving_label=NULL;
+}
+
 void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (m_tooltype==TT_SELECT && (m_dragstate==DS_BLOCK_MOVE || m_dragstate==DS_BLOCK_RESIZE))
         blockResizeMoveLeave(event);
+    if (m_tooltype==TT_SELECT && m_dragstate==DS_ALABEL_MOVE)
+        annnotationLabelMoveLeave(event->scenePos());
     if (m_tooltype==TT_SELECT  && m_dragstate==DS_ARROW_MOVE)
         arrowMoveLeave(event->scenePos());
     if (m_tooltype==TT_SELECT && m_dragstate==DS_ALINE_RESIZE)
@@ -675,25 +697,6 @@ void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
        m_dragstate=DS_NONE;
        m_draggingblock=NULL;
        m_resizingblockcorner=BC_LOWERLEFT;
-    }
-    if (m_dragstate==DS_ALABEL_MOVE)
-    {
-        QRectF oldrect=m_moving_label->boundingRect();
-        qreal x=pos.x()-m_blockmovingparams[0]*oldrect.width();
-        qreal y=pos.y()-m_blockmovingparams[1]*oldrect.height();
-        if (x<0) x=0;
-        if (y<0) y=0;
-        if (x+oldrect.width()>this->width()) x=this->width()-oldrect.width();
-        if (y+oldrect.height()>this->height()) y=this->height()-oldrect.height();
-        QRectF newrect(x,y,oldrect.width(),oldrect.height());
-        bool can_placed=m_diag->canBePlaced(newrect,m_moving_label);
-        if(can_placed)
-        {
-           m_moving_label->setRect(newrect);
-           this->update();
-        }
-        m_dragstate=DS_NONE;
-        m_moving_label=NULL;
     }
 }
 
