@@ -62,15 +62,27 @@ inline ParentLocation stringToLocation( const QString & s)
  */
 inline QString ptrToString(void * ptr)
 {
-    return QString::number(reinterpret_cast<int>(ptr),16);
+    union
+    {
+        void * p;
+        int    i;
+    }  u;
+    u.p=ptr;
+    return QString::number(u.i,16);
 }
 
 /*! Converts a string to pointer
  */
 inline void * stringToPtr(const QString & s)
 {
+    union
+    {
+        void * p;
+        int    i;
+    }  u;
     bool ok=true;
-    return reinterpret_cast<void *>(s.toInt(&ok,16));
+    u.i=s.toInt(&ok,16);
+    return u.p;
 }
 /*! Preprocesses a string for addition to XML
  */
