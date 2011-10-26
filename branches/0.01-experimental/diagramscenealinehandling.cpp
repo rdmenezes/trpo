@@ -121,6 +121,8 @@ void DiagramScene::leaveAnnotationLineResize(const QPointF & pos)
       m_resizing_aline->end()->setY(newpos.y());
       this->update();
   }
+  m_dragstate=DS_NONE;
+  m_resizing_aline=NULL;
 }
 
 void DiagramScene::removeAnnotationLine(ALineItem * line)
