@@ -1,4 +1,4 @@
-#summary Замечания к плану работ 26.10.11-9.10.11
+#summary Замечания к плану работ 26.10.11-9.11.11
 #labels Phase-Support,Phase-Requirements
 
 = Введение =
