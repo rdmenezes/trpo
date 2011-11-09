@@ -9,6 +9,7 @@
 #include <QPointF>
 #include <QVector>
 #include "moverange.h"
+#include "arrowsegment.h"
 //A diagram, where it's placed
 class Diagram;
 //An arrow segment, where data is placed
