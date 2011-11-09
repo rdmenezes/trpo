@@ -41,6 +41,16 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 MainWindow::~MainWindow() {
+
+    QMessageBox *messageBox = new QMessageBox(QMessageBox::Question,
+                                                QString(""),
+                                                QString("Do you want to save the changes you made?"),
+                                                QMessageBox::Save | QMessageBox::Discard, this);
+
+    if (messageBox->exec() == QMessageBox::Save) {
+        this->save();
+    }
+
     delete ui;
     delete m_set;
     delete path;
