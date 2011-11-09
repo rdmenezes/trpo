@@ -12,6 +12,7 @@
 #include "tooltype.h"
 #include "diagram.h"
 #include "boxitem.h"
+#include "arrowsegment.h"
 //Defines a default block space
 #define BLOCK_SPACE_Y 3
 //Defines a block space x
