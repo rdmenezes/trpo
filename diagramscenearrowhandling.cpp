@@ -517,8 +517,7 @@ void DiagramScene::arrowMoveLeave(const QPointF &pos)
      }
      else
      {
-         delete tmp1;
-         delete tmp2;
+
      }
  }
  m_dragstate=DS_NONE;
