@@ -28,7 +28,10 @@ SOURCES += main.cpp \
     diagramsave.cpp \
     saveloadutils.cpp \
     diagramload.cpp \
-    loadelements.cpp
+    loadelements.cpp \
+    tool.cpp \
+    change.cpp \
+    collisionobject.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
@@ -47,7 +50,10 @@ HEADERS += mainwindow.h \
     moverange.h \
     compare.h \
     saveloadutils.h \
-    loadelements.h
+    loadelements.h \
+    tool.h \
+    change.h \
+    collisionobject.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc
