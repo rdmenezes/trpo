@@ -32,7 +32,9 @@ SOURCES += main.cpp \
     tool.cpp \
     change.cpp \
     collisionobject.cpp \
-    tooldelegate.cpp
+    tooldelegate.cpp \
+    serializable.cpp \
+    diagramobject.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
@@ -55,7 +57,9 @@ HEADERS += mainwindow.h \
     tool.h \
     change.h \
     collisionobject.h \
-    tooldelegate.h
+    tooldelegate.h \
+    serializable.h \
+    diagramobject.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc

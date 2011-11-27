@@ -4,7 +4,26 @@ CollisionObject::~CollisionObject()
 {
 }
 
-ShapeType RectangularCollisionObject::collisionShape() const     { return ST_RECTANGLE; }
-ShapeType LinearCollisionObject     ::collisionShape() const     { return ST_LINE; }
-ShapeType ComplexCollisionObject    ::collisionShape() const     { return ST_COMPLEX; }
+const QRectF & CollisionObject::collisionRect() const
+{
+    throw CollisionDataNotSpecified();
+    return *(new QRectF());
+}
 
+const QLineF & CollisionObject::collisionLine() const
+{
+    throw CollisionDataNotSpecified();
+    return *(new QLineF());
+}
+
+CollisionObject * CollisionObject::firstObject()
+{
+    throw CollisionDataNotSpecified();
+    return NULL;
+}
+
+CollisionObject * CollisionObject::nextObject()
+{
+    throw CollisionDataNotSpecified();
+    return NULL;
+}
