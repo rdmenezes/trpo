@@ -8,19 +8,33 @@
 #include <QMainWindow>
 #include <QKeyEvent>
 #include "diagramset.h"
+
+
 //User interface
 namespace Ui {
     class MainWindow;
 }
+
+class ToolSceneData;
+
 /*! Class of main window of project
  */
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
+
+private:
+      /*! A tool items in table
+       */
+      QVector<ToolSceneData *>  m_tool_table_items;
 public:
     /*! Creates a new windoe
      */
     explicit MainWindow(QWidget *parent = 0);
+    /*! Selects a tool by data
+        \param[in] tool data
+     */
+    void selectTool(ToolSceneData * toolData);
     /*! Destructor
      */
     ~MainWindow();

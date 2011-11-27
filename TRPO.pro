@@ -31,7 +31,8 @@ SOURCES += main.cpp \
     loadelements.cpp \
     tool.cpp \
     change.cpp \
-    collisionobject.cpp
+    collisionobject.cpp \
+    tooldelegate.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
@@ -53,7 +54,8 @@ HEADERS += mainwindow.h \
     loadelements.h \
     tool.h \
     change.h \
-    collisionobject.h
+    collisionobject.h \
+    tooldelegate.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc
