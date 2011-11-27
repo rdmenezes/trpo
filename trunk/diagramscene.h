@@ -13,6 +13,10 @@
 #include "diagram.h"
 #include "boxitem.h"
 #include "arrowsegment.h"
+
+
+#include "tool.h"
+
 //Defines a default block space
 #define BLOCK_SPACE_Y 3
 //Defines a block space x
@@ -70,11 +74,14 @@ class DiagramScene : public QGraphicsScene
 {
 Q_OBJECT
 private:
+    Tool                 *   m_tool;               //!< Current tool
+    Diagram              *   m_diag;               //!< Diagram data
+
+
     QGraphicsView *          m_view;               //!< View widget pointer for data
     ToolType                 m_tooltype;           //!< Selected type of tool
     ToolPanel            *   m_panel;              //!< A pointer to panel
     QGraphicsProxyWidget *   m_panel_in_scene;     //!< A pointer to panel
-    Diagram              *   m_diag;               //!< Diagram data
     QRectF                   m_default_block_size; //!< Default block size tool
     QRectF                   m_default_number_size; //!< Default number size for block
     TextEditState            m_edit_state;         //!< Text edit state
@@ -326,6 +333,10 @@ public:
     /*! Clears a scene, removing all objects, and setting state variables to beginning
      */
     void clear();
+
+    /*! Sets a new tool for data
+     */
+    inline void setTool(Tool * tool)  { m_tool=tool; m_tool->setDiagramData(this,m_diag); }
 signals:
 
 public slots:

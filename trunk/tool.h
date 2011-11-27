@@ -28,6 +28,7 @@ public:
          */
         inline void  setDiagramData(DiagramScene * scene, Diagram * diagram)
         {
+            if (!this) return;
              m_scene=scene;
              m_diagram=diagram;
         }

@@ -5,7 +5,11 @@
 #include "diagramscene.h"
 #include <QMessageBox>
 #include <QFileDialog>
+#include "tooldelegate.h"
+#include <QStandardItemModel>
 
+#define VIEW_WIDTH_X 102
+#define VIEW_WIDTH_Y 102
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -21,17 +25,57 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Setup splitter
     QList<int> sizes;
-    sizes<<750<<150;
+    sizes<<696<<204;
     ui->sptItems->setSizes(sizes);
 
     //Setup graphic interface
     DiagramScene * scene=new DiagramScene(m_set->get(0));
     ui->view->setScene(scene);
-    scene->setSceneRect(0,0,ui->view->viewport()->width(),
-                            ui->view->viewport()->height());
+    scene->setSceneRect(0,0,ui->view->width()-2,
+                            ui->view->height()-2);
     scene->setView(ui->view);
 
 
+    //Setup delegates table
+
+    QVector<Tool *> tool_ptrs;
+    tool_ptrs<<NULL; // 0
+    tool_ptrs<<NULL; // 1
+    tool_ptrs<<NULL; // 2
+    tool_ptrs<<NULL; // 3
+    tool_ptrs<<NULL; // 4
+    tool_ptrs<<NULL; // 5
+    QVector<QGraphicsView *> views;
+    for (int row=0;row<3;row++)
+    {
+        for (int col=0;col<2;col++)
+        {
+            //Create name of node
+            QString name(":/");
+            name+=QString::number(row*2+col+1);
+            name+=".png";
+            //Create a view
+            QGraphicsView * editor=new QGraphicsView(this);
+            editor->setFixedSize(VIEW_WIDTH_X,VIEW_WIDTH_Y);
+            ToolScene  * scene=new ToolScene();
+            ToolSceneData * data=new ToolSceneData(new QImage(name),
+                                                   this,
+                                                   tool_ptrs[row*2+col]
+                                                  );
+            m_tool_table_items<<data;
+            ui->toolBox->addWidget(editor,row,col);
+            editor->setScene(scene);
+            views<<editor;
+        }
+    }
+    for (int i=0;i<views.size();i++)
+    {
+        views[i]->scene()->setSceneRect(0,0,
+                                        views[i]->width()-2,
+                                        views[i]->height()-2);
+        static_cast<ToolScene*>(views[i]->scene())->setData(m_tool_table_items[i]);
+    }
+    static_cast<ToolScene*>(views[2]->scene())->select();
     //Set some signals
     connect(ui->actionSave,SIGNAL(triggered()),this,SLOT(save()));
     connect(ui->actionSave_as,SIGNAL(triggered()),this,SLOT(saveAs()));
@@ -155,4 +199,12 @@ void MainWindow::exportDiagram() {
             QMessageBox::warning(NULL, QString("Error"), QString("Can't export diagram."));
         }
     }
+}
+
+
+void MainWindow::selectTool(ToolSceneData * toolData)
+{
+ for (int i=0;i<m_tool_table_items.size();i++)
+  m_tool_table_items[i]->deselect();
+ static_cast<DiagramScene *>(ui->view->scene())->setTool(toolData->tool());
 }
