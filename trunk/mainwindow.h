@@ -27,6 +27,9 @@ private:
       /*! A tool items in table
        */
       QVector<ToolSceneData *>  m_tool_table_items;
+      /*! Path for object
+       */
+      QString * m_path;
 public:
     /*! Creates a new windoe
      */
@@ -49,7 +52,7 @@ protected:
      */
     void keyPressEvent(QKeyEvent *event);
     
-    QString *path;
+
     
 protected slots:
     void open();

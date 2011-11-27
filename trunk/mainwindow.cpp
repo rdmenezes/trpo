@@ -82,7 +82,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionOpen,SIGNAL(triggered()),this,SLOT(open()));
     connect(ui->actionExport_to_PNF_Ctrl_E,SIGNAL(triggered()),this,SLOT(exportDiagram()));
     connect(ui->actionShow_Help_F1,SIGNAL(triggered()),this,SLOT(showHelp()));
-    path = NULL;
+    m_path = NULL;
 }
 
 MainWindow::~MainWindow() {
@@ -99,7 +99,7 @@ MainWindow::~MainWindow() {
     */
     delete ui;
     delete m_set;
-    delete path;
+    delete m_path;
 }
 
 void MainWindow::changeEvent(QEvent *e) {
@@ -150,13 +150,13 @@ void MainWindow::open() {
     
     QString temp = QFileDialog::getOpenFileName();
     if (!temp.isEmpty()) {
-        if (path) delete path;
-        path = new QString(temp);
+        if (m_path) delete m_path;
+        m_path = new QString(temp);
         
         QGraphicsView *view = ui->view;
         DiagramScene *scene = (DiagramScene *)view->scene();
         
-        if (!(scene->load(*path))) {
+        if (!(scene->load(*m_path))) {
             QMessageBox::warning(NULL, QString("Error"), QString("Can't open file."));
         }
     }
@@ -164,13 +164,13 @@ void MainWindow::open() {
 
 void MainWindow::save() {
     
-    if (path == 0) {
+    if (m_path == 0) {
         this->saveAs();
     }
     else {
         QGraphicsView *view = ui->view;
         DiagramScene *scene = (DiagramScene *)view->scene();
-        bool success=scene->save(*path);
+        bool success=scene->save(*m_path);
         if (!success) {
             QMessageBox::warning(NULL, QString("Error"), QString("Can't save file."));
         }
@@ -181,8 +181,8 @@ void MainWindow::saveAs() {
     
     QString temp = QFileDialog::getSaveFileName();
     if (!temp.isEmpty()) {
-        if (path) delete path;
-        path = new QString(temp);
+        if (m_path) delete m_path;
+        m_path = new QString(temp);
         this->save();
     }
 }

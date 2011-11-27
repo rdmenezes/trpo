@@ -14,7 +14,8 @@ enum  ShapeType
 {
   ST_RECTANGLE,
   ST_LINE,
-  ST_COMPLEX
+  ST_COMPLEX,
+  ST_NONE
 };
 
 /*! Exception, which is thrown if attempted to work with
