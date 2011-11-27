@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+
     //Creates a diaram set
     m_set=new DiagramSet();
     //Setup UI
@@ -18,19 +19,19 @@ MainWindow::MainWindow(QWidget *parent) :
     //Set window Title
     this->setWindowTitle("IDEF0 Diagram Editor");
 
+    //Setup splitter
+    QList<int> sizes;
+    sizes<<750<<150;
+    ui->sptItems->setSizes(sizes);
+
     //Setup graphic interface
     DiagramScene * scene=new DiagramScene(m_set->get(0));
-    QGraphicsView * view=new QGraphicsView(scene,this);
-    view->setGeometry(0,0,
-                      this->contentsRect().width(),
-                      this->contentsRect().height()
-                      -ui->menuBar->height()
-                      );
-    this->setCentralWidget(view);
-    scene->setSceneRect(0,0,view->contentsRect().width()
-    ,view->contentsRect().height()-ui->menuBar->height()
-    );
-    scene->setView(view);
+    ui->view->setScene(scene);
+    scene->setSceneRect(0,0,ui->view->viewport()->width(),
+                            ui->view->viewport()->height());
+    scene->setView(ui->view);
+
+
     //Set some signals
     connect(ui->actionSave,SIGNAL(triggered()),this,SLOT(save()));
     connect(ui->actionSave_as,SIGNAL(triggered()),this,SLOT(saveAs()));
@@ -41,7 +42,8 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 MainWindow::~MainWindow() {
-
+    /** TODO: It must be performed if diagram is not empty,
+              not fucking every time!
     QMessageBox *messageBox = new QMessageBox(QMessageBox::Question,
                                                 QString(""),
                                                 QString("Do you want to save the changes you made?"),
@@ -50,7 +52,7 @@ MainWindow::~MainWindow() {
     if (messageBox->exec() == QMessageBox::Save) {
         this->save();
     }
-
+    */
     delete ui;
     delete m_set;
     delete path;
@@ -107,7 +109,7 @@ void MainWindow::open() {
         if (path) delete path;
         path = new QString(temp);
         
-        QGraphicsView *view = (QGraphicsView *)this->centralWidget();
+        QGraphicsView *view = ui->view;
         DiagramScene *scene = (DiagramScene *)view->scene();
         
         if (!(scene->load(*path))) {
@@ -122,7 +124,7 @@ void MainWindow::save() {
         this->saveAs();
     }
     else {
-        QGraphicsView *view = (QGraphicsView *)this->centralWidget();
+        QGraphicsView *view = ui->view;
         DiagramScene *scene = (DiagramScene *)view->scene();
         bool success=scene->save(*path);
         if (!success) {
@@ -146,7 +148,7 @@ void MainWindow::exportDiagram() {
     QString temp = QFileDialog::getSaveFileName();
     if (!temp.isEmpty()) {
         
-        QGraphicsView *view = (QGraphicsView *)this->centralWidget();
+        QGraphicsView *view =  ui->view;
         DiagramScene *scene = (DiagramScene *)view->scene();
         
         if (!(scene->exportTo(temp))) {
