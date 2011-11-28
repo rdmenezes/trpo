@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent,
     scene->setSceneRect(0,0,ui->view->width()-2,
                             ui->view->height()-2);
     scene->setView(ui->view);
-
+ui->view->setMouseTracking(true);
 
     //Setup delegates table
 
