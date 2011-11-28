@@ -235,9 +235,9 @@ void DiagramScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
 
 QPointF pointTmp=event->scenePos();
-double x1 = pointTmp.rx();
-double y1 = pointTmp.ry();
-y1=y1*-1;
+double x1 = pointTmp.x();
+double y1 = pointTmp.y();
+
 QString   textX;
 textX.setNum(x1);
 QString   textY;
