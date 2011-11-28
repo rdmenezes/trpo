@@ -12,9 +12,7 @@
 bool DiagramScene::save(const QString & filename)
 {
   QDomDocument  doc("IDEFML");
-  if (!(this->diagram()->set()->areDiagramsCorrect()))
-      return false;
-  this->diagram()->set()->save(&doc);
+  //this->diagram()->set()->save(&doc);
   QFile file(filename);
   if (!file.open(QIODevice::WriteOnly))
       return false;
@@ -39,6 +37,7 @@ bool DiagramScene::load(const QString & filename)
   if (root.tagName()!="set")
       return false;
   this->clear();
+  /*!< TODO: Replace with good code
   this->diagram()->set()->load(&root);
   for (int i=0;i<DIAGRAM_MAX_BLOCKS;i++)
       if (this->diagram()->getBlockByID(i))
@@ -50,6 +49,7 @@ bool DiagramScene::load(const QString & filename)
   for (int i=0;i<diagram()->arrowSegments().size();i++)
       this->addItem(this->diagram()->arrowSegments()[i]);
   this->update();
+  */
   return true;
 }
 

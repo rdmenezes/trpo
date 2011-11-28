@@ -7,17 +7,29 @@
 #include <QFileDialog>
 #include "tooldelegate.h"
 #include <QStandardItemModel>
+#include "diagram.h"
 
 #define VIEW_WIDTH_X 102
 #define VIEW_WIDTH_Y 102
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QWidget *parent,
+                       DiagramSet * set,
+                       const DiagramParent & p) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
 
-    //Creates a diaram set
-    m_set=new DiagramSet();
+    //Creates a diagram set
+    if (!set)
+    {
+     m_set=new DiagramSet();
+     m_own=true;
+    }
+    else
+    {
+     m_set=set;
+     m_own=false;
+    }
     //Setup UI
     ui->setupUi(this);
     //Set window Title
@@ -29,7 +41,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->sptItems->setSizes(sizes);
 
     //Setup graphic interface
-    DiagramScene * scene=new DiagramScene(m_set->get(0));
+    Diagram * diag=m_set->create(p);
+    DiagramScene * scene=new DiagramScene(diag);
+    diag->bind(scene,m_set);
     ui->view->setScene(scene);
     scene->setSceneRect(0,0,ui->view->width()-2,
                             ui->view->height()-2);
@@ -98,7 +112,8 @@ MainWindow::~MainWindow() {
     }
     */
     delete ui;
-    delete m_set;
+    if (m_own)
+         delete m_set;
     delete m_path;
 }
 
@@ -204,7 +219,9 @@ void MainWindow::exportDiagram() {
 
 void MainWindow::selectTool(ToolSceneData * toolData)
 {
+
  for (int i=0;i<m_tool_table_items.size();i++)
   m_tool_table_items[i]->deselect();
  static_cast<DiagramScene *>(ui->view->scene())->setTool(toolData->tool());
 }
+

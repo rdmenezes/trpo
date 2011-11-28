@@ -9,15 +9,8 @@
 #include <QDomDocument>
 #include <QDomElement>
 
-bool DiagramSet::areDiagramsCorrect()
-{
-  bool ok=true;
-  QHash<int,Diagram *>::iterator it=m_set.begin();
-  for(;it!=m_set.end();it++)
-      ok=ok && it.value()->isCorrect();
-  return ok;
-}
 
+/*
 void DiagramSet::save(QDomDocument *doc)
 {
   QDomElement set=doc->createElement("set");
@@ -27,18 +20,19 @@ void DiagramSet::save(QDomDocument *doc)
       it.value()->save(doc,&set);
   doc->appendChild(set);
 }
+*/
 /*! Handles empty block
     \param[in] doc document
     \param[in] diag diagram
     \param[in] id   id diagram
  */
 void handleEmptyBlock(QDomDocument * doc,QDomElement * diag,int id);
-
+/*! TODO: Reimplement
 void Diagram::save(QDomDocument * doc,QDomElement * sete)
 {
   QDomElement diag=doc->createElement("diagram");
-  diag.setAttribute("id",intToString(this->getID()));
-  diag.setAttribute("location",locationToString(m_parent));
+  //diag.setAttribute("id",intToString(this->getID()));
+  //diag.setAttribute("location",locationToString(m_parent));
   //Here must be placed actions of appending each element
   for (int i=0;i<DIAGRAM_MAX_BLOCKS;i++)
   {
@@ -57,7 +51,7 @@ void Diagram::save(QDomDocument * doc,QDomElement * sete)
       m_arrow_points[i]->save(doc,&diag);
   sete->appendChild(diag);
 }
-
+*/
 void handleEmptyBlock(QDomDocument * doc,QDomElement * diag,int id)
 {
   QDomElement block=doc->createElement("block");

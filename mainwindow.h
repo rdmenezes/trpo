@@ -8,7 +8,7 @@
 #include <QMainWindow>
 #include <QKeyEvent>
 #include "diagramset.h"
-
+#include "diagram.h"
 
 //User interface
 namespace Ui {
@@ -30,14 +30,28 @@ private:
       /*! Path for object
        */
       QString * m_path;
+      /*! Diagram data
+       */
+      DiagramSet * m_set;
+      /*! Whether we should delete an objects
+       */
+      bool      m_own;
 public:
-    /*! Creates a new windoe
+    /*! Creates a new window
+        \param[in] parent object
      */
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = 0,
+                        DiagramSet * set = 0,
+                        const DiagramParent & p=DiagramParent());
     /*! Selects a tool by data
         \param[in] tool data
      */
     void selectTool(ToolSceneData * toolData);
+
+    /*! Changes a set of data
+        \param[in] set of data
+     */
+    void changeSet(DiagramSet * set);
     /*! Destructor
      */
     ~MainWindow();
@@ -63,7 +77,6 @@ protected slots:
      */
     void showHelp();
 private:
-    DiagramSet *   m_set; //!< Set of diagrams
     Ui::MainWindow *ui;  //!< UI
 };
 

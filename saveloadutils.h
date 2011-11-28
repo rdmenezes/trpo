@@ -39,8 +39,9 @@ inline double stringToDouble(const QString & s)
     return s.toDouble(&ok);
 }
 /*! Converts parent location to string
+    \param[in] loc location
  */
-inline QString locationToString( ParentLocation & loc)
+inline QString locationToString( DiagramParent & loc)
 {
     QString result=QString::number(loc.diagramID(),10);
     result+=";";
@@ -50,12 +51,12 @@ inline QString locationToString( ParentLocation & loc)
 
 /*! Converts parent location to string
  */
-inline ParentLocation stringToLocation( const QString & s)
+inline DiagramParent stringToLocation( const QString & s)
 {
     QStringList lst=s.split(";");
-    if (lst.size()!=2) return ParentLocation();
+    if (lst.size()!=2) return DiagramParent();
     bool ok=true;
-    return ParentLocation(lst[0].toInt(&ok,10),lst[1].toInt(&ok,10));
+    return DiagramParent(lst[0].toInt(&ok,10),lst[1].toInt(&ok,10));
 }
 
 /*! Converts a pointer to string
