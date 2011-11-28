@@ -10,7 +10,7 @@
 
 
 
-
+/*! TODO: Replace it with properly written code
 void DiagramSet::load(QDomElement * e)
 {
  QDomNamedNodeMap attrs=e->attributes();
@@ -38,9 +38,9 @@ void DiagramSet::load(QDomElement * e)
    n=n.nextSibling();
  }
 }
+*/
 
-
-
+/*! TODO: Reimplement
 void Diagram::load(QDomElement * e,DiagramSet * parent)
 {
   m_set=parent;
@@ -79,7 +79,7 @@ void Diagram::load(QDomElement * e,DiagramSet * parent)
   correctItems(data);
   delete data;
 }
-
+*/
 
 void correctItems(DiagramLoadData * data)
 {

@@ -241,6 +241,15 @@ public:
         \param[in] parent not used
      */
     explicit DiagramScene(Diagram * d,QObject *parent = 0);
+    /*! Returns a default binded view
+        \return view
+     */
+    QGraphicsView * view() const { return views()[0]; }
+    /*! Sets a diagram
+        \param[in] d  diagram
+     */
+    inline void setDiagram(Diagram * d) { m_diag=d; }
+
     /*! Event, that occures when mouse is being pressed
         \param[in] ev event
      */

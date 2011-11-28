@@ -2,27 +2,78 @@
 
 DiagramSet::DiagramSet()
 {
-    m_max_id=1;
-    m_set.insert(0,new Diagram());
-    m_set[0]->setID(0);
-    m_set[0]->setDiagramSet(this);
+    m_max_id=0;
 }
 
-int DiagramSet::create(
-       const ParentLocation & loc
-                      )
+Diagram * DiagramSet::create(
+                             const DiagramParent & l
+                            )
 {
-  m_set.insert(m_max_id,
-               new Diagram(loc));
-  m_set[m_max_id]->setID(m_max_id);
-  return m_max_id++;
+  Diagram * n=new Diagram(l);
+  m_set.insert(m_max_id++,n);
+  return  n;
 }
 
 
 Diagram * DiagramSet::get(int id)
 {
- Q_ASSERT( m_set.contains(id) );
+ if ( ! m_set.contains(id) ) return NULL;
  return m_set[id];
+}
+
+
+bool DiagramSet::empty() const
+{
+    bool fempty=true;
+    for(QHash<int,Diagram *>::const_iterator it=m_set.begin();
+        it!=m_set.end();
+        ++it
+       )
+       fempty= fempty && it.value()->empty();
+    return fempty;
+}
+
+int  DiagramSet::find(const Diagram * d) const
+{
+  for(QHash<int,Diagram *>::const_iterator it=m_set.begin();
+      it!=m_set.end();
+      ++it
+     )
+  {
+      bool cmp=it.value()==d;
+      if (cmp)
+          return it.key();
+  }
+  return -1;
+}
+
+void DiagramSet::remove(int id)
+{
+  if (m_set.contains(id))
+  {
+    Diagram * d=m_set[id];
+    delete  d;
+    m_set.remove(id);
+  }
+}
+
+
+void DiagramSet::save(QDomDocument * /* doc */,
+                      QDomElement *  /* element */)
+{
+    //!< TODO: Implement this later
+}
+
+void DiagramSet::load(QDomElement * /* element */,
+                      QMap<void *, Serializable *> & /* addressMap */ )
+{
+    //!< TODO: Implement this later
+}
+
+void DiagramSet::resolvePointers(QMap<void *, Serializable *> &
+                                 /* adressMap */)
+{
+    //!< TODO: Implement this later
 }
 
 DiagramSet::~DiagramSet()

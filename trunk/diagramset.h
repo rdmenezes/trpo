@@ -5,6 +5,7 @@
 */
 #include <QHash>
 #include "diagram.h"
+#include "serializable.h"
 #ifndef DIAGRAMSET_H
 #define DIAGRAMSET_H
 
@@ -13,7 +14,7 @@ class QDomDocument;
 /*! \class DiagramSet
     Describes a set of diagrams
  */
-class DiagramSet
+class DiagramSet: public Serializable
 {
 private:
     /*! Max diagrams in set
@@ -27,25 +28,45 @@ public:
      */
     DiagramSet();
     /*! Creates a new diagram with specified location
-        \param[in] loc location
-        \return diagram id
+        \param[in] l location
+        \return new diagram
      */
-    int create(const ParentLocation & loc);
+    Diagram * create(const DiagramParent & l);
     /*! Gets a diagram by id
         \param[in] id
         \return pointer to diagram
      */
     Diagram * get(int id);
-    /*! Saves itself to a document
-        \param[in] document to save to
+    /*! Returns diagram id by diagram
+        \param[in] diagram diagram data
+        \return id
      */
-    void save(QDomDocument * doc);
-    /*! Tests,whether diagrams are correct
+    int find(const Diagram * diagram) const;
+    /*! Removes a diagram from set
+        \param[in] id  diagram id
      */
-    bool areDiagramsCorrect();
-    /*! Loads an set of diagrams
+    void remove(int id);
+    /*! Tests, whether set is empty
      */
-    void load(QDomElement * e);
+    bool empty() const;
+
+    //Reimplemented from serializable
+    /*!  Saves a data to document
+         \param[in] doc     document data
+         \param[in] element parent element data
+     */
+    virtual  void save(QDomDocument * doc,QDomElement * element);
+    /*! Loads a default data from document populating address map
+        \param[in] element element data
+        \param[in] addressMap adressedMap
+     */
+    virtual  void load(QDomElement * element,
+                       QMap<void *, Serializable *> & addressMap);
+    /*! Resolves inner pointers, from stored in adress map
+        \param[in] addressMap map of addresses
+     */
+    virtual  void resolvePointers(QMap<void *, Serializable *> & adressMap);
+
     /*! Destructor
      */
     ~DiagramSet();

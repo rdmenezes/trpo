@@ -429,13 +429,13 @@ void DiagramScene::incrementBlockID(BoxItem * block)
  processChangeBlockID(block,previd,newid);
 }
 
-void DiagramScene::processChangeBlockID(BoxItem * block, char previd, char newid)
+void DiagramScene::processChangeBlockID(BoxItem * block, char /* previd */, char  newid)
 {
- m_diag->undoIfSwapped(block,previd);
+ //m_diag->undoIfSwapped(block,previd);
  if (m_diag->getBlockByID(newid))
  {
-        BoxItem * oldblock=m_diag->getBlockByID(newid);
-        m_diag->addNewSwap(oldblock,previd,block,newid);
+        //BoxItem * oldblock=m_diag->getBlockByID(newid);
+        //m_diag->addNewSwap(oldblock,previd,block,newid);
  }
  m_diag->setBlockID(block,newid);
 }

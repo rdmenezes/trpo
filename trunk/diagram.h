@@ -7,6 +7,8 @@
 #include <QVector>
 #include <QRectF>
 #include <time.h>
+#include "diagramobject.h"
+
 #ifndef DIAGRAM_H
 #define DIAGRAM_H
 //Graphics item
@@ -23,6 +25,8 @@ class ArrowPoint;
 class ArrowSegment;
 //A set of diagram
 class DiagramSet;
+//Diagram sce
+class DiagramScene;
 //Dom element
 class QDomElement;
 //Dom document
@@ -30,17 +34,17 @@ class QDomDocument;
 
 /*! Declares a location of parent block
  */
-class ParentLocation: public QPair<int,int>
+class DiagramParent: public QPair<int,int>
 {
   public:
            /*! Default constructor
             */
-           inline ParentLocation() {}
+           inline DiagramParent() { first=-1; second=-1; }
            /*! Creates  a new location
                 \param[in] diag diagram
                 \param[in] block block
             */
-           inline ParentLocation(int diag,int block)
+           inline DiagramParent(int diag,int block)
            {
                first=diag;
                second=block;
@@ -48,7 +52,7 @@ class ParentLocation: public QPair<int,int>
            /*! Copy constructor
                \param[in] o other
            */
-           inline ParentLocation(const ParentLocation & o)
+           inline DiagramParent(const DiagramParent & o)
            {
              first=o.first;
              second=o.second;
@@ -68,68 +72,31 @@ class ParentLocation: public QPair<int,int>
             */
            inline void setBlockID(int id)  { second=id;}
 };
-/*! Interval, between history clearing in seconds
- */
-#define HISTORY_CLEAR_INTERVAL 2
-class Diagram;
-/*! Class, that handles changes of numbers in blocks, used to undo
-    needless swaps, when changing number
-*/
-class NumberChangeHistory
-{
- public:
-    /*! Represents change of number of item to number
-    */
-    typedef QPair<BoxItem *, char> ChangeEntry;
-    /*! Represents swapping iterm numbers as two changes
-    */
-    typedef QPair<ChangeEntry,ChangeEntry> SwapEntry;
- private:
-    /*! History is a vector of changes
-     */
-    QVector<SwapEntry> m_history;
-    /*! Declares a last time change
-     */
-    clock_t            m_time;
- public:
-    /*! Constructs a history
-     */
-    NumberChangeHistory();
-    /*! Undos a swapping if swapped was before HISTORY_CLEAR_INTERVAL reached
-        \param[in] item      item that value is changing now
-        \param[in] old_value value, that is changed
-        \param[in] diag      diagram
-     */
-    void undoIfSwapped(BoxItem * item,char old_value,Diagram * diag);
-    /*! Adds new swap in history
-        \param[in] one first swap
-        \param[in] two second swap
-     */
-    void addNewSwap(const ChangeEntry & one, const ChangeEntry & two);
-    /*! Clears a history
-     */
-    void clear();
-};
+
 /*! Defines a max blocks in diagram
  */
 #define DIAGRAM_MAX_BLOCKS 7
 /*! Declares a diagram blocks
  */
-class Diagram
+class Diagram : public Serializable
 {
 private:
+        /*! Set of objects
+         */
+        QVector<DiagramObject *> m_objects;
         /*! A diagram set, where it's belong to
         */
         DiagramSet      *       m_set;
         /*! Describes a parent data location
          */
-        ParentLocation          m_parent;
+        DiagramParent          m_parent;
+        /*! Scene, which diagram is belongs to
+         */
+        DiagramScene    *      m_scene;
+
         /*! An amount of boxes. If NULL - the block is absent
          */
         BoxItem          *      m_boxes[DIAGRAM_MAX_BLOCKS];
-        /*! History data
-         */
-        NumberChangeHistory     m_history;
         /*! Vector  of annotation labels
          */
         QVector<ALabelItem *>   m_alabels;
@@ -161,15 +128,51 @@ private:
          */
         bool doesntCollideWithLines(const QRectF & rect);
 public:
+        /*! Returns a parent location
+         */
+        inline const DiagramParent & parent() const { return m_parent; }
+        /*! Sets a parent location
+            \param[in] parent parent location
+         */
+        inline void setParent(const DiagramParent & parent) { m_parent=parent;}
+        /*! Returns a scene
+            \param[in] scene scen data
+         */
+        inline DiagramScene * scene()  { return m_scene; }
+        /*! Returns scene identifier
+         */
+        int id() const;
+        /*! Binds an diagram to data
+            \param[in] scene scene data
+            \param[in] set   set data
+         */
+        inline void bind(DiagramScene * scene,DiagramSet * set)
+        {
+          m_scene=scene;
+          m_set=set;
+        }
+        /*!  Saves a data to document
+             \param[in] doc     document data
+             \param[in] element parent element data
+         */
+        virtual  void save(QDomDocument * doc,QDomElement * element);
+        /*! Loads a default data from document populating address map
+            \param[in] element element data
+            \param[in] addressMap adressedMap
+         */
+        virtual  void load(QDomElement * element,
+                           QMap<void *, Serializable *> & addressMap);
+        /*! Resolves inner pointers, from stored in adress map
+            \param[in] addressMap map of addresses
+         */
+        virtual  void resolvePointers(QMap<void *, Serializable *> & adressMap);
+
+
+
+
         /*! Returns a total boxes
          */
         inline int getTotalBoxes() { return DIAGRAM_MAX_BLOCKS; }
-        /*! Returns a parent location
-         */
-        inline const ParentLocation & location() const { return m_parent; }
-        /*! Sets a parent location
-         */
-        inline void setParentLocation(const ParentLocation & loc) { m_parent=loc;}
         /*! Returns an annotation labels
          */
         inline QVector<ALabelItem *> & annotationLabels() { return  m_alabels; }
@@ -182,22 +185,16 @@ public:
         /*! Returns an arrow segments
          */
         inline QVector<ArrowSegment *> & arrowSegments() { return m_arrow_segments; }
-        /*! Returns a diagram set
-         */
-        inline DiagramSet * set() { return m_set;}
-        /*! Sets a diagram set
-         */
-        inline void setDiagramSet(DiagramSet * set) { m_set=set; }
         /*! Inits an empty diagram
          */
         Diagram();
         /*! Inits an empty diagram with an location
-            \param[in] loc
+            \param[in] l  parent
          */
-        Diagram(const ParentLocation & loc);
+        Diagram(const DiagramParent & l);
         /*! Determines, whether diagram is empty
          */
-        bool isEmpty() const;
+        bool empty() const;
         /*! Determines, whether we can add a new box
          */
         bool canAddBoxes() const;
@@ -237,30 +234,10 @@ public:
         /*! Gets an index id for box
          */
         int getBoxID() const;
-        /*! Returns a diagram id
-            \return diagram id
-         */
-        inline int getID() const { return m_id; }
-        /*! Sets a diagram id
-            \param[in] id diargam id
-         */
-        inline void setID(int id) { m_id=id;}
         /*! Returns a block by id
             \param[in] id block id
          */
         BoxItem * getBlockByID(int id);
-        /*! Undos a swapping if swapped was before HISTORY_CLEAR_INTERVAL reached
-            \param[in] item      item that value is changing now
-            \param[in] old_value value, that is changed
-         */
-        void undoIfSwapped(BoxItem * item,char old_value);
-        /*! Adds new swap in history
-            \param[in] item1 first item
-            \param[in] new1  new value of first item
-            \param[in] item2 second item
-            \param[in] new2  new value of second item
-         */
-        void addNewSwap(BoxItem * item1, char new1,BoxItem * item2,char new2);
         /*! Sets a blocks id
          */
         void setBlockID(BoxItem * item, char pos);
@@ -315,10 +292,10 @@ public:
             \param[in] doc document
             \param[in] sete set
          */
-        void save(QDomDocument * doc,QDomElement * sete);
+        //void save(QDomDocument * doc,QDomElement * sete);
         /*! Loads a diagram
          */
-        void load(QDomElement * diag,DiagramSet * parent);
+        //void load(QDomElement * diag,DiagramSet * parent);
         /*! Destructor
          */
         ~Diagram();
