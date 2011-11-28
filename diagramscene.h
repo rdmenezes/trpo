@@ -257,6 +257,7 @@ public:
     /*! Event, that occures when mouse is being pressed
         \param[in] ev event
      */
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     /*! Event, that occures when key is being pressed
         \param[in] ev event

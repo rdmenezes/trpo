@@ -76,7 +76,8 @@ protected slots:
     /*! Shows a help dialog
      */
     void showHelp();
-private:
+
+public:
     Ui::MainWindow *ui;  //!< UI
 };
 

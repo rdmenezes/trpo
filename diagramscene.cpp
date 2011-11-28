@@ -13,6 +13,8 @@
 #include <QFontMetricsF>
 #include <QApplication>
 #include <QMessageBox>
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
 //Unit-tests for arrow joining
 //#define MERGE_TEST_1
 //#define MERGE_TEST_2
@@ -228,6 +230,27 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
        else this->QGraphicsScene::mousePressEvent(event);
      }
     }
+}
+void DiagramScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+
+QPointF pointTmp=event->scenePos();
+double x1 = pointTmp.rx();
+double y1 = pointTmp.ry();
+y1=y1*-1;
+QString   textX;
+textX.setNum(x1);
+QString   textY;
+textY.setNum(y1);
+QString text;
+text.append(textX);
+text.append(" ");
+text.append(textY);
+MainWindow *parentwin = static_cast <MainWindow*>(this->views()[0]->window());
+parentwin->ui->cursorCoordinates->clear();
+parentwin->ui->cursorCoordinates->setText(text);
+
+
 }
 void DiagramScene::keyPressEvent(QKeyEvent * event)
 {
