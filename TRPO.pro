@@ -29,7 +29,6 @@ SOURCES += main.cpp \
     diagramload.cpp \
     loadelements.cpp \
     tool.cpp \
-    change.cpp \
     collisionobject.cpp \
     tooldelegate.cpp \
     serializable.cpp \
@@ -54,7 +53,6 @@ HEADERS += mainwindow.h \
     saveloadutils.h \
     loadelements.h \
     tool.h \
-    change.h \
     collisionobject.h \
     tooldelegate.h \
     serializable.h \

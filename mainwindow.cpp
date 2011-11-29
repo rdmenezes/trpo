@@ -102,8 +102,29 @@ MainWindow::MainWindow(QWidget *parent,
 
 
     //Perform test of box
-    Box * box=new Box(QPointF(200,200),diag);
+    Box * t=new Box(QPointF(100,25),diag);
+    QRectF tmp=t->boundingRect();
+    scene->addItem(t);
+    for (int i=0;i<5;i++)
+    {
+      Box * box=new Box(QPointF (100,50
+                                     +(tmp.height()+2)*i),
+                        diag);
+      scene->addItem(box);
+      QRectF r=box->boundingRect();
+      r.setWidth(r.width()-4*i);
+      box->setRect(r);
+    }
+    /*
+    Box * box=new Box(QPointF(100,100),diag);
     scene->addItem(box);
+
+    Box * box2=new Box(QPointF(100,200),diag);
+    scene->addItem(box2);
+    QRectF r=box2->boundingRect();
+    r.setWidth(r.width()*2);
+    box2->setRect(r);
+    */
 }
 
 MainWindow::~MainWindow() {

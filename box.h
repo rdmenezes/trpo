@@ -70,11 +70,15 @@ private:
         /*! Size of bounding rect of box
          */
         QSize    m_size;
+        /*! Determines, whether number is visible
+         */
+        bool     m_number_is_visible;
         /*! Box id
          */
         int      m_id;
-
-
+        /*! Regenerates a text positions and parameters
+         */
+        void regenerate();
 protected:
         /*! Paints a box
          */
@@ -125,8 +129,14 @@ public:
         \param[in] addressMap map of addresses
      */
     virtual  void resolvePointers(QMap<void *, Serializable *> & adressMap);
-
-
+    /*! Sets a new rectangle for box
+        \param[in] rect new rect
+     */
+    virtual  void setRect(const QRectF & rect);
+    /*! Sets a text for box
+        \param[in] text new text data
+     */
+    void setText(const QString & text);
 
     ArrowPoint *& getLineRef(int side,int pos)  { return m_line_refs[side][pos]; }    
     /*! Declares a type of item
@@ -135,9 +145,7 @@ public:
     {
         USERTYPE=QGraphicsItem::UserType+1
     };
-    /*! Regenerates a text positions and parameters
-     */
-    void regenerate();
+
     /*! Returns item id
     */
     inline char id() const { return m_id; }
