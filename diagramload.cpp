@@ -4,7 +4,7 @@
 #include "alineitem.h"
 #include "arrowpoint.h"
 #include "arrowsegment.h"
-#include "boxitem.h"
+#include "box.h"
 #include "saveloadutils.h"
 #include "loadelements.h"
 
@@ -87,7 +87,7 @@ void correctItems(DiagramLoadData * data)
  //Correct block line references
  for (int i=0;i<DIAGRAM_MAX_BLOCKS;i++)
  {
-     BoxItem * block=dia->getBlockByID(i);
+     Box * block=dia->getBlockByID(i);
      if (block)
      {
        for (int j=0;j<BLOCK_SIDES;j++)
@@ -151,7 +151,7 @@ void correctItems(DiagramLoadData * data)
    ArrowPoint * p=dia->arrowPoints()[i];
    p->setDiagram(dia);
    //Set Block
-   BoxItem *& block=p->accessBlock();
+   Box *& block=p->accessBlock();
    if (block && data->blocks.contains(block)) block=data->blocks[block];
    else block=NULL;
    //Set in

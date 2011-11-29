@@ -1,5 +1,5 @@
 #include "diagram.h"
-#include "boxitem.h"
+#include "box.h"
 #include "collision.h"
 #include "alabelitem.h"
 #include "alineitem.h"
@@ -12,6 +12,11 @@ int Diagram::id() const
   return m_set->find(this);
 }
 
+int Diagram::getBoxNumber(DiagramObject * b)
+{
+    //!< TODO: Implement this later.
+    return 0;
+}
 
 void Diagram::save(QDomDocument * /* doc */,
                       QDomElement *  /* element */)
@@ -84,7 +89,7 @@ int Diagram::getBoxID() const
  return false;
 }
 
-void Diagram::addBox(BoxItem * box)
+void Diagram::addBox(Box * box)
 {
   this->m_boxes[box->id()]=box;
 }
@@ -169,20 +174,20 @@ bool Diagram::canBePlaced(const QRectF &rect, ALabelItem *pointer)
 {
     return canBePlaced(rect,(QGraphicsItem*)pointer) && doesntCollideWithLines(rect);
 }
-bool Diagram::canBePlaced(const QRectF & rect, BoxItem * pointer)
+bool Diagram::canBePlaced(const QRectF & rect, Box * pointer)
 {
     return canBePlaced(rect,(QGraphicsItem*)pointer) && doesntCollideWithLines(rect);
 }
 
 
-BoxItem * Diagram::getBlockByID(int id)
+Box * Diagram::getBlockByID(int id)
 {
    return m_boxes[id];
 }
 
 
 
-void Diagram::setBlockID(BoxItem * item, char pos)
+void Diagram::setBlockID(Box * item, char pos)
 {
     if (item)
     {
@@ -279,7 +284,7 @@ bool Diagram::canBePlacedAroundPoints(const QRectF & rect, const QVector<ArrowPo
     bool correct=true;
     for (int i=0;(i<pts.size()) && correct;i++)
     {
-        BoxItemSide bis=BoxItem::sideOfPoint(pts[i],rect);
+        BoxSide bis=Box::sideOfPoint(pts[i],rect);
         if (bis==BIS_LEFT || bis==BIS_TOP)
         {
             if (pts[i]->isEndingPoint()) ++(refs[bis]); else correct=false;
@@ -296,7 +301,7 @@ bool Diagram::canBePlacedAroundPoints(const QRectF & rect, const QVector<ArrowPo
 }
 
 bool Diagram::canPlaceSegment(ArrowPoint * point1, ArrowPoint * point2,
-                              BoxItem * block, bool always_check_bounds)
+                              Box * block, bool always_check_bounds)
 {
     for (int i=0;i<DIAGRAM_MAX_BLOCKS;i++)
     {

@@ -4,6 +4,7 @@
 */
 #ifndef DIAGRAMOBJECT_H
 #define DIAGRAMOBJECT_H
+#include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QStyleOptionGraphicsItem>
 #include <QWidget>

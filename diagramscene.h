@@ -11,7 +11,7 @@
 #include <QGraphicsSceneDragDropEvent>
 #include "tooltype.h"
 #include "diagram.h"
-#include "boxitem.h"
+#include "box.h"
 #include "arrowsegment.h"
 
 
@@ -88,7 +88,7 @@ private:
     LabelEdit            *   m_label_editor;       //!< A current label editor
     QGraphicsProxyWidget *   m_label_editor_in_scene; //!< A label editor in scene
     DragState                m_dragstate;          //!< Dragging state work
-    BoxItem              *   m_draggingblock;      //!< Dragged block
+    Box                  *   m_draggingblock;      //!< Dragged block
     BlockCorner              m_resizingblockcorner; //!< Resizing corner of block
     qreal                    m_blockmovingparams[2]; //!< Defines an x and y relevance to moving
     QRectF                   m_alabel_block_size;   //!< Size of annotation label
@@ -127,7 +127,7 @@ private:
         \param[in] pos position
         \param[in] box  box item
      */
-    void processAnnotationLineToBox(const QPointF & pos,BoxItem * box);
+    void processAnnotationLineToBox(const QPointF & pos,Box * box);
     /*! Processes pressing annotation line on blank space (setting second point)
         \param[in] pos position
      */
@@ -150,7 +150,7 @@ private:
         \param[in] previd previous block id
         \param[in] newid  new block id
     */
-    void processChangeBlockID(BoxItem * block, char previd, char newid);
+    void processChangeBlockID(Box * block, char previd, char newid);
     /*! Processes removing of items
         \param[in] items clicked items
      */
@@ -159,7 +159,7 @@ private:
         \param[in] item item data
         \param[in] pos  position
      */
-    void determineDraggingBoxAction(BoxItem * item,const QPointF & pos);
+    void determineDraggingBoxAction(Box * item,const QPointF & pos);
     /*! Removes arrow segment
         \param[in] seg segment
      */
@@ -192,17 +192,17 @@ private:
         \param[in] p   new point
         \param[om] box block
      */
-    void addArrowPointingToBlock(ArrowPoint * p,BoxItem * box);
+    void addArrowPointingToBlock(ArrowPoint * p,Box * box);
     /*! Prolongs arrow to block edge
         \param[in] p    point
         \param[in] box  block
      */
-    void prolongArrowToBlockEdge(ArrowPoint * p,BoxItem * box);
+    void prolongArrowToBlockEdge(ArrowPoint * p,Box * box);
     /*! Processes arrow addition, pointing to block
         \param[in] p position
         \param[in] box  box
      */
-    void processArrowPointingToBlock(ArrowPoint * p, BoxItem * box);
+    void processArrowPointingToBlock(ArrowPoint * p, Box * box);
     /*! Process common arrow building
         \param[in] pos  pointf
      */
@@ -214,7 +214,7 @@ private:
     /*! Process arrow operation while clicking on block space
         \param[in] event event
      */
-    void processArrowClickOnBox(QGraphicsSceneMouseEvent * event,BoxItem * box);
+    void processArrowClickOnBox(QGraphicsSceneMouseEvent * event,Box * box);
     /*! Process arrow operation while clicking on block space
         \param[in] event event
      */
@@ -296,11 +296,11 @@ public:
     /*! Decrements block id
         \param[in] block block
      */
-    void decrementBlockID(BoxItem * block);
+    void decrementBlockID(Box * block);
     /*! Increments block id
         \param[in] block block
      */
-    void incrementBlockID(BoxItem * block);
+    void incrementBlockID(Box * block);
     /*! Gets a new edit state
         \param[in] edit state
      */

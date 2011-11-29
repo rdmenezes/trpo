@@ -11,7 +11,6 @@ SOURCES += main.cpp \
     helpwindow.cpp \
     diagramscene.cpp \
     toolpanel.cpp \
-    boxitem.cpp \
     diagram.cpp \
     diagramset.cpp \
     collision.cpp \
@@ -34,13 +33,13 @@ SOURCES += main.cpp \
     collisionobject.cpp \
     tooldelegate.cpp \
     serializable.cpp \
-    diagramobject.cpp
+    diagramobject.cpp \
+    box.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
     toolpanel.h \
     tooltype.h \
-    boxitem.h \
     diagram.h \
     diagramset.h \
     collision.h \
@@ -59,7 +58,13 @@ HEADERS += mainwindow.h \
     collisionobject.h \
     tooldelegate.h \
     serializable.h \
-    diagramobject.h
+    diagramobject.h \
+    box.h \
+    connection.h \
+    direction.h \
+    boxconnectortype.h \
+    objectconnector.h \
+    drawingconstants.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc

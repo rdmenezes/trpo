@@ -56,7 +56,7 @@ class SerializableFactory
          template<typename T>
          static void bind(const QString & name)
          {
-             m_tagmap.insert(name,create<T>);
+             m_tagmap.insert(name,&create<T>);
          }
          /*! Creates an object, corresponding to tag
           */

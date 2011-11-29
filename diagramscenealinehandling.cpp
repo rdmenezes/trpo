@@ -69,10 +69,10 @@ void DiagramScene::processAnnotationLineSecondPointOnBlank(const QPointF & pos)
  }
 }
 
-void DiagramScene::processAnnotationLineToBox(const QPointF & pos,BoxItem * box)
+void DiagramScene::processAnnotationLineToBox(const QPointF & pos,Box * box)
 {
   ArrowPoint * p=new ArrowPoint(pos.x(),pos.y());
-  BoxItemSide side=box->sideOfPoint(p);
+  BoxSide side=box->sideOfPoint(p);
   QRectF rect=box->boundingRect();
   if (side==BIS_LEFT) p->setX(rect.left());
   if (side==BIS_RIGHT) p->setX(rect.right());

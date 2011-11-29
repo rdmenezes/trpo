@@ -43,7 +43,8 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
   QRectF & number_size=m_default_number_size;
   //Get size of default text
   QFontMetrics mtr2(this->font());
-  QRect label_size=mtr2.boundingRect(DEFAULT_BLOCK_TEXT);
+  //QRect label_size=mtr2.boundingRect(DEFAULT_BLOCK_TEXT);
+ /*
   m_default_block_size.setX(0);
   m_default_block_size.setY(0);
   m_default_block_size.setWidth(
@@ -55,10 +56,13 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
                                  label_size.height()+
                                  (number_size.height()+BLOCK_SPACE_Y)*2
                                 );
+  */
   //Compute a size of default label
+  /*
   QRect tmp_alabel=mtr2.boundingRect(DEFAULT_ALABEL_TEXT);
   m_alabel_block_size=QRectF(tmp_alabel.x(),tmp_alabel.y(),
                              tmp_alabel.width()+2, tmp_alabel.height()+2);
+  */
   //Sets a no edit state
   m_edit_state=TES_NONE;
   m_label_editor=NULL;
@@ -187,9 +191,9 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
      {
          if (lst[i]->type()==QGraphicsProxyWidget::Type)
              isWidgetClicked=true;
-         if (m_tooltype==TT_ARROW && lst[i]->type()==BoxItem::USERTYPE)
+         if (m_tooltype==TT_ARROW && lst[i]->type()==Box::USERTYPE)
          {
-             this->processArrowClickOnBox(event,static_cast<BoxItem *>(lst[i]));
+             this->processArrowClickOnBox(event,static_cast<Box *>(lst[i]));
              return;
          }
          if (m_tooltype==TT_ARROW && lst[i]->type()==ArrowSegment::USERTYPE)
@@ -197,10 +201,10 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
              this->processArrowClickOnLine(event,static_cast<ArrowSegment *>(lst[i]));
              return;
          }
-         if (m_tooltype==TT_ANNOTATION_LINE && lst[i]->type()==BoxItem::USERTYPE
+         if (m_tooltype==TT_ANNOTATION_LINE && lst[i]->type()==Box::USERTYPE
                                             && m_alds==ALDS_SPECIFIEDNONE)
          {
-             this->processAnnotationLineToBox(event->scenePos(),static_cast<BoxItem *>(lst[i]));
+             this->processAnnotationLineToBox(event->scenePos(),static_cast<Box *>(lst[i]));
              return;
          }
          if (m_tooltype==TT_ANNOTATION_LINE && lst[i]->type()==ArrowSegment::USERTYPE
@@ -342,9 +346,9 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
      QList<QGraphicsItem *> items=this->items(scenepos);
      for (int i=0;(i<items.size()) && !handled;i++)
      {
-         if (items[i]->type()==BoxItem::USERTYPE)
+         if (items[i]->type()==Box::USERTYPE)
          {
-             static_cast<BoxItem *>(items[i])->keyPressEvent(event);
+             static_cast<Box *>(items[i])->keyPressEvent(event);
              handled=true;
          }
          if (items[i]->type()==ALabelItem::USERTYPE)
@@ -413,15 +417,15 @@ void DiagramScene::addBlock(QGraphicsSceneMouseEvent *event)
  if (m_diag->canAddBoxes())
  {
   QRectF size=getDefaultBlockSize(event->scenePos());
-  if (m_diag->canBePlaced(size,(BoxItem*)NULL))
+  if (m_diag->canBePlaced(size,(Box*)NULL))
   {
    QVector<ArrowPoint *> list=m_diag->getNearArrowPoints(size);
    if (m_diag->canBePlacedAroundPoints(size,list))
    {
-    BoxItem * b=new BoxItem(event->scenePos(),this);
-    this->addItem(b);
-    m_diag->addBox(b);
-    b->attachAllPoints(list);
+    //Box * b=new Box(event->scenePos(),this);
+    //this->addItem(b);
+    //m_diag->addBox(b);
+    //b->attachAllPoints(list);
    }
   }
  }
@@ -438,21 +442,21 @@ void DiagramScene::addAnnotationLabel(QGraphicsSceneMouseEvent *event)
  }
 }
 
-void DiagramScene::decrementBlockID(BoxItem * block)
+void DiagramScene::decrementBlockID(Box * block)
 {
  int previd=block->id();
  int newid=((block->id()==0)?DIAGRAM_MAX_BLOCKS:previd)-1;
  processChangeBlockID(block,previd,newid);
 }
 
-void DiagramScene::incrementBlockID(BoxItem * block)
+void DiagramScene::incrementBlockID(Box * block)
 {
  int previd=block->id();
  int newid=(block->id()==DIAGRAM_MAX_BLOCKS-1)?0:(previd+1);
  processChangeBlockID(block,previd,newid);
 }
 
-void DiagramScene::processChangeBlockID(BoxItem * block, char /* previd */, char  newid)
+void DiagramScene::processChangeBlockID(Box * block, char /* previd */, char  newid)
 {
  //m_diag->undoIfSwapped(block,previd);
  if (m_diag->getBlockByID(newid))
@@ -467,10 +471,10 @@ void DiagramScene::processRemoving(const QList<QGraphicsItem *> & items)
  {
     for (int i=0;i<items.size();i++)
     {
-        if (items[i]->type()==BoxItem::USERTYPE)
+        if (items[i]->type()==Box::USERTYPE)
         {
-            char id=static_cast<BoxItem *>(items[i])->id();
-            static_cast<BoxItem *>(items[i])->clearPointReferences();
+            char id=static_cast<Box *>(items[i])->id();
+            static_cast<Box *>(items[i])->clearPointReferences();
             m_diag->removeBlock(id);
             this->removeItem(items[i]);
         }
@@ -515,9 +519,9 @@ void  DiagramScene::blockResizeMoveEnter ( QGraphicsSceneMouseEvent * event )
    {
         for(int i=0;i<lst.size();i++)
         {
-          if (lst[i]->type()==BoxItem::USERTYPE)
+          if (lst[i]->type()==Box::USERTYPE)
           {
-                determineDraggingBoxAction(static_cast<BoxItem *>(lst[i]),
+                determineDraggingBoxAction(static_cast<Box *>(lst[i]),
                                            event->scenePos()
                                            );
           }
@@ -536,7 +540,7 @@ void  DiagramScene::blockResizeMoveEnter ( QGraphicsSceneMouseEvent * event )
 }
 
 #define CORNER_PRECISE 7
-void DiagramScene::determineDraggingBoxAction(BoxItem * item,const QPointF & pos)
+void DiagramScene::determineDraggingBoxAction(Box * item,const QPointF & pos)
 {
   bool handled=false;
   if (   pos.x()-item->boundingRect().x() < CORNER_PRECISE
@@ -691,7 +695,7 @@ void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
          if (m_diag->canBePlacedAroundPoints(oldrect,lst))
          {
            m_draggingblock->clearPointReferences();
-           m_draggingblock->setRect(oldrect);
+           //m_draggingblock->setRect(oldrect);
            m_draggingblock->attachAllPoints(lst);
            this->update();
          }
@@ -713,7 +717,7 @@ void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
        bool can_placed=m_diag->canBePlaced(newrect,m_draggingblock);
        if(can_placed)
        {
-          m_draggingblock->setRect(newrect);
+          //m_draggingblock->setRect(newrect);
           m_draggingblock->clearPointReferences();
           this->update();
        }

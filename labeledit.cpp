@@ -1,9 +1,9 @@
 #include "labeledit.h"
 #include "diagramscene.h"
-#include "boxitem.h"
+#include "box.h"
 #include "alabelitem.h"
 
-LabelEdit::LabelEdit(DiagramScene * scene, BoxItem * item,QWidget *parent ) :
+LabelEdit::LabelEdit(DiagramScene * scene, ::Box * item,QWidget *parent ) :
     QPlainTextEdit(parent)
 {
     setAttribute(Qt::WA_TranslucentBackground);
