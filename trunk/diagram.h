@@ -14,7 +14,7 @@
 //Graphics item
 class QGraphicsItem;
 //Box item
-class BoxItem;
+class Box;
 //Annotation label item
 class ALabelItem;
 //Annoation lint item
@@ -96,7 +96,7 @@ private:
 
         /*! An amount of boxes. If NULL - the block is absent
          */
-        BoxItem          *      m_boxes[DIAGRAM_MAX_BLOCKS];
+        Box             *      m_boxes[DIAGRAM_MAX_BLOCKS];
         /*! Vector  of annotation labels
          */
         QVector<ALabelItem *>   m_alabels;
@@ -151,6 +151,11 @@ public:
           m_scene=scene;
           m_set=set;
         }
+        /*! Returns a number for a box.
+            \param[in] b box
+            \return box id or non-existing id, if not found
+         */
+        int getBoxNumber(DiagramObject * b);
         /*!  Saves a data to document
              \param[in] doc     document data
              \param[in] element parent element data
@@ -201,7 +206,7 @@ public:
         /*! Adds a new Box
             \param[in] box box to be added
          */
-        void addBox(BoxItem * box);
+        void addBox(Box * box);
         /*! Adds a new Annotation Label
             \param[in] label annotation label  to be added
          */
@@ -210,7 +215,7 @@ public:
             \param[in] rect   bounding rect geometry
             \param[in] pointer NULL if don't check
          */
-        bool canBePlaced(const QRectF & rect, BoxItem * pointer=NULL);
+        bool canBePlaced(const QRectF & rect, Box * pointer=NULL);
         /*! Determines, whether block can be placed or not
             \param[in] rect   bounding rect geometry
             \param[in] pointer NULL if don't check
@@ -223,7 +228,7 @@ public:
             \param[in] always_check_bounds determines, whether bounds needs to be checked
          */
         bool canPlaceSegment(ArrowPoint * point1, ArrowPoint * point2,
-                             BoxItem * block=NULL,
+                             Box * block=NULL,
                              bool always_check_bounds=false );
         /*! Determines, whether annotation line can be placed ot not
             \param[in] point1  first point
@@ -237,10 +242,10 @@ public:
         /*! Returns a block by id
             \param[in] id block id
          */
-        BoxItem * getBlockByID(int id);
+        Box * getBlockByID(int id);
         /*! Sets a blocks id
          */
-        void setBlockID(BoxItem * item, char pos);
+        void setBlockID(Box * item, char pos);
         /*! Removes a block with id
             \param[in] id id of removing block
          */

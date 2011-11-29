@@ -6,10 +6,13 @@
 #ifndef BOXITEM_H
 #define BOXITEM_H
 
-#include <QGraphicsItem>
 #include <QRectF>
 #include <QRect>
+#include <QSize>
+#include "diagramobject.h"
+#include "diagram.h"
 #include "moverange.h"
+#include "drawingconstants.h"
 //Class of scene
 class DiagramScene;
 //Arrow points
@@ -21,10 +24,10 @@ class QDomDocument;
 //Loading data
 class DiagramLoadData;
 
-/*! \class BoxItemSide
+/*! \class BoxSide
     Declares a box item side
  */
-enum BoxItemSide
+enum BoxSide
 {
     BIS_LEFT=0,
     BIS_RIGHT=1,
@@ -41,34 +44,37 @@ enum BlockEnteringType
 #define MAX_LINE_REFERENCES 3
 //Block sides (total)
 #define BLOCK_SIDES 4
-//Default block text
-#define DEFAULT_BLOCK_TEXT "Some action"
 
-/*! \class BoxItem
+
+
+
+/*! \class Box
 
     Declares a box item class
  */
-class BoxItem : public QGraphicsItem
+class Box : public DiagramObject
 {
 private:
         /*! Real text string
          */
-        QString  m_real_string;
+        QString  m_real_text;
         /*! Viewed text string
          */
-        QString  m_viewed_string;
-        /*! rendered string position
+        QString  m_view_text;
+        /*!  m_view_text position on a screen
          */
-        QRect  m_string_pos;
-        /*! Number position
+        QRectF   m_text_rect;
+        /*! rendered number position
          */
-        QPointF  m_number_pos;
-        /*! Rect
+        QRectF   m_number_rect;
+        /*! Size of bounding rect of box
          */
-        QRectF   m_rect;
+        QSize    m_size;
         /*! Box id
          */
-        char     m_id;
+        int      m_id;
+
+
         /*! Location of child diagram (-1 is default)
          */
         int m_childdiagram;
@@ -81,20 +87,24 @@ private:
         void addLabelEdit(QKeyEvent * event);
         /*! Declares, whether point can be added to side
          */
-        bool canAddToSide(BoxItemSide side);
+        bool canAddToSide(BoxSide side);
 public:
           /*! Describes a key press event
            */
           void keyPressEvent(QKeyEvent *event);
 public:
-    //Functions for loading and saving
-    QString & accessRealString()    { return m_real_string; }
-    QString & accessViewedString() { return m_viewed_string; }
-    QRect &   accessStringPos()     { return m_string_pos;  }
-    QPointF & accessNumberPos()     { return  m_number_pos; }
-    QRectF &  accessRect()          { return m_rect; }
-    ArrowPoint *& getLineRef(int side,int pos)  { return m_line_refs[side][pos]; }
-    inline BoxItem() {}
+    /*! Constructs empty box.
+        Used by serializable factory.
+     */
+    inline Box() : DiagramObject(ST_RECTANGLE) {}
+    /*! Creates a box from a specified position
+        \param[in] p   position of center of box
+        \param[in] d   diagram
+        \param[in] txt text data
+     */
+    Box(const QPointF & p, Diagram * d, const QString & txt=BOX_DEFAULT_TEXT);
+
+    ArrowPoint *& getLineRef(int side,int pos)  { return m_line_refs[side][pos]; }    
     /*! Declares a type of item
      */
     enum ItemType
@@ -115,19 +125,13 @@ public:
         \param[in] pos    position of creation of box
         \param[in] scene  scene data
     */
-    BoxItem(const QPointF & pos,DiagramScene * scene);
+    Box(const QPointF & pos,DiagramScene * scene);
     /*! Returns a type of box item
      */
     int type() const;
     /*! Returns a bounding rectangle of item
      */
     QRectF boundingRect() const;
-    /*! Gives access to rect for changing
-     */
-    inline QRectF & frameRect() { return m_rect; }
-    /*! Sets a new rectangle
-     */
-    void setRect(const QRectF & rect);
     /*! Updates an item string
      */
     void updateString(const QString & text);
@@ -163,13 +167,13 @@ public:
         \param[in] point point
         \return side
      */
-    static BoxItemSide sideOfPoint(ArrowPoint * point, const QRectF & m_rect);
+    static BoxSide sideOfPoint(ArrowPoint * point, const QRectF & m_rect);
     /*! Determines, thich size of box this point
         is belong to.
         \param[in] point point
         \return side
      */
-    BoxItemSide sideOfPoint(ArrowPoint * point);
+    BoxSide sideOfPoint(ArrowPoint * point);
     /*! Tests, whether it can add a point reference
         \param[in] point point data
         \param[in] enter entering type of point

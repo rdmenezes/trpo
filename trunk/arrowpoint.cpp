@@ -2,7 +2,7 @@
 #include "alineitem.h"
 #include "arrowsegment.h"
 #include "diagram.h"
-#include "boxitem.h"
+#include "box.h"
 #include <QMessageBox>
 
 ArrowPoint::ArrowPoint(qreal x, qreal y): QPointF(x,y)

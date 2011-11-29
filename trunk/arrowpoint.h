@@ -17,7 +17,7 @@ class ArrowSegment;
 //A line ,where data is placed
 class ALineItem;
 //A class of box item
-class BoxItem;
+class Box;
 //Dom element
 class QDomElement;
 //Dom document
@@ -35,7 +35,7 @@ private:
         Diagram * m_diag;
         /*! Determines, whether  arrow point is attached to an item
          */
-        BoxItem * m_block;
+        Box * m_block;
         /*!  Vector of segments, that output point is me
          */
         QVector<ArrowSegment *> m_in;
@@ -55,7 +55,7 @@ private:
 public:
         /*! Determines, whether  arrow point is attached to an item
          */
-        inline BoxItem *& accessBlock() { return m_block; }
+        inline Box *& accessBlock() { return m_block; }
         /*!  Vector of segments, that output point is me
          */
         inline QVector<ArrowSegment *> & accessIn() { return m_in; }
@@ -131,11 +131,11 @@ public:
         /*! Returns attached block
             \param[in] block block data
          */
-        inline BoxItem * attachedBlock() { return m_block; }
+        inline Box * attachedBlock() { return m_block; }
         /*! Attaches a block to a point
             \param[in] block block to be attached
          */
-        inline void attachBlock(BoxItem * b) {m_block=b;}
+        inline void attachBlock(Box * b) {m_block=b;}
         /*! Deattaches a block from a point
          */
         inline void deattachFromBlock() { m_block=NULL; }

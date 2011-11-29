@@ -9,7 +9,7 @@
 #include <QDomAttr>
 #include <QHash>
 
-class BoxItem;
+class Box;
 class ALineItem;
 class ArrowSegment;
 class ArrowPoint;
@@ -20,7 +20,7 @@ class DiagramLoadData
 {
  public:
         Diagram * diagram;
-        QHash<void *,BoxItem *>        blocks;
+        QHash<void *,Box *>        blocks;
         QHash<void *,ALineItem  * >    annotationlines;
         QHash<void *,ArrowSegment *>   segments;
         QHash<void *,ArrowPoint   *>   points;

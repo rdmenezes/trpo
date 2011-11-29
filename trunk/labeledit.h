@@ -11,12 +11,12 @@
 /*! A diagram scene aggregation
  */
 class DiagramScene;
-/*! A box item
- */
-class BoxItem;
 /*! An annotation label item
  */
 class ALabelItem;
+/*! Box item
+ */
+class Box;
 /*! Ctrl pressed time
  */
 #define LE_CTRL_PRESSED 0.5
@@ -33,7 +33,7 @@ private:
         DiagramScene * m_scene;
         /*! Box item pointer
          */
-        BoxItem      * m_boxitem;
+        ::Box      * m_boxitem;
         /*! Annotation label pointer
          */
         ALabelItem   * m_alabelitem;
@@ -43,7 +43,7 @@ public:
             \param[in] item  item data
             \param[in] parent NULL
          */
-        LabelEdit(DiagramScene * scene, BoxItem * item,QWidget *parent = 0);
+        LabelEdit(DiagramScene * scene, ::Box * item,QWidget *parent = 0);
         /*! Constructs a label edit
             \param[in] scene scene, where it's placed
             \param[in] item  item data

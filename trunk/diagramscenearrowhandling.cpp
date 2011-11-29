@@ -78,7 +78,7 @@ void DiagramScene::processArrowCommonBuilding(const QPointF & scenePos)
     else delete p;
 }
 
-void  movePointToBound(QPointF * p,BoxItem * box,BoxItemSide side)
+void  movePointToBound(QPointF * p,Box * box,BoxSide side)
 {
     if (side==BIS_LEFT)   p->setX(box->boundingRect().left());
     if (side==BIS_RIGHT)   p->setX(box->boundingRect().right());
@@ -87,14 +87,14 @@ void  movePointToBound(QPointF * p,BoxItem * box,BoxItemSide side)
 }
 
 void DiagramScene::processArrowClickOnBox(QGraphicsSceneMouseEvent * event,
-                                          BoxItem * box)
+                                          Box * box)
 {
    ArrowPoint * p=new ArrowPoint(event->scenePos().x(),event->scenePos().y());
    if (m_arrow_state==AES_NONE)
    {
      if(box->canAddPointReference(p,BET_OUTPUT))
      {
-        BoxItemSide  side=box->sideOfPoint(p);
+        BoxSide  side=box->sideOfPoint(p);
         m_diag->addArrowPoint(p);
         movePointToBound(p,box,side);
         box->addPointReference(p);
@@ -255,11 +255,11 @@ void DiagramScene::processArrowJoin(const QPointF & pos,ArrowSegment * seg)
  p1->update();
 }
 
-void DiagramScene::processArrowPointingToBlock(ArrowPoint * p, BoxItem * box)
+void DiagramScene::processArrowPointingToBlock(ArrowPoint * p, Box * box)
 {
   QPointF tmp=constructDirectedLine(*m_last_arrow_point,*p);
   p->setX(tmp.x()); p->setY(tmp.y());
-  BoxItemSide  side=box->sideOfPoint(p);
+  BoxSide  side=box->sideOfPoint(p);
   movePointToBound(p,box,side);
   //Check for wrong collision type with the block
   ArrowDirection  dir=direction(*m_last_arrow_point,*p);
@@ -287,7 +287,7 @@ void DiagramScene::processArrowPointingToBlock(ArrowPoint * p, BoxItem * box)
   }
 }
 
-void DiagramScene::prolongArrowToBlockEdge(ArrowPoint * p,BoxItem * box)
+void DiagramScene::prolongArrowToBlockEdge(ArrowPoint * p,Box * box)
 {
     m_last_arrow_point->setX(p->x());
     m_last_arrow_point->setY(p->y());
@@ -299,7 +299,7 @@ void DiagramScene::prolongArrowToBlockEdge(ArrowPoint * p,BoxItem * box)
 
 }
 
-void DiagramScene::addArrowPointingToBlock(ArrowPoint * p,BoxItem * box)
+void DiagramScene::addArrowPointingToBlock(ArrowPoint * p,Box * box)
 {
     m_diag->addArrowPoint(p);
     ArrowSegment * seg=new ArrowSegment(m_last_arrow_point,p);

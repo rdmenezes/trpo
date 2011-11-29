@@ -1,18 +1,68 @@
-#include "boxitem.h"
+#include "box.h"
 #include "diagramscene.h"
 #include "keytest.h"
 #include "labeledit.h"
 #include "arrowpoint.h"
-#include <QFontMetrics>
-#include <QRect>
+#include <QFontMetricsF>
 #include <math.h>
 #include <string.h>
+#include <algorithm>
 
-BoxItem::BoxItem(const QPointF & pos,DiagramScene * scene)
+#define METRICS_TEST_RECT  QRectF(0,0,4.0E+9,4.0E+9)
+
+
+Box::Box(const QPointF & p, Diagram * d, const QString & txt)
+    :DiagramObject(ST_RECTANGLE)
 {
+  setDiagram(d);
+  DiagramScene * scene=d->scene();
+  m_real_text=txt;
+  m_view_text=txt;
+  m_id=d->getBoxNumber(this);
+
+  QFont numberFont=scene->font();
+  numberFont.setPointSize(BOX_NUMBER_FONT_SIZE);
+
+  QFont textFont=scene->font();
+  textFont.setPointSize(BOX_TEXT_FONT_SIZE);
+
+  QFontMetricsF numberMetrics(numberFont);
+  QFontMetricsF textMetrics(textFont);
+
+  QRectF  numberRect=numberMetrics.boundingRect(METRICS_TEST_RECT,Qt::AlignCenter,m_real_text);
+  QRectF  textRect  =textMetrics.boundingRect(METRICS_TEST_RECT,
+                                              Qt::AlignCenter,
+                                              BOX_NUMBER_TEXT);
+
+  qreal width=std::max(numberRect.width(),textRect.width())+
+              2*BOX_BORDER_WIDTH;
+  qreal height=textRect.height()
+               +numberRect.height()
+               +BOX_DEFAULT_NUMBER_SPACE;
+  m_size=QSize(width,height);
+  setPos(p-QPointF(width/2,height/2));
+
+  QRectF bounds=boundingRect();
+  m_number_rect=numberRect;
+  m_number_rect.setLeft(bounds.right()-numberRect.width()
+                        -BOX_BORDER_WIDTH);
+  m_number_rect.setTop(bounds.bottom()-numberRect.height()
+                        -BOX_BORDER_WIDTH);
+
+  m_text_rect=bounds;
+  m_text_rect.setLeft(m_text_rect.left()+BOX_BORDER_WIDTH);
+  m_text_rect.setRight(m_text_rect.right()-BOX_BORDER_WIDTH);
+  m_text_rect.setTop(m_text_rect.top()+BOX_BORDER_WIDTH);
+  m_text_rect.setBottom(m_text_rect.bottom()-BOX_BORDER_WIDTH);
+
+}
+Box::Box(const QPointF & pos,DiagramScene * scene)
+    :DiagramObject(ST_RECTANGLE)
+{
+ /*
  m_rect=scene->getDefaultBlockSize(pos);
- m_real_string=DEFAULT_BLOCK_TEXT;
- m_viewed_string=DEFAULT_BLOCK_TEXT;
+ m_real_text=DEFAULT_BLOCK_TEXT;
+ m_view_text=DEFAULT_BLOCK_TEXT;
  m_id=scene->diagram()->getBoxID();
  m_childdiagram=-1;
  //Get small label position;
@@ -23,20 +73,24 @@ BoxItem::BoxItem(const QPointF & pos,DiagramScene * scene)
  QFontMetrics metrics(scene->font());
  m_string_pos=metrics.boundingRect(m_rect.x(),m_rect.y()+1,m_rect.width(),
                                    m_rect.height()-numbersize.height(),
-                                   Qt::AlignCenter,m_viewed_string);
+                                   Qt::AlignCenter,m_view_text);
   //Clears point references
   memset(m_line_refs,0,sizeof(ArrowPoint*)*BLOCK_SIDES*MAX_LINE_REFERENCES);
+  */
 }
 
-QRectF BoxItem::boundingRect() const
+QRectF Box::boundingRect() const
 {
-    return m_rect;
+    return QRectF(scenePos(),scenePos()+
+                             QPointF(m_size.width(),m_size.height())
+                 );
 }
 
-void BoxItem::paint(QPainter *painter,
+void Box::paint(QPainter *painter,
                     const QStyleOptionGraphicsItem *option,
                     QWidget *widget)
 {
+  /*
   painter->setBrush(Qt::NoBrush);
   QPen pen(QColor(0,0,0));
   pen.setWidth(1);
@@ -49,17 +103,19 @@ void BoxItem::paint(QPainter *painter,
   painter->setFont(newfont);
   painter->drawText(m_number_pos,QString::number(m_id));
   painter->setFont(oldfont);
-  painter->drawText(m_string_pos,m_viewed_string);
+  painter->drawText(m_string_pos,m_view_text);
   (void)option,widget;
+  */
 }
 
-int BoxItem::type() const
+int Box::type() const
 {
-    return BoxItem::USERTYPE;
+    return Box::USERTYPE;
 }
 
-void BoxItem::keyPressEvent(QKeyEvent *event)
+void Box::keyPressEvent(QKeyEvent *event)
 {
+    /*
     DiagramScene * myscene=static_cast<DiagramScene*>(this->scene());
     if (myscene->isPanelActive())
          return;
@@ -77,12 +133,12 @@ void BoxItem::keyPressEvent(QKeyEvent *event)
        if (isTextEditKey(event) &&
            myscene->editState()==TES_NONE)
        {
-           LabelEdit  * field=new LabelEdit(myscene,this);
+           LabelEdit  * field=new LabelEdit(myscene,const_cast<Box*>(this));
            QRect tmp(m_rect.x(),m_rect.y(),m_rect.width(),m_rect.height());
            field->setGeometry(tmp);
            field->setFont(myscene->font());
-           if (m_real_string!=DEFAULT_BLOCK_TEXT)
-            field->setPlainText(m_real_string);
+           if (m_real_text!=DEFAULT_BLOCK_TEXT)
+            field->setPlainText(m_real_text);
            //Move to end cursor
            QTextCursor c=field->textCursor();
            c.movePosition(QTextCursor::End);
@@ -97,25 +153,27 @@ void BoxItem::keyPressEvent(QKeyEvent *event)
            this->QGraphicsItem::keyPressEvent(event);
        }
     }
+    */
 }
 
-void BoxItem::updateString(const QString & text)
+void Box::updateString(const QString & text)
 {
    if (!text.isEmpty())
    {
-        m_real_string=text;
-        m_viewed_string=text;
+        m_real_text=text;
+        m_view_text=text;
         regenerate();
         update();
    }
 }
 
-void BoxItem::regenerate()
+void Box::regenerate()
 {
+   /*
    QRectF       numrect=static_cast<DiagramScene *>(this->scene())->getDefaultBlockNumberSize();
    QRect        rect(m_rect.x(),m_rect.y(),m_rect.width(),m_rect.height());
    QFontMetrics metrics(scene()->font());
-   QRect basic_rect=metrics.boundingRect(rect,Qt::AlignCenter,m_real_string);
+   QRect basic_rect=metrics.boundingRect(rect,Qt::AlignCenter,m_real_text);
    //printf("%d %d %d %d\n",basic_rect.x(),basic_rect.y(),basic_rect.width(),basic_rect.height());
    m_number_pos.setX(m_rect.x()+m_rect.width()-numrect.width());
    m_number_pos.setY(m_rect.y()+m_rect.height());
@@ -123,12 +181,12 @@ void BoxItem::regenerate()
        basic_rect.height()<=m_rect.height()-numrect.height()
        )
    {
-     m_viewed_string=m_real_string;
+     m_view_text=m_real_text;
    }
    else
    {
        //printf("Worked other lap");
-       QStringList rows=m_real_string.split("\n",
+       QStringList rows=m_real_text.split("\n",
                                             QString::KeepEmptyParts,
                                             Qt::CaseSensitive);
        m_viewed_string="";
@@ -170,15 +228,18 @@ void BoxItem::regenerate()
    m_string_pos=metrics.boundingRect(m_rect.x(),m_rect.y()+1,m_rect.width(),
                                      m_rect.height()-numrect.height(),
                                      Qt::AlignCenter,m_viewed_string);
+   */
 }
 
-void BoxItem::setRect(const QRectF & rect)
+/*
+void Box::setRect(const QRectF & rect)
 {
-    m_rect=rect;
+    //m_rect=rect;
     regenerate();
 }
+*/
 
-void BoxItem::clearPointReferences()
+void Box::clearPointReferences()
 {
   for (int i=0;i<BLOCK_SIDES;i++)
   {
@@ -193,25 +254,26 @@ void BoxItem::clearPointReferences()
   }
 }
 
-BoxItemSide BoxItem::sideOfPoint(ArrowPoint * point, const QRectF & m_rect)
+BoxSide Box::sideOfPoint(ArrowPoint * point, const QRectF & m_rect)
 {
  QPointF center=m_rect.center();
  qreal dx=point->x()-center.x();
  qreal dy=point->y()-center.y();
  qreal fdx=fabs(dx);
  qreal fdy=fabs(dy);
- BoxItemSide result=BIS_BOTTOM;
+ BoxSide result=BIS_BOTTOM;
  if (fdx>=fdy) {  if (dx<0) result=BIS_LEFT; else result=BIS_RIGHT;  }
  else          {  if (dy<0) return result=BIS_TOP;   }
  return result;
 }
 
-BoxItemSide BoxItem::sideOfPoint(ArrowPoint *point)
+BoxSide Box::sideOfPoint(ArrowPoint *point)
 {
-    return sideOfPoint(point,m_rect);
+    return BIS_BOTTOM;
+    //return sideOfPoint(point,m_rect);
 }
 
-void BoxItem::removePointReference(ArrowPoint * point)
+void Box::removePointReference(ArrowPoint * point)
 {
     for (int i=0;i<BLOCK_SIDES;i++)
     {
@@ -223,9 +285,9 @@ void BoxItem::removePointReference(ArrowPoint * point)
     }
 }
 
-void BoxItem::addPointReference(ArrowPoint * point)
+void Box::addPointReference(ArrowPoint * point)
 {
-    BoxItemSide bis=sideOfPoint(point);
+    BoxSide bis=sideOfPoint(point);
     bool handled=false;
     for (int j=0;(j<MAX_LINE_REFERENCES) && (!handled); j++)
     {
@@ -240,40 +302,44 @@ void BoxItem::addPointReference(ArrowPoint * point)
 }
 
 
-bool BoxItem::canAddToSide(BoxItemSide side)
+bool Box::canAddToSide(BoxSide side)
 {
   int cnt=0;
   for (int i=0;i<MAX_LINE_REFERENCES;i++) if (m_line_refs[side][i]!=NULL) ++cnt;
   return cnt!=MAX_LINE_REFERENCES;
 }
 
-bool BoxItem::canAddPointReference(ArrowPoint * point,
+bool Box::canAddPointReference(ArrowPoint * point,
                                    BlockEnteringType enter)
 {
-  BoxItemSide bis=sideOfPoint(point);
+  BoxSide bis=sideOfPoint(point);
   if (bis==BIS_LEFT || bis==BIS_TOP) return enter==BET_INPUT && canAddToSide(bis);
   if (bis==BIS_BOTTOM)               return canAddToSide(bis);
   if (bis==BIS_RIGHT)                return enter==BET_OUTPUT && canAddToSide(bis);
   return false;
 }
 
-MoveRange BoxItem::getRange(ArrowPoint * point)
+MoveRange Box::getRange(ArrowPoint * point)
 {
-  BoxItemSide bis=sideOfPoint(point);
+  /*
+  BoxSide bis=sideOfPoint(point);
   if (bis==BIS_LEFT)
       return createVerticalRange(m_rect.top(),m_rect.bottom(),m_rect.left());
   if (bis==BIS_RIGHT)
       return createVerticalRange(m_rect.top(),m_rect.bottom(),m_rect.right());
   if (bis==BIS_TOP)
       return createHorizontalRange(m_rect.left(),m_rect.right(),m_rect.top());
-  return createHorizontalRange(m_rect.left(),m_rect.right(),m_rect.bottom());
+  */
+  return MoveRange(0,0,0,0);
+  //return createHorizontalRange(m_rect.left(),m_rect.right(),m_rect.bottom());
 }
 
-void BoxItem::attachAllPoints(const QVector<ArrowPoint *> pts)
+void Box::attachAllPoints(const QVector<ArrowPoint *> pts)
 {
+  /*
   for (int i=0;i<pts.size();i++)
   {
-      BoxItemSide bis=sideOfPoint(pts[i]);
+      BoxSide bis=sideOfPoint(pts[i]);
       if (bis==BIS_LEFT) pts[i]->setX(m_rect.left());
       if (bis==BIS_RIGHT) pts[i]->setX(m_rect.right());
       if (bis==BIS_TOP)    pts[i]->setY(m_rect.top());
@@ -281,4 +347,5 @@ void BoxItem::attachAllPoints(const QVector<ArrowPoint *> pts)
       pts[i]->update();
       addPointReference(pts[i]);
   }
+  */
 }

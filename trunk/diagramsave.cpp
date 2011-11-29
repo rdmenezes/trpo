@@ -4,7 +4,7 @@
 #include "alineitem.h"
 #include "arrowpoint.h"
 #include "arrowsegment.h"
-#include "boxitem.h"
+#include "box.h"
 #include "saveloadutils.h"
 #include <QDomDocument>
 #include <QDomElement>
@@ -60,17 +60,19 @@ void handleEmptyBlock(QDomDocument * doc,QDomElement * diag,int id)
   diag->appendChild(block);
 }
 
-void BoxItem::save(QDomDocument * doc,QDomElement * diagram)
+void Box::save(QDomDocument * doc,QDomElement * diagram)
 {
  QDomElement block=doc->createElement("block");
+ /*
  block.setAttribute("this",ptrToString(this));
- block.setAttribute("real_string",stringToStringXML(m_real_string));
- block.setAttribute("viewed_string",stringToStringXML(m_viewed_string));
+ block.setAttribute("real_string",stringToStringXML(m_real_text));
+ block.setAttribute("viewed_string",stringToStringXML(m_viewtext));
  block.setAttribute("string_pos",rectToString(m_string_pos));
  block.setAttribute("number_pos",pointfToString(m_number_pos));
  block.setAttribute("rect",rectfToString(m_rect));
  block.setAttribute("id",intToString(m_id));
  block.setAttribute("childid",intToString(m_childdiagram));
+ */
  for (int i=0;i<BLOCK_SIDES;i++)
  {
      for (int j=0;j<MAX_LINE_REFERENCES;j++)

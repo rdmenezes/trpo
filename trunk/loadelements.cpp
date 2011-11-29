@@ -4,12 +4,12 @@
 #include "alineitem.h"
 #include "arrowpoint.h"
 #include "arrowsegment.h"
-#include "boxitem.h"
+#include "box.h"
 #include "saveloadutils.h"
 #include "loadelements.h"
 #include <QDomAttr>
 
-void loadBlockRef(QDomElement * el,BoxItem * box, int &i, int &j)
+void loadBlockRef(QDomElement * el,Box * box, int &i, int &j)
 {
   if(i==BLOCK_SIDES)
       return;
@@ -33,6 +33,7 @@ QString getAttr(QDomNamedNodeMap & map,const QString & name)
 
 void loadBlock(QDomElement * el,DiagramLoadData * data)
 {
+    /*
     QDomNamedNodeMap map=el->attributes();
     void * me=NULL;
     int    id=0;
@@ -46,7 +47,7 @@ void loadBlock(QDomElement * el,DiagramLoadData * data)
         data->diagram->setBlockID(NULL,(char)id);
         return;
     }
-    BoxItem * item=new BoxItem();
+    Box * item=new Box();
     data->diagram->setBlockID(item,(char)id);
     data->blocks.insert(me,item);
     item->setID((char)id);
@@ -92,6 +93,7 @@ void loadBlock(QDomElement * el,DiagramLoadData * data)
         }
         n=n.nextSibling();
     }
+    */
 }
 
 void loadAnnotationLine(QDomElement * el,DiagramLoadData *  data)
@@ -181,7 +183,7 @@ void loadPoint(QDomElement * el,DiagramLoadData * data)
    if (map.contains("this"))
        me=stringToPtr(getAttr(map,"this"));
    if (map.contains("block"))
-       arrow->accessBlock()=(BoxItem*)stringToPtr(getAttr(map,"block"));
+       arrow->accessBlock()=(Box*)stringToPtr(getAttr(map,"block"));
    if (map.contains("x"))
        arrow->setX(stringToDouble(getAttr(map,"x")));
    if (map.contains("y"))
