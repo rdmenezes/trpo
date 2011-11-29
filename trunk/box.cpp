@@ -35,11 +35,12 @@ Box::Box(const QPointF & p, Diagram * d, const QString & txt)
                                                 Qt::AlignCenter,
                                                 BOX_NUMBER_TEXT);
 
-  qreal width=std::max(numberRect.width(),textRect.width())+
-              2*BOX_BORDER_WIDTH+2*BOX_BORDER_PADDING;
+  qreal width=std::max(numberRect.width(),textRect.width())
+              +2*BOX_BORDER_PADDING;
   qreal height=textRect.height()
                +numberRect.height()
-               +BOX_DEFAULT_NUMBER_SPACE;
+               +BOX_DEFAULT_NUMBER_SPACE
+               +2*BOX_BORDER_PADDING;
   m_size=QSize(width,height);
   setPos(p-QPointF(width/2,height/2));
 
@@ -51,11 +52,10 @@ Box::Box(const QPointF & p, Diagram * d, const QString & txt)
                         -BOX_LABEL_PADDING);
 
   m_text_rect=bounds;
-  m_text_rect.setLeft(m_text_rect.left()+BOX_LABEL_PADDING);
-  m_text_rect.setRight(m_text_rect.right()-BOX_LABEL_PADDING);
   m_text_rect.setTop(m_text_rect.top()+BOX_LABEL_PADDING);
   m_text_rect.setBottom(m_text_rect.bottom()-BOX_LABEL_PADDING);
 
+  m_number_is_visible=true;
 }
 
 
@@ -78,14 +78,18 @@ void Box::paint(QPainter * p)
  textFont.setPointSize(BOX_TEXT_FONT_SIZE);
 
  p->setPen(QPen(QBrush(BOX_LINE_COLOR),BOX_BORDER_WIDTH));
+
  p->drawRect(boundingRect());
 
+ if (m_number_is_visible)
+ {
  p->setPen(QPen(QBrush(BOX_TEXT_COLOR),BOX_BORDER_WIDTH));
 
  p->setFont(numberFont);
  p->drawText(m_number_rect,
-             Qt::AlignTop | Qt::AlignLeft,
+             Qt::AlignLeft | Qt::AlignTop,
              BOX_NUMBER_TEXT);
+ }
 
  p->setFont(textFont);
  p->drawText(m_text_rect,
@@ -114,6 +118,126 @@ void Box::resolvePointers(QMap<void *, Serializable *> &
     //!< TODO: Implement this later
 }
 
+
+void Box::regenerate()
+{
+ QRectF bounds=boundingRect();
+ /* If bounds are smaller than paddings, than don't draw things
+  */
+ if (bounds.height()<BOX_LABEL_PADDING
+     || bounds.width()<BOX_LABEL_PADDING)
+ {
+     m_view_text="";
+     m_number_is_visible=false;
+     return;
+ }
+ bounds.setLeft(bounds.left()+BOX_LABEL_PADDING);
+ bounds.setRight(bounds.right()-BOX_LABEL_PADDING);
+ bounds.setTop(bounds.top()+BOX_LABEL_PADDING);
+ bounds.setBottom(bounds.bottom()-BOX_LABEL_PADDING);
+
+
+ QFont numberFont=this->scene()->font();
+ numberFont.setPointSize(BOX_NUMBER_FONT_SIZE);
+
+ QFont textFont=this->scene()->font();
+ textFont.setPointSize(BOX_TEXT_FONT_SIZE);
+
+ QFontMetricsF numberMetrics(numberFont);
+ QFontMetricsF textMetrics(textFont);
+
+ QRectF  numberRect=numberMetrics.boundingRect(METRICS_TEST_RECT,
+                                               Qt::AlignCenter,
+                                               BOX_NUMBER_TEXT);
+ /*! Just because number font is smaller than label
+     we can't draw stuff is box smaller
+  */
+ if (numberRect.width()>bounds.width() ||
+     numberRect.height()>bounds.height()
+     )
+ {
+  m_view_text="";
+  m_number_is_visible=false;
+  return;
+ }
+ numberRect.moveLeft(bounds.right()-numberRect.width());
+ numberRect.moveTop(bounds.bottom()-numberRect.height());
+ m_number_rect=numberRect;
+ m_view_text="";
+ bool exit=false;
+ QStringList rows=m_real_text.split("\n",
+                                    QString::KeepEmptyParts,
+                                    Qt::CaseSensitive);
+ for (int i=0;i<rows.size() && !exit;i++)
+ {
+     QString oldview=m_view_text;
+     QString row_string=textMetrics.elidedText(rows[i],
+                                               Qt::ElideRight,
+                                               bounds.width()+2*BOX_BORDER_PADDING
+                                              );
+     m_view_text+=row_string;
+     QRectF  oldRect=textMetrics.boundingRect(METRICS_TEST_RECT,Qt::AlignCenter,oldview);
+     QRectF  textRect =textMetrics.boundingRect(METRICS_TEST_RECT,Qt::AlignCenter,m_view_text);
+     //If current row runs out an object, cut it.
+     if (textRect.height()>bounds.height())
+     {
+        m_view_text=oldview;
+        exit=true;
+     }
+     //If current row is colliding with number, elide it
+     else if (bounds.y()+textRect.height()-m_number_rect.y()>0.01)
+     {
+         exit=true;
+         row_string=textMetrics.elidedText(rows[i],
+                                          Qt::ElideRight,
+                                          bounds.width()-
+                                          m_number_rect.width()
+                                         );
+         m_view_text=oldview;
+         m_view_text+=row_string;
+         m_view_text+="\n";
+         /*! Handle when text in middle colliding with width
+          */
+         if (bounds.width()/2+oldRect.width()/2>
+             bounds.width()-m_number_rect.width())
+         {
+            qreal wdth=bounds.width()/2+oldRect.width()/2-
+                       2*((bounds.width()-m_number_rect.width()));
+            wdth=oldRect.width()-wdth;
+            row_string=textMetrics.elidedText(rows[i],
+                                              Qt::ElideRight,
+                                              wdth
+                                              );
+            m_view_text=oldview;
+            m_view_text+=row_string;
+            m_view_text+="\n";
+         }
+     } else m_view_text+="\n";
+ }
+ if (!m_view_text.isEmpty())
+     m_view_text.remove(m_view_text.length()-1);
+ m_text_rect=bounds;
+ m_text_rect.setWidth(m_text_rect.width()+2*BOX_BORDER_PADDING);
+}
+
+
+void Box::setRect(const QRectF & rect)
+{
+    setX(rect.x());
+    setY(rect.y());
+    m_size.setWidth(rect.width());
+    m_size.setHeight(rect.height());
+    regenerate();
+    this->scene()->update();
+}
+
+
+void Box::setText(const QString & text)
+{
+    m_real_text=text;
+    regenerate();
+    this->scene()->update();
+}
 
 int Box::type() const
 {
@@ -174,9 +298,10 @@ void Box::updateString(const QString & text)
    }
 }
 
+/*
 void Box::regenerate()
 {
-   /*
+
    QRectF       numrect=static_cast<DiagramScene *>(this->scene())->getDefaultBlockNumberSize();
    QRect        rect(m_rect.x(),m_rect.y(),m_rect.width(),m_rect.height());
    QFontMetrics metrics(scene()->font());
@@ -235,9 +360,9 @@ void Box::regenerate()
    m_string_pos=metrics.boundingRect(m_rect.x(),m_rect.y()+1,m_rect.width(),
                                      m_rect.height()-numrect.height(),
                                      Qt::AlignCenter,m_viewed_string);
-   */
-}
 
+}
+*/
 /*
 void Box::setRect(const QRectF & rect)
 {
