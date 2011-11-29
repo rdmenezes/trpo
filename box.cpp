@@ -68,18 +68,30 @@ QRectF Box::boundingRect() const
 
 void Box::paint(QPainter * p)
 {
- QFont oldfont=this->scene()->font();
+ QFont oldfont=p->font();
 
- QFont numberFont=this->scene()->font();
+ QFont numberFont=p->font();
  numberFont.setPointSize(BOX_NUMBER_FONT_SIZE);
 
- QFont textFont=this->scene()->font();
+ QFont textFont=p->font();
  textFont.setPointSize(BOX_TEXT_FONT_SIZE);
 
  p->setPen(QPen(QBrush(BOX_LINE_COLOR),BOX_BORDER_WIDTH));
  p->drawRect(boundingRect());
 
- this->scene()->setFont(oldfont);
+ p->setPen(QPen(QBrush(BOX_TEXT_COLOR),BOX_BORDER_WIDTH));
+
+ p->setFont(numberFont);
+ p->drawText(m_number_rect,
+             Qt::AlignCenter,
+             BOX_NUMBER_TEXT);
+
+ p->setFont(m_view_text);
+ p->drawText(m_text_rect,
+             Qt::AlignTop | Qt::AlignHCenter,
+             m_view_text);
+
+ p->setFont(oldfont);
 }
 
 int Box::type() const

@@ -4,6 +4,7 @@
 #include "compare.h"
 #include <QPainter>
 #include <QGraphicsScene>
+#include <stdio.h>
 
 ArrowSegment::ArrowSegment(ArrowPoint * in, ArrowPoint * out)
 {
