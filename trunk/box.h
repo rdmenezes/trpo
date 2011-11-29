@@ -110,6 +110,22 @@ public:
         \param[in] txt text data
      */
     Box(const QPointF & p, Diagram * d, const QString & txt=BOX_DEFAULT_TEXT);
+    /*!  Saves a data to document
+         \param[in] doc     document data
+         \param[in] element parent element data
+     */
+    virtual  void save(QDomDocument * doc,QDomElement * element);
+    /*! Loads a default data from document populating address map
+        \param[in] element element data
+        \param[in] addressMap adressedMap
+     */
+    virtual  void load(QDomElement * element,
+                       QMap<void *, Serializable *> & addressMap);
+    /*! Resolves inner pointers, from stored in adress map
+        \param[in] addressMap map of addresses
+     */
+    virtual  void resolvePointers(QMap<void *, Serializable *> & adressMap);
+
 
 
     ArrowPoint *& getLineRef(int side,int pos)  { return m_line_refs[side][pos]; }    
@@ -190,11 +206,6 @@ public:
         \param[in] point point
      */
     MoveRange getRange(ArrowPoint * point);
-    /*! Saves a block
-        \param[in] doc document
-        \param[in] diag set
-     */
-    void save(QDomDocument * doc,QDomElement * diagram);
 };
 
 #endif // BOXITEM_H

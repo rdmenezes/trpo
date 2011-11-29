@@ -8,6 +8,7 @@
 #include "tooldelegate.h"
 #include <QStandardItemModel>
 #include "diagram.h"
+#include "box.h"
 
 #define VIEW_WIDTH_X 102
 #define VIEW_WIDTH_Y 102
@@ -48,7 +49,8 @@ MainWindow::MainWindow(QWidget *parent,
     scene->setSceneRect(0,0,ui->view->width()-2,
                             ui->view->height()-2);
     scene->setView(ui->view);
-ui->view->setMouseTracking(true);
+    //Set mouse tracking for  data.
+    ui->view->setMouseTracking(true);
 
     //Setup delegates table
 
@@ -97,6 +99,11 @@ ui->view->setMouseTracking(true);
     connect(ui->actionExport_to_PNF_Ctrl_E,SIGNAL(triggered()),this,SLOT(exportDiagram()));
     connect(ui->actionShow_Help_F1,SIGNAL(triggered()),this,SLOT(showHelp()));
     m_path = NULL;
+
+
+    //Perform test of box
+    Box * box=new Box(QPointF(200,200),diag);
+    scene->addItem(box);
 }
 
 MainWindow::~MainWindow() {
