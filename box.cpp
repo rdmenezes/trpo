@@ -20,6 +20,7 @@ Box::Box(const QPointF & p, Diagram * d, const QString & txt)
   m_view_text=txt;
   m_id=d->getBoxNumber(this);
 
+
   QFont numberFont=scene->font();
   numberFont.setPointSize(BOX_NUMBER_FONT_SIZE);
 
@@ -29,13 +30,13 @@ Box::Box(const QPointF & p, Diagram * d, const QString & txt)
   QFontMetricsF numberMetrics(numberFont);
   QFontMetricsF textMetrics(textFont);
 
-  QRectF  numberRect=numberMetrics.boundingRect(METRICS_TEST_RECT,Qt::AlignCenter,m_real_text);
-  QRectF  textRect  =textMetrics.boundingRect(METRICS_TEST_RECT,
-                                              Qt::AlignCenter,
-                                              BOX_NUMBER_TEXT);
+  QRectF  textRect  =textMetrics.boundingRect(METRICS_TEST_RECT,Qt::AlignCenter,m_real_text);
+  QRectF  numberRect=numberMetrics.boundingRect(METRICS_TEST_RECT,
+                                                Qt::AlignCenter,
+                                                BOX_NUMBER_TEXT);
 
   qreal width=std::max(numberRect.width(),textRect.width())+
-              2*BOX_BORDER_WIDTH;
+              2*BOX_BORDER_WIDTH+2*BOX_BORDER_PADDING;
   qreal height=textRect.height()
                +numberRect.height()
                +BOX_DEFAULT_NUMBER_SPACE;
@@ -45,15 +46,15 @@ Box::Box(const QPointF & p, Diagram * d, const QString & txt)
   QRectF bounds=boundingRect();
   m_number_rect=numberRect;
   m_number_rect.setLeft(bounds.right()-numberRect.width()
-                        -BOX_BORDER_WIDTH);
+                        -BOX_LABEL_PADDING);
   m_number_rect.setTop(bounds.bottom()-numberRect.height()
-                        -BOX_BORDER_WIDTH);
+                        -BOX_LABEL_PADDING);
 
   m_text_rect=bounds;
-  m_text_rect.setLeft(m_text_rect.left()+BOX_BORDER_WIDTH);
-  m_text_rect.setRight(m_text_rect.right()-BOX_BORDER_WIDTH);
-  m_text_rect.setTop(m_text_rect.top()+BOX_BORDER_WIDTH);
-  m_text_rect.setBottom(m_text_rect.bottom()-BOX_BORDER_WIDTH);
+  m_text_rect.setLeft(m_text_rect.left()+BOX_LABEL_PADDING);
+  m_text_rect.setRight(m_text_rect.right()-BOX_LABEL_PADDING);
+  m_text_rect.setTop(m_text_rect.top()+BOX_LABEL_PADDING);
+  m_text_rect.setBottom(m_text_rect.bottom()-BOX_LABEL_PADDING);
 
 }
 
@@ -68,12 +69,12 @@ QRectF Box::boundingRect() const
 
 void Box::paint(QPainter * p)
 {
- QFont oldfont=p->font();
+ QFont oldfont=this->scene()->font();
 
- QFont numberFont=p->font();
+ QFont numberFont=this->scene()->font();
  numberFont.setPointSize(BOX_NUMBER_FONT_SIZE);
 
- QFont textFont=p->font();
+ QFont textFont=this->scene()->font();
  textFont.setPointSize(BOX_TEXT_FONT_SIZE);
 
  p->setPen(QPen(QBrush(BOX_LINE_COLOR),BOX_BORDER_WIDTH));
@@ -83,10 +84,10 @@ void Box::paint(QPainter * p)
 
  p->setFont(numberFont);
  p->drawText(m_number_rect,
-             Qt::AlignCenter,
+             Qt::AlignTop | Qt::AlignLeft,
              BOX_NUMBER_TEXT);
 
- p->setFont(m_view_text);
+ p->setFont(textFont);
  p->drawText(m_text_rect,
              Qt::AlignTop | Qt::AlignHCenter,
              m_view_text);
