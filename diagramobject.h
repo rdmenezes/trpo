@@ -24,8 +24,8 @@ class TextChangeNotImplemented
     an can have collision
  */
 class DiagramObject: public QGraphicsItem,
-                            CollisionObject,
-                            Serializable
+                     public CollisionObject,
+                     public Serializable
 {
 protected:
         Diagram * m_diag;  //!< Diagram

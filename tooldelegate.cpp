@@ -1,6 +1,7 @@
 #include "tooldelegate.h"
 #include <QPixmap>
 #include <QGraphicsView>
+#include <stdio.h>
 
 #define FRAME_OFFSET_X 0
 #define FRAME_OFFSET_Y 0

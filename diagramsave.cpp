@@ -60,10 +60,11 @@ void handleEmptyBlock(QDomDocument * doc,QDomElement * diag,int id)
   diag->appendChild(block);
 }
 
+/*
 void Box::save(QDomDocument * doc,QDomElement * diagram)
 {
  QDomElement block=doc->createElement("block");
- /*
+
  block.setAttribute("this",ptrToString(this));
  block.setAttribute("real_string",stringToStringXML(m_real_text));
  block.setAttribute("viewed_string",stringToStringXML(m_viewtext));
@@ -72,7 +73,7 @@ void Box::save(QDomDocument * doc,QDomElement * diagram)
  block.setAttribute("rect",rectfToString(m_rect));
  block.setAttribute("id",intToString(m_id));
  block.setAttribute("childid",intToString(m_childdiagram));
- */
+
  for (int i=0;i<BLOCK_SIDES;i++)
  {
      for (int j=0;j<MAX_LINE_REFERENCES;j++)
@@ -84,6 +85,7 @@ void Box::save(QDomDocument * doc,QDomElement * diagram)
  }
  diagram->appendChild(block);
 }
+*/
 
 void ALabelItem::save(QDomDocument * doc,QDomElement * diagram)
 {

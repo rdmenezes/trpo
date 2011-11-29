@@ -94,6 +94,26 @@ void Box::paint(QPainter * p)
  p->setFont(oldfont);
 }
 
+
+void Box::save(QDomDocument * /* doc */,
+               QDomElement *  /* element */)
+{
+    //!< TODO: Implement this later
+}
+
+void Box::load(QDomElement * /* element */,
+               QMap<void *, Serializable *> & /* addressMap */ )
+{
+    //!< TODO: Implement this later
+}
+
+void Box::resolvePointers(QMap<void *, Serializable *> &
+                          /* adressMap */)
+{
+    //!< TODO: Implement this later
+}
+
+
 int Box::type() const
 {
     return Box::USERTYPE;
