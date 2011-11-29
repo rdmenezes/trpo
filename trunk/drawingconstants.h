@@ -9,19 +9,25 @@
 
 /*! Default box text
 */
-#define BOX_DEFAULT_TEXT "Process"
+#define BOX_DEFAULT_TEXT "Default process"
 /*! A space betweeen default label and default font
 */
-#define BOX_DEFAULT_NUMBER_SPACE  5
+#define BOX_DEFAULT_NUMBER_SPACE  3
 /*! Box number font size
  */
 #define BOX_NUMBER_FONT_SIZE 10
 /*! Box number font size
  */
-#define BOX_TEXT_FONT_SIZE   14
+#define BOX_TEXT_FONT_SIZE   12
 /*! Box border width
  */
 #define BOX_BORDER_WIDTH 1
+/*! Box border width
+ */
+#define BOX_BORDER_PADDING 1
+/*! Common paddings
+ */
+#define BOX_LABEL_PADDING BOX_BORDER_WIDTH+BOX_BORDER_PADDING
 /*! Box number text
  */
 #define BOX_NUMBER_TEXT  QString("A")+QString::number(m_id)
