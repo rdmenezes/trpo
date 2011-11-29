@@ -56,28 +56,7 @@ Box::Box(const QPointF & p, Diagram * d, const QString & txt)
   m_text_rect.setBottom(m_text_rect.bottom()-BOX_BORDER_WIDTH);
 
 }
-Box::Box(const QPointF & pos,DiagramScene * scene)
-    :DiagramObject(ST_RECTANGLE)
-{
- /*
- m_rect=scene->getDefaultBlockSize(pos);
- m_real_text=DEFAULT_BLOCK_TEXT;
- m_view_text=DEFAULT_BLOCK_TEXT;
- m_id=scene->diagram()->getBoxID();
- m_childdiagram=-1;
- //Get small label position;
- QRectF numbersize=scene->getDefaultBlockNumberSize();
- m_number_pos.setX(m_rect.right()-numbersize.width());
- m_number_pos.setY(m_rect.bottom());
- //Compute bounding rect
- QFontMetrics metrics(scene->font());
- m_string_pos=metrics.boundingRect(m_rect.x(),m_rect.y()+1,m_rect.width(),
-                                   m_rect.height()-numbersize.height(),
-                                   Qt::AlignCenter,m_view_text);
-  //Clears point references
-  memset(m_line_refs,0,sizeof(ArrowPoint*)*BLOCK_SIDES*MAX_LINE_REFERENCES);
-  */
-}
+
 
 QRectF Box::boundingRect() const
 {
@@ -86,26 +65,21 @@ QRectF Box::boundingRect() const
                  );
 }
 
-void Box::paint(QPainter *painter,
-                    const QStyleOptionGraphicsItem *option,
-                    QWidget *widget)
+
+void Box::paint(QPainter * p)
 {
-  /*
-  painter->setBrush(Qt::NoBrush);
-  QPen pen(QColor(0,0,0));
-  pen.setWidth(1);
-  painter->setPen(pen);
-  QRect rect(m_rect.x(),m_rect.y(),m_rect.width(),m_rect.height());
-  painter->drawRect(rect);
-  QFont oldfont(painter->font());
-  QFont newfont(oldfont);
-  newfont.setPointSize(10);
-  painter->setFont(newfont);
-  painter->drawText(m_number_pos,QString::number(m_id));
-  painter->setFont(oldfont);
-  painter->drawText(m_string_pos,m_view_text);
-  (void)option,widget;
-  */
+ QFont oldfont=this->scene()->font();
+
+ QFont numberFont=this->scene()->font();
+ numberFont.setPointSize(BOX_NUMBER_FONT_SIZE);
+
+ QFont textFont=this->scene()->font();
+ textFont.setPointSize(BOX_TEXT_FONT_SIZE);
+
+ p->setPen(QPen(QBrush(BOX_LINE_COLOR),BOX_BORDER_WIDTH));
+ p->drawRect(boundingRect());
+
+ this->scene()->setFont(oldfont);
 }
 
 int Box::type() const

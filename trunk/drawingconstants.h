@@ -25,6 +25,11 @@
 /*! Box number text
  */
 #define BOX_NUMBER_TEXT  QString("A")+QString::number(m_id)
-
+/*! Box line color
+ */
+#define BOX_LINE_COLOR   QColor(0,0,0)
+/*! Box text color
+ */
+#define BOX_TEXT_COLOR   QColor(0,0,0)
 
 #endif // DRAWINGCONSTANTS_H

@@ -35,10 +35,13 @@ public:
 };
 
 
-/*! Function, that creates an object for tag.
- */
 template<typename T>
-Serializable * create() { return new T(); }
+class Creator
+{
+  public:
+        static  Serializable * create() { return new T(); }
+};
+
 /*! Class, that creates object, corresponding tags
     He needs initialization on start, and any object, must have
     default constructor
@@ -56,7 +59,7 @@ class SerializableFactory
          template<typename T>
          static void bind(const QString & name)
          {
-             m_tagmap.insert(name,&create<T>);
+             m_tagmap.insert(name,&(Creator<T>::create));
          }
          /*! Creates an object, corresponding to tag
           */
