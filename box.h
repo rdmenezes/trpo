@@ -75,6 +75,12 @@ private:
         int      m_id;
 
 
+protected:
+        /*! Paints a box
+         */
+        void paint(QPainter * p);
+private:
+
         /*! Location of child diagram (-1 is default)
          */
         int m_childdiagram;
@@ -88,6 +94,7 @@ private:
         /*! Declares, whether point can be added to side
          */
         bool canAddToSide(BoxSide side);
+
 public:
           /*! Describes a key press event
            */
@@ -103,6 +110,7 @@ public:
         \param[in] txt text data
      */
     Box(const QPointF & p, Diagram * d, const QString & txt=BOX_DEFAULT_TEXT);
+
 
     ArrowPoint *& getLineRef(int side,int pos)  { return m_line_refs[side][pos]; }    
     /*! Declares a type of item
@@ -135,14 +143,7 @@ public:
     /*! Updates an item string
      */
     void updateString(const QString & text);
-    /*! Paint event reaction
-        \param[in] painter painter drawing
-        \param[in] option options
-        \param[in] widget widget data
-     */
-    void paint(QPainter *painter,
-               const QStyleOptionGraphicsItem *option,
-               QWidget *widget);
+
     /*! Returns a child diagram
         \return id
      */
