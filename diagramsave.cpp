@@ -1,7 +1,7 @@
 #include "diagramset.h"
 #include "diagram.h"
-#include "alabelitem.h"
-#include "alineitem.h"
+#include "freecomment.h"
+#include "commentline.h"
 #include "arrowpoint.h"
 #include "arrowsegment.h"
 #include "box.h"
@@ -87,7 +87,7 @@ void Box::save(QDomDocument * doc,QDomElement * diagram)
 }
 */
 
-void ALabelItem::save(QDomDocument * doc,QDomElement * diagram)
+void FreeComment::save(QDomDocument * doc,QDomElement * diagram)
 {
  QDomElement alabel=doc->createElement("annotation_label");
  alabel.setAttribute("string",stringToStringXML(m_string));
@@ -95,7 +95,7 @@ void ALabelItem::save(QDomDocument * doc,QDomElement * diagram)
  diagram->appendChild(alabel);
 }
 
-void ALineItem::save(QDomDocument * doc,QDomElement * diagram)
+void CommentLine::save(QDomDocument * doc,QDomElement * diagram)
 {
  QDomElement  aline=doc->createElement("annotation_line");
  aline.setAttribute("this",ptrToString(this));

@@ -1,7 +1,7 @@
 #include "box.h"
 #include "diagramscene.h"
 #include "keytest.h"
-#include "labeledit.h"
+#include "objecttexteditor.h"
 #include "arrowpoint.h"
 #include <QFontMetricsF>
 #include <math.h>
@@ -268,7 +268,7 @@ void Box::keyPressEvent(QKeyEvent *event)
        if (isTextEditKey(event) &&
            myscene->editState()==TES_NONE)
        {
-           LabelEdit  * field=new LabelEdit(myscene,const_cast<Box*>(this));
+           ObjectTextEditor  * field=new LabelEdit(myscene,const_cast<Box*>(this));
            QRect tmp(m_rect.x(),m_rect.y(),m_rect.width(),m_rect.height());
            field->setGeometry(tmp);
            field->setFont(myscene->font());

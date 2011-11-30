@@ -1,5 +1,5 @@
 #include "arrowpoint.h"
-#include "alineitem.h"
+#include "commentline.h"
 #include "arrowsegment.h"
 #include "diagram.h"
 #include "box.h"
@@ -257,7 +257,7 @@ bool ArrowPoint::canMoveTo(const QPointF & pos, ArrowSegment * exc)
      return r.isWithin(pos);
 }
 
-void ArrowPoint::removeAnnotation(ALineItem * line)
+void ArrowPoint::removeAnnotation(CommentLine * line)
 {
     for (int i=0;i<m_lines.size();i++)
     {
@@ -269,7 +269,7 @@ void ArrowPoint::removeAnnotation(ALineItem * line)
     }
 }
 
-void ArrowPoint::attachAnnotation(ALineItem * line)
+void ArrowPoint::attachAnnotation(CommentLine * line)
 {
     m_lines<<line;
 }

@@ -1,8 +1,8 @@
 #include "diagram.h"
 #include "box.h"
 #include "collision.h"
-#include "alabelitem.h"
-#include "alineitem.h"
+#include "freecomment.h"
+#include "commentline.h"
 #include "arrowpoint.h"
 #include "arrowsegment.h"
 #include "diagramset.h"
@@ -94,12 +94,12 @@ void Diagram::addBox(Box * box)
   this->m_boxes[box->id()]=box;
 }
 
-void Diagram::addAnnotationLabel(ALabelItem * label)
+void Diagram::addAnnotationLabel(FreeComment * label)
 {
   this->m_alabels<<label;
 }
 
-void Diagram::removeAnnotationLabel(ALabelItem * label)
+void Diagram::removeAnnotationLabel(FreeComment * label)
 {
     for (int i=0;i<m_alabels.size();i++)
     {
@@ -170,7 +170,7 @@ bool Diagram::canBePlaced(const QRectF &rect, QGraphicsItem *pointer)
           && testForNoBlockCollision(rect,pointer);
 }
 
-bool Diagram::canBePlaced(const QRectF &rect, ALabelItem *pointer)
+bool Diagram::canBePlaced(const QRectF &rect, FreeComment *pointer)
 {
     return canBePlaced(rect,(QGraphicsItem*)pointer) && doesntCollideWithLines(rect);
 }
@@ -200,7 +200,7 @@ void Diagram::setBlockID(Box * item, char pos)
         item->setID(pos);
 }
 
-void Diagram::addAnnotationLine(ALineItem * line)
+void Diagram::addAnnotationLine(CommentLine * line)
 {
     m_alines<<line;
     line->setDiagram(this);
@@ -219,7 +219,7 @@ void Diagram::addArrowSegment(ArrowSegment * segment)
     segment->setDiagram(this);
 }
 
-void Diagram::removeAnnotationLine(ALineItem * line)
+void Diagram::removeAnnotationLine(CommentLine * line)
 {
    for (int i=0;i<m_alines.size();i++)
    {

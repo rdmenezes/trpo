@@ -15,7 +15,7 @@ class Diagram;
 //An arrow segment, where data is placed
 class ArrowSegment;
 //A line ,where data is placed
-class ALineItem;
+class CommentLine;
 //A class of box item
 class Box;
 //Dom element
@@ -44,7 +44,7 @@ private:
         QVector<ArrowSegment *> m_out;
         /*!   Attached annotation lines
         */
-        QVector<ALineItem * >  m_lines;
+        QVector<CommentLine * >  m_lines;
         /*! Generates moving restriction policy
             \param[out] result policy
             \param[in]  point  that determines restrictions
@@ -64,7 +64,7 @@ public:
         inline QVector<ArrowSegment *> & accessOut() { return m_out; }
         /*!   Attached annotation lines
         */
-        inline QVector<ALineItem * >  & accessLines() { return  m_lines; }
+        inline QVector<CommentLine * >  & accessLines() { return  m_lines; }
         /*! Detects, whether has annotations
          */
         bool hasAnnotations() { return m_lines.size()!=0; }
@@ -111,7 +111,7 @@ public:
         /*! Adds an annotation line, which is attached line
             \param[in] line annotation line
          */
-        void attachAnnotation(ALineItem * line);
+        void attachAnnotation(CommentLine * line);
         /*! Tries a segment removal
             \param[in] segment segment data
             \return true, on success false, if can't be
@@ -120,7 +120,7 @@ public:
         /*! Removes an annotation from segment
             \param[in] line line, that will be removed
          */
-        void removeAnnotation(ALineItem * line);
+        void removeAnnotation(CommentLine * line);
         /*! Removes a point from diagram
          */
         void die();
@@ -172,7 +172,7 @@ public:
         bool canMoveTo(const QPointF & pos, ArrowSegment * exc=NULL);
         /*! Returns a lines.
          */
-        inline QVector<ALineItem * > & annotationLines() { return m_lines; }
+        inline QVector<CommentLine * > & annotationLines() { return m_lines; }
         /*! Saves a point
             \param[in] doc document
             \param[in] diagram diagram

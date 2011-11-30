@@ -1,7 +1,7 @@
 #include "diagramscene.h"
 #include "arrowpoint.h"
 #include "arrowsegment.h"
-#include "alineitem.h"
+#include "commentline.h"
 #include "diagram.h"
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
@@ -42,7 +42,7 @@ void DiagramScene::processAnnotationLineSecondPointOnBlank(const QPointF & pos)
  error= error || toosmall || cannotPlace;
  if (!error)
  {
-    ALineItem * aline=NULL;
+    CommentLine * aline=NULL;
     if (m_aline_segment)
     {
       ArrowPoint * p=new ArrowPoint(m_aline_firstpoint.x(),m_aline_firstpoint.y());
@@ -56,10 +56,10 @@ void DiagramScene::processAnnotationLineSecondPointOnBlank(const QPointF & pos)
       m_aline_segment->in()->tryRemoveSegment(m_aline_segment,false);
       m_aline_segment->out()->tryRemoveSegment(m_aline_segment,false);
       m_aline_segment->die();
-      aline=new ALineItem(p,second);
+      aline=new CommentLine(p,second);
     }
     if (!aline)
-         aline=new ALineItem(m_aline_firstpoint,second);
+         aline=new CommentLine(m_aline_firstpoint,second);
     this->addItem(aline);
     m_diag->addAnnotationLine(aline);
     this->update();
@@ -96,7 +96,7 @@ void DiagramScene::processAnnotationLineToSegment(const QPointF & pos,
 }
 
 void DiagramScene::enterAnnotationLineResize(const QPointF & pos,
-                                             ALineItem * item)
+                                             CommentLine * item)
 {
  (void)pos;
   m_dragstate=DS_ALINE_RESIZE;
@@ -125,7 +125,7 @@ void DiagramScene::leaveAnnotationLineResize(const QPointF & pos)
   m_resizing_aline=NULL;
 }
 
-void DiagramScene::removeAnnotationLine(ALineItem * line)
+void DiagramScene::removeAnnotationLine(CommentLine * line)
 {
  if (line->isAttachedToLine())
  {

@@ -16,9 +16,9 @@ class QGraphicsItem;
 //Box item
 class Box;
 //Annotation label item
-class ALabelItem;
+class FreeComment;
 //Annoation lint item
-class ALineItem;
+class CommentLine;
 //Arrow points item
 class ArrowPoint;
 //Arrow segments item
@@ -99,10 +99,10 @@ private:
         Box             *      m_boxes[DIAGRAM_MAX_BLOCKS];
         /*! Vector  of annotation labels
          */
-        QVector<ALabelItem *>   m_alabels;
+        QVector<FreeComment *>   m_alabels;
         /*! Vector of annotation lines
          */
-        QVector<ALineItem *>    m_alines;
+        QVector<CommentLine *>    m_alines;
         /*! Vector of arrow points
          */
         QVector<ArrowPoint *>   m_arrow_points;
@@ -180,10 +180,10 @@ public:
         inline int getTotalBoxes() { return DIAGRAM_MAX_BLOCKS; }
         /*! Returns an annotation labels
          */
-        inline QVector<ALabelItem *> & annotationLabels() { return  m_alabels; }
+        inline QVector<FreeComment *> & annotationLabels() { return  m_alabels; }
         /*! Returns an annotatione lines
          */
-        inline QVector<ALineItem *> &  annotationLines() { return m_alines; }
+        inline QVector<CommentLine *> &  annotationLines() { return m_alines; }
         /*! Returns an arrow points
          */
         inline QVector<ArrowPoint *> &  arrowPoints()    { return  m_arrow_points; }
@@ -210,7 +210,7 @@ public:
         /*! Adds a new Annotation Label
             \param[in] label annotation label  to be added
          */
-        void addAnnotationLabel(ALabelItem * label);
+        void addAnnotationLabel(FreeComment * label);
         /*! Determines, whether block can be placed or not
             \param[in] rect   bounding rect geometry
             \param[in] pointer NULL if don't check
@@ -220,7 +220,7 @@ public:
             \param[in] rect   bounding rect geometry
             \param[in] pointer NULL if don't check
          */
-        bool canBePlaced(const QRectF & rect, ALabelItem * pointer=NULL);
+        bool canBePlaced(const QRectF & rect, FreeComment * pointer=NULL);
         /*! Determines, whether arrow can be placed ot not
             \param[in] point1  first point
             \param[in] point2  second point
@@ -253,11 +253,11 @@ public:
         /*! Removes an annotation label
             \param[in] label label item
          */
-        void removeAnnotationLabel(ALabelItem * label);
+        void removeAnnotationLabel(FreeComment * label);
         /*! Adds a new annotation line
             \param[in] line annotation line
          */
-        void addAnnotationLine(ALineItem * line);
+        void addAnnotationLine(CommentLine * line);
         /*! Adds a new arrow point
             \param[in]  point arrow point
          */
@@ -269,7 +269,7 @@ public:
         /*! Removes an annotation line from diagram
             \param[in] line  annotationline
          */
-        void removeAnnotationLine(ALineItem * line);
+        void removeAnnotationLine(CommentLine * line);
         /*! Removes an arrow point from diagram
             \param[in] point arrow point
          */

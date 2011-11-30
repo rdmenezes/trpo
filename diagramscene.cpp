@@ -1,11 +1,11 @@
 #include "diagramscene.h"
 #include "helpwindow.h"
 #include "toolpanel.h"
-#include "labeledit.h"
-#include "alabelitem.h"
+#include "objecttexteditor.h"
+#include "commentline.h"
 #include "arrowsegment.h"
 #include "arrowpoint.h"
-#include "alineitem.h"
+#include "freecomment.h"
 #include <QTextEdit>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
@@ -111,31 +111,31 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
     update();
 #endif
 #ifdef TOP_ALINE_TEST
-    this->addItem( new ALineItem(QPointF(200,200),QPointF(200,190)) );
-    this->addItem( new ALineItem(QPointF(250,200),QPointF(250,150)) );
-    this->addItem( new ALineItem(QPointF(300,200),QPointF(300,100)) );
-    this->addItem( new ALineItem(QPointF(350,200),QPointF(350,50)) );
+    this->addItem( new CommentLine(QPointF(200,200),QPointF(200,190)) );
+    this->addItem( new CommentLine(QPointF(250,200),QPointF(250,150)) );
+    this->addItem( new CommentLine(QPointF(300,200),QPointF(300,100)) );
+    this->addItem( new CommentLine(QPointF(350,200),QPointF(350,50)) );
     this->update();
 #endif
 #ifdef BOTTOM_ALINE_TEST
-    this->addItem( new ALineItem(QPointF(200,190),QPointF(200,200)) );
-    this->addItem( new ALineItem(QPointF(250,150),QPointF(250,200)) );
-    this->addItem( new ALineItem(QPointF(300,100),QPointF(300,200)) );
-    this->addItem( new ALineItem(QPointF(350,50),QPointF(350,200)) );
+    this->addItem( new CommentLine(QPointF(200,190),QPointF(200,200)) );
+    this->addItem( new CommentLine(QPointF(250,150),QPointF(250,200)) );
+    this->addItem( new CommentLine(QPointF(300,100),QPointF(300,200)) );
+    this->addItem( new CommentLine(QPointF(350,50),QPointF(350,200)) );
     this->update();
 #endif
 #ifdef LEFT_ALINE_TEST
-    this->addItem( new ALineItem(QPointF(350,200),QPointF(340,200)) );
-    this->addItem( new ALineItem(QPointF(350,150),QPointF(300,150)) );
-    this->addItem( new ALineItem(QPointF(350,100),QPointF(250,100)) );
-    this->addItem( new ALineItem(QPointF(350,50),QPointF(150,50)) );
+    this->addItem( new CommentLine(QPointF(350,200),QPointF(340,200)) );
+    this->addItem( new CommentLine(QPointF(350,150),QPointF(300,150)) );
+    this->addItem( new CommentLine(QPointF(350,100),QPointF(250,100)) );
+    this->addItem( new CommentLine(QPointF(350,50),QPointF(150,50)) );
     this->update();
 #endif
 #ifdef RIGHT_ALINE_TEST
-    this->addItem( new ALineItem(QPointF(340,200),QPointF(350,200)) );
-    this->addItem( new ALineItem(QPointF(300,150),QPointF(350,150)) );
-    this->addItem( new ALineItem(QPointF(250,100),QPointF(350,100)) );
-    this->addItem( new ALineItem(QPointF(150,50),QPointF(350,50)) );
+    this->addItem( new CommentLine(QPointF(340,200),QPointF(350,200)) );
+    this->addItem( new CommentLine(QPointF(300,150),QPointF(350,150)) );
+    this->addItem( new CommentLine(QPointF(250,100),QPointF(350,100)) );
+    this->addItem( new CommentLine(QPointF(150,50),QPointF(350,50)) );
     this->update();
 #endif
 }
@@ -218,9 +218,9 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
              this->enterArrowMove(event->scenePos(),static_cast<ArrowSegment *>(lst[i]));
              return;
          }
-         if (m_tooltype==TT_SELECT && lst[i]->type()==ALineItem::USERTYPE)
+         if (m_tooltype==TT_SELECT && lst[i]->type()==CommentLine::USERTYPE)
          {
-             this->enterAnnotationLineResize(event->scenePos(),static_cast<ALineItem *>(lst[i]));
+             this->enterAnnotationLineResize(event->scenePos(),static_cast<CommentLine *>(lst[i]));
              return;
          }
      }
@@ -351,9 +351,9 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
              static_cast<Box *>(items[i])->keyPressEvent(event);
              handled=true;
          }
-         if (items[i]->type()==ALabelItem::USERTYPE)
+         if (items[i]->type()==FreeComment::USERTYPE)
          {
-             static_cast<ALabelItem *>(items[i])->keyPressEvent(event);
+             static_cast<FreeComment *>(items[i])->keyPressEvent(event);
              handled=true;
          }
 
@@ -434,9 +434,9 @@ void DiagramScene::addBlock(QGraphicsSceneMouseEvent *event)
 void DiagramScene::addAnnotationLabel(QGraphicsSceneMouseEvent *event)
 {
  QRectF size=getDefaultAnnotationLabelSize(event->scenePos());
- if (m_diag->canBePlaced(size,(ALabelItem*)NULL))
+ if (m_diag->canBePlaced(size,(FreeComment*)NULL))
  {
-     ALabelItem * a=new ALabelItem(size);
+     FreeComment * a=new FreeComment(size);
      this->addItem(a);
      m_diag->addAnnotationLabel(a);
  }
@@ -478,18 +478,18 @@ void DiagramScene::processRemoving(const QList<QGraphicsItem *> & items)
             m_diag->removeBlock(id);
             this->removeItem(items[i]);
         }
-        if (items[i]->type()==ALabelItem::USERTYPE)
+        if (items[i]->type()==FreeComment::USERTYPE)
         {
-            m_diag->removeAnnotationLabel(static_cast<ALabelItem *>(items[i]));
+            m_diag->removeAnnotationLabel(static_cast<FreeComment *>(items[i]));
             this->removeItem(items[i]);
         }
         if (items[i]->type()==ArrowSegment::USERTYPE)
         {
           removeArrowSegment(static_cast<ArrowSegment *>(items[i]));
         }
-        if (items[i]->type()==ALineItem::USERTYPE)
+        if (items[i]->type()==CommentLine::USERTYPE)
         {
-            removeAnnotationLine(static_cast<ALineItem *>(items[i]));
+            removeAnnotationLine(static_cast<CommentLine *>(items[i]));
         }
     }
  }
@@ -525,11 +525,11 @@ void  DiagramScene::blockResizeMoveEnter ( QGraphicsSceneMouseEvent * event )
                                            event->scenePos()
                                            );
           }
-          if (lst[i]->type()==ALabelItem::USERTYPE)
+          if (lst[i]->type()==FreeComment::USERTYPE)
           {
               m_dragstate=DS_ALABEL_MOVE;
               QPointF pos=event->scenePos();
-              ALabelItem * item=static_cast<ALabelItem *>(lst[i]);
+              FreeComment * item=static_cast<FreeComment *>(lst[i]);
               m_moving_label=item;
               QRectF       rct=item->boundingRect();
               m_blockmovingparams[0]=(pos.x()-rct.left())/rct.width();
