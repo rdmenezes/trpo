@@ -105,15 +105,17 @@ MainWindow::MainWindow(QWidget *parent,
     Box * t=new Box(QPointF(100,25),diag);
     QRectF tmp=t->boundingRect();
     scene->addItem(t);
-    for (int i=0;i<5;i++)
+    for (int i=1;i<5;i++)
     {
       Box * box=new Box(QPointF (100,50
-                                     +(tmp.height()+2)*i),
+                                     +(tmp.height()+8)*i),
                         diag);
       scene->addItem(box);
       QRectF r=box->boundingRect();
-      r.setWidth(r.width()-4*i);
+      r.setWidth(r.width()+4*i);
+      r.setHeight(r.height()+4*i);
       box->setRect(r);
+      box->setText("Text\ngrazedaaaaa!");
     }
     /*
     Box * box=new Box(QPointF(100,100),diag);
