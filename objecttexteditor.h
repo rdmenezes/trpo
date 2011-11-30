@@ -6,17 +6,11 @@
 #ifndef LABELEDIT_H
 #define LABELEDIT_H
 
+#include "diagramobject.h"
+#include "diagramscene.h"
 #include <QPlainTextEdit>
 #include <time.h>
-/*! A diagram scene aggregation
- */
-class DiagramScene;
-/*! An annotation label item
- */
-class FreeComment;
-/*! Box item
- */
-class Box;
+
 /*! Ctrl pressed time
  */
 #define LE_CTRL_PRESSED 0.5
@@ -33,23 +27,13 @@ private:
         DiagramScene * m_scene;
         /*! Box item pointer
          */
-        ::Box      * m_boxitem;
-        /*! Annotation label pointer
-         */
-        FreeComment   * m_alabelitem;
+        DiagramObject * m_object;
 public:
         /*! Constructs a label edit
-            \param[in] scene scene, where it's placed
-            \param[in] item  item data
-            \param[in] parent NULL
+            \param[in] scene  scene, where it's placed
+            \param[in] object object data
          */
-        ObjectTextEditor(DiagramScene * scene, ::Box * item,QWidget *parent = 0);
-        /*! Constructs a label edit
-            \param[in] scene scene, where it's placed
-            \param[in] item  item data
-            \param[in] parent NULL
-         */
-        ObjectTextEditor(DiagramScene * scene, FreeComment * item,QWidget *parent = 0);
+        ObjectTextEditor(DiagramScene * scene, DiagramObject * object);
         /*! Describes a key pressing event, that registers a control pressing
             \param[in] e event
          */

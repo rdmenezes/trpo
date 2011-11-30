@@ -9,11 +9,12 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsSceneDragDropEvent>
+#include <QKeyEvent>
 #include "tooltype.h"
 #include "diagram.h"
 #include "box.h"
 #include "arrowsegment.h"
-
+#include "diagramobject.h"
 
 #include "tool.h"
 
@@ -64,9 +65,6 @@ enum ArrowDirection;
 /*! A class of panel for tool selection
  */
 class ToolPanel;
-/*! Label editor, used for editing labels of blocks and annotation labels
- */
-class ObjectTextEditor;
 /*! \class DiagramScene
     Declares a scene, containing the diagram data
 */
@@ -76,6 +74,7 @@ Q_OBJECT
 private:
     Tool                 *   m_tool;               //!< Current tool
     Diagram              *   m_diag;               //!< Diagram data
+    QGraphicsProxyWidget *   m_editor;             //!< A current text editor
 
 
     QGraphicsView *          m_view;               //!< View widget pointer for data
@@ -85,7 +84,6 @@ private:
     QRectF                   m_default_block_size; //!< Default block size tool
     QRectF                   m_default_number_size; //!< Default number size for block
     TextEditState            m_edit_state;         //!< Text edit state
-    ObjectTextEditor            *   m_label_editor;       //!< A current label editor
     QGraphicsProxyWidget *   m_label_editor_in_scene; //!< A label editor in scene
     DragState                m_dragstate;          //!< Dragging state work
     Box                  *   m_draggingblock;      //!< Dragged block
@@ -249,6 +247,16 @@ public:
         \param[in] d  diagram
      */
     inline void setDiagram(Diagram * d) { m_diag=d; }
+    /*! Enables editor mode (adds ObjectTextEditor at specified rectangle)
+        \param[in] on whether it's on
+        \param[in] r  rectangle
+        \param[in] e  event, that is provided to editor
+        \param[in] d  diagram object
+     */
+    void toggleEditMode(bool on, const QRectF & r=QRectF(),
+                                 QKeyEvent * e=NULL,
+                                 DiagramObject * d=NULL);
+
 
     /*! Event, that occures when mouse is being pressed
         \param[in] ev event
@@ -308,13 +316,14 @@ public:
     /*! Toggles editing state on
         \param[in] edit  editor
         \param[in] sed   proxy widget
-     */
+
     inline void toggleEditStateOn(ObjectTextEditor * edit, QGraphicsProxyWidget * sed)
     {
        this->m_edit_state=TES_EDIT;
        this->m_label_editor=edit;
        this->m_label_editor_in_scene=sed;
     }
+    */
     /*! Toggles editing state off
      */
     void toggleEditStateOff();

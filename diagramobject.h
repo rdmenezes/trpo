@@ -51,6 +51,10 @@ public:
         \param[in] text text data
      */
     virtual void setText(const QString & text);
+    /*! Returns editor text
+        \return text for editor
+     */
+    virtual const QString & getEditableText() const;
     /*! Paint event reaction
         \param[in] painter painter drawing
         \param[in] option options

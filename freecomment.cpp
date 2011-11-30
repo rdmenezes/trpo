@@ -44,7 +44,7 @@ void FreeComment::keyPressEvent(QKeyEvent *event)
     if (isTextEditKey(event) &&
         myscene->editState()==TES_NONE)
     {
-        ObjectTextEditor  * field=new ObjectTextEditor(myscene,this);
+        ObjectTextEditor  * field=new ObjectTextEditor(myscene,NULL);
 
         const int border_hint=5;
         QRect tmp(m_rect.x(),m_rect.y(),m_rect.width(),m_rect.height()+2*border_hint);
@@ -58,7 +58,7 @@ void FreeComment::keyPressEvent(QKeyEvent *event)
         field->setTextCursor(c);
         QGraphicsProxyWidget * proxy=this->scene()->addWidget(field);
         proxy->update();
-        myscene->toggleEditStateOn(field,proxy);
+        //myscene->toggleEditStateOn(field,proxy);
         field->grabKeyboard();
         field->keyPressEvent(event);
     }
