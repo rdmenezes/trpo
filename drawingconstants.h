@@ -6,6 +6,9 @@
 #ifndef DRAWINGCONSTANTS_H
 #define DRAWINGCONSTANTS_H
 
+/*! Rectangle for testing metrics
+ */
+#define METRICS_TEST_RECT  QRectF(0,0,4.0E+9,4.0E+9)
 
 /*! Default box text
 */
@@ -37,5 +40,19 @@
 /*! Box text color
  */
 #define BOX_TEXT_COLOR   QColor(0,0,0)
+
+
+/*! Free comment default label
+ */
+#define FC_TEXT   "Comment"
+/*! Default font size
+ */
+#define FC_FONT_SIZE  12
+/*! Default rectangle padding between text
+ */
+#define FC_PADDING 1
+/*! Default font color
+ */
+#define FC_FONT_COLOR  QColor(0,0,0)
 
 #endif // DRAWINGCONSTANTS_H

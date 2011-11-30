@@ -7,9 +7,7 @@
 #include <math.h>
 #include <string.h>
 #include <algorithm>
-
-#define METRICS_TEST_RECT  QRectF(0,0,4.0E+9,4.0E+9)
-
+#include <memory>
 
 Box::Box(const QPointF & p, Diagram * d, const QString & txt)
     :DiagramObject(ST_RECTANGLE)
@@ -21,48 +19,49 @@ Box::Box(const QPointF & p, Diagram * d, const QString & txt)
   m_id=d->getBoxNumber(this);
 
 
-  QFont numberFont=scene->font();
-  numberFont.setPointSize(BOX_NUMBER_FONT_SIZE);
+  std::auto_ptr<QFont>  numberFont(new QFont(scene->font()));
+  numberFont->setPointSize(BOX_NUMBER_FONT_SIZE);
 
-  QFont textFont=scene->font();
-  textFont.setPointSize(BOX_TEXT_FONT_SIZE);
+  std::auto_ptr<QFont>  textFont(new QFont(scene->font()));
+  textFont->setPointSize(BOX_TEXT_FONT_SIZE);
 
-  QFontMetricsF numberMetrics(numberFont);
-  QFontMetricsF textMetrics(textFont);
+  std::auto_ptr<QFontMetricsF>  numberMetrics(new QFontMetricsF(*numberFont));
+  std::auto_ptr<QFontMetricsF>  textMetrics(new QFontMetricsF(*textFont));
 
-  QRectF  textRect  =textMetrics.boundingRect(METRICS_TEST_RECT,Qt::AlignCenter,m_real_text);
-  QRectF  numberRect=numberMetrics.boundingRect(METRICS_TEST_RECT,
-                                                Qt::AlignCenter,
-                                                BOX_NUMBER_TEXT);
+  std::auto_ptr<QRectF>  textRect (new QRectF(textMetrics->boundingRect(METRICS_TEST_RECT,Qt::AlignCenter,m_real_text)));
+  std::auto_ptr<QRectF>  numberRect(new QRectF(numberMetrics->boundingRect(METRICS_TEST_RECT,
+                                                 Qt::AlignCenter,
+                                                 BOX_NUMBER_TEXT)));
 
-  qreal width=std::max(numberRect.width(),textRect.width())
+  qreal width=std::max(numberRect->width(),textRect->width())
               +2*BOX_BORDER_PADDING;
-  qreal height=textRect.height()
-               +numberRect.height()
+  qreal height=textRect->height()
+               +numberRect->height()
                +BOX_DEFAULT_NUMBER_SPACE
                +2*BOX_BORDER_PADDING;
   m_size=QSize(width,height);
   setPos(p-QPointF(width/2,height/2));
 
-  QRectF bounds=boundingRect();
-  m_number_rect=numberRect;
-  m_number_rect.setLeft(bounds.right()-numberRect.width()
+  std::auto_ptr<QRectF> bounds(new QRectF(boundingRect()));
+  m_number_rect=*numberRect;
+  m_number_rect.setLeft(bounds->width()-numberRect->width()
                         -BOX_LABEL_PADDING);
-  m_number_rect.setTop(bounds.bottom()-numberRect.height()
+  m_number_rect.setTop(bounds->height()-numberRect->height()
                         -BOX_LABEL_PADDING);
 
-  m_text_rect=bounds;
-  m_text_rect.setTop(m_text_rect.top()+BOX_LABEL_PADDING);
-  m_text_rect.setBottom(m_text_rect.bottom()-BOX_LABEL_PADDING);
+  m_text_rect=*bounds;
+  m_text_rect.setTop(BOX_LABEL_PADDING);
+  m_text_rect.setBottom(m_text_rect.height()-BOX_LABEL_PADDING);
 
   m_number_is_visible=true;
+
 }
 
 
 QRectF Box::boundingRect() const
 {
-    return QRectF(scenePos(),scenePos()+
-                             QPointF(m_size.width(),m_size.height())
+    return QRectF(0,0,
+                  m_size.width(),m_size.height()
                  );
 }
 
@@ -160,8 +159,8 @@ void Box::regenerate()
   m_number_is_visible=false;
   return;
  }
- numberRect.moveLeft(bounds.right()-numberRect.width());
- numberRect.moveTop(bounds.bottom()-numberRect.height());
+ numberRect.moveLeft(bounds.width()-numberRect.width());
+ numberRect.moveTop(bounds.height()-numberRect.height());
  m_number_rect=numberRect;
  m_view_text="";
  bool exit=false;
@@ -229,9 +228,10 @@ void Box::setRect(const QRectF & rect)
 {
     setX(rect.x());
     setY(rect.y());
+    //setPos(QPointF(rect.x(),rect.y()));
     m_size.setWidth(rect.width());
     m_size.setHeight(rect.height());
-    regenerate();
+    //regenerate();
     this->scene()->update();
 }
 

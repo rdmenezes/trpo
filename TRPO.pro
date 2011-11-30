@@ -33,7 +33,8 @@ SOURCES += main.cpp \
     tooldelegate.cpp \
     serializable.cpp \
     diagramobject.cpp \
-    box.cpp
+    box.cpp \
+    graphicunittests.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
@@ -62,7 +63,8 @@ HEADERS += mainwindow.h \
     direction.h \
     boxconnectortype.h \
     objectconnector.h \
-    drawingconstants.h
+    drawingconstants.h \
+    graphicunittests.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc
