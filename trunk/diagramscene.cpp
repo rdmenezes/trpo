@@ -27,10 +27,40 @@
 //#define LEFT_ALINE_TEST
 //#define RIGHT_ALINE_TEST
 
+
+void DiagramScene::toggleEditMode(bool on, const QRectF & r,
+                                           QKeyEvent * e,
+                                           DiagramObject * d)
+{
+  if (on)
+  {
+     if (m_editor) return;
+     ObjectTextEditor * editor=new ObjectTextEditor(this,d);
+     editor->setGeometry(r.x(),r.y(),r.width(),r.height());
+     editor->setFont(this->font());
+     editor->setPlainText(d->getEditableText());
+     QTextCursor c=editor->textCursor();
+     c.movePosition(QTextCursor::End);
+     editor->setTextCursor(c);
+     m_editor=this->addWidget(editor);
+     editor->grabKeyboard();
+     editor->keyPressEvent(e);
+  }
+  else
+  {
+      if (!m_editor) return;
+      m_editor->widget()->releaseKeyboard();
+      this->removeItem(m_editor);
+      m_editor=NULL;
+  }
+}
+
 DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
     QGraphicsScene(parent)
 {
   m_diag=d;
+  m_editor=NULL;
+
   m_tooltype=TT_BLOCK;
   m_panel=NULL;
   m_panel_in_scene=NULL;
@@ -65,7 +95,7 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
   */
   //Sets a no edit state
   m_edit_state=TES_NONE;
-  m_label_editor=NULL;
+  //m_label_editor=NULL;
   m_label_editor_in_scene=NULL;
   this->clearElementStates();
 
@@ -150,11 +180,11 @@ void DiagramScene::hideUI()
  m_panel_in_scene=NULL;
  if (m_edit_state==TES_EDIT)
  {
-     this->removeItem(m_label_editor_in_scene);
+ //    this->removeItem(m_label_editor_in_scene);
  }
  m_edit_state=TES_NONE;
- m_label_editor=NULL;
- m_label_editor_in_scene=NULL;
+// m_label_editor=NULL;
+// m_label_editor_in_scene=NULL;
 }
 
 const QRectF & DiagramScene::getDefaultBlockNumberSize() const
@@ -494,14 +524,6 @@ void DiagramScene::processRemoving(const QList<QGraphicsItem *> & items)
     }
  }
 
-void DiagramScene::toggleEditStateOff()
-{
-    this->m_edit_state=TES_NONE;
-    this->m_label_editor->releaseKeyboard();
-    this->removeItem(m_label_editor_in_scene);
-    m_label_editor=NULL;
-    m_label_editor_in_scene=NULL;
-}
 
 
 void  DiagramScene::blockResizeMoveEnter ( QGraphicsSceneMouseEvent * event )

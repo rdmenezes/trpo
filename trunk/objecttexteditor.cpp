@@ -3,23 +3,14 @@
 #include "box.h"
 #include "freecomment.h"
 
-ObjectTextEditor::ObjectTextEditor(DiagramScene * scene, ::Box * item,QWidget *parent ) :
-    QPlainTextEdit(parent)
+ObjectTextEditor::ObjectTextEditor(DiagramScene * scene, DiagramObject * object ) :
+    QPlainTextEdit(NULL)
 {
     setAttribute(Qt::WA_TranslucentBackground);
     m_scene=scene;
-    m_boxitem=item;
-    m_alabelitem=NULL;
+    m_object=object;
 }
 
-ObjectTextEditor::ObjectTextEditor(DiagramScene * scene, FreeComment * item,QWidget *parent ) :
-    QPlainTextEdit(parent)
-{
-    setAttribute(Qt::WA_TranslucentBackground);
-    m_scene=scene;
-    m_boxitem=NULL;
-    m_alabelitem=item;
-}
 
 void ObjectTextEditor::keyPressEvent(QKeyEvent *e)
 {
@@ -27,15 +18,11 @@ void ObjectTextEditor::keyPressEvent(QKeyEvent *e)
        (e->modifiers() & Qt::ControlModifier) !=0
       )
    {
-    if (m_boxitem)
-    { m_boxitem->updateString(this->toPlainText());   }
-    if (m_alabelitem)
-    { m_alabelitem->trySetText(this->toPlainText());  }
-    m_scene->toggleEditStateOff();
+     m_object->setText(this->toPlainText());
+     m_scene->toggleEditMode(false);
    }
    else
    {
      this->QPlainTextEdit::keyPressEvent(e);
    }
-
 }
