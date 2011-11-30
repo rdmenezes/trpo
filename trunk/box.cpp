@@ -188,30 +188,34 @@ void Box::regenerate()
      else if (bounds.y()+textRect.height()-m_number_rect.y()>0.01)
      {
          exit=true;
-         row_string=textMetrics.elidedText(rows[i],
-                                          Qt::ElideRight,
-                                          bounds.width()-
-                                          m_number_rect.width()
-                                         );
-         m_view_text=oldview;
-         m_view_text+=row_string;
-         m_view_text+="\n";
-         /*! Handle when text in middle colliding with width
-          */
-         if (bounds.width()/2+oldRect.width()/2>
-             bounds.width()-m_number_rect.width())
+         qreal oldwidth=textRect.width();
+         qreal newwidth=textRect.width();
+         do
          {
-            qreal wdth=bounds.width()/2+oldRect.width()/2-
-                       2*((bounds.width()-m_number_rect.width()));
-            wdth=oldRect.width()-wdth;
-            row_string=textMetrics.elidedText(rows[i],
-                                              Qt::ElideRight,
-                                              wdth
-                                              );
-            m_view_text=oldview;
-            m_view_text+=row_string;
-            m_view_text+="\n";
+             oldwidth=newwidth;
+             if (bounds.width()/2+newwidth/2
+                 >
+                 bounds.width()-m_number_rect.width())
+             {
+                m_view_text=oldview;
+                qreal deltawidth=bounds.width()/(-2)+newwidth/2
+                                +m_number_rect.width();
+                row_string=textMetrics.elidedText(rows[i],
+                                                  Qt::ElideRight,
+                                                  newwidth-deltawidth
+                                                 );
+                m_view_text+=row_string;
+                textRect=textMetrics.boundingRect(METRICS_TEST_RECT,Qt::AlignCenter,m_view_text);
+                newwidth=textRect.width();
+             }
          }
+         while(bounds.width()/2+newwidth/2
+               >
+               bounds.width()-m_number_rect.width()
+               &&
+               oldwidth-newwidth>=0
+              );
+         m_view_text+="\n";
      } else m_view_text+="\n";
  }
  if (!m_view_text.isEmpty())
