@@ -163,7 +163,7 @@ public:
     int type() const;
     /*! Returns a bounding rectangle of item
      */
-    QRectF boundingRect() const;
+    virtual QRectF boundingRect() const;
     /*! Updates an item string
      */
     void updateString(const QString & text);

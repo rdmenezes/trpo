@@ -466,9 +466,9 @@ void DiagramScene::addAnnotationLabel(QGraphicsSceneMouseEvent *event)
  QRectF size=getDefaultAnnotationLabelSize(event->scenePos());
  if (m_diag->canBePlaced(size,(FreeComment*)NULL))
  {
-     FreeComment * a=new FreeComment(size);
-     this->addItem(a);
-     m_diag->addAnnotationLabel(a);
+     //FreeComment * a=new FreeComment(size);
+     //this->addItem(a);
+     //m_diag->addAnnotationLabel(a);
  }
 }
 

@@ -86,14 +86,15 @@ void Box::save(QDomDocument * doc,QDomElement * diagram)
  diagram->appendChild(block);
 }
 */
-
+/*
 void FreeComment::save(QDomDocument * doc,QDomElement * diagram)
 {
  QDomElement alabel=doc->createElement("annotation_label");
- alabel.setAttribute("string",stringToStringXML(m_string));
+ alabel.setAttribute("string",stringToStringXML(m_text));
  alabel.setAttribute("rect",rectfToString(m_rect));
  diagram->appendChild(alabel);
 }
+*/
 
 void CommentLine::save(QDomDocument * doc,QDomElement * diagram)
 {

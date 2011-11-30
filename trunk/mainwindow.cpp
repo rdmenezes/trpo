@@ -9,6 +9,7 @@
 #include <QStandardItemModel>
 #include "diagram.h"
 #include "box.h"
+#include "graphicunittests.h"
 
 #define VIEW_WIDTH_X 102
 #define VIEW_WIDTH_Y 102
@@ -102,31 +103,8 @@ MainWindow::MainWindow(QWidget *parent,
 
 
     //Perform test of box
-    Box * t=new Box(QPointF(100,25),diag);
-    QRectF tmp=t->boundingRect();
-    scene->addItem(t);
-    for (int i=1;i<5;i++)
-    {
-      Box * box=new Box(QPointF (100,50
-                                     +(tmp.height()+8)*i),
-                        diag);
-      scene->addItem(box);
-      QRectF r=box->boundingRect();
-      r.setWidth(r.width()+4*i);
-      r.setHeight(r.height()+4*i);
-      box->setRect(r);
-      box->setText("Text\ngrazedaaaaa!");
-    }
-    /*
-    Box * box=new Box(QPointF(100,100),diag);
-    scene->addItem(box);
-
-    Box * box2=new Box(QPointF(100,200),diag);
-    scene->addItem(box2);
-    QRectF r=box2->boundingRect();
-    r.setWidth(r.width()*2);
-    box2->setRect(r);
-    */
+    //GraphicUnitTests gut(diag);
+    //gut.performBoxVerticalTextRegenTest();
 }
 
 MainWindow::~MainWindow() {

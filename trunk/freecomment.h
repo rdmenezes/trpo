@@ -10,61 +10,86 @@
 #include <QRectF>
 #include <QRect>
 #include <QKeyEvent>
+#include "drawingconstants.h"
+#include "diagramobject.h"
 //Describes an annotation label item
 #define DEFAULT_ALABEL_TEXT "Some commentary"
 
-//Dom element
-class QDomElement;
-//Dom document
-class QDomDocument;
-//Loading data
-class DiagramLoadData;
 
 /*! \class FreeComment
 
     Describes an annotation label item
  */
-class FreeComment : public QGraphicsItem
+class FreeComment : public DiagramObject
 {
 private:
     /*! Default string data
      */
-    QString m_string;
-    /*! Rect
+    QString m_text;
+    /*! Size of rect
      */
-    QRectF   m_rect;
+    QSizeF  m_size;
+protected:
+    /*! Paints a comment
+        \param[in] p painter
+     */
+    void paint(QPainter * p);
+    /*! Computes a rect for new text
+     */
+    QRectF computeRect(const QString & text);
 public:
-    inline QString & string() { return m_string; }
-    inline QRectF  & rect()   { return m_rect;   }
+    /*!  Default constructor, used by Serializable
+     */
+    inline FreeComment():DiagramObject(ST_RECTANGLE) {}
+    /*!   Default constructor, used to create a point
+          \param[in] p   middle point for comment creation
+          \param[in] d   diagram
+          \param[in] txt text
+     */
+    FreeComment(const QPointF & p, Diagram * d, const QString & txt=FC_TEXT);
+    /*! Returns a bounding rectangle of item
+        \return bounding rectangle
+     */
+    QRectF boundingRect() const;
+    /*!  Saves a data to document
+         \param[in] doc     document data
+         \param[in] element parent element data
+     */
+    virtual  void save(QDomDocument * doc,QDomElement * element);
+    /*! Loads a default data from document populating address map
+        \param[in] element element data
+        \param[in] addressMap adressedMap
+     */
+    virtual  void load(QDomElement * element,
+                       QMap<void *, Serializable *> & addressMap);
+    /*! Resolves inner pointers, from stored in adress map
+        \param[in] addressMap map of addresses
+     */
+    virtual  void resolvePointers(QMap<void *, Serializable *> & adressMap);
+    /*! Sets a text for an item
+        \param[in] text text
+     */
+    void setText(const QString & text);
+    /*! Moves a comment about to poin (tries)
+        \param[in]  p   point
+     */
+    void moveTo(const QPointF & p);
+
+    inline QString & string() { return m_text; }
+    inline QRectF  & rect()   { return *(new QRectF());   }
     /*! Declares a type of item
      */
     enum ItemType
     {
         USERTYPE=QGraphicsItem::UserType+10
     };
-    //Does nothing
-    inline FreeComment() {}
-    /*! Constrcts a label item
-        \param[in] rect bounding rectangle
-     */
-    FreeComment(const QRectF & rect);
+
     /*! Tries setting rect to label item
      */
     void setRect(const QRectF & rect);
     /*! Returns a type of annotation label item
      */
     int type() const;
-    /*! Returns a bounding rectangle of item
-     */
-    QRectF boundingRect() const;
-    /*! Paint event reaction
-        \param[in] painter painter drawing
-        \param[in] option options
-        \param[in] widget widget data
-     */
-    void paint(QPainter *painter,
-               const QStyleOptionGraphicsItem *option,
-               QWidget *widget);
     /*! Handles a text editing
         \param[in] event event of editing
      */
@@ -73,11 +98,7 @@ public:
         \param[in] text new text
      */
     void trySetText(const QString & text);
-    /*! Saves a label
-        \param[in] doc document
-        \param[in] diag set
-     */
-    void save(QDomDocument * doc,QDomElement * diagram);
+
 signals:
 
 public slots:
