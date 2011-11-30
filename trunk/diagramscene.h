@@ -66,7 +66,7 @@ enum ArrowDirection;
 class ToolPanel;
 /*! Label editor, used for editing labels of blocks and annotation labels
  */
-class LabelEdit;
+class ObjectTextEditor;
 /*! \class DiagramScene
     Declares a scene, containing the diagram data
 */
@@ -85,14 +85,14 @@ private:
     QRectF                   m_default_block_size; //!< Default block size tool
     QRectF                   m_default_number_size; //!< Default number size for block
     TextEditState            m_edit_state;         //!< Text edit state
-    LabelEdit            *   m_label_editor;       //!< A current label editor
+    ObjectTextEditor            *   m_label_editor;       //!< A current label editor
     QGraphicsProxyWidget *   m_label_editor_in_scene; //!< A label editor in scene
     DragState                m_dragstate;          //!< Dragging state work
     Box                  *   m_draggingblock;      //!< Dragged block
     BlockCorner              m_resizingblockcorner; //!< Resizing corner of block
     qreal                    m_blockmovingparams[2]; //!< Defines an x and y relevance to moving
     QRectF                   m_alabel_block_size;   //!< Size of annotation label
-    ALabelItem           *   m_moving_label;        //!< Moving annotation label
+    FreeComment           *   m_moving_label;        //!< Moving annotation label
     ArrowEditState           m_arrow_state;         //!< Arrow editing state
     ArrowPoint           *   m_last_arrow_point;          //!< Last point added to scene
     ArrowSegment         *   m_moving_segment;      //!< Segment that can be moved
@@ -101,7 +101,7 @@ private:
     AnnotationLineDrawingState  m_alds;            //!< Annotation line drawing state
     QPointF                  m_aline_firstpoint;   //!< Annotation line first point
     //Arguments for resizing annotation line
-    ALineItem           *    m_resizing_aline;     //!< Resizing annotation line
+    CommentLine           *    m_resizing_aline;     //!< Resizing annotation line
 
     void annnotationLabelMoveLeave(const QPointF & pos);
     /*! Enters into annotation line resizing state
@@ -113,11 +113,11 @@ private:
         \param[in] pos position
         \param[in] item item, that is being analyzed
      */
-    void enterAnnotationLineResize(const QPointF & pos, ALineItem * item);
+    void enterAnnotationLineResize(const QPointF & pos, CommentLine * item);
     /*! Removes annotation line
         \param[in] line annotation line to be removed
      */
-    void removeAnnotationLine(ALineItem * line);
+    void removeAnnotationLine(CommentLine * line);
     /*! Processes pressing annotation line to segment
         \param[in] pos position
         \param[in] seg segment
@@ -309,7 +309,7 @@ public:
         \param[in] edit  editor
         \param[in] sed   proxy widget
      */
-    inline void toggleEditStateOn(LabelEdit * edit, QGraphicsProxyWidget * sed)
+    inline void toggleEditStateOn(ObjectTextEditor * edit, QGraphicsProxyWidget * sed)
     {
        this->m_edit_state=TES_EDIT;
        this->m_label_editor=edit;

@@ -15,9 +15,9 @@ SOURCES += main.cpp \
     diagramset.cpp \
     collision.cpp \
     keytest.cpp \
-    labeledit.cpp \
-    alabelitem.cpp \
-    alineitem.cpp \
+    objecttexteditor.cpp \
+    freecomment.cpp \
+    commentline.cpp \
     arrowsegment.cpp \
     arrowpoint.cpp \
     moverange.cpp \
@@ -43,9 +43,9 @@ HEADERS += mainwindow.h \
     diagramset.h \
     collision.h \
     keytest.h \
-    labeledit.h \
-    alabelitem.h \
-    alineitem.h \
+    objecttexteditor.h \
+    freecomment.h \
+    commentline.h \
     arrowsegment.h \
     arrowpoint.h \
     moverange.h \

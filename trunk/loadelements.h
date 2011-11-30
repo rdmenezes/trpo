@@ -10,7 +10,7 @@
 #include <QHash>
 
 class Box;
-class ALineItem;
+class CommentLine;
 class ArrowSegment;
 class ArrowPoint;
 class Diagram;
@@ -21,7 +21,7 @@ class DiagramLoadData
  public:
         Diagram * diagram;
         QHash<void *,Box *>        blocks;
-        QHash<void *,ALineItem  * >    annotationlines;
+        QHash<void *,CommentLine  * >    annotationlines;
         QHash<void *,ArrowSegment *>   segments;
         QHash<void *,ArrowPoint   *>   points;
 };

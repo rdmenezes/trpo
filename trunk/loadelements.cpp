@@ -1,7 +1,7 @@
 #include "diagramset.h"
 #include "diagram.h"
-#include "alabelitem.h"
-#include "alineitem.h"
+#include "freecomment.h"
+#include "commentline.h"
 #include "arrowpoint.h"
 #include "arrowsegment.h"
 #include "box.h"
@@ -105,7 +105,7 @@ void loadAnnotationLine(QDomElement * el,DiagramLoadData *  data)
  void * me=NULL;
  if (map.contains("this"))
      me=stringToPtr(getAttr(map,"this"));
-  ALineItem * line=new ALineItem();
+  CommentLine * line=new CommentLine();
   line->accessIsBinded()=is_attached;
   data->diagram->annotationLines()<<line;
   data->annotationlines.insert(me,line);
@@ -137,7 +137,7 @@ void loadAnnotationLabel(QDomElement * el,DiagramLoadData * data)
        name=stringXMLToString(getAttr(map,"string"));
    if (map.contains("rect"))
        rect=stringToRectf(getAttr(map,"rect"));
-   ALabelItem * label=new ALabelItem();
+   FreeComment * label=new FreeComment();
    label->string()=name;
    label->rect()=rect;
    data->diagram->annotationLabels()<<label;
@@ -201,7 +201,7 @@ void loadPoint(QDomElement * el,DiagramLoadData * data)
            if (refel.tagName()=="out")
                loadPtrToVector<ArrowSegment *>(&refel,arrow->accessOut());
            if (refel.tagName()=="line")
-               loadPtrToVector<ALineItem *>(&refel,arrow->accessLines());
+               loadPtrToVector<CommentLine *>(&refel,arrow->accessLines());
        }
        n=n.nextSibling();
    }

@@ -1,7 +1,7 @@
 #include "diagramset.h"
 #include "diagram.h"
-#include "alabelitem.h"
-#include "alineitem.h"
+#include "freecomment.h"
+#include "commentline.h"
 #include "arrowpoint.h"
 #include "arrowsegment.h"
 #include "box.h"
@@ -109,7 +109,7 @@ void correctItems(DiagramLoadData * data)
  //Correct annotation lines
  for (int i=0;i<dia->annotationLines().size();i++)
  {
-     ALineItem * aline=dia->annotationLines()[i];
+     CommentLine * aline=dia->annotationLines()[i];
      aline->setDiagram(dia);
      if (aline->isAttachedToLine())
      {
@@ -178,7 +178,7 @@ void correctItems(DiagramLoadData * data)
        }
    }
    //Set lines
-   QVector<ALineItem *> & lines=p->accessLines();
+   QVector<CommentLine *> & lines=p->accessLines();
    for (int j=0;j<lines.size();j++)
    {
        if (data->annotationlines.contains(lines[j]))

@@ -94,7 +94,7 @@ private:
         /*! Propagates a label editing
             \param[in] event event editing
          */
-        void addLabelEdit(QKeyEvent * event);
+        void addObjectTextEditor(QKeyEvent * event);
         /*! Declares, whether point can be added to side
          */
         bool canAddToSide(BoxSide side);
