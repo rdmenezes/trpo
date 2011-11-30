@@ -104,7 +104,7 @@ MainWindow::MainWindow(QWidget *parent,
 
     //Perform test of box
     GraphicUnitTests gut(diag);
-    gut.performBoxVerticalTextRegenTest();
+    gut.performFreeCommentTest();
 }
 
 MainWindow::~MainWindow() {
