@@ -37,8 +37,9 @@ public:
     /*! Creates a new object
         \param[in] shape shape data
      */
-    inline DiagramObject(ShapeType shape): CollisionObject(shape),
-                                           QGraphicsItem(NULL)
+    inline DiagramObject(ShapeType shape): QGraphicsItem(NULL),
+                                           CollisionObject(shape)
+
     {
 
     }

@@ -14,16 +14,16 @@ void GraphicUnitTests::performBoxVerticalTextRegenTest()
     for (int i=1;i<5;i++)
     {
       Box * box=new Box(QPointF (100,50
-                                     +(tmp.height()+8)*i),
+                                     +(tmp.height()+20)*i),
                         m_diag);
       m_diag->scene()->addItem(box);
-      //QRectF r=box->boundingRect();
-      //std::cout<<r.x();
-      //r.setX(box->x());
-      //r.setY(box->y());
-      //r.setWidth(r.width()+2*i);
-      //box->setRect(r);
-      //box->setText("Text\ngrazedaaaaa!");
+      QRectF r=box->boundingRect();
+      r.moveLeft(box->x());
+      r.moveTop(box->y());
+      r.setWidth(r.width()+4*i);
+      r.setHeight(r.height()+4*i);
+      box->setRect(r);
+      box->setText("Text\ngrazedaaaaa!");
     }
 
 }

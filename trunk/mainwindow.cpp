@@ -103,8 +103,8 @@ MainWindow::MainWindow(QWidget *parent,
 
 
     //Perform test of box
-    //GraphicUnitTests gut(diag);
-    //gut.performBoxVerticalTextRegenTest();
+    GraphicUnitTests gut(diag);
+    gut.performBoxVerticalTextRegenTest();
 }
 
 MainWindow::~MainWindow() {
