@@ -21,21 +21,19 @@ FreeComment::FreeComment(const QPointF & p, Diagram * d, const QString & txt)
    QRectF rect=metrics.boundingRect(METRICS_TEST_RECT,Qt::AlignCenter,m_text);
    m_size.setWidth(rect.width()+2*FC_PADDING);
    m_size.setHeight(rect.height()+2*FC_PADDING);
-   setX(p.x());
-   setY(p.y());
-   //setX(p.x()-m_size.width()/2);
-   //setY(p.y()-m_size.height()/2);
+   setX(p.x()-m_size.width()/2);
+   setY(p.y()-m_size.height()/2);
 
 }
 
 QRectF FreeComment::boundingRect() const
 {
-  return QRectF(x(),y(),m_size.width(),m_size.height());
+  return QRectF(0,0,m_size.width(),m_size.height());
 }
 
 void FreeComment::paint(QPainter *p)
 {
-    p->drawText(boundingRect(),Qt::AlignTop | Qt::AlignLeft,m_text);
+    p->drawText(boundingRect(),Qt::AlignCenter,m_text);
 }
 
 
@@ -70,8 +68,8 @@ void FreeComment::setText(const QString &text)
 
 void FreeComment::moveTo(const QPointF &p)
 {
-   setX(p.x());
-   setY(p.y());
+   setX(p.x()-m_size.width()/2);
+   setY(p.y()-m_size.height()/2);
    this->scene()->update();
 }
 

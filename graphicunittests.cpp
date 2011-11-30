@@ -30,9 +30,8 @@ void GraphicUnitTests::performBoxVerticalTextRegenTest()
 
 void GraphicUnitTests::performFreeCommentTest()
 {
-  FreeComment * fc=new FreeComment(QPointF(50,50),m_diag);
+  FreeComment * fc=new FreeComment(QPointF(100,100),m_diag);
   m_diag->scene()->addItem(fc);
-  /*
   FreeComment * fc2=new FreeComment(QPointF(100,100),m_diag);
   m_diag->scene()->addItem(fc2);
   fc2->setText("Complex comment\nnow simple");
@@ -40,5 +39,5 @@ void GraphicUnitTests::performFreeCommentTest()
   m_diag->scene()->addItem(fc3);
   fc3->setText("Complex comment\nnow simple");
   fc3->moveTo(QPointF(200,200));
-  */
+
 }
