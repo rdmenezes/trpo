@@ -13,7 +13,7 @@
 #include <QRectF>
 #include <math.h>
 #include "graphicunittests.h"
-
+#include <QSlider>
 #define VIEW_WIDTH_X 102
 #define VIEW_WIDTH_Y 102
 
@@ -23,9 +23,7 @@ MainWindow::MainWindow(QWidget *parent,
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-
-    //ui->horizontalSlider->setTickPosition(QSlider::TicksBothSides);
-    previousScaleValue=0;
+    previousScaleValue=3;
 
     //Creates a diagram set
     if (!set)
