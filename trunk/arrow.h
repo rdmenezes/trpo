@@ -19,7 +19,19 @@ private:
         ObjectConnector * m_self;     //!< Self object connector
         ObjectConnector * m_input;    //!< Input object connector
         ObjectConnector * m_output;   //!< Output object connector
-        bool              m_tunneled; //!< Tunneled object connector
+        bool              m_tunneled_begin; //!< Tunneled object connector
+        bool              m_tunneled_end;   //!< Whether object is connected at  end
+        /*! Constructs an input roundings
+            \param[in] p1     point
+            \param[in] angle  angular points
+         */
+        void constructInputRounding(QRectF & p1, qreal angle);
+        /*! Draws a brackets
+            \param[in] p painter
+            \param[in] point point
+            \param[in] bracket bracket
+         */
+        void drawBracket(QPainter * p,const QPointF & point, qreal angle);
 protected:
         /*! Paints an object
             \param[in] p painter
@@ -38,9 +50,10 @@ public:
         /*! Creates an arrow with following output lines
             \param[in] self      self connector
             \param[in] d         diagram
-            \param[in] tunneled  whether arrow is tunneled
+            \param[in] tunneled     whether arrow is tunneled at begin
+            \param[in] tunneled_end whether arrow is tunneled at end
          */
-        inline Arrow(ObjectConnector * self, Diagram * d, bool tunneled=false);
+        Arrow(ObjectConnector * self, Diagram * d, bool tunneled=false, bool tunneled_end=false);
         /*! Sets an input connector
             \param[in] input input connector
          */
@@ -51,7 +64,10 @@ public:
         inline void setOutput(ObjectConnector * output) { m_output=output; }
         /*! Toggles a tunneled state of object
          */
-        inline void toggleTunneled()   { m_tunneled=!m_tunneled; update(); }
+        inline void toggleTunneledBegin()   { m_tunneled_begin=!m_tunneled_begin; update(); }
+        /*! Toggles a tunneled state of object
+         */
+        inline void toggleTunneledEnd()   { m_tunneled_end=!m_tunneled_end; update(); }
         /*! Returns a bounding rectangle
          */
         QRectF  boundingRect() const;
@@ -72,6 +88,9 @@ public:
             \param[in] addressMap map of addresses
          */
         virtual  void resolvePointers(QMap<void *, Serializable *> & adressMap);
+        /*! Destructs an arrow
+         */
+        ~Arrow();
 };
 
 #endif // ARROW_H
