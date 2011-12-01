@@ -183,35 +183,35 @@ void MainWindow::scale(int coef){
      switch (coef)
      {
      case 0:
-         view->scale(pow(2, coef-previousScaleValue), pow(2, coef-previousScaleValue));
+         view->scale(pow(2.0, coef-previousScaleValue), pow(2.0, coef-previousScaleValue));
          previousScaleValue=0;
          break;
      case 1:
-         view->scale(pow(2, coef-previousScaleValue), pow(2, coef-previousScaleValue));
+         view->scale(pow(2.0, coef-previousScaleValue), pow(2.0, coef-previousScaleValue));
          previousScaleValue=1;
          break;
      case 2:
-         view->scale(pow(2, coef-previousScaleValue), pow(2, coef-previousScaleValue));
+         view->scale(pow(2.0, coef-previousScaleValue), pow(2.0, coef-previousScaleValue));
          previousScaleValue=2;
          break;
      case 3:
-         view->scale(pow(2, coef-previousScaleValue), pow(2, coef-previousScaleValue));
+         view->scale(pow(2.0, coef-previousScaleValue), pow(2.0, coef-previousScaleValue));
          previousScaleValue=3;
          break;
      case 4:
-         view->scale(pow(2, coef-previousScaleValue), pow(2, coef-previousScaleValue));
+         view->scale(pow(2.0, coef-previousScaleValue), pow(2.0, coef-previousScaleValue));
          previousScaleValue=4;
          break;
      case 5:
-         view->scale(pow(2, coef-previousScaleValue), pow(2, coef-previousScaleValue));
+         view->scale(pow(2.0, coef-previousScaleValue), pow(2.0, coef-previousScaleValue));
          previousScaleValue=5;
          break;
      case 6:
-         view->scale(pow(2, coef-previousScaleValue), pow(2, coef-previousScaleValue));
+         view->scale(pow(2.0, coef-previousScaleValue), pow(2.0, coef-previousScaleValue));
          previousScaleValue=6;
          break;
      case 7:
-         view->scale(pow(2, coef-previousScaleValue), pow(2, coef-previousScaleValue));
+         view->scale(pow(2.0, coef-previousScaleValue), pow(2.0, coef-previousScaleValue));
          previousScaleValue=7;
          break;
      }
