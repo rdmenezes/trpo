@@ -8,6 +8,7 @@
 #include "diagramobject.h"
 #include <QLineF>
 #include <QVector>
+#include <QPair>
 #ifndef OBJECTCONNECTOR_H
 #define OBJECTCONNECTOR_H
 
@@ -20,10 +21,7 @@ class ObjectConnector: public QLineF
          DiagramObject        *   m_parent;
          /*! Relative positions of connected objects
           */
-         QVector<qreal>           m_connected_positions;
-         /*! Binded objects
-          */
-         QVector<DiagramObject*>  m_connected_objects;
+         QVector< QPair<qreal,ObjectConnector*> > m_connected[2];
          /*! Directions of objects, which are acceptable
           */
          QVector<Direction>       m_acceptable_directions;
@@ -82,6 +80,17 @@ class ObjectConnector: public QLineF
         /*! Tests, whether we should draw roundings for items
          */
         inline bool drawRoundings() const { return m_parent->drawRoundings(); }
+
+        /*! Adds a new connector
+            \param[in] c     connector
+            \param[in] point adding point
+         */
+        bool addConnector(ObjectConnector * c, qreal point,Connection type);
+        /*! Returns a connected objects
+            \param[in] point point
+            \return    new   object
+         */
+        QVector<ObjectConnector *>  getConnected(qreal point,Connection type);
 };
 
 

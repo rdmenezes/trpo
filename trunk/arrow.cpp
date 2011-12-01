@@ -25,8 +25,6 @@ Arrow::Arrow(ObjectConnector * self, Diagram * d, bool tunneled,bool tunneled_en
     setDiagram(d);
     m_tunneled_begin=tunneled;
     m_tunneled_end=tunneled_end;
-    m_input=NULL;
-    m_output=NULL;
 
     QRectF rct=sceneDrawingBounds();
 
@@ -88,48 +86,65 @@ void Arrow::paint(QPainter * p)
     //Calculate first point
     QPointF p1=m_self->p1();
     Direction self=m_self->direction();
-    if (m_input)
+    bool mustmovefirstpoint=false;
+    QVector<ObjectConnector *> inputctrs=m_self->getConnected(0,C_INPUT);
+    if (inputctrs.size())
     {
-        qreal distance=QLineF(m_input->p1(),m_self->p1()).length();
-        Direction input=m_input->direction();
-        if (distance>A_ROUNDING_RADIUS && isNotCollinear(input,self))
+        mustmovefirstpoint=true;
+        for (int i=0;i<inputctrs.size();i++)
         {
-            //Actually in this case we are drawing input rounding
-            //Compute draw point
-            {
-             QPointF points_access[4]={m_self->p1(),m_self->p1(),m_self->p1(),m_self->p1()};
-             points_access[D_RIGHT]+=QPointF(A_ROUNDING_RADIUS,0);
-             points_access[D_LEFT]+=QPointF(- A_ROUNDING_RADIUS,0);
-             points_access[D_TOP]+=QPointF(0,- A_ROUNDING_RADIUS);
-             points_access[D_BOTTOM]+=QPointF(0,+ A_ROUNDING_RADIUS);
-             p1=points_access[m_self->direction()];
-            }
+          ObjectConnector * m_input=inputctrs[i];
+          qreal distance=QLineF(m_input->p1(),m_self->p1()).length();
+          Direction input=m_input->direction();
+          if (distance>A_ROUNDING_RADIUS && isNotCollinear(input,self))
+          {
             //Actual drawing is done here
             QRectF dp;
             qreal angle=0.0f;
-            constructInputRounding(dp,angle);
+            constructInputRounding(m_input,dp,angle);
             dp.moveTopLeft(translate(dp.topLeft()));
             p->drawArc(dp,angle,90*DEGREE);
-
-        }
+          } else mustmovefirstpoint=false;
+         }
+    }
+    if (mustmovefirstpoint)
+    {
+        //Actually in this case we are drawing input rounding
+        //Compute draw point
+         QPointF points_access[4]={m_self->p1(),m_self->p1(),m_self->p1(),m_self->p1()};
+         points_access[D_RIGHT]+=QPointF(A_ROUNDING_RADIUS,0);
+         points_access[D_LEFT]+=QPointF(- A_ROUNDING_RADIUS,0);
+         points_access[D_TOP]+=QPointF(0,- A_ROUNDING_RADIUS);
+         points_access[D_BOTTOM]+=QPointF(0,+ A_ROUNDING_RADIUS);
+         p1=points_access[m_self->direction()];
     }
 
+    //Calculate second point
     QPointF p2=m_self->p2();
-    if (m_output)
+    QVector<ObjectConnector *> outputctrs=m_self->getConnected(1,C_OUTPUT);
+    bool mustmovesecondpoint=false;
+    if (outputctrs.size())
     {
-        qreal distance=QLineF(m_output->p2(),m_self->p2()).length();
-        if (distance>A_ROUNDING_RADIUS && isNotCollinear(m_output->direction(),self))
+        mustmovesecondpoint=true;
+        for (int i=0;i<outputctrs.size();i++)
         {
-            QPointF points_access[4]={m_self->p2(),m_self->p2(),m_self->p2(),m_self->p2()};
-            points_access[D_RIGHT]+=QPointF(-A_ROUNDING_RADIUS,0);
-            points_access[D_LEFT]+=QPointF(+ A_ROUNDING_RADIUS,0);
-            points_access[D_TOP]+=QPointF(0,+ A_ROUNDING_RADIUS);
-            points_access[D_BOTTOM]+=QPointF(0,- A_ROUNDING_RADIUS);
+         ObjectConnector * m_output=outputctrs[i];
+         qreal distance=QLineF(m_output->p2(),m_self->p2()).length();
+         if (distance<A_ROUNDING_RADIUS || !isNotCollinear(m_output->direction(),self))
+            mustmovesecondpoint=false;
         }
+    }
+    if (mustmovesecondpoint)
+    {
+        QPointF points_access[4]={m_self->p2(),m_self->p2(),m_self->p2(),m_self->p2()};
+        points_access[D_RIGHT]+=QPointF(-A_ROUNDING_RADIUS,0);
+        points_access[D_LEFT]+=QPointF(+ A_ROUNDING_RADIUS,0);
+        points_access[D_TOP]+=QPointF(0,+ A_ROUNDING_RADIUS);
+        points_access[D_BOTTOM]+=QPointF(0,- A_ROUNDING_RADIUS);
     }
     p->drawLine(translate(p1),translate(p2));
     //Draw an arrow
-    if (!m_output)
+    if (!(outputctrs.size()))
     {
         QPointF pts[3]={m_self->p2(),m_self->p2(),m_self->p2()};
         QLineF  m_pvec=m_self->unitVector();
@@ -150,7 +165,7 @@ void Arrow::paint(QPainter * p)
 typedef QPair<Direction,Direction> DirectionPair;
 typedef QPair<QPointF,qreal>       InputPair;
 
-void Arrow::constructInputRounding(QRectF & p1, qreal angle)
+void Arrow::constructInputRounding(ObjectConnector * input,QRectF & p1, qreal angle)
 {
 
   QHash< QPair<Direction,Direction>,QPair<QPointF,qreal> > points;
@@ -180,7 +195,7 @@ void Arrow::constructInputRounding(QRectF & p1, qreal angle)
                 InputPair(m_self->p1()+QPointF(A_ROUNDING_RADIUS,A_ROUNDING_RADIUS),90*DEGREE)
                );
 
-  InputPair  res=points[DirectionPair(m_input->direction(),m_self->direction())];
+  InputPair  res=points[DirectionPair(input->direction(),m_self->direction())];
   p1=QRectF(
              res.first-QPointF(A_ROUNDING_RADIUS,A_ROUNDING_RADIUS),
              res.first+QPointF(A_ROUNDING_RADIUS,A_ROUNDING_RADIUS)
