@@ -131,3 +131,71 @@ void GraphicUnitTests::performArrowTest3()
     }
 }
 
+void GraphicUnitTests::performArrowTest4()
+{
+    {
+        ObjectConnector * connector1=new ObjectConnector(350,150,150,150);
+        ObjectConnector * connector2=new ObjectConnector(150,150,150,50);
+        ObjectConnector * connector3=new ObjectConnector(150,50,50,50);
+        connector1->addConnector(connector2,1,C_OUTPUT);
+        connector2->addConnector(connector1,0,C_INPUT);
+        connector2->addConnector(connector3,1,C_OUTPUT);
+        connector3->addConnector(connector2,0,C_INPUT);
+        Arrow    * arr1=new Arrow(connector1,m_diag);
+        Arrow    * arr2=new Arrow(connector2,m_diag);
+        Arrow    * arr3=new Arrow(connector3,m_diag);
+        m_diag->scene()->addItem(arr1);
+        m_diag->scene()->addItem(arr2);
+        m_diag->scene()->addItem(arr3);
+    }
+    {
+        ObjectConnector * connector1=new ObjectConnector(300,252,150,252);
+        ObjectConnector * connector2=new ObjectConnector(150,252,150,250);
+        ObjectConnector * connector3=new ObjectConnector(150,250,50,250);
+        connector1->addConnector(connector2,1,C_OUTPUT);
+        connector2->addConnector(connector1,0,C_INPUT);
+        connector2->addConnector(connector3,1,C_OUTPUT);
+        connector3->addConnector(connector2,0,C_INPUT);
+        Arrow    * arr1=new Arrow(connector1,m_diag);
+        Arrow    * arr2=new Arrow(connector2,m_diag);
+        Arrow    * arr3=new Arrow(connector3,m_diag);
+        m_diag->scene()->addItem(arr1);
+        m_diag->scene()->addItem(arr2);
+        m_diag->scene()->addItem(arr3);
+    }
+}
+
+
+void GraphicUnitTests::performArrowTest5()
+{
+    {
+        ObjectConnector * connector1=new ObjectConnector(300,50,150,50);
+        ObjectConnector * connector2=new ObjectConnector(150,50,150,150);
+        ObjectConnector * connector3=new ObjectConnector(150,150,50,150);
+        connector1->addConnector(connector2,1,C_OUTPUT);
+        connector2->addConnector(connector1,0,C_INPUT);
+        connector2->addConnector(connector3,1,C_OUTPUT);
+        connector3->addConnector(connector2,0,C_INPUT);
+        Arrow    * arr1=new Arrow(connector1,m_diag);
+        Arrow    * arr2=new Arrow(connector2,m_diag);
+        Arrow    * arr3=new Arrow(connector3,m_diag);
+        m_diag->scene()->addItem(arr1);
+        m_diag->scene()->addItem(arr2);
+        m_diag->scene()->addItem(arr3);
+    }
+    {
+        ObjectConnector * connector1=new ObjectConnector(300,250,150,250);
+        ObjectConnector * connector2=new ObjectConnector(150,250,150,252);
+        ObjectConnector * connector3=new ObjectConnector(150,252,50,252);
+        connector1->addConnector(connector2,1,C_OUTPUT);
+        connector2->addConnector(connector1,0,C_INPUT);
+        connector2->addConnector(connector3,1,C_OUTPUT);
+        connector3->addConnector(connector2,0,C_INPUT);
+        Arrow    * arr1=new Arrow(connector1,m_diag);
+        Arrow    * arr2=new Arrow(connector2,m_diag);
+        Arrow    * arr3=new Arrow(connector3,m_diag);
+        m_diag->scene()->addItem(arr1);
+        m_diag->scene()->addItem(arr2);
+        m_diag->scene()->addItem(arr3);
+    }
+}
