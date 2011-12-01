@@ -24,7 +24,7 @@ private:
             \param[in] p1     point
             \param[in] angle  angular points
          */
-        void constructInputRounding(ObjectConnector * input,QRectF & p1, qreal angle);
+        void constructInputRounding(ObjectConnector * input,QRectF & p1, qreal & angle);
         /*! Draws a brackets
             \param[in] p painter
             \param[in] point point

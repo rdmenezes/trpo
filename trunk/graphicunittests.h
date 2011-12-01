@@ -16,7 +16,9 @@ public:
         void performBoxVerticalTextRegenTest();
         void performFreeCommentTest();
         void performArrowTest();
-        void performVerticalTest();
+        void performArrowTest2();
+        void performArrowTest3();
+
 };
 
 #endif // GRAPHICUNITTESTS_H
