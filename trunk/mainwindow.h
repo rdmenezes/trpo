@@ -36,6 +36,8 @@ private:
       /*! Whether we should delete an objects
        */
       bool      m_own;
+      //Previous position of horizontalSlider
+      int previousScaleValue;
 public:
     /*! Creates a new window
         \param[in] parent object
@@ -73,6 +75,7 @@ protected slots:
     void save();
     void saveAs();
     void exportDiagram();
+    void scale(int coef);
     /*! Shows a help dialog
      */
     void showHelp();
