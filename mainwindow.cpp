@@ -9,7 +9,13 @@
 #include <QStandardItemModel>
 #include "diagram.h"
 #include "box.h"
+<<<<<<< .mine
+#include <QGraphicsScene>
+#include <QRectF>
+#include <math.h>
+=======
 #include "graphicunittests.h"
+>>>>>>> .r173
 
 #define VIEW_WIDTH_X 102
 #define VIEW_WIDTH_Y 102
@@ -20,6 +26,9 @@ MainWindow::MainWindow(QWidget *parent,
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+
+    //ui->horizontalSlider->setTickPosition(QSlider::TicksBothSides);
+    previousScaleValue=0;
 
     //Creates a diagram set
     if (!set)
@@ -99,12 +108,15 @@ MainWindow::MainWindow(QWidget *parent,
     connect(ui->actionOpen,SIGNAL(triggered()),this,SLOT(open()));
     connect(ui->actionExport_to_PNF_Ctrl_E,SIGNAL(triggered()),this,SLOT(exportDiagram()));
     connect(ui->actionShow_Help_F1,SIGNAL(triggered()),this,SLOT(showHelp()));
+    connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),this,SLOT(scale(int)));
     m_path = NULL;
 
 
     //Perform test of box
     GraphicUnitTests gut(diag);
     gut.performFreeCommentTest();
+
+
 }
 
 MainWindow::~MainWindow() {
@@ -168,6 +180,48 @@ void MainWindow::showHelp() {
    HelpWindow d(this);
    d.exec();
 }
+
+
+void MainWindow::scale(int coef){
+     QGraphicsView *view = ui->view;
+     //depending on new position of horizontalSlider
+     switch (coef)
+     {
+     case 0:
+         view->scale(pow(2, coef-previousScaleValue), pow(2, coef-previousScaleValue));
+         previousScaleValue=0;
+         break;
+     case 1:
+         view->scale(pow(2, coef-previousScaleValue), pow(2, coef-previousScaleValue));
+         previousScaleValue=1;
+         break;
+     case 2:
+         view->scale(pow(2, coef-previousScaleValue), pow(2, coef-previousScaleValue));
+         previousScaleValue=2;
+         break;
+     case 3:
+         view->scale(pow(2, coef-previousScaleValue), pow(2, coef-previousScaleValue));
+         previousScaleValue=3;
+         break;
+     case 4:
+         view->scale(pow(2, coef-previousScaleValue), pow(2, coef-previousScaleValue));
+         previousScaleValue=4;
+         break;
+     case 5:
+         view->scale(pow(2, coef-previousScaleValue), pow(2, coef-previousScaleValue));
+         previousScaleValue=5;
+         break;
+     case 6:
+         view->scale(pow(2, coef-previousScaleValue), pow(2, coef-previousScaleValue));
+         previousScaleValue=6;
+         break;
+     case 7:
+         view->scale(pow(2, coef-previousScaleValue), pow(2, coef-previousScaleValue));
+         previousScaleValue=7;
+         break;
+     }
+}
+
 
 void MainWindow::open() {
     
