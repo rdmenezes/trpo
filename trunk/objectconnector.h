@@ -14,9 +14,10 @@
 /*! \class ObjectConnector
     Class, which creates a connectors for data
  */
-class ObjectConnector
+class ObjectConnector: public QLineF
 {
  private:
+         DiagramObject        *   m_parent;
          /*! Relative positions of connected objects
           */
          QVector<qreal>           m_connected_positions;
@@ -54,6 +55,10 @@ class ObjectConnector
         inline ObjectConnector(qreal x1, qreal y1, qreal x2, qreal y2)
             : QLineF(x1,y1,x2,y2)
         {}
+        /*! Sets a parent object for connector
+            \param[in] parent parent object
+         */
+        inline void setParent(DiagramObject * parent) { m_parent=parent;}
         /*! Resizes a line without saving absolute coordinates
             \param[in] l   new line
          */
@@ -74,6 +79,9 @@ class ObjectConnector
             \param[in] o other connector
          */
         void merge(ObjectConnector * o);
+        /*! Tests, whether we should draw roundings for items
+         */
+        inline bool drawRoundings() const { return m_parent->drawRoundings(); }
 };
 
 

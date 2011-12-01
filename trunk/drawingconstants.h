@@ -5,6 +5,7 @@
 */
 #ifndef DRAWINGCONSTANTS_H
 #define DRAWINGCONSTANTS_H
+#include <QtGlobal>
 
 /*! Rectangle for testing metrics
  */
@@ -54,5 +55,28 @@
 /*! Default font color
  */
 #define FC_FONT_COLOR  QColor(0,0,0)
+
+
+/*! Rounding radius with padding
+ */
+#define A_ROUNDING_PADDING 6
+/*! Rounding radius
+ */
+#define A_ROUNDING_RADIUS  5
+/*! Pen width
+ */
+#define A_PEN_WIDTH 1
+/*! Arrow color
+ */
+#define A_COLOR  QColor(0,0,0)
+
+class QPainter;
+class QPointF;
+/*! Draws a brackets
+    \param[in] p painter
+    \param[in] point point
+    \param[in] bracket bracket
+ */
+void drawBracket(QPainter * p,const QPointF & point, qreal angle);
 
 #endif // DRAWINGCONSTANTS_H
