@@ -9,13 +9,10 @@
 #include <QStandardItemModel>
 #include "diagram.h"
 #include "box.h"
-<<<<<<< .mine
 #include <QGraphicsScene>
 #include <QRectF>
 #include <math.h>
-=======
 #include "graphicunittests.h"
->>>>>>> .r173
 
 #define VIEW_WIDTH_X 102
 #define VIEW_WIDTH_Y 102
