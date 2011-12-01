@@ -3,6 +3,7 @@
 #include "diagram.h"
 #include "box.h"
 #include "freecomment.h"
+#include "arrow.h"
 #include <iostream>
 
 void GraphicUnitTests::performBoxVerticalTextRegenTest()
@@ -39,5 +40,23 @@ void GraphicUnitTests::performFreeCommentTest()
   m_diag->scene()->addItem(fc3);
   fc3->setText("Complex comment\nnow simple");
   fc3->moveTo(QPointF(200,200));
+}
 
+void GraphicUnitTests::performArrowTest()
+{
+   ObjectConnector * connector1=new ObjectConnector(50,100,150,100);
+   Arrow    * arr1=new Arrow(connector1,m_diag,true,true);
+   m_diag->scene()->addItem(arr1);
+
+   ObjectConnector * connector2=new ObjectConnector(150,200,50,200);
+   Arrow    * arr2=new Arrow(connector2,m_diag,true,true);
+   m_diag->scene()->addItem(arr2);
+
+   ObjectConnector * connector3=new ObjectConnector(250,50,250,200);
+   Arrow    * arr3=new Arrow(connector3,m_diag,true,true);
+   m_diag->scene()->addItem(arr3);
+
+   ObjectConnector * connector4=new ObjectConnector(300,200,300,50);
+   Arrow    * arr4=new Arrow(connector4,m_diag,true,true);
+   m_diag->scene()->addItem(arr4);
 }

@@ -69,14 +69,15 @@
 /*! Arrow color
  */
 #define A_COLOR  QColor(0,0,0)
-
-class QPainter;
-class QPointF;
-/*! Draws a brackets
-    \param[in] p painter
-    \param[in] point point
-    \param[in] bracket bracket
+/*! Arrow angle
  */
-void drawBracket(QPainter * p,const QPointF & point, qreal angle);
+#define A_ARROW_ANGLE 30
+/*! Horizontal length of arrow
+ */
+#define A_ARROW_HORIZ_LEN 5
+/*! Vertical length of arrow
+ */
+#define A_ARROW_VERT_LEN 3
+
 
 #endif // DRAWINGCONSTANTS_H

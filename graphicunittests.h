@@ -15,6 +15,7 @@ public:
         inline GraphicUnitTests(Diagram * d)  {m_diag=d;}
         void performBoxVerticalTextRegenTest();
         void performFreeCommentTest();
+        void performArrowTest();
 };
 
 #endif // GRAPHICUNITTESTS_H
