@@ -17,15 +17,14 @@ class Arrow : public DiagramObject
 {
 private:
         ObjectConnector * m_self;     //!< Self object connector
-        ObjectConnector * m_input;    //!< Input object connector
-        ObjectConnector * m_output;   //!< Output object connector
         bool              m_tunneled_begin; //!< Tunneled object connector
         bool              m_tunneled_end;   //!< Whether object is connected at  end
         /*! Constructs an input roundings
+            \param[in] input  input line
             \param[in] p1     point
             \param[in] angle  angular points
          */
-        void constructInputRounding(QRectF & p1, qreal angle);
+        void constructInputRounding(ObjectConnector * input,QRectF & p1, qreal angle);
         /*! Draws a brackets
             \param[in] p painter
             \param[in] point point
@@ -57,11 +56,11 @@ public:
         /*! Sets an input connector
             \param[in] input input connector
          */
-        inline void setInput(ObjectConnector * input)  { m_input=input; }
+        inline bool addInput(ObjectConnector * input,qreal point)  { return m_self->addConnector(input,point,C_INPUT); }
         /*! Sets an output connector
             \param[in]  output output connector
          */
-        inline void setOutput(ObjectConnector * output) { m_output=output; }
+        inline bool addOutput(ObjectConnector * output,qreal point) { return m_self->addConnector(output,point,C_OUTPUT);}
         /*! Toggles a tunneled state of object
          */
         inline void toggleTunneledBegin()   { m_tunneled_begin=!m_tunneled_begin; update(); }
