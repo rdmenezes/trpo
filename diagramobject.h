@@ -64,6 +64,9 @@ public:
     void paint(QPainter *painter,
                const QStyleOptionGraphicsItem *option,
                QWidget *widget);
+    /*! Whether we should draw roundings
+     */
+    virtual bool drawRoundings() const;
 };
 
 #endif // DIAGRAMOBJECT_H

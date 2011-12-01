@@ -17,3 +17,9 @@ void DiagramObject::paint(QPainter *painter,
 {
   this->paint(painter);
 }
+
+
+bool DiagramObject::drawRoundings() const
+{
+    return false;
+}

@@ -34,7 +34,9 @@ SOURCES += main.cpp \
     serializable.cpp \
     diagramobject.cpp \
     box.cpp \
-    graphicunittests.cpp
+    graphicunittests.cpp \
+    arrow.cpp \
+    objectconnector.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
@@ -64,7 +66,8 @@ HEADERS += mainwindow.h \
     boxconnectortype.h \
     objectconnector.h \
     drawingconstants.h \
-    graphicunittests.h
+    graphicunittests.h \
+    arrow.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc

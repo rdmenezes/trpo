@@ -10,6 +10,7 @@
 FreeComment::FreeComment(const QPointF & p, Diagram * d, const QString & txt)
             :DiagramObject(ST_RECTANGLE)
 {
+   setDiagram(d);
    DiagramScene * scene=d->scene();
 
    QFont font=scene->font();
