@@ -13,6 +13,7 @@
 #include <QFontMetricsF>
 #include <QApplication>
 #include <QMessageBox>
+#include <QVector>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 //Unit-tests for arrow joining
@@ -195,77 +196,39 @@ const QRectF & DiagramScene::getDefaultBlockNumberSize() const
 }
 void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    QPointF pos=event->buttonDownScenePos(event->button());
-    //Do in case of nothing found
-    if (this->items(pos).size()==0)
-    {
-      if (m_tooltype==TT_BLOCK && m_edit_state==TES_NONE)
-          addBlock(event);
-      if (m_tooltype==TT_ANNOTATION_LABEL && m_edit_state==TES_NONE)
-          addAnnotationLabel(event);
-      if (m_tooltype==TT_ARROW)
-          processArrowClickOnBlankSpace(event);
-      if (m_tooltype==TT_ANNOTATION_LINE)
+    QPointF pos=event->scenePos();
+     QList<QGraphicsItem *> lst=this->items(pos);// Затем сцена получает список объектов под курсором (метод QGraphicsScene::items)
+// Сцена сортирует этот список по убыванию типа
+     int countClik=0;
+     if (this->items(pos).size()==0 || m_editor!=NULL || m_tool==NULL)
+   {
+         this->QGraphicsScene::mousePressEvent(event);
+
+   }
+      QVector<int> vec=m_tool->getClickableItems();// через m_tool->getClickableItems() получается список типов объектов, которые инструмент обрабатывает
+      for (int i=0;i<lst.size();i++)
       {
-          if (m_alds==ALDS_SPECIFIEDNONE)
-            processAnnotationLinePointOnBlank(pos);
-          else
-            processAnnotationLineSecondPointOnBlank(pos);
+           if (vec.contains(lst[i]->type()))
+           {
+
+           bool objectClic=m_tool->onClick(pos,lst[i]);//.Вызываем метод onClick(), передавая туда объект, или точку
+
+                   if (objectClic==true)
+                   {
+                      countClik++;
+                      break;
+                   }
+
+           }
+
+
+
+      }
+      if (countClik==0)
+      {
+         m_tool->onClick(pos,NULL);
       }
 
-    }
-    //Propagate key pressing event
-    else
-    {
-     bool isWidgetClicked=false;
-     QList<QGraphicsItem *> lst=this->items(pos);
-     for (int i=0;i<lst.size();i++)
-     {
-         if (lst[i]->type()==QGraphicsProxyWidget::Type)
-             isWidgetClicked=true;
-         if (m_tooltype==TT_ARROW && lst[i]->type()==Box::USERTYPE)
-         {
-             this->processArrowClickOnBox(event,static_cast<Box *>(lst[i]));
-             return;
-         }
-         if (m_tooltype==TT_ARROW && lst[i]->type()==ArrowSegment::USERTYPE)
-         {
-             this->processArrowClickOnLine(event,static_cast<ArrowSegment *>(lst[i]));
-             return;
-         }
-         if (m_tooltype==TT_ANNOTATION_LINE && lst[i]->type()==Box::USERTYPE
-                                            && m_alds==ALDS_SPECIFIEDNONE)
-         {
-             this->processAnnotationLineToBox(event->scenePos(),static_cast<Box *>(lst[i]));
-             return;
-         }
-         if (m_tooltype==TT_ANNOTATION_LINE && lst[i]->type()==ArrowSegment::USERTYPE
-                                            && m_alds==ALDS_SPECIFIEDNONE)
-         {
-             this->processAnnotationLineToSegment(event->scenePos(),static_cast<ArrowSegment *>(lst[i]));
-             return;
-         }
-         if (m_tooltype==TT_SELECT && lst[i]->type()==ArrowSegment::USERTYPE)
-         {
-             this->enterArrowMove(event->scenePos(),static_cast<ArrowSegment *>(lst[i]));
-             return;
-         }
-         if (m_tooltype==TT_SELECT && lst[i]->type()==CommentLine::USERTYPE)
-         {
-             this->enterAnnotationLineResize(event->scenePos(),static_cast<CommentLine *>(lst[i]));
-             return;
-         }
-     }
-     if (isWidgetClicked)
-        this->QGraphicsScene::mousePressEvent(event);
-     else
-     {
-       if (m_tooltype==TT_ERASER && m_edit_state==TES_NONE)
-             processRemoving(lst);
-       else if (m_tooltype==TT_SELECT) blockResizeMoveEnter(event);
-       else this->QGraphicsScene::mousePressEvent(event);
-     }
-    }
 }
 void DiagramScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
