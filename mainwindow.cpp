@@ -195,11 +195,11 @@ void MainWindow::scale(int coef){
              view->scale((pow(2, coef-2-previousScaleValue))*3, (pow(2, coef-2-previousScaleValue))*3);
      }
      else
+     {
+         /*
          view->scale(pow(2.0, coef-previousScaleValue), pow(2.0, coef-previousScaleValue));
-<<<<<<< .mine
-     previousScaleValue=coef;
-=======
-         previousScaleValue=0;
+         previousScaleValue=coef;
+         //previousScaleValue=0;
          break;
      case 1:
          view->scale(pow(2.0, coef-previousScaleValue), pow(2.0, coef-previousScaleValue));
@@ -229,8 +229,8 @@ void MainWindow::scale(int coef){
          view->scale(pow(2.0, coef-previousScaleValue), pow(2.0, coef-previousScaleValue));
          previousScaleValue=7;
          break;
+         */
      }
->>>>>>> .r184
 }
 
 
