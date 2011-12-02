@@ -39,13 +39,15 @@ QVector<int> DiagramTestTool::getKeyDownItems()
 
 bool DiagramTestTool::onClick(const QPointF &p, QGraphicsItem * /* item */)
 {
+  QPointF pp=p;
   if (m_test)
   {
       QRectF rct=m_test->boundingRect();
-      m_test->setPos(p-QPointF(rct.width()/2,rct.height()/2));
+      pp-=QPointF(rct.width()/2,rct.height()/2);
+      m_test->setPos(pp);
       m_scene->update();
   }
-  m_test=new DiagramObjectTest(p,m_diagram);
+  m_test=new DiagramObjectTest(pp,m_diagram);
   this->m_scene->addItem(m_test);
   return true;
 }

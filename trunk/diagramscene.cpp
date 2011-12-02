@@ -196,39 +196,36 @@ const QRectF & DiagramScene::getDefaultBlockNumberSize() const
 }
 void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    QPointF pos=event->scenePos();
-     QList<QGraphicsItem *> lst=this->items(pos);// Затем сцена получает список объектов под курсором (метод QGraphicsScene::items)
-// Сцена сортирует этот список по убыванию типа
-     int countClik=0;
-     if (this->items(pos).size()==0 || m_editor!=NULL || m_tool==NULL)
-   {
-         this->QGraphicsScene::mousePressEvent(event);
-
+  QPointF pos=event->scenePos();
+  // Затем сцена получает список объектов под курсором (метод QGraphicsScene::items)
+  QList<QGraphicsItem *> lst=this->items(pos);
+  // Сцена сортирует этот список по убыванию типа
+  // Ну и где, собственно сортировка, почему она пропущена?  (комментарий: Мамонтов Д.П.)
+  int countClick=0;
+  if (this->items(pos).size()==0 || m_editor!=NULL || m_tool==NULL)
+  {
+     this->QGraphicsScene::mousePressEvent(event);
+     return;
+  }
+  QVector<int> vec=m_tool->getClickableItems();// через m_tool->getClickableItems() получается список типов объектов, которые инструмент обрабатывает
+  for (int i=0;i<lst.size();i++)
+  {
+    if (vec.contains(lst[i]->type()))
+    {
+      bool objectClick=m_tool->onClick(pos,lst[i]);//.Вызываем метод onClick(), передавая туда объект, или точку
+      if (objectClick==true)
+       {
+         countClick++;
+         break;          // Переписать, не используя break. Вообще этот счетчик countClick не нужен
+                         // (комментарий: Мамонтов Д.П.)
+       }
+    }
    }
-      QVector<int> vec=m_tool->getClickableItems();// через m_tool->getClickableItems() получается список типов объектов, которые инструмент обрабатывает
-      for (int i=0;i<lst.size();i++)
-      {
-           if (vec.contains(lst[i]->type()))
-           {
-
-           bool objectClic=m_tool->onClick(pos,lst[i]);//.Вызываем метод onClick(), передавая туда объект, или точку
-
-                   if (objectClic==true)
-                   {
-                      countClik++;
-                      break;
-                   }
-
-           }
-
-
-
-      }
-      if (countClik==0)
-      {
-         m_tool->onClick(pos,NULL);
-      }
-
+   if (countClick==0)
+   {
+     if (! ( m_tool->onClick(pos,NULL )))
+         QGraphicsScene::mousePressEvent(event);
+   }
 }
 void DiagramScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
