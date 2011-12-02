@@ -84,6 +84,9 @@ public:
             \param[in] addressMap map of addresses
          */
         virtual  void resolvePointers(QMap<void *, Serializable *> & adressMap);
+        /*! Draws a rounding data
+         */
+        bool drawRoundings() const;
         /*! Destructs an arrow
          */
         ~Arrow();

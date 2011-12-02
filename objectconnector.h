@@ -79,7 +79,13 @@ class ObjectConnector: public QLineF
         void merge(ObjectConnector * o);
         /*! Tests, whether we should draw roundings for items
          */
-        inline bool drawRoundings() const { return m_parent->drawRoundings(); }
+        inline bool drawRoundings() const
+        {
+            if (!m_parent)
+                return false;
+            else
+                return m_parent->drawRoundings();
+        }
 
         /*! Adds a new connector
             \param[in] c     connector
