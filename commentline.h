@@ -9,6 +9,9 @@
 #include <QGraphicsItem>
 #include <QPointF>
 #include <QPainterPath>
+#include "diagramscene.h"
+#include "diagramobject.h"
+#include "objectconnector.h"
 //A point of line segment
 class ArrowPoint;
 //A diagram data
@@ -23,9 +26,22 @@ class DiagramLoadData;
 /*! \class CommentLine
     Declares an annotation line item
  */
-class CommentLine : public QGraphicsItem
+class CommentLine : public DiagramObject
 {
 private:
+        /*! Input connector data
+         */
+        ObjectConnector * m_input;
+        /*! Output connector data
+         */
+        ObjectConnector * m_output;
+        /*! Point from input connector
+         */
+        QPointF       m_in;
+        /*! Point from output connector
+         */
+        QPointF       m_out;
+
         /*! A free point, that is pointed into air
          */
         QPointF m_freepoint;
@@ -65,7 +81,40 @@ private:
             \param[out] path path
          */
         void drawLeftRight(QPainterPath & path);
+protected:
+        /*! Paints a line
+            \param[in] p painter
+         */
+        void paint(QPainter * p);
 public:
+        /*! Special constructor, used by serializable
+         */
+        inline CommentLine():DiagramObject(ST_LINE) {}
+        /*! Creates a comment line
+            \param[in] in  input
+            \param[in] out output
+            \param[in] oin input connector
+            \param[in] out output connector
+         */
+        CommentLine(const QPointF & in,const QPointF & out,ObjectConnector * oin, ObjectConnector* oout);
+        /*!  Saves a data to document
+             \param[in] doc     document data
+             \param[in] element parent element data
+         */
+        virtual  void save(QDomDocument * doc,QDomElement * element);
+        /*! Loads a default data from document populating address map
+            \param[in] element element data
+            \param[in] addressMap adressedMap
+         */
+        virtual  void load(QDomElement * element,
+                           QMap<void *, Serializable *> & addressMap);
+        /*! Resolves inner pointers, from stored in adress map
+            \param[in] addressMap map of addresses
+         */
+        virtual  void resolvePointers(QMap<void *, Serializable *> & adressMap);
+
+
+
         /*! A free point, that is pointed into air
          */
         inline QPointF & accessFree() { return m_freepoint; }
@@ -84,8 +133,6 @@ public:
         };
          inline QPointF * begin() { return m_bindedpoint;}
          inline QPointF * end()   { return &m_freepoint; }
-         //Does nothing
-         inline CommentLine() {}
          /*! Constructs an annotation line, not binded into any of points
             \param[in] bindedpoint free binded point (first)
             \param[in] freepoint   free point (second)
@@ -125,11 +172,6 @@ public:
          /*! Returns a type of segment
           */
          int type() const;
-         /*! Saves a line
-             \param[in] doc document
-             \param[in] diagram diagram
-          */
-         void save(QDomDocument * doc,QDomElement * diagram);
 };
 
 #endif // ALINEITEM_H
