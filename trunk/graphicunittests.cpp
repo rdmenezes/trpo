@@ -5,6 +5,7 @@
 #include "freecomment.h"
 #include "arrow.h"
 #include "commentline.h"
+#include "diagramobjecttest.h"
 #define  _USE_MATH_DEFINES
 #include <math.h>
 #include <iostream>
@@ -226,5 +227,11 @@ void GraphicUnitTests::performCommentLineTest2()
         CommentLine * cml=new CommentLine(pivot,p2,NULL,NULL,m_diag);
         m_diag->scene()->addItem(cml);
     }
+}
+
+void GraphicUnitTests::performDefaultObjectTest()
+{
+    DiagramObjectTest * diag=new DiagramObjectTest(QPointF(100,100),m_diag);
+    m_diag->scene()->addItem(diag);
 }
 

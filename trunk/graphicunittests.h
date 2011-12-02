@@ -22,6 +22,7 @@ public:
         void performArrowTest5();
         void performCommentLineTest();
         void performCommentLineTest2();
+        void performDefaultObjectTest();
 };
 
 #endif // GRAPHICUNITTESTS_H

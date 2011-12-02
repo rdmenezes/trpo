@@ -70,6 +70,12 @@ public:
     /*! Whether we should draw roundings
      */
     virtual bool drawRoundings() const;
+    /*! Returns a diagram for object
+     */
+    inline  Diagram * diagram() const
+    {
+        return m_diag;
+    }
 };
 
 #endif // DIAGRAMOBJECT_H
