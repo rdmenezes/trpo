@@ -50,25 +50,22 @@ QRectF CommentLine::boundingRect() const
 }
 
 
-void CommentLine::drawCubicCurve(const QPointF & p0,
-                               const QPointF & p1,
-                               const QPointF & p2,
-                               const QPointF & p3,
-                               double t0, double t1,
-                               QPainterPath & path)
+void CommentLine::drawCubicCurve(QPointF  p[4],
+                                 double t0, double t1,
+                                 QPainterPath & path)
 {
     double t01=1.0-t0,t11=1.0-t1;
     double a0=t01*t01*t01,a1=3*t0*t01*t01,a2=3*t0*t0*t01,a3=t0*t0*t0;
     double b0=t11*t11*t11,b1=3*t1*t11*t11,b2=3*t1*t1*t11,b3=t1*t1*t1;
-    QPointF F0=p1-p0*a0-p3*a3;
-    QPointF F1=p2-p0*b0-p3*b3;
+    QPointF F0=p[1]-p[0]*a0-p[3]*a3;
+    QPointF F1=p[2]-p[0]*b0-p[3]*b3;
     double D=a1*b2-a2*b1;
     QPointF D1=F0*b2-F1*a2;
     QPointF D2=F1*a1-F0*b1;
     D1/=D;
     D2/=D;
-    path.moveTo(p0);
-    path.cubicTo(D1,D2,p3);
+    path.moveTo(p[0]);
+    path.cubicTo(D1,D2,p[3]);
 }
 
 void CommentLine::drawArcs(QPainterPath & path,qreal l, qreal x,qreal hx)
@@ -79,19 +76,21 @@ void CommentLine::drawArcs(QPainterPath & path,qreal l, qreal x,qreal hx)
     QPointF line(lineVector.dx(),lineVector.dy());
     QPointF normal(normalLine.dx(),normalLine.dy());
 
-    QPointF p00=translate(m_in);
-    QPointF  p01=p00+line*l/2+normal*x;
-    QPointF  p02=p00+line*(l+hx)/2+normal*x/2;
+    QPointF  p0[4];
+    p0[0]=translate(m_in);
+    p0[1]=p0[0]+line*l/2+normal*x;
+    p0[2]=p0[0]+line*(l+hx)/2+normal*x/2;
+    QPointF  middle=p0[0]+line*l/2;
+    p0[3]=middle;
 
-    QPointF  middle=p00+line*l/2;
+    drawCubicCurve(p0,0.4,0.75,path);
 
-    drawCubicCurve(p00,p01,p02,middle,0.4,0.75,path);
-
-    QPointF p10=translate(m_out);
-    QPointF p11=p00+line*l/2-normal*x;
-    QPointF p12=p00+line*(l-hx)/2-normal*x/2;
-
-    drawCubicCurve(p10,p11,p12,middle,0.4,0.75,path);
+    QPointF p1[4];
+    p1[0]=translate(m_out);
+    p1[1]=p0[0]+line*l/2-normal*x;
+    p1[2]=p0[0]+line*(l-hx)/2-normal*x/2;
+    p1[3]=middle;
+    drawCubicCurve(p1,0.4,0.75,path);
 }
 
 void CommentLine::paint(QPainter * p)
