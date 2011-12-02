@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent,
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    previousScaleValue=3;
+    previousScaleValue=4;
 
     //Creates a diagram set
     if (!set)
@@ -179,11 +179,26 @@ void MainWindow::showHelp() {
 
 void MainWindow::scale(int coef){
      QGraphicsView *view = ui->view;
-     //depending on new position of horizontalSlider
-     switch (coef)
+     //depending on new and previous positions of horizontalSlider
+     if (coef==1)
      {
-     case 0:
+         if (previousScaleValue==0)
+             view->scale((pow(2, coef+1-previousScaleValue))/3, (pow(2, coef+1-previousScaleValue))/3);
+         else
+             view->scale((pow(2, coef+2-previousScaleValue))/3, (pow(2, coef+2-previousScaleValue))/3);
+     }
+     if (previousScaleValue==1)
+     {
+         if (coef==0)
+             view->scale((pow(2, coef-1-previousScaleValue))*3, (pow(2, coef-1-previousScaleValue))*3);
+         else
+             view->scale((pow(2, coef-2-previousScaleValue))*3, (pow(2, coef-2-previousScaleValue))*3);
+     }
+     else
          view->scale(pow(2.0, coef-previousScaleValue), pow(2.0, coef-previousScaleValue));
+<<<<<<< .mine
+     previousScaleValue=coef;
+=======
          previousScaleValue=0;
          break;
      case 1:
@@ -215,6 +230,7 @@ void MainWindow::scale(int coef){
          previousScaleValue=7;
          break;
      }
+>>>>>>> .r184
 }
 
 
