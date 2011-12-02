@@ -277,6 +277,6 @@ void MainWindow::selectTool(ToolSceneData * toolData)
 
 void MainWindow::setActionText(const QString & text)
 {
-    ui->labelCurrentAction->setText(text);
+    ui->currentAction->setText(text);
 }
 
