@@ -187,15 +187,18 @@ void MainWindow::scale(int coef){
          else
              view->scale((pow(2.0, coef+2-previousScaleValue))/3, (pow(2.0, coef+2-previousScaleValue))/3);
      }
-     if (previousScaleValue==1)
-     {
-         if (coef==0)
-             view->scale((pow(2.0, coef-1-previousScaleValue))*3, (pow(2.0, coef-1-previousScaleValue))*3);
-         else
-             view->scale((pow(2.0, coef-2-previousScaleValue))*3, (pow(2.0, coef-2-previousScaleValue))*3);
-     }
      else
-         view->scale(pow(2.0f, coef-previousScaleValue), pow(2.0f, coef-previousScaleValue));
+     {
+         if (previousScaleValue==1)
+         {
+             if (coef==0)
+                 view->scale((pow(2.0, coef-1-previousScaleValue))*3, (pow(2.0, coef-1-previousScaleValue))*3);
+             else
+                 view->scale((pow(2.0, coef-2-previousScaleValue))*3, (pow(2.0, coef-2-previousScaleValue))*3);
+         }
+         else
+             view->scale(pow(2.0f, coef-previousScaleValue), pow(2.0f, coef-previousScaleValue));
+     }
      previousScaleValue=coef;
 }
 
