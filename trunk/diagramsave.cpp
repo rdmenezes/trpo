@@ -95,7 +95,7 @@ void FreeComment::save(QDomDocument * doc,QDomElement * diagram)
  diagram->appendChild(alabel);
 }
 */
-
+/*
 void CommentLine::save(QDomDocument * doc,QDomElement * diagram)
 {
  QDomElement  aline=doc->createElement("annotation_line");
@@ -113,7 +113,7 @@ void CommentLine::save(QDomDocument * doc,QDomElement * diagram)
  }
  diagram->appendChild(aline);
 }
-
+*/
 void ArrowSegment::save(QDomDocument * doc,QDomElement * diagram)
 {
  QDomElement  aseg=doc->createElement("segment");

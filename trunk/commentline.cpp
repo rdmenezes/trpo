@@ -5,14 +5,39 @@
 #include <QGraphicsScene>
 #include <QPainter>
 
-CommentLine::CommentLine(const QPointF & bindedpoint,const QPointF & freepoint)
+
+
+void CommentLine::save(QDomDocument * /* doc */,
+               QDomElement *  /* element */)
+{
+    //!< TODO: Implement this later
+}
+
+void CommentLine::load(QDomElement * /* element */,
+               QMap<void *, Serializable *> & /* addressMap */ )
+{
+    //!< TODO: Implement this later
+}
+
+void CommentLine::resolvePointers(QMap<void *, Serializable *> &
+                          /* adressMap */)
+{
+    //!< TODO: Implement this later
+}
+
+void CommentLine::paint(QPainter * p)
+{
+    //! TODO: Implement
+}
+
+CommentLine::CommentLine(const QPointF & bindedpoint,const QPointF & freepoint) : DiagramObject(ST_LINE)
 {
     m_bindedpoint=new QPointF(bindedpoint);
     m_freepoint=freepoint;
     m_isbindedtoline=false;
 }
 
-CommentLine::CommentLine(QPointF * bindedpoint,const QPointF & freepoint)
+CommentLine::CommentLine(QPointF * bindedpoint,const QPointF & freepoint) : DiagramObject(ST_LINE)
 {
   m_bindedpoint=bindedpoint;
   m_freepoint=freepoint;
