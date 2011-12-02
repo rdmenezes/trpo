@@ -27,7 +27,7 @@ public:
         \param[in] p      point
         \param[in] item   item, located in the point (NULL can be passed too)
     */
-    virtual void    onClick(const QPointF & p, QGraphicsItem * item);
+    virtual bool    onClick(const QPointF & p, QGraphicsItem * item);
     /*! A vector of items, whick onClick can be performed
     */
     virtual QVector<int> getClickableItems();
@@ -35,7 +35,7 @@ public:
         \param[in] p      point
         \param[in] item   item, located in the point (NULL can be passed too)
     */
-    virtual void    onRelease(const QPointF & p, QGraphicsItem * item);
+    virtual bool    onRelease(const QPointF & p, QGraphicsItem * item);
     /*! A vector of items, whick onRelease can be performed
      */
     virtual QVector<int> getReleaseableItems();
@@ -48,7 +48,7 @@ public:
         \param[in] event event data
         \param[in] item  item
      */
-    virtual void onKeyDown(QKeyEvent * event, QGraphicsItem * item);
+    virtual bool onKeyDown(QKeyEvent * event, QGraphicsItem * item);
     /*! Returns an items,on which key down can be performed
      */
     virtual QVector<int> getKeyDownItems();
