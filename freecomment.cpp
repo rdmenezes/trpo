@@ -93,12 +93,12 @@ void FreeComment::resolvePointers(QMap<void *, Serializable *> &
     //!< TODO: Implement this later
 }
 
-
-
 int FreeComment::type() const
 {
-    return FreeComment::USERTYPE;
+  return IsFreeComment;
 }
+
+
 
 void FreeComment::setRect(const QRectF & rect)
 {

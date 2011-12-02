@@ -87,6 +87,10 @@ public:
         \param[in]  p   point
      */
     void moveTo(const QPointF & p);
+    /*! Returns a type of box item
+     */
+    int type() const;
+
 
     inline QString & string() { return m_text; }
     inline QRectF  & rect()   { return *(new QRectF());   }
@@ -100,9 +104,6 @@ public:
     /*! Tries setting rect to label item
      */
     void setRect(const QRectF & rect);
-    /*! Returns a type of annotation label item
-     */
-    int type() const;
     /*! Handles a text editing
         \param[in] event event of editing
      */

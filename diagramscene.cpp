@@ -60,6 +60,8 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
 {
   m_diag=d;
   m_editor=NULL;
+  m_tool=NULL;
+
 
   m_tooltype=TT_BLOCK;
   m_panel=NULL;

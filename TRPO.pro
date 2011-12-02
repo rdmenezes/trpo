@@ -71,7 +71,8 @@ HEADERS += mainwindow.h \
     graphicunittests.h \
     arrow.h \
     diagramobjecttest.h \
-    attachedcomment.h
+    attachedcomment.h \
+    itemtypes.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc

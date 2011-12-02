@@ -98,6 +98,10 @@ void Box::paint(QPainter * p)
  p->setFont(oldfont);
 }
 
+int Box::type() const
+{
+   return IsBox;
+}
 
 void Box::save(QDomDocument * /* doc */,
                QDomElement *  /* element */)
@@ -241,11 +245,6 @@ void Box::setText(const QString & text)
     m_real_text=text;
     regenerate();
     this->scene()->update();
-}
-
-int Box::type() const
-{
-    return Box::USERTYPE;
 }
 
 void Box::keyPressEvent(QKeyEvent *event)

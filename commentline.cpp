@@ -107,6 +107,13 @@ void CommentLine::paint(QPainter * p)
     p->drawPath(path);
 }
 
+/*! Returns a type of segment
+ */
+int CommentLine::type() const
+{
+    return  IsCommentLine;
+}
+
 void CommentLine::save(QDomDocument * /* doc */,
                QDomElement *  /* element */)
 {
@@ -166,10 +173,4 @@ void CommentLine::die()
 }
 
 
-/*! Returns a type of segment
- */
-int CommentLine::type() const
-{
-    return CommentLine::USERTYPE;
-}
 

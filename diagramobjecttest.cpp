@@ -1,4 +1,5 @@
 #include "diagramobjecttest.h"
+#include "itemtypes.h"
 
 QRectF DiagramObjectTest::boundingRect() const
 {
@@ -10,6 +11,10 @@ void DiagramObjectTest::paint(QPainter *p)
   p->drawImage(boundingRect(),m_img);
 }
 
+int DiagramObjectTest::type() const
+{
+    return IsDefaultItem;
+}
 
 void DiagramObjectTest::save(QDomDocument * /* doc */,
                QDomElement *  /* element */)
@@ -28,3 +33,5 @@ void DiagramObjectTest::resolvePointers(QMap<void *, Serializable *> &
 {
     //!< TODO: Implement this later
 }
+
+

@@ -355,7 +355,15 @@ public:
 
     /*! Sets a new tool for data
      */
-    inline void setTool(Tool * tool)  { m_tool=tool; m_tool->setDiagramData(this,m_diag); }
+    inline void setTool(Tool * tool)
+    {
+      if (m_tool)
+            m_tool->clearState();
+      m_tool=tool;
+      m_tool->setDiagramData(this,m_diag);
+      if (m_tool)
+            m_tool->initState();
+    }
 signals:
 
 public slots:

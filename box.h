@@ -137,6 +137,10 @@ public:
         \param[in] text new text data
      */
     void setText(const QString & text);
+    /*! Returns a type of box item
+     */
+    int type() const;
+
 
     ArrowPoint *& getLineRef(int side,int pos)  { return m_line_refs[side][pos]; }    
     /*! Declares a type of item
@@ -158,9 +162,6 @@ public:
         \param[in] scene  scene data
     */
     Box(const QPointF & pos,DiagramScene * scene);
-    /*! Returns a type of box item
-     */
-    int type() const;
     /*! Returns a bounding rectangle of item
      */
     virtual QRectF boundingRect() const;

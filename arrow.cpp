@@ -204,6 +204,16 @@ Arrow::~Arrow()
  delete m_self;
 }
 
+bool Arrow::drawRoundings() const
+{
+  return true;
+}
+
+int Arrow::type() const
+{
+  return IsArrow;
+}
+
 void Arrow::save(QDomDocument * /* doc */,
                QDomElement *  /* element */)
 {
@@ -222,8 +232,5 @@ void Arrow::resolvePointers(QMap<void *, Serializable *> &
     //!< TODO: Implement this later
 }
 
-bool Arrow::drawRoundings() const
-{
-  return true;
-}
+
 
