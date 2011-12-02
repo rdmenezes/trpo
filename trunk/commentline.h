@@ -44,18 +44,12 @@ private:
          */
         QPointF       m_out;
         /*! Draws a cubic curve by points
-            \param[in] p0   point
-            \param[in] p1   point
-            \param[in] p2   point
-            \param[in] p3   point
+            \param[in] p    pivot points
             \param[in] t0   time, when p1 is reached
             \param[in] t1   time, when p2 is reached
             \param[out] path  path
          */
-        void drawCubicCurve(const QPointF & p0,
-                            const QPointF & p1,
-                            const QPointF & p2,
-                            const QPointF & p3,
+        void drawCubicCurve(QPointF p[4],
                             double t0, double t1,
                             QPainterPath & path);
         /*! Draws an arcs
