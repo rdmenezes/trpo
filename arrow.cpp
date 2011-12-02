@@ -4,18 +4,6 @@
 #include <math.h>
 #include <QHash>
 #include <QPair>
-QRectF bound(QPointF  ps[], int n)
-{
-    qreal minx=ps[0].x(),miny=ps[0].y(),maxx=ps[0].x(),maxy=ps[0].y();
-    for (int i=1;i<n;i++)
-    {
-        if (ps[i].x()<minx) minx=ps[i].x();
-        if (ps[i].y()<miny) miny=ps[i].y();
-        if (ps[i].x()>maxx) maxx=ps[i].x();
-        if (ps[i].y()>maxy) maxy=ps[i].y();
-    }
-    return QRectF(minx,miny,maxx-minx,maxy-miny);
-}
 
 
 Arrow::Arrow(ObjectConnector * self, Diagram * d, bool tunneled,bool tunneled_end)
