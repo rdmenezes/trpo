@@ -10,7 +10,7 @@
 CommentLine::CommentLine(const QPointF & in,
                          const QPointF & out,
                          ObjectConnector * oin,
-                         ObjectConnector * oout,
+                         AttachedComment * attach,
                          Diagram * d) : DiagramObject(ST_LINE)
 {
     setDiagram(d);
@@ -18,7 +18,7 @@ CommentLine::CommentLine(const QPointF & in,
     m_in=in;
     m_out=out;
     m_input=oin;
-    m_output=oout;
+    m_parentcomment=attach;
 
     qreal x=std::min(in.x(),out.x());
     qreal y=std::min(in.y(),out.y());

@@ -23,6 +23,8 @@ class QDomDocument;
 //Loading data
 class DiagramLoadData;
 
+
+class AttachedComment;
 /*! \class CommentLine
     Declares an annotation line item
  */
@@ -32,9 +34,9 @@ private:
         /*! Input connector data
          */
         ObjectConnector * m_input;
-        /*! Output connector data
+        /*! Parent comment data
          */
-        ObjectConnector * m_output;
+        AttachedComment * m_parentcomment;
         /*! Point from input connector
          */
         QPointF       m_in;
@@ -63,6 +65,7 @@ private:
             \param[in]  hx   horizontal arc height
          */
         void drawArcs(QPainterPath & path,qreal l, qreal x,qreal hx);
+
 
         /*! A free point, that is pointed into air
          */
@@ -102,7 +105,7 @@ public:
         CommentLine(const QPointF & in,
                     const QPointF & out,
                     ObjectConnector * oin,
-                    ObjectConnector * oout,
+                    AttachedComment * oout,
                     Diagram * d );
         /*! Determines  a bounding rect
             \return bounding rectangle

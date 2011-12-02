@@ -16,6 +16,8 @@
 #define DEFAULT_ALABEL_TEXT "Some commentary"
 
 
+class AttachedComment;
+
 /*! \class FreeComment
 
     Describes an annotation label item
@@ -29,6 +31,9 @@ private:
     /*! Size of rect
      */
     QSizeF  m_size;
+    /*! Attached comment
+     */
+    AttachedComment * m_parentcomment;
 protected:
     /*! Paints a comment
         \param[in] p painter
@@ -38,9 +43,17 @@ protected:
      */
     QRectF computeRect(const QString & text);
 public:
+    /*! Parent commentary
+        \return parent commentary
+     */
+    inline AttachedComment * parentComment() { return m_parentcomment; }
+    /*! Sets a parent commentary
+         \param[in] p parent comment
+     */
+    inline void setParentComment(AttachedComment * p) { m_parentcomment=p;}
     /*!  Default constructor, used by Serializable
      */
-    inline FreeComment():DiagramObject(ST_RECTANGLE) {}
+    inline FreeComment():DiagramObject(ST_RECTANGLE) { m_parentcomment=NULL; }
     /*!   Default constructor, used to create a point
           \param[in] p   middle point for comment creation
           \param[in] d   diagram
