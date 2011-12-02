@@ -286,6 +286,8 @@ MainWindow *parentwin = static_cast <MainWindow*>(this->views()[0]->window());
 parentwin->ui->cursorCoordinates->clear();
 parentwin->ui->cursorCoordinates->setText(text);
 
+ if (m_tool)
+        m_tool->onMove(event->lastScenePos(),event->scenePos());
 
 }
 void DiagramScene::keyPressEvent(QKeyEvent * event)

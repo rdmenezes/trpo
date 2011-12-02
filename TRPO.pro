@@ -38,7 +38,8 @@ SOURCES += main.cpp \
     arrow.cpp \
     objectconnector.cpp \
     diagramobjecttest.cpp \
-    attachedcomment.cpp
+    attachedcomment.cpp \
+    diagramtesttool.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
@@ -72,7 +73,8 @@ HEADERS += mainwindow.h \
     arrow.h \
     diagramobjecttest.h \
     attachedcomment.h \
-    itemtypes.h
+    itemtypes.h \
+    diagramtesttool.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc

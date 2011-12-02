@@ -9,6 +9,7 @@
 #include <QKeyEvent>
 #include "diagramset.h"
 #include "diagram.h"
+#include "tool.h"
 
 //User interface
 namespace Ui {
@@ -49,7 +50,14 @@ public:
         \param[in] tool data
      */
     void selectTool(ToolSceneData * toolData);
-
+    /*! Selects a tool
+        \param[in] tool data
+     */
+    void selectTool(Tool * tool);
+    /*! Sets an action text
+        \param[in[ text text
+     */
+    void setActionText(const QString & text);
     /*! Changes a set of data
         \param[in] set of data
      */
