@@ -10,6 +10,7 @@
 #include "diagramscene.h"
 #include "objectconnector.h"
 #include "drawingconstants.h"
+#include "itemtypes.h"
 
 /*! \class Arrow
  */
@@ -87,6 +88,9 @@ public:
         /*! Draws a rounding data
          */
         bool drawRoundings() const;
+        /*! Returns a type of box item
+         */
+        int type() const;
         /*! Destructs an arrow
          */
         ~Arrow();

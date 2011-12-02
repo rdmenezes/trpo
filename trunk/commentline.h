@@ -120,8 +120,12 @@ public:
             \param[in] addressMap map of addresses
          */
         virtual  void resolvePointers(QMap<void *, Serializable *> & adressMap);
-
-
+        /*! Returns a type of segment
+         */
+        int type() const;
+        /*! Destructor
+         */
+        ~CommentLine();
 
         /*! A free point, that is pointed into air
          */
@@ -160,12 +164,6 @@ public:
          /*! Kills a line item, removing it from any of places
           */
          void die();
-         /*! Destructor
-          */
-         ~CommentLine();
-         /*! Returns a type of segment
-          */
-         int type() const;
 };
 
 #endif // ALINEITEM_H

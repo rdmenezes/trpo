@@ -35,7 +35,9 @@ public:
             \return rectangle
          */
         QRectF boundingRect() const;
-
+        /*! Returns a type of box item
+         */
+        int type() const;
         /*!  Saves a data to document
              \param[in] doc     document data
              \param[in] element parent element data
@@ -51,6 +53,7 @@ public:
             \param[in] addressMap map of addresses
          */
         virtual  void resolvePointers(QMap<void *, Serializable *> & adressMap);
+
 };
 
 #endif // DIAGRAMOBJECTTEST_H

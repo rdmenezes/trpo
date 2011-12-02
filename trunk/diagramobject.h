@@ -10,6 +10,7 @@
 #include <QWidget>
 #include "collisionobject.h"
 #include "serializable.h"
+#include "itemtypes.h"
 
 class Diagram;
 
