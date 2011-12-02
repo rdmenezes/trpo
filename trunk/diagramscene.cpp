@@ -14,8 +14,11 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QVector>
+#include <QtAlgorithms>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+//using namespace std;
+
 //Unit-tests for arrow joining
 //#define MERGE_TEST_1
 //#define MERGE_TEST_2
@@ -200,7 +203,11 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
   // Затем сцена получает список объектов под курсором (метод QGraphicsScene::items)
   QList<QGraphicsItem *> lst=this->items(pos);
   // Сцена сортирует этот список по убыванию типа
+  qSort(lst);
   // Ну и где, собственно сортировка, почему она пропущена?  (комментарий: Мамонтов Д.П.)
+  // Я использовала стандартную сортировку для контейнеров из QtAlgorythms
+  // Оно же по идее должно дергать оператор operator<, да? По крайней мере Сычев нам
+  // так рассказывал. Правильно?
   int countClick=0;
   if (this->items(pos).size()==0 || m_editor!=NULL || m_tool==NULL)
   {
@@ -208,20 +215,21 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
      return;
   }
   QVector<int> vec=m_tool->getClickableItems();// через m_tool->getClickableItems() получается список типов объектов, которые инструмент обрабатывает
-  for (int i=0;i<lst.size();i++)
+ bool objectClick=false;
+  for (int i=0;(i<lst.size())||!objectClick;i++)
   {
     if (vec.contains(lst[i]->type()))
     {
-      bool objectClick=m_tool->onClick(pos,lst[i]);//.Вызываем метод onClick(), передавая туда объект, или точку
-      if (objectClick==true)
-       {
-         countClick++;
-         break;          // Переписать, не используя break. Вообще этот счетчик countClick не нужен
-                         // (комментарий: Мамонтов Д.П.)
-       }
+       objectClick=m_tool->onClick(pos,lst[i]);//.Вызываем метод onClick(), передавая туда объект, или точку
+//      if (objectClick==true)
+//       {
+//        // countClick++;
+//         break;          // Переписать, не используя break. Вообще этот счетчик countClick не нужен
+//                         // (комментарий: Мамонтов Д.П.)
+//       }
     }
    }
-   if (countClick==0)
+   if (objectClick==false)
    {
      if (! ( m_tool->onClick(pos,NULL )))
          QGraphicsScene::mousePressEvent(event);
