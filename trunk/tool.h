@@ -35,6 +35,9 @@ public:
         /*! Clears an inner state of tool
          */
         virtual void   clearState();
+        /*! Inits an inner state of tool
+         */
+        virtual void   initState();
         /*! An action, that is performed if user clicks on scene
             \param[in] p      point
             \param[in] item   item, located in the point (NULL can be passed too)
