@@ -10,6 +10,8 @@ Arrow::Arrow(ObjectConnector * self, Diagram * d, bool tunneled,bool tunneled_en
       :DiagramObject(ST_LINE)
 {
     m_self=self;
+    self->setParent(this);
+
     setDiagram(d);
     m_tunneled_begin=tunneled;
     m_tunneled_end=tunneled_end;
@@ -86,7 +88,7 @@ void Arrow::paint(QPainter * p)
           ObjectConnector * m_input=inputctrs[i];
           qreal distance=QLineF(m_input->p1(),m_self->p1()).length();
           Direction input=m_input->direction();
-          if (distance>A_ROUNDING_RADIUS && isNotCollinear(input,self) && checkDistance)
+          if (distance>A_ROUNDING_RADIUS && isNotCollinear(input,self) && checkDistance && m_input->drawRoundings())
           {
             //Actual drawing is done here
             QRectF dp;
@@ -119,7 +121,9 @@ void Arrow::paint(QPainter * p)
         {
          ObjectConnector * m_output=outputctrs[i];
          qreal distance=QLineF(m_output->p2(),m_self->p2()).length();
-         if (distance<A_ROUNDING_RADIUS || !isNotCollinear(m_output->direction(),self) || !checkDistance)
+         if (distance<A_ROUNDING_RADIUS || !isNotCollinear(m_output->direction(),self)
+                                        || !checkDistance
+                                        || !m_output->drawRoundings())
             mustmovesecondpoint=false;
         }
     }
@@ -184,8 +188,9 @@ void Arrow::constructInputRounding(ObjectConnector * input,QRectF & p1, qreal & 
   points.insert(DirectionPair(D_LEFT,D_BOTTOM),
                 InputPair(translate(m_self->p1())+QPointF(A_ROUNDING_RADIUS,A_ROUNDING_RADIUS),90*DEGREE)
                );
-  Direction inpd=input->direction();
-  Direction seld=m_self->direction();
+  // Uncomment this for debug
+  //Direction inpd=input->direction();
+  //Direction seld=m_self->direction();
   InputPair  res=points[DirectionPair(input->direction(),m_self->direction())];
   p1=QRectF(
              res.first-QPointF(A_ROUNDING_RADIUS,A_ROUNDING_RADIUS),
@@ -217,5 +222,8 @@ void Arrow::resolvePointers(QMap<void *, Serializable *> &
     //!< TODO: Implement this later
 }
 
-
+bool Arrow::drawRoundings() const
+{
+  return true;
+}
 

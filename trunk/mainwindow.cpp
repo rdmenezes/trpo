@@ -109,7 +109,7 @@ MainWindow::MainWindow(QWidget *parent,
 
     //Perform test of box
     GraphicUnitTests gut(diag);
-    gut.performCommentLineTest();
+    gut.performArrowTest2();
 
 
 }
