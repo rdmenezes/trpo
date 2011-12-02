@@ -4,6 +4,7 @@
 
 void   DiagramTestTool::clearState()
 {
+   static_cast<MainWindow*>(m_scene->view()->window())->setActionText("");
   if (m_test)
     this->m_scene->removeItem(m_test);
   delete this;
@@ -36,7 +37,7 @@ QVector<int> DiagramTestTool::getKeyDownItems()
 }
 
 
-void DiagramTestTool::onClick(const QPointF &p, QGraphicsItem * /* item */)
+bool DiagramTestTool::onClick(const QPointF &p, QGraphicsItem * /* item */)
 {
   if (m_test)
   {
@@ -46,16 +47,17 @@ void DiagramTestTool::onClick(const QPointF &p, QGraphicsItem * /* item */)
   }
   m_test=new DiagramObjectTest(p,m_diagram);
   this->m_scene->addItem(m_test);
+  return true;
 }
 
-void DiagramTestTool::onRelease(const QPointF & /* p */, QGraphicsItem * /* item */)
+bool DiagramTestTool::onRelease(const QPointF & /* p */, QGraphicsItem * /* item */)
 {
-
+  return true;
 }
 
-void DiagramTestTool::onKeyDown(QKeyEvent * /* event */, QGraphicsItem * /* item */)
+bool DiagramTestTool::onKeyDown(QKeyEvent * /* event */, QGraphicsItem * /* item */)
 {
-
+  return true;
 }
 
 void DiagramTestTool::onMove(const QPointF & /* lastpos */ , const QPointF &pos)

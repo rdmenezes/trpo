@@ -41,16 +41,18 @@ public:
         /*! An action, that is performed if user clicks on scene
             \param[in] p      point
             \param[in] item   item, located in the point (NULL can be passed too)
+            \return true if handled
         */
-        virtual void    onClick(const QPointF & p, QGraphicsItem * item)=0;
+        virtual bool    onClick(const QPointF & p, QGraphicsItem * item)=0;
         /*! A vector of items, whick onClick can be performed
         */
         virtual QVector<int> getClickableItems()=0;
         /*! An action, that is performed if user releases a mouse button on scene
             \param[in] p      point
             \param[in] item   item, located in the point (NULL can be passed too)
+            \return true if handled
         */
-        virtual void    onRelease(const QPointF & p, QGraphicsItem * item)=0;
+        virtual bool    onRelease(const QPointF & p, QGraphicsItem * item)=0;
         /*! A vector of items, whick onRelease can be performed
          */
         virtual QVector<int> getReleaseableItems()=0;
@@ -62,8 +64,9 @@ public:
         /*! This method is called, when user performs key down event
             \param[in] event event data
             \param[in] item  item
+            \return true if handled
          */
-        virtual void onKeyDown(QKeyEvent * event, QGraphicsItem * item)=0;
+        virtual bool onKeyDown(QKeyEvent * event, QGraphicsItem * item)=0;
         /*! Returns an items,on which key down can be performed
          */
         virtual QVector<int> getKeyDownItems()=0;
