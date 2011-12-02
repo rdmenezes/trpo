@@ -4,6 +4,9 @@
 #include "box.h"
 #include "freecomment.h"
 #include "arrow.h"
+#include "commentline.h"
+#define  _USE_MATH_DEFINES
+#include <math.h>
 #include <iostream>
 
 void GraphicUnitTests::performBoxVerticalTextRegenTest()
@@ -199,3 +202,29 @@ void GraphicUnitTests::performArrowTest5()
         m_diag->scene()->addItem(arr3);
     }
 }
+
+void GraphicUnitTests::performCommentLineTest()
+{
+  QPointF pivot(100,100);
+  for (qreal i=0;i<6.28;i+=0.3 )
+  {
+       int len=i*6.0+1;
+        QPointF  p2=pivot+len*QPointF(cos(i),-1*sin(i));
+        CommentLine * cml=new CommentLine(pivot,p2,NULL,NULL,m_diag);
+        m_diag->scene()->addItem(cml);
+  }
+}
+
+
+void GraphicUnitTests::performCommentLineTest2()
+{
+    qreal angles[]={M_PI/4, 3*M_PI/4, 5*M_PI/4, 7*M_PI/4,0,M_PI/2,M_PI,3*M_PI/2 };
+    QPointF pivot(100,100);
+    for (int  i=4;i<8;i++)
+    {
+        QPointF  p2=pivot+50*QPointF(cos(angles[i]),-1*sin(angles[i]));
+        CommentLine * cml=new CommentLine(pivot,p2,NULL,NULL,m_diag);
+        m_diag->scene()->addItem(cml);
+    }
+}
+

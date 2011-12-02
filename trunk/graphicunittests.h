@@ -20,6 +20,8 @@ public:
         void performArrowTest3();
         void performArrowTest4();
         void performArrowTest5();
+        void performCommentLineTest();
+        void performCommentLineTest2();
 };
 
 #endif // GRAPHICUNITTESTS_H

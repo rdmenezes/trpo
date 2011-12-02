@@ -39,9 +39,6 @@ protected:
         /*! Scene drawing bounds
          */
         QRectF sceneDrawingBounds() const;
-        /*! Translate an object
-         */
-        inline QPointF translate( const QPointF & p ) { return p-pos(); }
 public:
         /*! Default constructor, used by SerializableFactory
          */

@@ -41,6 +41,28 @@ private:
         /*! Point from output connector
          */
         QPointF       m_out;
+        /*! Draws a cubic curve by points
+            \param[in] p0   point
+            \param[in] p1   point
+            \param[in] p2   point
+            \param[in] p3   point
+            \param[in] t0   time, when p1 is reached
+            \param[in] t1   time, when p2 is reached
+            \param[out] path  path
+         */
+        void drawCubicCurve(const QPointF & p0,
+                            const QPointF & p1,
+                            const QPointF & p2,
+                            const QPointF & p3,
+                            double t0, double t1,
+                            QPainterPath & path);
+        /*! Draws an arcs
+            \param[in]  path painter path
+            \param[in]  l    length
+            \param[in]  x    arc height
+            \param[in]  hx   horizontal arc height
+         */
+        void drawArcs(QPainterPath & path,qreal l, qreal x,qreal hx);
 
         /*! A free point, that is pointed into air
          */
@@ -58,34 +80,14 @@ private:
         /*! Casts a point into binded point
          */
         ArrowPoint * binded();
-        /*! Draws a cubic curve by points
-            \param[in] p0   point
-            \param[in] p1   point
-            \param[in] p2   point
-            \param[in] p3   point
-            \param[in] t0   time, when p1 is reached
-            \param[in] t1   time, when p2 is reached
-            \param[out] path  path
-         */
-        void drawCubicCurve(const QPointF & p0,
-                            const QPointF & p1,
-                            const QPointF & p2,
-                            const QPointF & p3,
-                            double t0, double t1,
-                            QPainterPath & path);
-        /*! Draws a top and bottom type line item
-            \param[out] path path
-         */
-        void drawTopBottom(QPainterPath & path);
-        /*! Draws a left and right type line item
-            \param[out] path path
-         */
-        void drawLeftRight(QPainterPath & path);
 protected:
         /*! Paints a line
             \param[in] p painter
          */
         void paint(QPainter * p);
+        /*! Returns normal arc height
+         */
+        qreal getNormalArcHeight() const;
 public:
         /*! Special constructor, used by serializable
          */
@@ -95,8 +97,17 @@ public:
             \param[in] out output
             \param[in] oin input connector
             \param[in] out output connector
+            \param[in] d   diagram
          */
-        CommentLine(const QPointF & in,const QPointF & out,ObjectConnector * oin, ObjectConnector* oout);
+        CommentLine(const QPointF & in,
+                    const QPointF & out,
+                    ObjectConnector * oin,
+                    ObjectConnector * oout,
+                    Diagram * d );
+        /*! Determines  a bounding rect
+            \return bounding rectangle
+         */
+        QRectF boundingRect() const;
         /*!  Saves a data to document
              \param[in] doc     document data
              \param[in] element parent element data
@@ -143,20 +154,6 @@ public:
             \param[in] freepoint    free point (second)
           */
          CommentLine(QPointF * bindedpoint,const QPointF & freepoint);
-         /*! Declares a painting event reaction
-             \param[in] painter painting data
-             \param[in] option
-             \param[in] widget
-          */
-         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                        QWidget *widget);
-         /*! Sets a diagram for annotation line
-            \param[in] diag diagram
-          */
-         inline  void setDiagram(Diagram * diag) { m_diagram=diag; }
-         /*! Determines  a bounding rect
-          */
-         QRectF boundingRect() const;
          /*! Deattaches an item from line
           */
          void deattachFromLine();

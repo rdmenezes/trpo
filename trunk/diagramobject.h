@@ -33,6 +33,9 @@ protected:
             \param[in] p paint
          */
         virtual void paint(QPainter * p)=0;
+        /*! Translate an object
+         */
+        inline QPointF translate( const QPointF & p ) const { return p-pos(); }
 public:
     /*! Creates a new object
         \param[in] shape shape data

@@ -6,6 +6,8 @@
 #ifndef DRAWINGCONSTANTS_H
 #define DRAWINGCONSTANTS_H
 #include <QtGlobal>
+#include <QPointF>
+#include <QRectF>
 
 /*! Rectangle for testing metrics
  */
@@ -78,6 +80,27 @@
 /*! Vertical length of arrow
  */
 #define A_ARROW_VERT_LEN 3
+
+
+/*! Comment line width
+ */
+#define CL_WIDTH 1
+/*! Comment line color
+ */
+#define CL_COLOR QColor(0,0,0)
+
+inline QRectF bound(QPointF  ps[], int n)
+{
+    qreal minx=ps[0].x(),miny=ps[0].y(),maxx=ps[0].x(),maxy=ps[0].y();
+    for (int i=1;i<n;i++)
+    {
+        if (ps[i].x()<minx) minx=ps[i].x();
+        if (ps[i].y()<miny) miny=ps[i].y();
+        if (ps[i].x()>maxx) maxx=ps[i].x();
+        if (ps[i].y()>maxy) maxy=ps[i].y();
+    }
+    return QRectF(minx,miny,maxx-minx,maxy-miny);
+}
 
 
 #endif // DRAWINGCONSTANTS_H
