@@ -6,7 +6,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include "tooldelegate.h"
-#include <QStandardItemModel>
+#include "diagramtesttool.h"
 #include "diagram.h"
 #include "box.h"
 #include <QGraphicsScene>
@@ -166,6 +166,11 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         this->exportDiagram();
         handled=true;
     }
+    else if (event->key() == Qt::Key_F12) {
+        this->selectTool(new DiagramTestTool());
+        handled=true;
+    }
+
     if (!handled)
         this->QMainWindow::keyPressEvent(event);
 }
@@ -258,12 +263,20 @@ void MainWindow::exportDiagram() {
     }
 }
 
+void MainWindow::selectTool(Tool * tool)
+{
+ for (int i=0;i<m_tool_table_items.size();i++)
+     m_tool_table_items[i]->deselect();
+ static_cast<DiagramScene *>(ui->view->scene())->setTool(tool);
+}
 
 void MainWindow::selectTool(ToolSceneData * toolData)
 {
+  selectTool(toolData->tool());
+}
 
- for (int i=0;i<m_tool_table_items.size();i++)
-  m_tool_table_items[i]->deselect();
- static_cast<DiagramScene *>(ui->view->scene())->setTool(toolData->tool());
+void MainWindow::setActionText(const QString & text)
+{
+    ui->labelCurrentAction->setText(text);
 }
 
