@@ -126,6 +126,9 @@ public:
         /*! Returns a collision rect for item
          */
         virtual QLineF  collisionLine() const;
+        /*! Tests,whether a line contents a point
+         */
+        bool contains ( const QPointF & point ) const;
         /*! Destructor
          */
         ~CommentLine();

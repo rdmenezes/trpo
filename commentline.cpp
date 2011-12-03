@@ -177,5 +177,35 @@ void CommentLine::die()
     this->scene()->removeItem(this);
 }
 
+bool CommentLine::contains ( const QPointF & point ) const
+{
+    QLineF unitVector=QLineF(m_in,m_out).unitVector();
+    QLineF normalVector=unitVector.normalVector();
+    QPointF unit(unitVector.dx(),unitVector.dy());
+    QPointF normal(normalVector.dx(),normalVector.dy());
 
+    QPointF p1=translate(m_in);
+    QPointF p2=translate(m_out);
+
+    qreal ht=getNormalArcHeight();
+    qreal minh,maxh,minv,maxv;
+    {
+      QPointF p[4]={p1-ht*normal,p1+ht*normal,p2-ht*normal,p2+ht*normal};
+      for (int i=0;i<4;i++)
+      {
+        qreal hps=p[i].x()*unit.x()+p[i].y()*unit.y();
+        qreal vps=p[i].x()*normal.x()+p[i].y()*normal.y();
+        if (hps>maxh || i==0 ) maxh=hps;
+        if (hps<minh || i==0 ) minh=hps;
+        if (vps>maxv || i==0 ) maxv=vps;
+        if (vps<minv || i==0 ) minv=vps;
+      }
+    }
+
+    qreal hp=point.x()*unit.x()+point.y()*unit.y();
+    qreal vp=point.x()*normal.x()+point.y()*normal.y();
+    bool hh=(minh<=hp && hp<=maxh);
+    bool vh=(minv<=vp && vp<=maxv);
+    return hh && vh;
+}
 
