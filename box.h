@@ -1,7 +1,7 @@
 /*! \file boxitem.h
-    \author HiddenSeeker
+    \author Mamonto
 
-    Declares a box graphics item, that represents block
+    Declares a box graphics item
  */
 #ifndef BOXITEM_H
 #define BOXITEM_H
