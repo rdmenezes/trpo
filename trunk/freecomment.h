@@ -90,6 +90,10 @@ public:
     /*! Returns a type of box item
      */
     int type() const;
+    /*! Returns a rectangle for collision testing
+     */
+    virtual QRectF  collisionRect() const;
+
 
 
     inline QString & string() { return m_text; }

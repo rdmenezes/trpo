@@ -140,6 +140,9 @@ public:
     /*! Returns a type of box item
      */
     int type() const;
+    /*! Returns a rectangle for collision testing
+     */
+    virtual QRectF  collisionRect() const;
 
 
     ArrowPoint *& getLineRef(int side,int pos)  { return m_line_refs[side][pos]; }    

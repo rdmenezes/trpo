@@ -103,6 +103,11 @@ int Box::type() const
    return IsBox;
 }
 
+QRectF  Box::collisionRect() const
+{
+    return  QRectF(pos(),m_size);
+}
+
 void Box::save(QDomDocument * /* doc */,
                QDomElement *  /* element */)
 {

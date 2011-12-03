@@ -39,10 +39,10 @@ public:
        inline ShapeType collisionShape() const { return m_shapetype; }
        /*! Returns a collision rect for item
         */
-       virtual const QRectF & collisionRect() const;
+       virtual QRectF  collisionRect() const;
        /*! Returns a collision rect for item
         */
-       virtual const QLineF & collisionLine() const ;
+       virtual QLineF  collisionLine() const ;
        /*! Returns first object for collision
        */
        virtual CollisionObject *    firstObject();

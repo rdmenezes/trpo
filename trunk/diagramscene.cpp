@@ -107,27 +107,25 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
   QPointF pos=event->scenePos();
   // Затем сцена получает список объектов под курсором (метод QGraphicsScene::items)
   QList<QGraphicsItem *> lst=this->items(pos);
-  // Сцена сортирует этот список по убыванию типа
-  qSort(lst.begin(),lst.end(),lessItem);  // Не совсем правильно, вначале, так будет вернее.
   if (lst.size()==0 || m_editor!=NULL || m_tool==NULL)
   {
      this->QGraphicsScene::mousePressEvent(event);
      return;
   }
+  // Сцена сортирует этот список по убыванию типа
+  qSort(lst.begin(),lst.end(),lessItem);  // Не совсем правильно, вначале, так будет вернее.
   QVector<int> vec=m_tool->getClickableItems();// через m_tool->getClickableItems() получается список типов объектов, которые инструмент обрабатывает
- bool objectClick=false;
-  for (int i=0;(i<lst.size())||!objectClick;i++)
+  bool objectClick=false;
+  for (int i=0;(i<lst.size()) && !objectClick;i++)
   {
     if (vec.contains(lst[i]->type()))
-    {
-       objectClick=m_tool->onClick(pos,lst[i]);//.Вызываем метод onClick() передавая туда объект, и точку
-    }
-   }
-   if (objectClick==false)
-   {
-     if (! ( m_tool->onClick(pos,NULL )))
+        objectClick=m_tool->onClick(pos,lst[i]);//.Вызываем метод onClick() передавая туда объект, и точку
+  }
+  if (objectClick==false)
+  {
+    if (! ( m_tool->onClick(pos,NULL )))
          QGraphicsScene::mousePressEvent(event);
-   }
+  }
 }
 
 void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -135,16 +133,16 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QPointF pos=event->scenePos();
     // Затем сцена получает список объектов под курсором (метод QGraphicsScene::items)
     QList<QGraphicsItem *> lst=this->items(pos);
-    // Сцена сортирует этот список по убыванию типа
-    qSort(lst.begin(),lst.end(),lessItem);  // Не совсем правильно, вначале, так будет вернее.
     if (lst.size()==0 || m_editor!=NULL || m_tool==NULL)
     {
        this->QGraphicsScene::mouseReleaseEvent(event);
        return;
     }
+    // Сцена сортирует этот список по убыванию типа
+    qSort(lst.begin(),lst.end(),lessItem);
     QVector<int> vec=m_tool->getReleaseableItems();// через m_tool->getClickableItems() получается список типов объектов, которые инструмент обрабатывает
-   bool objectClick=false;
-    for (int i=0;(i<lst.size())||!objectClick;i++)
+    bool objectClick=false;
+    for (int i=0;(i<lst.size()) && !objectClick;i++)
     {
       if (vec.contains(lst[i]->type()))
       {
@@ -187,16 +185,17 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
   QPointF pos=m_view->mapToScene(local_pos);
   // Затем сцена получает список объектов под курсором (метод QGraphicsScene::items)
   QList<QGraphicsItem *> lst=this->items(pos);
-  // Сцена сортирует этот список по убыванию типа
-  qSort(lst.begin(),lst.end(),lessItem);  // Не совсем правильно, вначале, так будет вернее.
+
   if (lst.size()==0 || m_editor!=NULL || m_tool==NULL)
   {
      this->QGraphicsScene::keyPressEvent(event);
      return;
   }
+  // Сцена сортирует этот список по убыванию типа
+  qSort(lst.begin(),lst.end(),lessItem);
   QVector<int> vec=m_tool->getKeyDownItems();// через m_tool->getClickableItems() получается список типов объектов, которые инструмент обрабатывает
- bool objectClick=false;
-  for (int i=0;(i<lst.size())||!objectClick;i++)
+  bool objectClick=false;
+  for (int i=0;(i<lst.size()) && !objectClick;i++)
   {
     if (vec.contains(lst[i]->type()))
     {

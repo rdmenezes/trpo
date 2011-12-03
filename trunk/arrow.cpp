@@ -214,6 +214,11 @@ int Arrow::type() const
   return IsArrow;
 }
 
+QLineF  Arrow::collisionLine() const
+{
+    return QLineF(*m_self);
+}
+
 void Arrow::save(QDomDocument * /* doc */,
                QDomElement *  /* element */)
 {
