@@ -98,6 +98,10 @@ int FreeComment::type() const
   return IsFreeComment;
 }
 
+QRectF  FreeComment::collisionRect() const
+{
+  return QRectF(pos(),m_size);
+}
 
 
 void FreeComment::setRect(const QRectF & rect)

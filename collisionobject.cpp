@@ -4,13 +4,13 @@ CollisionObject::~CollisionObject()
 {
 }
 
-const QRectF & CollisionObject::collisionRect() const
+QRectF  CollisionObject::collisionRect() const
 {
     throw CollisionDataNotSpecified();
     return *(new QRectF());
 }
 
-const QLineF & CollisionObject::collisionLine() const
+QLineF  CollisionObject::collisionLine() const
 {
     throw CollisionDataNotSpecified();
     return *(new QLineF());

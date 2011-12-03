@@ -123,6 +123,9 @@ public:
         /*! Returns a type of segment
          */
         int type() const;
+        /*! Returns a collision rect for item
+         */
+        virtual QLineF  collisionLine() const;
         /*! Destructor
          */
         ~CommentLine();

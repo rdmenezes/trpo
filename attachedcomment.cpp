@@ -29,3 +29,21 @@ void AttachedComment::resolvePointers(QMap<void *, Serializable *> &
 {
     //!< TODO: Implement this later
 }
+
+CollisionObject *    AttachedComment::firstObject()
+{
+  m_iterator=0;
+  return comment();
+}
+
+CollisionObject *    AttachedComment::nextObject()
+{
+    if (m_iterator==0)
+    {
+        m_iterator=1;
+        return line();
+    }
+    return NULL;
+}
+
+

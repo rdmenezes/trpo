@@ -114,6 +114,11 @@ int CommentLine::type() const
     return  IsCommentLine;
 }
 
+QLineF CommentLine::collisionLine() const
+{
+    return QLineF(m_in,m_out);
+}
+
 void CommentLine::save(QDomDocument * /* doc */,
                QDomElement *  /* element */)
 {

@@ -51,6 +51,12 @@ public:
              \param[in] addressMap map of addresses
           */
          virtual  void resolvePointers(QMap<void *, Serializable *> & adressMap);
+         /*! Returns first object for collision
+         */
+         virtual CollisionObject *    firstObject();
+         /*! Returns next object for collision
+          */
+         virtual CollisionObject *    nextObject();
          /*! Bounding rectangle
              \return bounding rectangle
           */

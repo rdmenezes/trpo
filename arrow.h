@@ -69,7 +69,6 @@ public:
          */
         QRectF  boundingRect() const;
 
-
         /*!  Saves a data to document
              \param[in] doc     document data
              \param[in] element parent element data
@@ -91,6 +90,9 @@ public:
         /*! Returns a type of box item
          */
         int type() const;
+        /*! Returns a collision rect for item
+         */
+        virtual QLineF  collisionLine() const;
         /*! Destructs an arrow
          */
         ~Arrow();

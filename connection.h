@@ -1,5 +1,5 @@
 /*! \file connection.h
-    \author HiddenSeeker
+    \author Mamontov
 
     Declares a connection types for ObjectConnector
  */
