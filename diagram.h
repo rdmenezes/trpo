@@ -8,6 +8,7 @@
 #include <QRectF>
 #include <time.h>
 #include "diagramobject.h"
+#include "box.h"
 
 #ifndef DIAGRAM_H
 #define DIAGRAM_H
@@ -84,6 +85,7 @@ private:
         /*! Set of objects
          */
         QVector<DiagramObject *> m_objects;
+
         /*! A diagram set, where it's belong to
         */
         DiagramSet      *       m_set;
@@ -93,10 +95,11 @@ private:
         /*! Scene, which diagram is belongs to
          */
         DiagramScene    *      m_scene;
-
-        /*! An amount of boxes. If NULL - the block is absent
+        /*! Box data info
          */
-        Box             *      m_boxes[DIAGRAM_MAX_BLOCKS];
+        QMap<Box *, int>       m_boxes;
+
+
         /*! Vector  of annotation labels
          */
         QVector<FreeComment *>   m_alabels;
@@ -112,9 +115,6 @@ private:
         /*! An id of diagram
          */
         int m_id;
-        /*! Sets a boxes to NULL
-         */
-        void nullifyBoxes();
         /*! Determines, whether item, doesn't collide with blocks
          */
         bool testForNoBlockCollision(const QRectF & rect,QGraphicsItem * pointer);
@@ -171,9 +171,20 @@ public:
             \param[in] addressMap map of addresses
          */
         virtual  void resolvePointers(QMap<void *, Serializable *> & adressMap);
+        /*! Scans an objects for collisions
+            \param[in] obj       adding/placing object
+            \param[in] exctypes  excluded from testing types
+            \param[in] excobjs   excluded from testing objects
+            \return true, if can place
+         */
+        bool canPlace(DiagramObject * obj,
+                      const QVector<int> & exctypes,
+                      const QVector<DiagramObject *> excobjs
+                     );
 
-
-
+        /*! Adds new object to diagram
+         */
+        void add(DiagramObject * obj);
 
         /*! Returns a total boxes
          */
@@ -249,7 +260,7 @@ public:
         /*! Removes a block with id
             \param[in] id id of removing block
          */
-        inline void removeBlock(int id) { m_boxes[id]=NULL; }
+        inline void removeBlock(int id) { /*m_boxes[id]=NULL;*/ }
         /*! Removes an annotation label
             \param[in] label label item
          */
