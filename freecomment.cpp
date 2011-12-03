@@ -60,11 +60,22 @@ QRectF FreeComment::computeRect(const QString & text)
 
 void FreeComment::setText(const QString &text)
 {
+    QRectF oldrect=collisionRect();
+    QString oldtext=m_text;
+
     QRectF rect=computeRect(text);
     setX(rect.x());
     setY(rect.y());
     m_size=rect.size();
     m_text=text;
+    QVector<CollisionObject *> exc; exc<<this;
+    if (! this->diagram()->canPlace(this,QVector<int>(),exc))
+    {
+        setX(oldrect.x());
+        setY(oldrect.y());
+        m_size=oldrect.size();
+        m_text=oldtext;
+    }
     this->scene()->update();
 }
 

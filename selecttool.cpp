@@ -50,6 +50,8 @@ bool SelectTool::onRelease(const QPointF & /* p */, QGraphicsItem * /* item */ )
   return true;
 }
 
+#define TEXT_EDIT_BORDER 5
+
 bool SelectTool::onKeyDown(QKeyEvent *  event , QGraphicsItem *  item )
 {
   if (item)
@@ -74,6 +76,17 @@ bool SelectTool::onKeyDown(QKeyEvent *  event , QGraphicsItem *  item )
                                          event,
                                          static_cast<Box*>(item));
         }
+    }
+    if (item->type()==IsFreeComment && isTextEditKey(event))
+    {
+        QRectF rect=static_cast<FreeComment*>(item)->collisionRect();
+        rect.moveLeft(rect.left()-TEXT_EDIT_BORDER);
+        rect.moveTop(rect.top()-TEXT_EDIT_BORDER);
+        rect.setWidth(rect.width()+2*TEXT_EDIT_BORDER);
+        rect.setHeight(rect.height()+2*TEXT_EDIT_BORDER);
+        m_scene->toggleEditMode(true,rect,
+                                     event,
+                                     static_cast<FreeComment*>(item));
     }
   }
   return true;

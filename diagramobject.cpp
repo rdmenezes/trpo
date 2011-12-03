@@ -28,3 +28,8 @@ bool DiagramObject::deleteOnRemoval()
 {
   return true;
 }
+
+int DiagramObject::collisionObjectType() const
+{
+    return type();
+}

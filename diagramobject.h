@@ -77,6 +77,9 @@ public:
     {
         return m_diag;
     }
+    /*! Collision object type
+     */
+    int collisionObjectType() const;
     /*! Clones a diagram object
      */
     virtual DiagramObject * clone()=0;
