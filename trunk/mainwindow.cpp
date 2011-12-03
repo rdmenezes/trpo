@@ -12,7 +12,7 @@
 #include "diagram.h"
 #include "boxtool.h"
 #include "freecommenttool.h"
-#include "mainwindow.h"
+#include "selecttool.h"
 #include "graphicunittests.h"
 #define VIEW_WIDTH_X 102
 #define VIEW_WIDTH_Y 102
@@ -53,14 +53,13 @@ MainWindow::MainWindow(QWidget *parent,
     ui->view->setScene(scene);
     scene->setSceneRect(0,0,ui->view->width()-2,
                             ui->view->height()-2);
-    scene->setView(ui->view);
     //Set mouse tracking for  data.
     ui->view->setMouseTracking(true);
 
     //Setup delegates table
 
     QVector<Tool *> tool_ptrs;
-    tool_ptrs<<NULL; // 0
+    tool_ptrs<<new SelectTool();      // 0
     tool_ptrs<<NULL; // 1
     tool_ptrs<<new BoxTool();         // 2
     tool_ptrs<<NULL; // 3

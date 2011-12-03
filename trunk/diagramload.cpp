@@ -80,7 +80,7 @@ void Diagram::load(QDomElement * e,DiagramSet * parent)
   delete data;
 }
 */
-
+/*
 void correctItems(DiagramLoadData * data)
 {
  Diagram * dia=data->diagram;
@@ -190,3 +190,4 @@ void correctItems(DiagramLoadData * data)
    }
  }
 }
+*/

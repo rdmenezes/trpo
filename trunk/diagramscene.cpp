@@ -181,8 +181,8 @@ parentwin->ui->cursorCoordinates->setText(text);
 }
 void DiagramScene::keyPressEvent(QKeyEvent * event)
 {
-  QPoint local_pos=m_view->mapFromGlobal(QCursor::pos());
-  QPointF pos=m_view->mapToScene(local_pos);
+  QPoint local_pos=this->view()->mapFromGlobal(QCursor::pos());
+  QPointF pos=this->view()->mapToScene(local_pos);
   // Затем сцена получает список объектов под курсором (метод QGraphicsScene::items)
   QList<QGraphicsItem *> lst=this->items(pos);
 
@@ -288,19 +288,6 @@ void DiagramScene::addAnnotationLabel(QGraphicsSceneMouseEvent *event)
  }
 }
 
-void DiagramScene::decrementBlockID(Box * block)
-{
- int previd=block->id();
- int newid=((block->id()==0)?DIAGRAM_MAX_BLOCKS:previd)-1;
- processChangeBlockID(block,previd,newid);
-}
-
-void DiagramScene::incrementBlockID(Box * block)
-{
- int previd=block->id();
- int newid=(block->id()==DIAGRAM_MAX_BLOCKS-1)?0:(previd+1);
- processChangeBlockID(block,previd,newid);
-}
 
 void DiagramScene::processChangeBlockID(Box * block, char /* previd */, char  newid)
 {

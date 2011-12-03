@@ -276,10 +276,8 @@ public:
      */
     inline Diagram * diagram() { return m_diag; }
 
-    /*! Sets parent widget for that view
-        \param[in] v parent widget
-    */
-    inline void setView(QGraphicsView * v) { m_view=v; }
+
+
     /*! Sets a tool for working with diagram.
         \note Makes panel disappear, so must be called at end of living of panel
         \param[in] t tool type
@@ -303,14 +301,6 @@ public:
         \param[in] event event data
      */
     void addAnnotationLabel(QGraphicsSceneMouseEvent *event);
-    /*! Decrements block id
-        \param[in] block block
-     */
-    void decrementBlockID(Box * block);
-    /*! Increments block id
-        \param[in] block block
-     */
-    void incrementBlockID(Box * block);
     /*! Gets a new edit state
         \param[in] edit state
      */

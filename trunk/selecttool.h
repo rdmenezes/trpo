@@ -1,23 +1,23 @@
-/*! \file   boxtool.h
+/*! \file selecttool.h
     \author Mamontov
-    A tool for box creation
+    Describes a selected tool data
 */
-#ifndef BOXTOOL_H
-#define BOXTOOL_H
+#ifndef SELECTTOOL_H
+#define SELECTTOOL_H
 #include "tool.h"
 #include "box.h"
+#include "freecomment.h"
 
-/*! \class BoxTool
-    A tool for box creation
+/*! \class SelectTool
+    A selection tool, chosen by user
  */
-class BoxTool : public Tool
+class SelectTool : public Tool
 {
-private:
-    Box * m_obj; //!< Object
+
 public:
-    /*! Constructor
+    /*! A selection tool
      */
-    BoxTool();
+    SelectTool();
     /*! Clears an inner state of tool
      */
     virtual void   clearState();
@@ -55,7 +55,7 @@ public:
     virtual QVector<int> getKeyDownItems();
     /*! Virtual destructor
     */
-    virtual ~BoxTool();
+    virtual ~SelectTool();
 };
 
-#endif // BOXTOOL_H
+#endif // SELECTTOOL_H
