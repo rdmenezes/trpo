@@ -70,110 +70,6 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
   m_tooltype=TT_BLOCK;
   m_panel=NULL;
   m_panel_in_scene=NULL;
-  //Compute size of default block
-  //Get small size label
-  QFont fnt=this->font();
-  fnt.setPointSize(10);
-  QFontMetrics mtr1(fnt);
-  m_default_number_size=mtr1.boundingRect("9");
-  QRectF & number_size=m_default_number_size;
-  //Get size of default text
-  QFontMetrics mtr2(this->font());
-  //QRect label_size=mtr2.boundingRect(DEFAULT_BLOCK_TEXT);
- /*
-  m_default_block_size.setX(0);
-  m_default_block_size.setY(0);
-  m_default_block_size.setWidth(
-                                ((label_size.width()>number_size.width())?
-                                label_size.width():number_size.width())
-                                +BLOCK_SPACE_X*2
-                               );
-  m_default_block_size.setHeight(
-                                 label_size.height()+
-                                 (number_size.height()+BLOCK_SPACE_Y)*2
-                                );
-  */
-  //Compute a size of default label
-  /*
-  QRect tmp_alabel=mtr2.boundingRect(DEFAULT_ALABEL_TEXT);
-  m_alabel_block_size=QRectF(tmp_alabel.x(),tmp_alabel.y(),
-                             tmp_alabel.width()+2, tmp_alabel.height()+2);
-  */
-  //Sets a no edit state
-  m_edit_state=TES_NONE;
-  //m_label_editor=NULL;
-  m_label_editor_in_scene=NULL;
-  this->clearElementStates();
-
-  //Conditional test situation
-#ifdef MERGE_TEST_1
-    ArrowPoint * p0=new ArrowPoint(200,200);
-    ArrowPoint * p1=new ArrowPoint(250,200);
-
-    ArrowPoint * p2=new ArrowPoint(300,200);
-    ArrowPoint * p3=new ArrowPoint(400,200);
-#endif
-#ifdef MERGE_TEST_2
-    ArrowPoint * p0=new ArrowPoint(200,200);
-    ArrowPoint * p1=new ArrowPoint(250,200);
-
-    ArrowPoint * p2=new ArrowPoint(300,200);
-    ArrowPoint * p3=new ArrowPoint(300,300);
-#endif
-#ifdef MERGE_TEST_3
-    ArrowPoint * p0=new ArrowPoint(200,200);
-    ArrowPoint * p1=new ArrowPoint(200,300);
-
-    ArrowPoint * p2=new ArrowPoint(300,300);
-    ArrowPoint * p3=new ArrowPoint(350,300);
-#endif
-#ifdef MERGE_TEST_4
-    ArrowPoint * p0=new ArrowPoint(200,200);
-    ArrowPoint * p1=new ArrowPoint(200,300);
-
-    ArrowPoint * p2=new ArrowPoint(300,300);
-    ArrowPoint * p3=new ArrowPoint(300,200);
-#endif
-#if  defined MERGE_TEST_1 || defined MERGE_TEST_2 || defined MERGE_TEST_3 || defined MERGE_TEST_4
-    m_diag->addArrowPoint(p0);
-    m_diag->addArrowPoint(p1);
-    m_diag->addArrowPoint(p2);
-    m_diag->addArrowPoint(p3);
-    ArrowSegment * seg1=new ArrowSegment(p0,p1);
-    ArrowSegment * seg2=new ArrowSegment(p2,p3);
-    m_diag->addArrowSegment(seg1);
-    m_diag->addArrowSegment(seg2);
-    addItem(seg1); addItem(seg2);
-    update();
-#endif
-#ifdef TOP_ALINE_TEST
-    this->addItem( new CommentLine(QPointF(200,200),QPointF(200,190)) );
-    this->addItem( new CommentLine(QPointF(250,200),QPointF(250,150)) );
-    this->addItem( new CommentLine(QPointF(300,200),QPointF(300,100)) );
-    this->addItem( new CommentLine(QPointF(350,200),QPointF(350,50)) );
-    this->update();
-#endif
-#ifdef BOTTOM_ALINE_TEST
-    this->addItem( new CommentLine(QPointF(200,190),QPointF(200,200)) );
-    this->addItem( new CommentLine(QPointF(250,150),QPointF(250,200)) );
-    this->addItem( new CommentLine(QPointF(300,100),QPointF(300,200)) );
-    this->addItem( new CommentLine(QPointF(350,50),QPointF(350,200)) );
-    this->update();
-#endif
-#ifdef LEFT_ALINE_TEST
-    this->addItem( new CommentLine(QPointF(350,200),QPointF(340,200)) );
-    this->addItem( new CommentLine(QPointF(350,150),QPointF(300,150)) );
-    this->addItem( new CommentLine(QPointF(350,100),QPointF(250,100)) );
-    this->addItem( new CommentLine(QPointF(350,50),QPointF(150,50)) );
-    this->update();
-#endif
-#ifdef RIGHT_ALINE_TEST
-    this->addItem( new CommentLine(QPointF(340,200),QPointF(350,200)) );
-    this->addItem( new CommentLine(QPointF(300,150),QPointF(350,150)) );
-    this->addItem( new CommentLine(QPointF(250,100),QPointF(350,100)) );
-    this->addItem( new CommentLine(QPointF(150,50),QPointF(350,50)) );
-    this->update();
-#endif
 }
 
 void DiagramScene::hideUI()
@@ -197,19 +93,23 @@ const QRectF & DiagramScene::getDefaultBlockNumberSize() const
 {
     return this->m_default_number_size;
 }
+/*! Cравнивает два объекта и возвращает объект с меньшим типом
+    \param[in] i1 элемент1
+    \param[in] i2 элемент2
+ */
+bool lessItem(QGraphicsItem * i1, QGraphicsItem * i2)
+{
+   return i1->type()<i2->type();
+}
+
 void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
   QPointF pos=event->scenePos();
   // Затем сцена получает список объектов под курсором (метод QGraphicsScene::items)
   QList<QGraphicsItem *> lst=this->items(pos);
   // Сцена сортирует этот список по убыванию типа
-  qSort(lst);
-  // Ну и где, собственно сортировка, почему она пропущена?  (комментарий: Мамонтов Д.П.)
-  // Я использовала стандартную сортировку для контейнеров из QtAlgorythms
-  // Оно же по идее должно дергать оператор operator<, да? По крайней мере Сычев нам
-  // так рассказывал. Правильно?
-  int countClick=0;
-  if (this->items(pos).size()==0 || m_editor!=NULL || m_tool==NULL)
+  qSort(lst.begin(),lst.end(),lessItem);  // Не совсем правильно, вначале, так будет вернее.
+  if (lst.size()==0 || m_editor!=NULL || m_tool==NULL)
   {
      this->QGraphicsScene::mousePressEvent(event);
      return;
@@ -220,13 +120,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
   {
     if (vec.contains(lst[i]->type()))
     {
-       objectClick=m_tool->onClick(pos,lst[i]);//.Вызываем метод onClick(), передавая туда объект, или точку
-//      if (objectClick==true)
-//       {
-//        // countClick++;
-//         break;          // Переписать, не используя break. Вообще этот счетчик countClick не нужен
-//                         // (комментарий: Мамонтов Д.П.)
-//       }
+       objectClick=m_tool->onClick(pos,lst[i]);//.Вызываем метод onClick() передавая туда объект, и точку
     }
    }
    if (objectClick==false)
@@ -235,6 +129,35 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
          QGraphicsScene::mousePressEvent(event);
    }
 }
+
+void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    QPointF pos=event->scenePos();
+    // Затем сцена получает список объектов под курсором (метод QGraphicsScene::items)
+    QList<QGraphicsItem *> lst=this->items(pos);
+    // Сцена сортирует этот список по убыванию типа
+    qSort(lst.begin(),lst.end(),lessItem);  // Не совсем правильно, вначале, так будет вернее.
+    if (lst.size()==0 || m_editor!=NULL || m_tool==NULL)
+    {
+       this->QGraphicsScene::mouseReleaseEvent(event);
+       return;
+    }
+    QVector<int> vec=m_tool->getReleaseableItems();// через m_tool->getClickableItems() получается список типов объектов, которые инструмент обрабатывает
+   bool objectClick=false;
+    for (int i=0;(i<lst.size())||!objectClick;i++)
+    {
+      if (vec.contains(lst[i]->type()))
+      {
+         objectClick=m_tool->onRelease(pos,lst[i]);//.Вызываем метод onClick() передавая туда объект, и точку
+      }
+    }
+    if (objectClick==false)
+    {
+       if (! ( m_tool->onRelease(pos,NULL )))
+           QGraphicsScene::mousePressEvent(event);
+    }
+}
+
 void DiagramScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
 
@@ -260,109 +183,31 @@ parentwin->ui->cursorCoordinates->setText(text);
 }
 void DiagramScene::keyPressEvent(QKeyEvent * event)
 {
-  bool handled=false;
-  //In case when F1 pressed show help
-  if (m_panel)
-     handled=processKeyToolSelect(event);
-  if (event->key()==Qt::Key_Escape && m_tooltype==TT_ARROW && m_arrow_state==AES_EDIT)
+  QPoint local_pos=m_view->mapFromGlobal(QCursor::pos());
+  QPointF pos=m_view->mapToScene(local_pos);
+  // Затем сцена получает список объектов под курсором (метод QGraphicsScene::items)
+  QList<QGraphicsItem *> lst=this->items(pos);
+  // Сцена сортирует этот список по убыванию типа
+  qSort(lst.begin(),lst.end(),lessItem);  // Не совсем правильно, вначале, так будет вернее.
+  if (lst.size()==0 || m_editor!=NULL || m_tool==NULL)
   {
-      //Compute position
-      QPointF  pos;
-      QPoint local_pos=m_view->mapFromGlobal(QCursor::pos());
-      pos=m_view->mapToScene(local_pos);
-      this->processArrowEscapePress(pos);
+     this->QGraphicsScene::keyPressEvent(event);
+     return;
   }
-  if (event->key()==Qt::Key_Escape && m_tooltype==TT_ANNOTATION_LINE && m_alds==ALDS_SPECIFIEDFIRSTPOINT)
+  QVector<int> vec=m_tool->getKeyDownItems();// через m_tool->getClickableItems() получается список типов объектов, которые инструмент обрабатывает
+ bool objectClick=false;
+  for (int i=0;(i<lst.size())||!objectClick;i++)
   {
-      //Compute position
-      QPointF  pos;
-      QPoint local_pos=m_view->mapFromGlobal(QCursor::pos());
-      pos=m_view->mapToScene(local_pos);
-      this->processAnnotationLineEscapePress(pos);
+    if (vec.contains(lst[i]->type()))
+    {
+       objectClick=m_tool->onKeyDown(event,lst[i]);//.Вызываем метод onClick() передавая туда объект, и точку
+    }
   }
-  //TODO: Remove this part
-  if (event->key()==Qt::Key_G)
-      this->exportTo("test.png");
-  if (event->key()==Qt::Key_F1)
+  if (objectClick==false)
   {
-      HelpWindow d;
-      d.exec();
-      handled=true;
+     if (! ( m_tool->onKeyDown(event,NULL )))
+         QGraphicsScene::keyPressEvent(event);
   }
-  if (event->key()==Qt::Key_F5)
-  {
-      if (! (this->save("tmp.xml")))
-      { QMessageBox::critical(NULL,"Can't save file","Can't save to \"tmp.xml\"");}
-  }
-  if (event->key()==Qt::Key_F6)
-  {
-      if (! (this->load("tmp.xml")))
-      { QMessageBox::critical(NULL,"Can't load file","Can't load from \"tmp.xml\"");}
-  }
-  if (event->key()==Qt::Key_F3)
-  {
-      this->clear();
-  }
-  //In case when Shift presset add panel if not present
-  if (event->key()==Qt::Key_Shift
-      && m_arrow_state!=AES_EDIT
-      && m_alds!=ALDS_SPECIFIEDFIRSTPOINT
-      && m_dragstate==DS_NONE)
-  {
-      //Compute panel position
-      QPointF  panel_pos;
-      QPoint local_pos=m_view->mapFromGlobal(QCursor::pos());
-      panel_pos=m_view->mapToScene(local_pos);
-      panel_pos.setX(panel_pos.x()-PANEL_WIDTH/2);
-      panel_pos.setY(panel_pos.y()-PANEL_HEIGHT/2);
-
-      //Check under- and over-flow
-      if (panel_pos.x()<0)  panel_pos.setX(0);
-      if (panel_pos.y()<0)  panel_pos.setY(0);
-      if (panel_pos.x()+PANEL_WIDTH>this->width())
-           panel_pos.setX(this->width()-PANEL_WIDTH);
-      if (panel_pos.y()+PANEL_HEIGHT>this->height())
-          panel_pos.setY(this->height()-PANEL_HEIGHT);
-
-      if (m_panel==NULL)
-      {
-       //Add tool panel
-       m_panel=new ToolPanel(m_view);
-       m_panel_in_scene=this->addWidget(m_panel);
-       //Set parameters and update
-       m_panel->setGeometry(panel_pos.x(),panel_pos.y(),PANEL_WIDTH,PANEL_HEIGHT);
-       m_panel->update();
-      }
-      else
-      {
-          //Move panel
-          m_panel->move(panel_pos.x(),panel_pos.y());
-          m_panel->update();
-      }
-      handled=true;
-  }
-  if (!handled)
-  {
-     QPoint viewpos=m_view->mapFromGlobal(QCursor::pos());
-     QPointF scenepos=m_view->mapToScene(viewpos);
-     QList<QGraphicsItem *> items=this->items(scenepos);
-     for (int i=0;(i<items.size()) && !handled;i++)
-     {
-         if (items[i]->type()==Box::USERTYPE)
-         {
-             static_cast<Box *>(items[i])->keyPressEvent(event);
-             handled=true;
-         }
-         if (items[i]->type()==FreeComment::USERTYPE)
-         {
-             static_cast<FreeComment *>(items[i])->keyPressEvent(event);
-             handled=true;
-         }
-
-     }
-  }
-  if (!handled)
-      this->QGraphicsScene::keyPressEvent(event);
 }
 
 
@@ -653,17 +498,7 @@ void DiagramScene::annnotationLabelMoveLeave(const QPointF & pos)
  m_moving_label=NULL;
 }
 
-void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    if (m_tooltype==TT_SELECT && (m_dragstate==DS_BLOCK_MOVE || m_dragstate==DS_BLOCK_RESIZE))
-        blockResizeMoveLeave(event);
-    if (m_tooltype==TT_SELECT && m_dragstate==DS_ALABEL_MOVE)
-        annnotationLabelMoveLeave(event->scenePos());
-    if (m_tooltype==TT_SELECT  && m_dragstate==DS_ARROW_MOVE)
-        arrowMoveLeave(event->scenePos());
-    if (m_tooltype==TT_SELECT && m_dragstate==DS_ALINE_RESIZE)
-        leaveAnnotationLineResize(event->scenePos());
-}
+
 
 void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
 {
