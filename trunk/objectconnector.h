@@ -100,29 +100,6 @@ class ObjectConnector: public QLineF
 };
 
 
-/*! \class ObjectConnectorFactory
-    Class, that creates a  specific connectors for objects
- */
-class ObjectConnectorFactory
-{
- private:
-         /*! Creates a connectors for a rectangles
-             \param[in] r rectangle
-             \return vector of connectors
-          */
-         static QVector<ObjectConnector *> createForRect(const QRectF & r);
- public:
-         /*! Creates a connectors for a rectangles
-             \param[in] r rectangle
-             \return vector of connectors
-          */
-         static QVector<ObjectConnector *> createForBox(const QRectF & r);
-         /*! Creates a connectors for a rectangles
-             \param[in] r rectangle
-             \return vector of connectors
-          */
-         static QVector<ObjectConnector *> createForComment(const QRectF & r);
-};
 
 /*! Free all connectors
     \param[in] cts connectors
