@@ -23,3 +23,8 @@ bool DiagramObject::drawRoundings() const
 {
     return false;
 }
+
+bool DiagramObject::deleteOnRemoval()
+{
+  return true;
+}

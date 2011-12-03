@@ -108,6 +108,19 @@ void Diagram::add(DiagramObject * obj)
 }
 
 
+void Diagram::clear()
+{
+    m_boxes.clear();
+    for (int i=0;i<m_objects.size();i++)
+    {
+        if (m_objects[i]->deleteOnRemoval())
+            this->scene()->removeItem(m_objects[i]);
+        else
+            delete m_objects[i];
+    }
+    m_objects.clear();
+}
+
 bool Diagram::canAddBoxes() const
 {
  return true;
@@ -376,19 +389,3 @@ Diagram::~Diagram()
   clear();
 }
 
-void Diagram::clear()
-{
- for (int i=0;i<m_objects.size();i++)
-      delete m_objects[i];
- m_objects.clear();
-
-
- for (int i=0;i<m_arrow_points.size();i++)
-     delete m_arrow_points[i];
- m_alabels.clear();
- m_alines.clear();
- m_arrow_points.clear();
- m_arrow_segments.clear();
- //nullifyBoxes();
- //m_history.clear();
-}

@@ -256,8 +256,6 @@ public:
     void toggleEditMode(bool on, const QRectF & r=QRectF(),
                                  QKeyEvent * e=NULL,
                                  DiagramObject * d=NULL);
-
-
     /*! Event, that occures when mouse is being pressed
         \param[in] ev event
      */
@@ -266,11 +264,18 @@ public:
         \param[in] ev event
      */
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    /*! Event, that occures when mouse is being released
+        \param[in] ev event
+     */
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     /*! Event, that occures when key is being pressed
         \param[in] ev event
     */
     void keyPressEvent(QKeyEvent * event);
+    /*! Returns a diagram
+     */
+    inline Diagram * diagram() { return m_diag; }
+
     /*! Sets parent widget for that view
         \param[in] v parent widget
     */
@@ -290,9 +295,6 @@ public:
         \param[in] pos  center position of label
      */
     QRectF getDefaultAnnotationLabelSize(const QPointF & pos);
-    /*! Returns a diagram
-     */
-    Diagram * diagram() { return m_diag; }
     /*! Adds a block at specified place
         \param[in] event event data
      */
@@ -313,17 +315,6 @@ public:
         \param[in] edit state
      */
     inline TextEditState editState() const { return m_edit_state; }
-    /*! Toggles editing state on
-        \param[in] edit  editor
-        \param[in] sed   proxy widget
-
-    inline void toggleEditStateOn(ObjectTextEditor * edit, QGraphicsProxyWidget * sed)
-    {
-       this->m_edit_state=TES_EDIT;
-       this->m_label_editor=edit;
-       this->m_label_editor_in_scene=sed;
-    }
-    */
     /*! Toggles editing state off
      */
     void toggleEditStateOff();

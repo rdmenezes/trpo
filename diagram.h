@@ -185,6 +185,9 @@ public:
         /*! Adds new object to diagram
          */
         void add(DiagramObject * obj);
+        /*! Clears a diagram
+         */
+        void clear();
 
         /*! Returns a total boxes
          */
@@ -301,9 +304,6 @@ public:
         /*! Tests, whether diagram is correct (has at least one block)
          */
         bool isCorrect();
-        /*! Clears a diagram
-         */
-        void clear();
         /*! Saves a diagram
             \param[in] doc document
             \param[in] sete set
