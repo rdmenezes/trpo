@@ -133,19 +133,19 @@ bool Diagram::doesntCollideWithLines(const QRectF & rect)
         ArrowPoint * iout=m_arrow_segments[i]->out();
         QPointF * in=m_arrow_segments[i]->in();
         QPointF * out=m_arrow_segments[i]->out();
-        if (collides(rect,*in,*out) && !boundaryCollides(rect,iin,iout))
-        {
-            return false;
-        }
+        //if (collides(rect,*in,*out) && !boundaryCollides(rect,iin,iout))
+        //{
+        //    return false;
+        //}
     }
     for (int i=0;i<m_alines.size();i++)
     {
         QPointF * p1=m_alines[i]->begin();
         QPointF * p2=m_alines[i]->end();
-        if (collides(rect,*p1,*p2) && !boundaryCollides(rect,p1,p2))
-        {
-             return false;
-        }
+       // if (collides(rect,*p1,*p2) && !boundaryCollides(rect,p1,p2))
+        //{
+       //      return false;
+       // }
     }
     return true;
 }
@@ -308,18 +308,18 @@ bool Diagram::canPlaceSegment(ArrowPoint * point1, ArrowPoint * point2,
      if (m_boxes[i]!=NULL)
      {
        QRectF rect=m_boxes[i]->boundingRect();
-       bool result=collides(rect,*point1,*point2);
-       if ((result && (m_boxes[i]==block
-                  || point1->attachedBlock()==m_boxes[i]
-                  || point2->attachedBlock()==m_boxes[i])) || always_check_bounds)
-            result=result && !boundaryCollides(rect,point1,point2);
+       bool result=false;
+       //if ((result && (m_boxes[i]==block
+       //           || point1->attachedBlock()==m_boxes[i]
+       //           || point2->attachedBlock()==m_boxes[i])) || always_check_bounds)
+       //     result=result && !boundaryCollides(rect,point1,point2);
        if (result) return false;
      }
     }
     for (int i=0;i<m_alabels.size();i++)
     {
-        if (collides(m_alabels[i]->boundingRect(),*point1,*point2))
-            return false;
+        //if (collides(m_alabels[i]->boundingRect(),*point1,*point2))
+        //    return false;
     }
     return true;
 }

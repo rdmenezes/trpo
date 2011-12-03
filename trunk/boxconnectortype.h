@@ -1,5 +1,5 @@
 /*! \file boxconnectortype.h
-    \author HiddenSeeker
+    \author Mamontov
 
     Declares a connection type for a box
  */
