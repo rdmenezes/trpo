@@ -98,11 +98,6 @@ private:
         /*! Declares, whether point can be added to side
          */
         bool canAddToSide(BoxSide side);
-
-public:
-          /*! Describes a key press event
-           */
-          void keyPressEvent(QKeyEvent *event);
 public:
     /*! Constructs empty box.
         Used by serializable factory.
@@ -150,7 +145,9 @@ public:
         \param[in] id id
     */
     inline void setNumber(int id) { m_id=id; regenerate(); update(); }
-
+    /*! Returns an editable text for editor
+     */
+    const QString & getEditableText() const;
 
     ArrowPoint *& getLineRef(int side,int pos)  { return m_line_refs[side][pos]; }    
     /*! Declares a type of item

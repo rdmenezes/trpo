@@ -108,6 +108,11 @@ DiagramObject * FreeComment::clone()
     return new FreeComment(this->pos(),this->diagram(),this->m_text);
 }
 
+const QString & FreeComment::getEditableText() const
+{
+  return m_text;
+}
+
 void FreeComment::setRect(const QRectF & rect)
 {
    //m_rect=rect;

@@ -96,7 +96,10 @@ public:
     /*! Clones a diagram object
      */
     virtual DiagramObject * clone();
-
+    /*! Returns an editable text
+        \return text of comment
+     */
+    const QString & getEditableText() const;
 
     inline QString & string() { return m_text; }
     inline QRectF  & rect()   { return *(new QRectF());   }

@@ -67,6 +67,13 @@ bool SelectTool::onKeyDown(QKeyEvent *  event , QGraphicsItem *  item )
         {
             m_diagram->changeBlockNumber(1,static_cast<Box*>(item));
         }
+        //Change text
+        else if (isTextEditKey(event))
+        {
+            m_scene->toggleEditMode(true,static_cast<Box*>(item)->collisionRect(),
+                                         event,
+                                         static_cast<Box*>(item));
+        }
     }
   }
   return true;

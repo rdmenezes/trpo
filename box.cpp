@@ -6,6 +6,7 @@
 #include <QFontMetricsF>
 #include <math.h>
 #include <string.h>
+#include <stdio.h>
 #include <algorithm>
 #include <memory>
 
@@ -221,7 +222,7 @@ void Box::regenerate()
                >
                bounds.width()-m_number_rect.width()
                &&
-               oldwidth-newwidth>=0
+               oldwidth-newwidth>0
               );
          m_view_text+="\n";
      } else m_view_text+="\n";
@@ -238,6 +239,10 @@ DiagramObject * Box::clone()
     return new Box(this->pos(),this->diagram(),m_real_text);
 }
 
+const QString & Box::getEditableText() const
+{
+    return m_real_text;
+}
 
 void Box::setRect(const QRectF & rect)
 {
@@ -256,49 +261,6 @@ void Box::setText(const QString & text)
     m_real_text=text;
     regenerate();
     this->scene()->update();
-}
-
-void Box::keyPressEvent(QKeyEvent *event)
-{
-    /*
-    DiagramScene * myscene=static_cast<DiagramScene*>(this->scene());
-    if (myscene->isPanelActive())
-         return;
-    if(event->key()==Qt::Key_Left)
-    {
-        static_cast<DiagramScene *>(this->scene())->decrementBlockID(this);
-    }
-    else if (event->key()==Qt::Key_Right)
-    {
-        static_cast<DiagramScene *>(this->scene())->incrementBlockID(this);
-    }
-    else
-    {
-       DiagramScene * myscene=static_cast<DiagramScene *>(this->scene());
-       if (isTextEditKey(event) &&
-           myscene->editState()==TES_NONE)
-       {
-           ObjectTextEditor  * field=new LabelEdit(myscene,const_cast<Box*>(this));
-           QRect tmp(m_rect.x(),m_rect.y(),m_rect.width(),m_rect.height());
-           field->setGeometry(tmp);
-           field->setFont(myscene->font());
-           if (m_real_text!=DEFAULT_BLOCK_TEXT)
-            field->setPlainText(m_real_text);
-           //Move to end cursor
-           QTextCursor c=field->textCursor();
-           c.movePosition(QTextCursor::End);
-           field->setTextCursor(c);
-           QGraphicsProxyWidget * proxy=this->scene()->addWidget(field);
-           myscene->toggleEditStateOn(field,proxy);
-           field->grabKeyboard();
-           field->keyPressEvent(event);
-       }
-       else
-       {
-           this->QGraphicsItem::keyPressEvent(event);
-       }
-    }
-    */
 }
 
 void Box::updateString(const QString & text)
