@@ -121,6 +121,47 @@ void Diagram::clear()
     m_objects.clear();
 }
 
+void Diagram::changeBlockNumber(int delta, Box * b)
+{
+    int newid=m_boxes[b]+delta;
+    //Undo swap, if it was
+    if (m_swaps.size())
+    {
+        //Undo swap with this box, if it was
+        if (clock()-m_swaps[m_swaps.size()-1].m_time<HISTORY_CLEAR_TIME*CLOCKS_PER_SEC)
+        {
+           SwapEntry entry=m_swaps[m_swaps.size()-1];
+           if ((entry.m_box1==b || entry.m_box2==b)
+               && m_boxes.contains(entry.m_box1)
+               && m_boxes.contains(entry.m_box2))
+           {
+            int pid1=m_boxes[entry.m_box1];
+            int pid2=m_boxes[entry.m_box2];
+            m_boxes[entry.m_box1]=pid2;
+            m_boxes[entry.m_box2]=pid1;
+            entry.m_box1->setNumber(pid2);
+            entry.m_box2->setNumber(pid1);
+            m_swaps.remove(m_swaps.size()-1);
+           }
+        }  else m_swaps.clear();
+    }
+    //Swap numbers if we need to
+    int oldid=m_boxes[b];
+    int pos=m_boxes.values().indexOf(newid);
+    if (pos!=-1)
+    {
+        Box * swappedbox=m_boxes.keys()[pos];
+        m_boxes[swappedbox]=oldid;
+        swappedbox->setNumber(oldid);
+        m_swaps<<SwapEntry(clock(),swappedbox,b);
+    }
+    //Set new id
+    m_boxes[b]=newid;
+    b->setNumber(newid);
+}
+
+
+
 bool Diagram::canAddBoxes() const
 {
  return true;

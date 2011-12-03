@@ -74,9 +74,31 @@ class DiagramParent: public QPair<int,int>
            inline void setBlockID(int id)  { second=id;}
 };
 
-/*! Defines a max blocks in diagram
+/*! \class SwapEntry
+    An entry of swapping box numbers
  */
-#define DIAGRAM_MAX_BLOCKS 7
+class SwapEntry
+{
+ public:
+        clock_t m_time; //!< Time
+        Box  *  m_box1; //!< First box
+        Box  *  m_box2; //!< Second box data
+        //! Default constructor
+        inline SwapEntry() {}
+        /*! Constructs a swap entry
+            \param[in] time time entry
+            \param[in] b1   box one
+            \param[in] b2   box two
+         */
+        inline SwapEntry(clock_t time, Box * b1, Box * b2)
+        { m_time=time; m_box1=b1; m_box2=b2;  }
+};
+
+/*! History clear time
+ */
+#define HISTORY_CLEAR_TIME 1
+
+
 /*! Declares a diagram blocks
  */
 class Diagram : public Serializable
@@ -85,7 +107,6 @@ private:
         /*! Set of objects
          */
         QVector<DiagramObject *> m_objects;
-
         /*! A diagram set, where it's belong to
         */
         DiagramSet      *       m_set;
@@ -98,7 +119,9 @@ private:
         /*! Box data info
          */
         QMap<Box *, int>       m_boxes;
-
+        /*! Swap entries data
+         */
+        QVector<SwapEntry>     m_swaps;
 
         /*! Vector  of annotation labels
          */
@@ -188,10 +211,14 @@ public:
         /*! Clears a diagram
          */
         void clear();
-
-        /*! Returns a total boxes
+        /*! Changes block number by a delta parameter
+            \param[in] delta delta number
+            \param[in] b     box
          */
-        inline int getTotalBoxes() { return DIAGRAM_MAX_BLOCKS; }
+        void changeBlockNumber(int delta, Box * b);
+
+
+
         /*! Returns an annotation labels
          */
         inline QVector<FreeComment *> & annotationLabels() { return  m_alabels; }

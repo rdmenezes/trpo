@@ -139,10 +139,10 @@ void Box::regenerate()
      m_number_is_visible=false;
      return;
  }
- bounds.setLeft(bounds.left()+BOX_LABEL_PADDING);
- bounds.setRight(bounds.right()-BOX_LABEL_PADDING);
- bounds.setTop(bounds.top()+BOX_LABEL_PADDING);
- bounds.setBottom(bounds.bottom()-BOX_LABEL_PADDING);
+ bounds.moveLeft(bounds.left()+BOX_LABEL_PADDING);
+ bounds.moveRight(bounds.right()-BOX_LABEL_PADDING);
+ bounds.moveTop(bounds.top()+BOX_LABEL_PADDING);
+ bounds.moveBottom(bounds.bottom()-BOX_LABEL_PADDING);
 
 
  QFont numberFont=this->scene()->font();

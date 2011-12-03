@@ -146,6 +146,11 @@ public:
     /*! Clones a diagram object
      */
     virtual DiagramObject * clone();
+    /*! Sets a number of box
+        \param[in] id id
+    */
+    inline void setNumber(int id) { m_id=id; regenerate(); update(); }
+
 
     ArrowPoint *& getLineRef(int side,int pos)  { return m_line_refs[side][pos]; }    
     /*! Declares a type of item
@@ -158,10 +163,6 @@ public:
     /*! Returns item id
     */
     inline char id() const { return m_id; }
-    /*! Sets an item id
-        \param[in] id id
-    */
-    inline void setID(int id) { m_id=id; update(); }
     /*! Creates an item position at scene
         \param[in] pos    position of creation of box
         \param[in] scene  scene data
