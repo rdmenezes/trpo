@@ -143,7 +143,9 @@ public:
     /*! Returns a rectangle for collision testing
      */
     virtual QRectF  collisionRect() const;
-
+    /*! Clones a diagram object
+     */
+    virtual DiagramObject * clone();
 
     ArrowPoint *& getLineRef(int side,int pos)  { return m_line_refs[side][pos]; }    
     /*! Declares a type of item

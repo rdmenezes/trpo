@@ -129,6 +129,9 @@ public:
         /*! Tests,whether a line contents a point
          */
         bool contains ( const QPointF & point ) const;
+        /*! Clones a diagram object
+         */
+        virtual DiagramObject * clone();
         /*! Destructor
          */
         ~CommentLine();

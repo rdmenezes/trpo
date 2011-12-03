@@ -103,6 +103,10 @@ QRectF  FreeComment::collisionRect() const
   return QRectF(pos(),m_size);
 }
 
+DiagramObject * FreeComment::clone()
+{
+    return new FreeComment(this->pos(),this->diagram(),this->m_text);
+}
 
 void FreeComment::setRect(const QRectF & rect)
 {

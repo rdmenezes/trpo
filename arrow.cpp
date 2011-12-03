@@ -219,6 +219,12 @@ QLineF  Arrow::collisionLine() const
     return QLineF(*m_self);
 }
 
+
+DiagramObject * Arrow::clone()
+{
+    return new Arrow(new ObjectConnector(*m_self),this->diagram(),m_tunneled_begin,m_tunneled_end);
+}
+
 void Arrow::save(QDomDocument * /* doc */,
                QDomElement *  /* element */)
 {

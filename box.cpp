@@ -233,6 +233,12 @@ void Box::regenerate()
 }
 
 
+DiagramObject * Box::clone()
+{
+    return new Box(this->pos(),this->diagram(),m_real_text);
+}
+
+
 void Box::setRect(const QRectF & rect)
 {
     setX(rect.x());

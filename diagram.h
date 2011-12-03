@@ -178,8 +178,8 @@ public:
             \return true, if can place
          */
         bool canPlace(DiagramObject * obj,
-                      const QVector<int> & exctypes,
-                      const QVector<DiagramObject *> excobjs
+                      const QVector<int> & exctypes=QVector<int>(),
+                      const QVector<DiagramObject *> & excobjs=QVector<DiagramObject *>()
                      );
 
         /*! Adds new object to diagram

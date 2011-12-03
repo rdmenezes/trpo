@@ -67,6 +67,9 @@ public:
          /*! Returns a line part
           */
          inline CommentLine *  line() const { return m_line; }
+         /*! Returns NULL
+          */
+         inline DiagramObject * clone();
 };
 
 #endif // ATTACHEDCOMMENT_H
