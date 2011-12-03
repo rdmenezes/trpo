@@ -202,7 +202,7 @@ public:
          */
         bool canPlace(DiagramObject * obj,
                       const QVector<int> & exctypes=QVector<int>(),
-                      const QVector<DiagramObject *> & excobjs=QVector<DiagramObject *>()
+                      const QVector<CollisionObject *> & excobjs=QVector<CollisionObject *>()
                      );
 
         /*! Adds new object to diagram

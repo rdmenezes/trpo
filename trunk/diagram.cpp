@@ -52,17 +52,15 @@ void Diagram::resolvePointers(QMap<void *, Serializable *> &
 
 bool Diagram::canPlace(DiagramObject * obj,
                         const QVector<int> & exctypes,
-                        const QVector<DiagramObject *> & excobjs
+                        const QVector<CollisionObject *> & excobjs
                       )
 {
     bool can=true;
-    CollisionDetector * detector=new CollisionDetector();
+    CollisionDetector * detector=new CollisionDetector(exctypes,excobjs);
     for (int i=0;i<m_objects.size();i++)
     {
-        if (!exctypes.contains(m_objects[i]->type()) && !excobjs.contains(m_objects[i]))
-        {
+        DiagramObject * d=m_objects[i];
             can= can && !( detector->test(obj,m_objects[i]) );
-        }
     }
     delete detector;
     return can;

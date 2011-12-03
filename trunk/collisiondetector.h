@@ -8,6 +8,7 @@
 #include "collision.h"
 #include <QHash>
 #include <QPair>
+#include <QVector>
 /*! \class CollisionDetector
     Declares a collision detector
  */
@@ -17,6 +18,9 @@ private:
         QHash< QPair<ShapeType,ShapeType>,
                bool (CollisionDetector::*) (CollisionObject *, CollisionObject *)
              > m_map; //!< Map data
+
+        QVector<int> m_exctypes; //!< Excluded types from scan
+        QVector<CollisionObject *> m_objects; //!< Excluded collision objects
         /*! Tests a collision between rectangles
             \param[in] o1 first object
             \param[in] o2 second object
@@ -43,8 +47,12 @@ private:
         bool testComplexAndOther(CollisionObject * o1,CollisionObject * o2);
 public:
     /*! Constructs a collision detector
+        \param[in] exctypes excluded types
+        \param[in] objects  excluded objects
      */
-    CollisionDetector();
+    CollisionDetector(const QVector<int> & exctypes,
+                      const QVector<CollisionObject *> & objects);
+
     /*! Tests an object for collision
      */
     bool test(CollisionObject * o1, CollisionObject * o2);

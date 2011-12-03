@@ -49,6 +49,9 @@ public:
        /*! Returns next object for collision
         */
        virtual CollisionObject *    nextObject();
+       /*! Type for implementing data
+        */
+       virtual int collisionObjectType() const=0;
        /*! Virtual destructor
         */
        virtual ~CollisionObject();
