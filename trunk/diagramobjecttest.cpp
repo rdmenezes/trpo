@@ -34,4 +34,8 @@ void DiagramObjectTest::resolvePointers(QMap<void *, Serializable *> &
     //!< TODO: Implement this later
 }
 
+DiagramObject * DiagramObjectTest::clone()
+{
+    return new DiagramObjectTest(this->pos(),this->diagram());
+}
 

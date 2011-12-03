@@ -93,6 +93,9 @@ public:
         /*! Returns a collision rect for item
          */
         virtual QLineF  collisionLine() const;
+        /*! Clones a diagram object
+         */
+        virtual DiagramObject * clone();
         /*! Destructs an arrow
          */
         ~Arrow();

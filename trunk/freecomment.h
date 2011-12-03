@@ -93,7 +93,9 @@ public:
     /*! Returns a rectangle for collision testing
      */
     virtual QRectF  collisionRect() const;
-
+    /*! Clones a diagram object
+     */
+    virtual DiagramObject * clone();
 
 
     inline QString & string() { return m_text; }

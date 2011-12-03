@@ -8,7 +8,7 @@
 #include "tooldelegate.h"
 #include "diagramtesttool.h"
 #include "diagram.h"
-#include "box.h"
+#include "boxtool.h"
 #include <QGraphicsScene>
 #include <QRectF>
 #include <math.h>
@@ -62,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent,
     QVector<Tool *> tool_ptrs;
     tool_ptrs<<NULL; // 0
     tool_ptrs<<NULL; // 1
-    tool_ptrs<<NULL; // 2
+    tool_ptrs<<new BoxTool(); // 2
     tool_ptrs<<NULL; // 3
     tool_ptrs<<NULL; // 4
     tool_ptrs<<NULL; // 5
@@ -108,8 +108,8 @@ MainWindow::MainWindow(QWidget *parent,
 
 
     //Perform test of box
-    GraphicUnitTests gut(diag);
-    gut.performDefaultObjectTest();
+    //GraphicUnitTests gut(diag);
+    //gut.performDefaultObjectTest();
 
 
 }

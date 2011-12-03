@@ -209,3 +209,9 @@ bool CommentLine::contains ( const QPointF & point ) const
     return hh && vh;
 }
 
+
+DiagramObject * CommentLine::clone()
+{
+    return new CommentLine(m_in,m_out,NULL,NULL,this->diagram());
+}
+

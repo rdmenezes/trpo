@@ -52,7 +52,7 @@ void Diagram::resolvePointers(QMap<void *, Serializable *> &
 
 bool Diagram::canPlace(DiagramObject * obj,
                         const QVector<int> & exctypes,
-                        const QVector<DiagramObject *> excobjs
+                        const QVector<DiagramObject *> & excobjs
                       )
 {
     bool can=true;

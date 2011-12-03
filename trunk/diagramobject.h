@@ -77,6 +77,9 @@ public:
     {
         return m_diag;
     }
+    /*! Clones a diagram object
+     */
+    virtual DiagramObject * clone()=0;
 };
 
 #endif // DIAGRAMOBJECT_H

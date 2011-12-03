@@ -53,7 +53,9 @@ public:
             \param[in] addressMap map of addresses
          */
         virtual  void resolvePointers(QMap<void *, Serializable *> & adressMap);
-
+        /*! Clones a diagram object
+         */
+        virtual DiagramObject * clone();
 };
 
 #endif // DIAGRAMOBJECTTEST_H

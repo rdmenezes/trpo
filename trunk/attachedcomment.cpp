@@ -46,4 +46,8 @@ CollisionObject *    AttachedComment::nextObject()
     return NULL;
 }
 
+DiagramObject * AttachedComment::clone()
+{
+ return NULL;
+}
 
