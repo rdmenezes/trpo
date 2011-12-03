@@ -41,7 +41,8 @@ SOURCES += main.cpp \
     attachedcomment.cpp \
     diagramtesttool.cpp \
     collisiondetector.cpp \
-    boxtool.cpp
+    boxtool.cpp \
+    freecommenttool.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
@@ -78,7 +79,8 @@ HEADERS += mainwindow.h \
     itemtypes.h \
     diagramtesttool.h \
     collisiondetector.h \
-    boxtool.h
+    boxtool.h \
+    freecommenttool.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc

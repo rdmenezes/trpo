@@ -1,19 +1,19 @@
+#include <QGraphicsView>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QSlider>
+#include <math.h>
 #include "mainwindow.h"
 #include "helpwindow.h"
 #include "ui_mainwindow.h"
-#include <QGraphicsView>
 #include "diagramscene.h"
-#include <QMessageBox>
-#include <QFileDialog>
 #include "tooldelegate.h"
 #include "diagramtesttool.h"
 #include "diagram.h"
 #include "boxtool.h"
-#include <QGraphicsScene>
-#include <QRectF>
-#include <math.h>
+#include "freecommenttool.h"
+#include "mainwindow.h"
 #include "graphicunittests.h"
-#include <QSlider>
 #define VIEW_WIDTH_X 102
 #define VIEW_WIDTH_Y 102
 
@@ -62,10 +62,10 @@ MainWindow::MainWindow(QWidget *parent,
     QVector<Tool *> tool_ptrs;
     tool_ptrs<<NULL; // 0
     tool_ptrs<<NULL; // 1
-    tool_ptrs<<new BoxTool(); // 2
+    tool_ptrs<<new BoxTool();         // 2
     tool_ptrs<<NULL; // 3
     tool_ptrs<<NULL; // 4
-    tool_ptrs<<NULL; // 5
+    tool_ptrs<<new FreeCommentTool(); // 5
     QVector<QGraphicsView *> views;
     for (int row=0;row<3;row++)
     {
@@ -126,6 +126,7 @@ MainWindow::~MainWindow() {
         this->save();
     }
     */
+    static_cast<DiagramScene *>(ui->view->scene())->diagram()->clear();
     delete ui;
     if (m_own)
          delete m_set;

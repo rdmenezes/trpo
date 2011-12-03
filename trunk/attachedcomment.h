@@ -70,6 +70,10 @@ public:
          /*! Returns NULL
           */
          inline DiagramObject * clone();
+         /*! Used to perfom a custom actions, before dying
+             \return true (default implementation) if just remove it from scene, false - if delete
+          */
+         virtual bool deleteOnRemoval();
 };
 
 #endif // ATTACHEDCOMMENT_H

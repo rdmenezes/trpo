@@ -14,7 +14,8 @@ enum ItemTypes
     IsBox        =QGraphicsItem::UserType+2,
     IsArrow      =QGraphicsItem::UserType+3,
     IsFreeComment=QGraphicsItem::UserType+4,
-    IsCommentLine=QGraphicsItem::UserType+5
+    IsCommentLine=QGraphicsItem::UserType+5,
+    IsAttachedComment=QGraphicsItem::UserType+6
 };
 
 #endif // ITEMTYPES_H
