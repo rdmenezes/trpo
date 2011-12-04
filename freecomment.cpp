@@ -119,8 +119,9 @@ DiagramObject * FreeComment::clone()
     return new FreeComment(this->pos(),this->diagram(),this->m_text);
 }
 
-const QString & FreeComment::getEditableText() const
+QString  FreeComment::getEditableText() const
 {
+  if (m_text==FC_TEXT) return QString("");
   return m_text;
 }
 
@@ -129,45 +130,3 @@ void FreeComment::setRect(const QRectF & rect)
    //m_rect=rect;
 }
 
-void FreeComment::keyPressEvent(QKeyEvent *event)
-{
-    DiagramScene * myscene=static_cast<DiagramScene *>(this->scene());
-    if (isTextEditKey(event) &&
-        myscene->editState()==TES_NONE)
-    {
-        ObjectTextEditor  * field=new ObjectTextEditor(myscene,NULL);
-        QRect tmp;//(m_rect.x(),m_rect.y(),m_rect.width(),m_rect.height()+2*border_hint);
-        field->setGeometry(tmp);
-        field->setFont(myscene->font());
-        //if (m_string!=DEFAULT_ALABEL_TEXT)
-        // field->setPlainText(m_string);
-        //Move to end cursor
-        QTextCursor c=field->textCursor();
-        c.movePosition(QTextCursor::End);
-        field->setTextCursor(c);
-        QGraphicsProxyWidget * proxy=this->scene()->addWidget(field);
-        proxy->update();
-        //myscene->toggleEditStateOn(field,proxy);
-        field->grabKeyboard();
-        field->keyPressEvent(event);
-    }
-    else
-    {
-        this->QGraphicsItem::keyPressEvent(event);
-    }
-}
-
-void FreeComment::trySetText(const QString & text)
-{
-    DiagramScene * scene=static_cast<DiagramScene *>(this->scene());
-    Diagram *       diag=scene->diagram();
-    QFontMetrics metrics(scene->font());
-    QRect        rect=metrics.boundingRect(0,0,100000,100000,Qt::AlignCenter,text);
-    QRectF newrect;//(m_rect.x(),m_rect.y(),rect.width(),rect.height());
-    if (diag->canBePlaced(newrect,this))
-    {
-        //m_rect=;
-        m_text=text;
-        scene->update();
-    }
-}

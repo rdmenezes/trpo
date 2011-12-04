@@ -261,23 +261,23 @@ void DiagramScene::processRemoving(const QList<QGraphicsItem *> & items)
  {
     for (int i=0;i<items.size();i++)
     {
-        if (items[i]->type()==Box::USERTYPE)
+        //if (items[i]->type()==Box::USERTYPE)
         {
             char id=static_cast<Box *>(items[i])->id();
             static_cast<Box *>(items[i])->clearPointReferences();
             m_diag->removeBlock(id);
             this->removeItem(items[i]);
         }
-        if (items[i]->type()==FreeComment::USERTYPE)
+        //if (items[i]->type()==FreeComment::USERTYPE)
         {
             m_diag->removeAnnotationLabel(static_cast<FreeComment *>(items[i]));
             this->removeItem(items[i]);
         }
-        if (items[i]->type()==ArrowSegment::USERTYPE)
+        //if (items[i]->type()==ArrowSegment::USERTYPE)
         {
           removeArrowSegment(static_cast<ArrowSegment *>(items[i]));
         }
-        if (items[i]->type()==CommentLine::USERTYPE)
+        //if (items[i]->type()==CommentLine::USERTYPE)
         {
             removeAnnotationLine(static_cast<CommentLine *>(items[i]));
         }
@@ -301,13 +301,13 @@ void  DiagramScene::blockResizeMoveEnter ( QGraphicsSceneMouseEvent * event )
    {
         for(int i=0;i<lst.size();i++)
         {
-          if (lst[i]->type()==Box::USERTYPE)
+          //if (lst[i]->type()==Box::USERTYPE)
           {
                 determineDraggingBoxAction(static_cast<Box *>(lst[i]),
                                            event->scenePos()
                                            );
           }
-          if (lst[i]->type()==FreeComment::USERTYPE)
+          //if (lst[i]->type()==FreeComment::USERTYPE)
           {
               m_dragstate=DS_ALABEL_MOVE;
               QPointF pos=event->scenePos();

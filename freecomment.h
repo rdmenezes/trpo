@@ -100,28 +100,12 @@ public:
     /*! Returns an editable text
         \return text of comment
      */
-    const QString & getEditableText() const;
+    QString  getEditableText() const;
 
-    inline QString & string() { return m_text; }
-    inline QRectF  & rect()   { return *(new QRectF());   }
-    /*! Declares a type of item
-     */
-    enum ItemType
-    {
-        USERTYPE=QGraphicsItem::UserType+10
-    };
 
     /*! Tries setting rect to label item
      */
     void setRect(const QRectF & rect);
-    /*! Handles a text editing
-        \param[in] event event of editing
-     */
-    void keyPressEvent(QKeyEvent *event);
-    /*! Tries setting a  new text
-        \param[in] text new text
-     */
-    void trySetText(const QString & text);
 
 signals:
 

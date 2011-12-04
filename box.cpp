@@ -239,8 +239,9 @@ DiagramObject * Box::clone()
     return new Box(this->pos(),this->diagram(),m_real_text);
 }
 
-const QString & Box::getEditableText() const
+QString  Box::getEditableText() const
 {
+    if (m_real_text==BOX_DEFAULT_TEXT) return QString("");
     return m_real_text;
 }
 
