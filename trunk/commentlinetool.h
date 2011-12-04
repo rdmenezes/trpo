@@ -35,6 +35,7 @@ private:
         Box                 * m_box;    //!< Box data
         Arrow               * m_arrow;  //!< Arrow data
         QPointF               m_startpoint;  //!< Starting poiny
+        qreal                 m_arrowposition; //!< Arrow position
 public:
         CommentLineTool();
         /*! Clears an inner state of tool
