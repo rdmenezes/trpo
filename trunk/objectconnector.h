@@ -97,6 +97,14 @@ class ObjectConnector: public QLineF
             \return    new   object
          */
         QVector<ObjectConnector *>  getConnected(qreal point,Connection type);
+        /*! Determines,whether connector has connected another connector
+            \param[in] o other connector
+         */
+        bool hasConnected(ObjectConnector * o);
+        /*! Removes a connector from list
+            \param[in] o other connector
+         */
+        void remove(ObjectConnector * o);
 };
 
 

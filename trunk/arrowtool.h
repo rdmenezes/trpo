@@ -38,12 +38,46 @@ class ArrowTool : public Tool
 private:
          ArrowToolState          m_state;        //!< State of arrow tool
          Arrow *                 m_preview[2];   //!< Previewed arrows
+         void                   (ArrowTool::* m_drawarr[13])(const QPointF & ,
+                                                             const QPointF & ); //!< Array of drawing functions
 
          ArrowToolPointLocation  m_loc[2];       //!< Where is starting point located
          Box *                   m_boxes[2];     //!< Boxes, where points are located
          Arrow *                 m_arrows[2];    //!< Arrows, where points are located
          qreal                   m_poses[2];     //!< Positions on points of data
          QPointF                 m_points[2];    //!< Specified positions of data
+
+         /*! Makes only first line of preview visible
+          */
+         void makeOneLineVisible();
+         /*! Makes all lines of preview visible
+          */
+         void makeAllVisible();
+         /*! Draws zero length arrow
+             \param[in] p1 first point
+             \param[in] p2 second point
+          */
+         void    drawZeroDirected(const QPointF & p1, const QPointF & p2);
+         /*! Draws a right directed arrow
+             \param[in] p1 first point
+             \param[in] p2 second point
+          */
+         void    drawRightLeftDirected(const QPointF & p1, const QPointF & p2);
+         /*! Draws a top directed arrow
+             \param[in] p1 first point
+             \param[in] p2 second point
+          */
+         void    drawTopBottomDirected(const QPointF & p1, const QPointF & p2);
+         /*! Draws a horizontal and after that vertical directed arrow
+             \param[in] p1 first point
+             \param[in] p2 second point
+          */
+         void    drawHVDirected(const QPointF & p1, const QPointF & p2);
+         /*! Draws a vertical and after that horizontal directed arrow
+             \param[in] p1 first point
+             \param[in] p2 second point
+          */
+         void    drawVHDirected(const QPointF & p1, const QPointF & p2);
 protected:
          /*! Returns a clockwise directions for arrow number - 0-12
              \param[in] pos               position

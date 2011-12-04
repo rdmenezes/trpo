@@ -3,6 +3,20 @@
 
 ArrowTool::ArrowTool()
 {
+    //Init drawing array
+    m_drawarr[0]=&ArrowTool::drawZeroDirected;
+    m_drawarr[1]=&ArrowTool::drawRightLeftDirected;
+    m_drawarr[2]=&ArrowTool::drawHVDirected;
+    m_drawarr[3]=&ArrowTool::drawVHDirected;
+    m_drawarr[4]=&ArrowTool::drawTopBottomDirected;
+    m_drawarr[5]=&ArrowTool::drawVHDirected;
+    m_drawarr[6]=&ArrowTool::drawHVDirected;
+    m_drawarr[7]=&ArrowTool::drawRightLeftDirected;
+    m_drawarr[8]=&ArrowTool::drawHVDirected;
+    m_drawarr[9]=&ArrowTool::drawVHDirected;
+    m_drawarr[10]=&ArrowTool::drawTopBottomDirected;
+    m_drawarr[11]=&ArrowTool::drawVHDirected;
+    m_drawarr[12]=&ArrowTool::drawHVDirected;
 }
 
 
@@ -100,6 +114,65 @@ int ArrowTool::clockwiseDirection(const QPointF & pos,bool canReturnZero)
 }
 
 
+void ArrowTool::makeOneLineVisible()
+{
+  m_preview[0]->setVisible(true);
+  m_preview[1]->setVisible(false);
+  m_preview[0]->model()->remove(m_preview[1]->model());
+  m_preview[1]->model()->remove(m_preview[0]->model());
+}
+
+
+void ArrowTool::makeAllVisible()
+{
+    m_preview[0]->setVisible(true);
+    m_preview[1]->setVisible(true);
+    if (!(m_preview[0]->model()->hasConnected(m_preview[1]->model())))
+    {
+        m_preview[0]->model()->addConnector(m_preview[1]->model(),1,C_OUTPUT);
+        m_preview[1]->model()->addConnector(m_preview[0]->model(),0,C_INPUT);
+    }
+}
+
+void    ArrowTool::drawZeroDirected(const QPointF & p1, const QPointF & p2)
+{
+   m_preview[0]->setVisible(false);
+   m_preview[1]->setVisible(false);
+   m_scene->update();
+}
+
+void  ArrowTool::drawRightLeftDirected(const QPointF &p1, const QPointF &p2)
+{
+    makeOneLineVisible();
+    m_preview[0]->model()->setLine(p1.x(),p1.y(),p2.x(),p1.y());
+    m_scene->update();
+}
+
+void ArrowTool::drawTopBottomDirected(const QPointF &p1, const QPointF &p2)
+{
+    makeOneLineVisible();
+    m_preview[0]->model()->setLine(p1.x(),p1.y(),p1.x(),p2.y());
+    m_scene->update();
+}
+
+
+void ArrowTool::drawHVDirected(const QPointF &p1, const QPointF &p2)
+{
+    makeAllVisible();
+    m_preview[0]->model()->setLine(p1.x(),p1.y(),p2.x(),p1.y());
+    m_preview[1]->model()->setLine(p2.x(),p1.y(),p2.x(),p2.y());
+    m_scene->update();
+}
+
+void ArrowTool::drawVHDirected(const QPointF &p1, const QPointF &p2)
+{
+    makeAllVisible();
+    m_preview[0]->model()->setLine(p1.x(),p1.y(),p1.x(),p2.y());
+    m_preview[1]->model()->setLine(p1.x(),p2.y(),p1.y(),p2.y());
+    m_scene->update();
+}
+
+
 QVector<int> ArrowTool::getClickableItems()
 {
     QVector<int> result;
@@ -136,6 +209,10 @@ bool ArrowTool::onKeyDown(QKeyEvent * /* event */, QGraphicsItem * /* item */)
 
 void ArrowTool::onMove(const QPointF & /* lastpos */ , const QPointF &pos)
 {
+  //Update preview only if first point specified
+  if (m_state==ATS_FIRSTPOINT)
+  {
 
+  }
 }
 

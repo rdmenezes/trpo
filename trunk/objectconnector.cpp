@@ -43,3 +43,32 @@ QVector<ObjectConnector *>  ObjectConnector::getConnected(qreal point,Connection
 
     return result;
 }
+
+bool ObjectConnector::hasConnected(ObjectConnector * o)
+ {
+     for (int i=0;i<2;i++)
+     {
+         for (int j=0;j<m_connected[i].size();j++)
+         {
+             if (m_connected[i][j].second==o)
+                 return true;
+         }
+     }
+     return false;
+ }
+
+
+void ObjectConnector::remove(ObjectConnector *o)
+{
+    for (int i=0;i<2;i++)
+    {
+        for (int j=0;j<m_connected[i].size();j++)
+        {
+            if (m_connected[i][j].second==o)
+            {
+               m_connected[i].remove(j);
+               --j;
+            }
+        }
+    }
+}
