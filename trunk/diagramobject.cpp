@@ -5,7 +5,7 @@ void DiagramObject::setText(const QString & /*text*/)
     throw TextChangeNotImplemented();
 }
 
-const QString & DiagramObject::getEditableText() const
+QString  DiagramObject::getEditableText() const
 {
   throw TextChangeNotImplemented();
   return *(new QString());

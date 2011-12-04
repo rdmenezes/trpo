@@ -59,7 +59,7 @@ public:
     /*! Returns editor text
         \return text for editor
      */
-    virtual const QString & getEditableText() const;
+    virtual QString  getEditableText() const;
     /*! Paint event reaction
         \param[in] painter painter drawing
         \param[in] option options

@@ -147,15 +147,9 @@ public:
     inline void setNumber(int id) { m_id=id; regenerate(); update(); }
     /*! Returns an editable text for editor
      */
-    const QString & getEditableText() const;
+    QString  getEditableText() const;
 
     ArrowPoint *& getLineRef(int side,int pos)  { return m_line_refs[side][pos]; }    
-    /*! Declares a type of item
-     */
-    enum ItemType
-    {
-        USERTYPE=QGraphicsItem::UserType+1
-    };
 
     /*! Returns item id
     */

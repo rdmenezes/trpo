@@ -137,10 +137,10 @@ void loadAnnotationLabel(QDomElement * el,DiagramLoadData * data)
        name=stringXMLToString(getAttr(map,"string"));
    if (map.contains("rect"))
        rect=stringToRectf(getAttr(map,"rect"));
-   FreeComment * label=new FreeComment();
-   label->string()=name;
-   label->rect()=rect;
-   data->diagram->annotationLabels()<<label;
+   //FreeComment * label=new FreeComment();
+   //label->string()=name;
+   //label->rect()=rect;
+   //data->diagram->annotationLabels()<<label;
 }
 
 void loadSegment(QDomElement * el,DiagramLoadData * data)
