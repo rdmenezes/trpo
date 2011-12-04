@@ -80,9 +80,74 @@ bool CommentLineTool::onClick(const QPointF &p, QGraphicsItem *  item )
    }
    else
    {
+       if (item)
+       {
+           if (item->type()==IsFreeComment)
+           {
+               FreeComment * fc=static_cast<FreeComment *>(item);
+               if (fc->parentComment()->line()==NULL)
+                  tryConnectWith(p,fc);
+           }
+       }
 
    }
    return true;
+}
+
+
+void CommentLineTool::tryConnectWith(const QPointF & pos, FreeComment * fc)
+{
+    QVector<CollisionObject *> exc; //!< Excluded objects
+    QPointF startpoint=m_startpoint;
+    ObjectConnector * toConnectWith=NULL;
+    if (m_loc==ATS_BOX)
+    {
+        exc<<m_box;
+        QRectF crect=m_box->collisionRect();
+        QPointF * tmp=getCollisionPoint(QLineF(m_startpoint,pos),
+                                     crect);
+        if (tmp)
+        {
+            Direction dir=D_LEFT;
+            if (fabs(tmp->x()-crect.left())<0.001) dir=D_LEFT;
+            if (fabs(tmp->x()-crect.right())<0.001) dir=D_RIGHT;
+            if (fabs(tmp->y()-crect.top())<0.001) dir=D_TOP;
+            if (fabs(tmp->y()-crect.bottom())<0.001) dir=D_BOTTOM;
+            toConnectWith=m_box->getBySide(dir);
+            startpoint=*tmp;
+            delete tmp;
+        }
+    }
+    if (m_loc==ATS_ARROW)
+    {
+        exc<<m_arrow;
+        toConnectWith=m_arrow->model();
+    }
+    QPointF endpoint=pos;
+    if (fc)
+    {
+        exc<<fc;
+        QPointF * tmp=getCollisionPoint(QLineF(m_startpoint,pos),
+                                     fc->collisionRect());
+        if (tmp)
+        {
+            endpoint=*tmp;
+            delete tmp;
+        }
+    }
+    m_line->setLine(startpoint.x(),startpoint.y(),
+                    endpoint.x(),endpoint.y());
+    if (m_diagram->canPlace(m_line,QVector<int>(),exc))
+    {
+        fc->parentComment()->setLine(m_line);
+        if (toConnectWith)
+        {
+            qreal cpos=position(*toConnectWith,startpoint);
+            m_line->setInput(toConnectWith,cpos);
+        }
+        initState();
+    }
+    m_scene->update();
 }
 
 bool CommentLineTool::onRelease(const QPointF & /* p */, QGraphicsItem * /* item */)

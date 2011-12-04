@@ -36,8 +36,16 @@ private:
         Arrow               * m_arrow;  //!< Arrow data
         QPointF               m_startpoint;  //!< Starting poiny
         qreal                 m_arrowposition; //!< Arrow position
+        /*!  Tries to connect comment line tool with free comment
+             \param[in] p point
+             \param[in] fc free comment
+         */
+        void tryConnectWith(const QPointF & p, FreeComment * fc);
 public:
         CommentLineTool();
+
+
+
         /*! Clears an inner state of tool
          */
         virtual void   clearState();

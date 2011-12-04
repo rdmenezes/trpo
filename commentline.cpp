@@ -102,7 +102,7 @@ void CommentLine::drawArcs(QPainterPath & path,qreal l, qreal x,qreal hx)
 
     QPointF  p0[4];
     p0[0]=translate(m_in);
-    p0[1]=p0[0]+line*l/3+normal*x/1,5;
+    p0[1]=p0[0]+line*l/3+normal*x/1.5;
     p0[2]=p0[0]+line*(l+hx)/2+normal*x/2;
     QPointF  middle=p0[0]+line*l/2;
     p0[3]=middle;

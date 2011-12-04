@@ -56,6 +56,7 @@ Box::Box(const QPointF & p, Diagram * d, const QString & txt)
 
   m_number_is_visible=true;
 
+  createConnectors();
 }
 
 
@@ -126,6 +127,7 @@ void Box::resolvePointers(QMap<void *, Serializable *> &
 {
     //!< TODO: Implement this later
 }
+
 
 
 void Box::regenerate()
@@ -245,6 +247,68 @@ QString  Box::getEditableText() const
     return m_real_text;
 }
 
+void Box::createConnectors()
+{
+  QRectF crect=collisionRect();
+  //Top
+  m_connectors<<new ObjectConnector(crect.topLeft().x(),
+                                    crect.topLeft().y(),
+                                    crect.topRight().x(),
+                                    crect.topRight().y());
+  //Right
+  m_connectors<<new ObjectConnector(crect.topRight().x(),
+                                    crect.topRight().y(),
+                                    crect.bottomRight().x(),
+                                    crect.bottomRight().y());
+  //Bottom
+  m_connectors<<new ObjectConnector(crect.bottomRight().x(),
+                                    crect.bottomRight().y(),
+                                    crect.bottomLeft().x(),
+                                    crect.bottomLeft().y());
+  //Left
+  m_connectors<<new ObjectConnector(crect.bottomLeft().x(),
+                                    crect.bottomLeft().y(),
+                                    crect.topLeft().x(),
+                                    crect.topLeft().y());
+
+}
+
+ObjectConnector * Box::getBySide(Direction d)
+{
+    if (d==D_TOP)
+        return m_connectors[0];
+    if (d==D_RIGHT)
+        return m_connectors[1];
+    if (d==D_BOTTOM)
+        return m_connectors[2];
+    return m_connectors[3];
+}
+void Box::setPos(const QPointF & ppos)
+{
+ QPointF old=pos();
+ QGraphicsItem::setPos(ppos);
+ if (m_connectors.size())
+ {
+     QPointF delta=ppos-old;
+     for (int i=0;i<m_connectors.size();i++)
+     {
+         m_connectors[i]->setP1(m_connectors[i]->p1()+delta);
+         m_connectors[i]->setP2(m_connectors[i]->p2()+delta);
+     }
+ }
+}
+
+void Box::setPos(qreal x, qreal y)
+{
+  setPos(QPointF(x,y));
+}
+Box::~Box()
+{
+  for (int i=0;i<m_connectors.size();i++)
+      delete m_connectors[i];
+}
+
+
 void Box::setRect(const QRectF & rect)
 {
     setX(rect.x());
@@ -275,71 +339,7 @@ void Box::updateString(const QString & text)
    }
 }
 
-/*
-void Box::regenerate()
-{
 
-   QRectF       numrect=static_cast<DiagramScene *>(this->scene())->getDefaultBlockNumberSize();
-   QRect        rect(m_rect.x(),m_rect.y(),m_rect.width(),m_rect.height());
-   QFontMetrics metrics(scene()->font());
-   QRect basic_rect=metrics.boundingRect(rect,Qt::AlignCenter,m_real_text);
-   //printf("%d %d %d %d\n",basic_rect.x(),basic_rect.y(),basic_rect.width(),basic_rect.height());
-   m_number_pos.setX(m_rect.x()+m_rect.width()-numrect.width());
-   m_number_pos.setY(m_rect.y()+m_rect.height());
-   if (basic_rect.width()<=m_rect.width() &&
-       basic_rect.height()<=m_rect.height()-numrect.height()
-       )
-   {
-     m_view_text=m_real_text;
-   }
-   else
-   {
-       //printf("Worked other lap");
-       QStringList rows=m_real_text.split("\n",
-                                            QString::KeepEmptyParts,
-                                            Qt::CaseSensitive);
-       m_viewed_string="";
-       bool exit=false;
-       int i=0;
-       for (i=0;(i<rows.size()) && !exit;i++)
-       {
-         QString old_v_string=m_viewed_string;        
-         QString row_string_elided=metrics.elidedText(rows[i],Qt::ElideRight,
-                                                      m_rect.width());
-         if (metrics.boundingRect(rect,Qt::AlignCenter,row_string_elided).width()>m_rect.width())
-             row_string_elided="";
-         //Add new string
-         m_viewed_string+=row_string_elided;
-         m_viewed_string+="\n";
-         if (metrics.boundingRect(rect,Qt::AlignCenter,m_viewed_string).height()
-             >
-             m_rect.height()-numrect.height())
-         {
-             m_viewed_string=old_v_string;
-             exit=true;
-             if (i!=0)
-                 rows[i]="...";
-             else
-                 rows[i]="";
-         }
-         else rows[i]=row_string_elided;
-       }
-       printf("%s",rows[0].toStdString().c_str());
-       m_viewed_string=rows[0];
-       if (i!=1) m_viewed_string+="\n";
-       for (int j=1;j<i;j++)
-       {
-           m_viewed_string+=rows[j];
-           if (j!=i-1)
-                m_viewed_string+="\n";
-       }
-   }
-   m_string_pos=metrics.boundingRect(m_rect.x(),m_rect.y()+1,m_rect.width(),
-                                     m_rect.height()-numrect.height(),
-                                     Qt::AlignCenter,m_viewed_string);
-
-}
-*/
 /*
 void Box::setRect(const QRectF & rect)
 {
