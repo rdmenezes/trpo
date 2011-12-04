@@ -251,6 +251,7 @@ bool ArrowTool::onKeyDown(QKeyEvent *  event, QGraphicsItem * /* item */)
   {
      m_scene->removeItem(m_preview[0]);
      m_scene->removeItem(m_preview[1]);
+     m_scene->update();
      static_cast<MainWindow*>(m_scene->view()->window())->setActionText("Click to place start point of arrow");
      m_state=ATS_START;
   }
