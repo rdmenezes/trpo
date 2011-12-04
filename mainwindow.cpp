@@ -185,6 +185,9 @@ void MainWindow::showHelp() {
 
 void MainWindow::scale(int coef){
      QGraphicsView *view = ui->view;
+     QRectF area;
+     area=view->sceneRect();
+
      //depending on new and previous positions of horizontalSlider
      if (coef==1)
      {
@@ -205,6 +208,7 @@ void MainWindow::scale(int coef){
          else
              view->scale(pow(2.0f, coef-previousScaleValue), pow(2.0f, coef-previousScaleValue));
      }
+     view->setSceneRect(area);
      previousScaleValue=coef;
 }
 
