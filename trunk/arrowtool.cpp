@@ -41,6 +41,7 @@ void ArrowTool::clearState()
    m_scene->removeItem(m_preview[0]);
    m_scene->removeItem(m_preview[1]);
    m_state=ATS_START;
+   m_scene->update();
  }
   static_cast<MainWindow*>(m_scene->view()->window())->setActionText("");
 }

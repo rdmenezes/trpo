@@ -16,6 +16,7 @@ void BoxTool::clearState()
   static_cast<MainWindow*>(m_scene->view()->window())->setActionText("");
   if (m_obj)
     this->m_scene->removeItem(m_obj);
+  m_scene->update();
 }
 
 void BoxTool::initState()

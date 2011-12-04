@@ -13,6 +13,7 @@
 #include "selecttool.h"
 #include "boxtool.h"
 #include "arrowtool.h"
+#include "commentlinetool.h"
 #include "freecommenttool.h"
 #include "graphicunittests.h"
 #define VIEW_WIDTH_X 102
@@ -64,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent,
     tool_ptrs<<NULL; // 1
     tool_ptrs<<new BoxTool();         // 2
     tool_ptrs<<new ArrowTool();       // 3
-    tool_ptrs<<NULL; // 4
+    tool_ptrs<<new CommentLineTool(); // 4
     tool_ptrs<<new FreeCommentTool(); // 5
     QVector<QGraphicsView *> views;
     for (int row=0;row<3;row++)

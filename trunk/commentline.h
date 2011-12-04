@@ -54,7 +54,7 @@ class CommentLine : public DiagramObject
 private:
         /*! Input connector data
          */
-        ObjectConnector * m_input;
+        ObjectConnector * m_self;
         /*! Parent comment data
          */
         AttachedComment * m_parentcomment;
@@ -156,6 +156,18 @@ public:
         /*! Destructor
          */
         ~CommentLine();
+        /*! Tests, whether has input
+         */
+        bool hasInput() const;
+        /*! Sets an input for
+            \param[in] c input connector
+            \param[in] a  line position in connector
+         */
+        inline void setInput(ObjectConnector * c, qreal a)
+        {
+            m_self->addConnector(c,0,C_INPUT);
+            c->addConnector(m_self,a,C_OUTPUT);
+        }
 
         /*! A free point, that is pointed into air
          */
