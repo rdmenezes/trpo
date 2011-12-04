@@ -107,7 +107,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
   QPointF pos=event->scenePos();
   // Затем сцена получает список объектов под курсором (метод QGraphicsScene::items)
   QList<QGraphicsItem *> lst=this->items(pos);
-  if (lst.size()==0 || m_editor!=NULL || m_tool==NULL)
+  if (m_editor!=NULL || m_tool==NULL)
   {
      this->QGraphicsScene::mousePressEvent(event);
      return;

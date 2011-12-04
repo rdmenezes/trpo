@@ -10,9 +10,10 @@
 #include "tooldelegate.h"
 #include "diagramtesttool.h"
 #include "diagram.h"
-#include "boxtool.h"
-#include "freecommenttool.h"
 #include "selecttool.h"
+#include "boxtool.h"
+#include "arrowtool.h"
+#include "freecommenttool.h"
 #include "graphicunittests.h"
 #define VIEW_WIDTH_X 102
 #define VIEW_WIDTH_Y 102
@@ -62,7 +63,7 @@ MainWindow::MainWindow(QWidget *parent,
     tool_ptrs<<new SelectTool();      // 0
     tool_ptrs<<NULL; // 1
     tool_ptrs<<new BoxTool();         // 2
-    tool_ptrs<<NULL; // 3
+    tool_ptrs<<new ArrowTool();       // 3
     tool_ptrs<<NULL; // 4
     tool_ptrs<<new FreeCommentTool(); // 5
     QVector<QGraphicsView *> views;
