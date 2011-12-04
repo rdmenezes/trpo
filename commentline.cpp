@@ -29,6 +29,19 @@ CommentLine::CommentLine(const QPointF & in,
     setY(y);
 }
 
+
+void CommentLine::setLine(qreal x1,qreal y1,qreal x2,qreal y2)
+{
+    m_in=QPointF(x1,y1);
+    m_out=QPointF(x2,y2);
+
+    qreal x=std::min(m_in.x(),m_out.x());
+    qreal y=std::min(m_in.y(),m_out.y());
+
+    setX(x);
+    setY(y);
+}
+
 bool CommentLine::hasInput() const
  {
      QVector<ObjectConnector *> c=m_self->getConnected(0,C_INPUT);

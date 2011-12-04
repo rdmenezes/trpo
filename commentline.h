@@ -12,6 +12,7 @@
 #include "diagramscene.h"
 #include "diagramobject.h"
 #include "objectconnector.h"
+#include <stdio.h>
 //A point of line segment
 class ArrowPoint;
 //A diagram data
@@ -29,20 +30,20 @@ class DiagramLoadData;
     \param[i]  r rectangle
     \return   point
  */
-inline QPointF getCollisionPoint(const QLineF &  l, const QRectF & r)
+inline QPointF * getCollisionPoint(const QLineF &  l, const QRectF & r)
 {
     QLineF lines[4]={ QLineF(r.topLeft(),r.topRight()),
                       QLineF(r.topRight(),r.bottomRight()),
-                      QLineF(r.bottomRight(),r.bottomLeft()),
-                      QLineF(r.bottomLeft(),r.topLeft())
+                      QLineF(r.bottomLeft(),r.bottomRight()),
+                      QLineF(r.topLeft(),r.bottomLeft())
                     };
     QPointF result;
     for (int i=0;i<4;i++)
-    {
-        if (l.intersect(lines[0],&result)==QLineF::BoundedIntersection)
-            return result;
+    { 
+        if (l.intersect(lines[i],&result)==QLineF::BoundedIntersection)
+            return new QPointF(result);
     }
-    return result;
+    return NULL;
 }
 
 class AttachedComment;
@@ -168,7 +169,13 @@ public:
             m_self->addConnector(c,0,C_INPUT);
             c->addConnector(m_self,a,C_OUTPUT);
         }
-
+        /*! Sets a line for item
+            \param[in] x1 first pos
+            \param[in] y1 first pos
+            \param[in] x2 second pos
+            \param[in] y2 second pos
+         */
+        void setLine(qreal x1,qreal y1,qreal x2,qreal y2);
         /*! A free point, that is pointed into air
          */
         inline QPointF & accessFree() { return m_freepoint; }
@@ -206,6 +213,7 @@ public:
          /*! Kills a line item, removing it from any of places
           */
          void die();
+
 };
 
 #endif // ALINEITEM_H
