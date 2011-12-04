@@ -1,4 +1,6 @@
 #include "arrowtool.h"
+#include "diagramscene.h"
+#include "mainwindow.h"
 #include <math.h>
 
 ArrowTool::ArrowTool()
@@ -26,6 +28,7 @@ ArrowTool::~ArrowTool()
 
 void   ArrowTool::initState()
 {
+    static_cast<MainWindow*>(m_scene->view()->window())->setActionText("Click to place start point of arrow");
     m_state=ATS_START;
 }
 
@@ -33,9 +36,13 @@ void   ArrowTool::initState()
 
 void ArrowTool::clearState()
 {
-  //static_cast<MainWindow*>(m_scene->view()->window())->setActionText("");
-  //if (m_obj)
-  //  this->m_scene->removeItem(m_obj);
+ if (m_state==ATS_FIRSTPOINT)
+ {
+   m_scene->removeItem(m_preview[0]);
+   m_scene->removeItem(m_preview[1]);
+   m_state=ATS_START;
+ }
+  static_cast<MainWindow*>(m_scene->view()->window())->setActionText("");
 }
 
 
@@ -55,7 +62,7 @@ int ArrowTool::clockwiseDirection(const QPointF & pos,bool canReturnZero)
        return 4;
    }
    //! If this is vertical line with bottom direction return 10
-   if (pos.y()>pivot.y() && fabs(pos.x()-pivot.x())<ARROW_SENSIVITY_X)
+   if (pos.y()>=pivot.y() && fabs(pos.x()-pivot.x())<ARROW_SENSIVITY_X)
    {
        return 10;
    }
@@ -65,7 +72,7 @@ int ArrowTool::clockwiseDirection(const QPointF & pos,bool canReturnZero)
        return 1;
    }
    //! If this is horizontal line with left direction return 7
-   if (pos.x()<pivot.x() && fabs(pos.y()-pivot.y())<ARROW_SENSIVITY_Y)
+   if (pos.x()<=pivot.x() && fabs(pos.y()-pivot.y())<ARROW_SENSIVITY_Y)
    {
        return 7;
    }
@@ -144,14 +151,14 @@ void    ArrowTool::drawZeroDirected(const QPointF & p1, const QPointF & p2)
 void  ArrowTool::drawRightLeftDirected(const QPointF &p1, const QPointF &p2)
 {
     makeOneLineVisible();
-    m_preview[0]->model()->setLine(p1.x(),p1.y(),p2.x(),p1.y());
+    m_preview[0]->setLine(p1.x(),p1.y(),p2.x(),p1.y());
     m_scene->update();
 }
 
 void ArrowTool::drawTopBottomDirected(const QPointF &p1, const QPointF &p2)
 {
     makeOneLineVisible();
-    m_preview[0]->model()->setLine(p1.x(),p1.y(),p1.x(),p2.y());
+    m_preview[0]->setLine(p1.x(),p1.y(),p1.x(),p2.y());
     m_scene->update();
 }
 
@@ -159,16 +166,16 @@ void ArrowTool::drawTopBottomDirected(const QPointF &p1, const QPointF &p2)
 void ArrowTool::drawHVDirected(const QPointF &p1, const QPointF &p2)
 {
     makeAllVisible();
-    m_preview[0]->model()->setLine(p1.x(),p1.y(),p2.x(),p1.y());
-    m_preview[1]->model()->setLine(p2.x(),p1.y(),p2.x(),p2.y());
+    m_preview[0]->setLine(p1.x(),p1.y(),p2.x(),p1.y());
+    m_preview[1]->setLine(p2.x(),p1.y(),p2.x(),p2.y());
     m_scene->update();
 }
 
 void ArrowTool::drawVHDirected(const QPointF &p1, const QPointF &p2)
 {
     makeAllVisible();
-    m_preview[0]->model()->setLine(p1.x(),p1.y(),p1.x(),p2.y());
-    m_preview[1]->model()->setLine(p1.x(),p2.y(),p1.y(),p2.y());
+    m_preview[0]->setLine(p1.x(),p1.y(),p1.x(),p2.y());
+    m_preview[1]->setLine(p1.x(),p2.y(),p2.x(),p2.y());
     m_scene->update();
 }
 
@@ -191,9 +198,45 @@ QVector<int> ArrowTool::getKeyDownItems()
 }
 
 
-bool ArrowTool::onClick(const QPointF &p, QGraphicsItem * /* item */)
+bool ArrowTool::onClick(const QPointF &p, QGraphicsItem *  item )
 {
-
+  if (m_state==ATS_START)
+  {
+        m_points[0]=p;
+        m_loc[0]=ATS_NONE;
+        //Setup location
+        if (item)
+        {
+            if (item->type()==IsBox)
+            {
+                m_boxes[0]=static_cast<Box*>(item);
+                m_loc[0]=ATS_BOX;
+            }
+            if (item->type()==IsArrow)
+            {
+                m_arrows[0]=static_cast<Arrow*>(item);
+                m_loc[0]=ATS_ARROW;
+            }
+        }
+        //Add new items
+        ObjectConnector * i1=new ObjectConnector(QLineF(p,p+QPointF(1,0)));
+        ObjectConnector * i2=new ObjectConnector(QLineF(p+QPointF(1,0),p+QPointF(1,1)));
+        m_preview[0]=new Arrow(i1,m_diagram);
+        m_preview[1]=new Arrow(i2,m_diagram);
+        m_preview[0]->setVisible(false);
+        m_preview[1]->setVisible(false);
+        i1->addConnector(i2,1,C_OUTPUT);
+        i2->addConnector(i1,0,C_INPUT);
+        m_scene->addItem(m_preview[0]);
+        m_scene->addItem(m_preview[1]);
+        //Set a data
+        static_cast<MainWindow*>(m_scene->view()->window())->setActionText("Select a direction for arrow");
+        m_state=ATS_FIRSTPOINT;
+  }
+  else
+  {
+      //Process selecting of second point
+  }
   return true;
 }
 
@@ -202,8 +245,15 @@ bool ArrowTool::onRelease(const QPointF & /* p */, QGraphicsItem * /* item */)
   return true;
 }
 
-bool ArrowTool::onKeyDown(QKeyEvent * /* event */, QGraphicsItem * /* item */)
+bool ArrowTool::onKeyDown(QKeyEvent *  event, QGraphicsItem * /* item */)
 {
+  if (m_state==ATS_FIRSTPOINT && event->key()==Qt::Key_Escape)
+  {
+     m_scene->removeItem(m_preview[0]);
+     m_scene->removeItem(m_preview[1]);
+     static_cast<MainWindow*>(m_scene->view()->window())->setActionText("Click to place start point of arrow");
+     m_state=ATS_START;
+  }
   return true;
 }
 
@@ -212,7 +262,48 @@ void ArrowTool::onMove(const QPointF & /* lastpos */ , const QPointF &pos)
   //Update preview only if first point specified
   if (m_state==ATS_FIRSTPOINT)
   {
+        QList<QGraphicsItem *> lst=m_scene->items(pos);
+        Box * box=NULL;
+        for (int i=0;i<lst.size();i++)
+            if (lst[i]->type()==IsBox)
+                box=static_cast<Box*>(lst[i]);
+        int direction=clockwiseDirection(pos,true);
+        QPointF p1=m_points[0];
+        QPointF p2=pos;
+        if (m_loc[0]==ATS_BOX)
+        {
+              if (box==m_boxes[0])
+                  direction=0;
+              if (direction==1
+                  || direction==2
+                  || direction==12)  p1.setX(m_boxes[0]->collisionRect().right());
+              if  (direction==3
+                   || direction==4
+                   || direction==5)  p1.setY(m_boxes[0]->collisionRect().top());
+              if (direction==6
+                  || direction==7
+                  || direction==8)   p1.setX(m_boxes[0]->collisionRect().left());
+              if (direction==9
+                  || direction==10
+                  || direction==11)  p1.setY(m_boxes[0]->collisionRect().bottom());
+        }
+        if (box)
+        {
+            if (direction==1
+                || direction==3
+                || direction==11) p2.setX(box->collisionRect().left());
+            if (direction==5
+                || direction==7
+                || direction==9) p2.setX(box->collisionRect().right());
+            if (direction==2
+                || direction==4
+                || direction==6) p2.setY(box->collisionRect().bottom());
+            if (direction==8
+                || direction==10
+                || direction==12) p2.setY(box->collisionRect().top());
+        }
 
+        (this->*(m_drawarr[direction]))(p1,p2);
   }
 }
 

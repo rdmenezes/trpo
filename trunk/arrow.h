@@ -100,6 +100,13 @@ public:
             \return object connector
          */
         inline ObjectConnector * model() {return m_self;}
+        /*! Sets an arrow parameters
+            \param[in] x1 x first point
+            \param[in] y1 y first point
+            \param[in] x2 x second point
+            \param[in] y2 y second point
+         */
+        void setLine(qreal x1, qreal y1, qreal x2, qreal y2);
         /*! Destructs an arrow
          */
         ~Arrow();

@@ -42,6 +42,15 @@ QRectF Arrow::sceneDrawingBounds() const
     return rct;
 }
 
+void Arrow::setLine(qreal x1, qreal y1, qreal x2, qreal y2)
+{
+   m_self->setLine(x1,y1,x2,y2);
+   QRectF rct=sceneDrawingBounds();
+
+   setX(rct.x());
+   setY(rct.y());
+}
+
 QRectF Arrow::boundingRect() const
 {
     QRectF rct=sceneDrawingBounds();
