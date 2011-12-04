@@ -17,7 +17,9 @@ CommentLine::CommentLine(const QPointF & in,
 
     m_in=in;
     m_out=out;
-    m_input=oin;
+    m_self=new ObjectConnector();
+    if (oin)
+        m_self->addConnector(oin,0,C_INPUT);
     m_parentcomment=attach;
 
     qreal x=std::min(in.x(),out.x());
@@ -27,6 +29,11 @@ CommentLine::CommentLine(const QPointF & in,
     setY(y);
 }
 
+bool CommentLine::hasInput() const
+ {
+     QVector<ObjectConnector *> c=m_self->getConnected(0,C_INPUT);
+     return c.size()!=0;
+ }
 qreal CommentLine::getNormalArcHeight() const
 {
    qreal distance=QLineF(m_in,m_out).length();
@@ -49,6 +56,10 @@ QRectF CommentLine::boundingRect() const
     return bound(pts,4);
 }
 
+CommentLine::~CommentLine()
+{
+  delete m_self;
+}
 
 void CommentLine::drawCubicCurve(QPointF  p[4],
                                  double t0, double t1,
@@ -165,11 +176,7 @@ void CommentLine::deattachFromLine()
   }
 }
 
-CommentLine::~CommentLine()
-{
-  if (!m_isbindedtoline)
-      delete m_bindedpoint;
-}
+
 
 void CommentLine::die()
 {

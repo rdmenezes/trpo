@@ -11,6 +11,44 @@
 #include "objectconnector.h"
 #include "drawingconstants.h"
 #include "itemtypes.h"
+#include <math.h>
+
+#define POSITION_SENSIVITY 4
+
+/*!  Returns 1D positions of point
+     \param[in] l line
+     \param[in] p point
+     \return 1D positions
+ */
+inline qreal position(const QLineF & l,
+                      const QPointF & p)
+{
+  if ( fabs(l.x2()-p.x())<POSITION_SENSIVITY
+       && fabs(l.y2()-p.y())<POSITION_SENSIVITY)
+         return 1;
+  if ( fabs(l.x1()-p.x())<POSITION_SENSIVITY
+       && fabs(l.y1()-p.y())<POSITION_SENSIVITY)
+         return 0;
+
+  QLineF unitVector=l.unitVector();
+  QPointF unit(unitVector.dx(),unitVector.dy());
+
+  qreal begpos=unit.x()*l.x1()+unit.y()*l.y1();
+  qreal endpos=unit.x()*l.x2()+unit.y()*l.y2();
+
+  if (fabs(endpos-begpos)<0.001) return 1;
+
+  qreal pos=unit.x()*p.x()+unit.y()*p.y();
+
+  return (pos-begpos)/(endpos-begpos);
+}
+
+
+inline QPointF position(const QLineF & l,
+                        qreal p)
+{
+ return l.p1()*p+l.p2()*(1-p);
+}
 
 /*! \class Arrow
  */
