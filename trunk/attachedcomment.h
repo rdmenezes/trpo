@@ -73,7 +73,7 @@ public:
          inline CommentLine *  line() const { return m_line; }
          /*! Returns NULL
           */
-         inline DiagramObject * clone();
+         DiagramObject * clone();
          /*! Used to perfom a custom actions, before dying
              \return true (default implementation) if just remove it from scene, false - if delete
           */
