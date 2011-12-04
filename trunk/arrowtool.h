@@ -24,7 +24,12 @@ enum ArrowToolPointLocation
     ATS_BOX,                //!< Box data
     ATS_ARROW               //!< Arrow data
 };
-
+/*! Arrow sensivity on x
+ */
+#define ARROW_SENSIVITY_X 3
+/*! Arrow  sensivity on y
+ */
+#define ARROW_SENSIVITY_Y 3
 /*! \class ArrowTool
     A tool, used to create arrows
  */
@@ -39,6 +44,12 @@ private:
          Arrow *                 m_arrows[2];    //!< Arrows, where points are located
          qreal                   m_poses[2];     //!< Positions on points of data
          QPointF                 m_points[2];    //!< Specified positions of data
+protected:
+         /*! Returns a clockwise directions for arrow number - 0-12
+             \param[in] pos               position
+             \param[in] canReturnZero     whether it can return zero on some positions
+          */
+         int clockwiseDirection(const QPointF & pos, bool canReturnZero);
 public:
          /*! Default constructor
           */
