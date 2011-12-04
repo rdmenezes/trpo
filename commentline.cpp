@@ -102,19 +102,19 @@ void CommentLine::drawArcs(QPainterPath & path,qreal l, qreal x,qreal hx)
 
     QPointF  p0[4];
     p0[0]=translate(m_in);
-    p0[1]=p0[0]+line*l/2+normal*x;
+    p0[1]=p0[0]+line*l/3+normal*x/1,5;
     p0[2]=p0[0]+line*(l+hx)/2+normal*x/2;
     QPointF  middle=p0[0]+line*l/2;
     p0[3]=middle;
 
-    drawCubicCurve(p0,0.4,0.75,path);
+    drawCubicCurve(p0,0.50,0.82,path);
 
     QPointF p1[4];
     p1[0]=translate(m_out);
-    p1[1]=p0[0]+line*l/2-normal*x;
+    p1[1]=p0[0]+line*(2*l/3)-normal*x/1.5;
     p1[2]=p0[0]+line*(l-hx)/2-normal*x/2;
     p1[3]=middle;
-    drawCubicCurve(p1,0.4,0.75,path);
+    drawCubicCurve(p1,0.50,0.82,path);
 }
 
 void CommentLine::paint(QPainter * p)

@@ -133,5 +133,6 @@ void CommentLineTool::onMove(const QPointF & /* lastpos */ , const QPointF &pos)
         }
         m_line->setLine(startpoint.x(),startpoint.y(),
                         endpoint.x(),endpoint.y());
+        m_scene->update();
     }
 }
