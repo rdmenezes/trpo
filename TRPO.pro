@@ -10,7 +10,6 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     helpwindow.cpp \
     diagramscene.cpp \
-    toolpanel.cpp \
     diagram.cpp \
     diagramset.cpp \
     collision.cpp \
@@ -44,12 +43,11 @@ SOURCES += main.cpp \
     boxtool.cpp \
     freecommenttool.cpp \
     selecttool.cpp \
-    arrowtool.cpp
+    arrowtool.cpp \
+    commentlinetool.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
-    toolpanel.h \
-    tooltype.h \
     diagram.h \
     diagramset.h \
     collision.h \
@@ -84,7 +82,8 @@ HEADERS += mainwindow.h \
     boxtool.h \
     freecommenttool.h \
     selecttool.h \
-    arrowtool.h
+    arrowtool.h \
+    commentlinetool.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc

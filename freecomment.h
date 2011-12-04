@@ -16,6 +16,7 @@
 #define DEFAULT_ALABEL_TEXT "Some commentary"
 
 
+
 class AttachedComment;
 
 /*! \class FreeComment

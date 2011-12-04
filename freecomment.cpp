@@ -132,14 +132,10 @@ void FreeComment::setRect(const QRectF & rect)
 void FreeComment::keyPressEvent(QKeyEvent *event)
 {
     DiagramScene * myscene=static_cast<DiagramScene *>(this->scene());
-    if (myscene->isPanelActive())
-         return;
     if (isTextEditKey(event) &&
         myscene->editState()==TES_NONE)
     {
         ObjectTextEditor  * field=new ObjectTextEditor(myscene,NULL);
-
-        const int border_hint=5;
         QRect tmp;//(m_rect.x(),m_rect.y(),m_rect.width(),m_rect.height()+2*border_hint);
         field->setGeometry(tmp);
         field->setFont(myscene->font());

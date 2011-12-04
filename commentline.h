@@ -24,6 +24,27 @@ class QDomDocument;
 class DiagramLoadData;
 
 
+/*! Returns a collision point for objects
+    \param[in] l line
+    \param[i]  r rectangle
+    \return   point
+ */
+inline QPointF getCollisionPoint(const QLineF &  l, const QRectF & r)
+{
+    QLineF lines[4]={ QLineF(r.topLeft(),r.topRight()),
+                      QLineF(r.topRight(),r.bottomRight()),
+                      QLineF(r.bottomRight(),r.bottomLeft()),
+                      QLineF(r.bottomLeft(),r.topLeft())
+                    };
+    QPointF result;
+    for (int i=0;i<4;i++)
+    {
+        if (l.intersect(lines[0],&result)==QLineF::BoundedIntersection)
+            return result;
+    }
+    return result;
+}
+
 class AttachedComment;
 /*! \class CommentLine
     Declares an annotation line item

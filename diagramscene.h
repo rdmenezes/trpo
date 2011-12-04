@@ -10,7 +10,6 @@
 #include <QGraphicsView>
 #include <QGraphicsSceneDragDropEvent>
 #include <QKeyEvent>
-#include "tooltype.h"
 #include "diagram.h"
 #include "box.h"
 #include "arrowsegment.h"
@@ -78,9 +77,6 @@ private:
 
 
     QGraphicsView *          m_view;               //!< View widget pointer for data
-    ToolType                 m_tooltype;           //!< Selected type of tool
-    ToolPanel            *   m_panel;              //!< A pointer to panel
-    QGraphicsProxyWidget *   m_panel_in_scene;     //!< A pointer to panel
     QRectF                   m_default_block_size; //!< Default block size tool
     QRectF                   m_default_number_size; //!< Default number size for block
     TextEditState            m_edit_state;         //!< Text edit state
@@ -138,11 +134,6 @@ private:
         \param[in] pos position
      */
     void processAnnotationLineEscapePress(const QPointF & pos);
-    /*! Process tool selection by keys
-        \param[in] event event
-        \return true, if handled
-    */
-    bool processKeyToolSelect(QKeyEvent * event);
     /*! Processes changing block id
         \param[in] block block, whose id is changing
         \param[in] previd previous block id
@@ -221,9 +212,6 @@ private:
         \param[in] pos position
      */
     void processArrowEscapePress(const QPointF & pos);
-    /*! Clears states of element editing
-     */
-    void clearElementStates();
 protected:
     /*! Handles a beginning of dragging item
         \param[in] event event data
@@ -278,11 +266,6 @@ public:
 
 
 
-    /*! Sets a tool for working with diagram.
-        \note Makes panel disappear, so must be called at end of living of panel
-        \param[in] t tool type
-    */
-    void setTool(ToolType t);
     /*! Computes a default block sizes;
      */
     QRectF getDefaultBlockSize(const QPointF & pos);
@@ -324,9 +307,6 @@ public:
         \return true on success
      */
     bool exportTo(const QString & filename);
-    /*! Determines whether panel is active
-     */
-    inline bool isPanelActive() { return m_panel!=NULL; }
     /*! Hides UI (Panel and text edit, if needed)
      */
     void hideUI();
