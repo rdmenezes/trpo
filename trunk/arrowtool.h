@@ -18,7 +18,7 @@ enum ArrowToolState
 
 /*! Describes, where first point of tool is located
  */
-enum ArrowToolPointLocation
+enum StartPointLocation
 {
     ATS_NONE,               //!< First point was found at no placed
     ATS_BOX,                //!< Box data
@@ -41,7 +41,7 @@ private:
          void                   (ArrowTool::* m_drawarr[13])(const QPointF & ,
                                                              const QPointF & ); //!< Array of drawing functions
 
-         ArrowToolPointLocation  m_loc[2];       //!< Where is starting point located
+         StartPointLocation      m_loc[2];       //!< Where is starting point located
          Box *                   m_boxes[2];     //!< Boxes, where points are located
          Arrow *                 m_arrows[2];    //!< Arrows, where points are located
          qreal                   m_poses[2];     //!< Positions on points of data

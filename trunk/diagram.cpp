@@ -60,7 +60,7 @@ bool Diagram::canPlace(DiagramObject * obj,
     for (int i=0;i<m_objects.size();i++)
     {
         DiagramObject * d=m_objects[i];
-            can= can && !( detector->test(obj,m_objects[i]) );
+        can= can && !( detector->test(obj,d) );
     }
     delete detector;
     return can;
@@ -70,11 +70,7 @@ bool Diagram::canPlace(DiagramObject * obj,
 
 bool Diagram::isCorrect()
 {
-    /*
-    for (int i=0;i<DIAGRAM_MAX_BLOCKS;i++)
-        if (m_boxes[i]) return true;
-    return false;
-    */
+  return true;
 }
 
 Diagram::Diagram()

@@ -1,6 +1,5 @@
 #include "diagramscene.h"
 #include "helpwindow.h"
-#include "toolpanel.h"
 #include "objecttexteditor.h"
 #include "commentline.h"
 #include "arrowsegment.h"
@@ -65,28 +64,12 @@ DiagramScene::DiagramScene(Diagram * d,QObject *parent) :
   m_diag=d;
   m_editor=NULL;
   m_tool=NULL;
-
-
-  m_tooltype=TT_BLOCK;
-  m_panel=NULL;
-  m_panel_in_scene=NULL;
 }
 
 void DiagramScene::hideUI()
 {
- if (m_panel)
- {
-     this->removeItem(m_panel_in_scene);
- }
- m_panel=NULL;
- m_panel_in_scene=NULL;
- if (m_edit_state==TES_EDIT)
- {
- //    this->removeItem(m_label_editor_in_scene);
- }
- m_edit_state=TES_NONE;
-// m_label_editor=NULL;
-// m_label_editor_in_scene=NULL;
+    if (m_editor)
+        this->removeItem(m_editor);
 }
 
 const QRectF & DiagramScene::getDefaultBlockNumberSize() const
@@ -210,33 +193,7 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
 }
 
 
-void DiagramScene::setTool(ToolType t)
-{
-    Q_ASSERT( m_panel );
-    m_tooltype=t;
 
-    this->removeItem(m_panel_in_scene);
-
-    m_panel=NULL;
-    m_panel_in_scene=NULL;
-}
-
-bool DiagramScene::processKeyToolSelect(QKeyEvent * event)
-{
-    int       keys[6]={Qt::Key_1,Qt::Key_2,Qt::Key_3,Qt::Key_4,Qt::Key_5,Qt::Key_6};
-    ToolType types[6]={TT_SELECT,TT_ERASER,TT_BLOCK,TT_ARROW,TT_ANNOTATION_LINE,
-                       TT_ANNOTATION_LABEL};
-    bool handled=false;
-    for (int i=0;i<6;i++)
-    {
-        if (event->key()==keys[i])
-        {
-            this->setTool(types[i]);
-            handled=true;
-        }
-    }
-    return handled;
-}
 
 QRectF DiagramScene::getDefaultBlockSize(const QPointF & pos)
 {
@@ -548,21 +505,5 @@ void DiagramScene::clear()
  this->hideUI();
  this->QGraphicsScene::clear();
  this->m_diag->clear();
- this->clearElementStates();
- m_tooltype=TT_BLOCK;
 }
 
-void DiagramScene::clearElementStates()
-{
- //Sets a no dragging state
- m_dragstate=DS_NONE;
- m_draggingblock=NULL;
- m_resizingblockcorner=BC_LOWERLEFT;
- m_moving_label=NULL;
- //Sets a no arrow editing state
- m_arrow_state=AES_NONE;
- m_last_arrow_point=NULL;
- //Sets a no annotation line editing state
- m_aline_segment=NULL;
- m_alds=ALDS_SPECIFIEDNONE;
-}
