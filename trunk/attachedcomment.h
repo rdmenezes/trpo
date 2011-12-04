@@ -61,6 +61,10 @@ public:
              \return bounding rectangle
           */
          QRectF boundingRect() const;
+         /*! Sets a line for comment
+             \param[in] l line
+          */
+         inline void setLine(CommentLine * line) {m_line=line;}
          /*! Returns a comment part
           */
          inline FreeComment * comment() const {return m_comment;}

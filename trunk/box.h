@@ -13,6 +13,8 @@
 #include "diagram.h"
 #include "moverange.h"
 #include "drawingconstants.h"
+#include "objectconnector.h"
+#include "direction.h"
 //Class of scene
 class DiagramScene;
 //Arrow points
@@ -76,9 +78,15 @@ private:
         /*! Box id
          */
         int      m_id;
+        /*! Box connector vector
+         */
+        QVector<ObjectConnector *> m_connectors;
         /*! Regenerates a text positions and parameters
          */
         void regenerate();
+        /*! Creates an input connectors for a box
+         */
+        void createConnectors();
 protected:
         /*! Paints a box
          */
@@ -148,20 +156,38 @@ public:
     /*! Returns an editable text for editor
      */
     QString  getEditableText() const;
-
-    ArrowPoint *& getLineRef(int side,int pos)  { return m_line_refs[side][pos]; }    
-
+    /*! Sets box position
+        \param[in] x x position
+        \param[in] y y position
+     */
+    void setPos(qreal x, qreal y);
+    /*! Sets box position
+        \param[in] pos position
+     */
+    void setPos(const QPointF & pos);
+    /*! Returns a bounding rectangle of item
+     */
+    virtual QRectF boundingRect() const;
     /*! Returns item id
     */
     inline char id() const { return m_id; }
+    /*! Returns a connector by direction
+        \param[in] d direction
+        \return connector
+     */
+    ObjectConnector * getBySide(Direction d);
+    /*! Destructor
+     */
+    virtual ~Box();
+
+
+    ArrowPoint *& getLineRef(int side,int pos)  { return m_line_refs[side][pos]; }    
     /*! Creates an item position at scene
         \param[in] pos    position of creation of box
         \param[in] scene  scene data
     */
     Box(const QPointF & pos,DiagramScene * scene);
-    /*! Returns a bounding rectangle of item
-     */
-    virtual QRectF boundingRect() const;
+
     /*! Updates an item string
      */
     void updateString(const QString & text);
