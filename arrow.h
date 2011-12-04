@@ -96,6 +96,10 @@ public:
         /*! Clones a diagram object
          */
         virtual DiagramObject * clone();
+        /*! Returns an object connector
+            \return object connector
+         */
+        inline ObjectConnector * model() {return m_self;}
         /*! Destructs an arrow
          */
         ~Arrow();
