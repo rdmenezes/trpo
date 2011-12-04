@@ -186,7 +186,7 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
   // Затем сцена получает список объектов под курсором (метод QGraphicsScene::items)
   QList<QGraphicsItem *> lst=this->items(pos);
 
-  if (lst.size()==0 || m_editor!=NULL || m_tool==NULL)
+  if (m_editor!=NULL || m_tool==NULL)
   {
      this->QGraphicsScene::keyPressEvent(event);
      return;

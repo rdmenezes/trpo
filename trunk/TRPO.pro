@@ -43,7 +43,8 @@ SOURCES += main.cpp \
     collisiondetector.cpp \
     boxtool.cpp \
     freecommenttool.cpp \
-    selecttool.cpp
+    selecttool.cpp \
+    arrowtool.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
@@ -82,7 +83,8 @@ HEADERS += mainwindow.h \
     collisiondetector.h \
     boxtool.h \
     freecommenttool.h \
-    selecttool.h
+    selecttool.h \
+    arrowtool.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc
