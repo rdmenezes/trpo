@@ -137,7 +137,8 @@ void CommentLineTool::tryConnectWith(const QPointF & pos, FreeComment * fc)
     }
     m_line->setLine(startpoint.x(),startpoint.y(),
                     endpoint.x(),endpoint.y());
-    if (m_diagram->canPlace(m_line,QVector<int>(),exc))
+    QVector<int> excv; excv<<IsCommentLine<<IsArrow;
+    if (m_diagram->canPlace(m_line,excv,exc))
     {
         fc->parentComment()->setLine(m_line);
         if (toConnectWith)
