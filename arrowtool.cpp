@@ -465,7 +465,7 @@ void ArrowTool::connectNoneToLine()
     Arrow * lastpreview=m_preview[m_preview_amount-1];
     Direction lsegdir=lastpreview->model()->direction();
     Direction enddir=m_arrows[1]->model()->direction();
-    bool isNotOpposite=isOpposite(lsegdir,enddir);
+    bool isNotOpposite=!isOpposite(lsegdir,enddir);
     bool isBadCollision=lsegdir==enddir && m_poses[1]!=0;
     bool canplace=canPlacePreviews();
     if (isNotOpposite && !isBadCollision && canplace)

@@ -90,6 +90,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
   QPointF pos=event->scenePos();
   // Затем сцена получает список объектов под курсором (метод QGraphicsScene::items)
   QList<QGraphicsItem *> lst=this->items(pos);
+  this->diagram()->items(pos,lst);
   if (m_editor!=NULL || m_tool==NULL)
   {
      this->QGraphicsScene::mousePressEvent(event);
@@ -116,6 +117,7 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QPointF pos=event->scenePos();
     // Затем сцена получает список объектов под курсором (метод QGraphicsScene::items)
     QList<QGraphicsItem *> lst=this->items(pos);
+    this->diagram()->items(pos,lst);
     if (lst.size()==0 || m_editor!=NULL || m_tool==NULL)
     {
        this->QGraphicsScene::mouseReleaseEvent(event);
@@ -167,7 +169,7 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
   QPointF pos=this->view()->mapToScene(local_pos);
   // Затем сцена получает список объектов под курсором (метод QGraphicsScene::items)
   QList<QGraphicsItem *> lst=this->items(pos);
-
+  this->diagram()->items(pos,lst);
   if (m_editor!=NULL || m_tool==NULL)
   {
      this->QGraphicsScene::keyPressEvent(event);
