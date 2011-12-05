@@ -562,7 +562,49 @@ void ArrowTool::connectLineToLine()
 
 void ArrowTool::connectLineToBox()
 {
-
+    Arrow * fpreview=m_preview[0];
+    Direction fsegdir=fpreview->model()->direction();
+    Direction begdir=m_arrows[0]->model()->direction();
+    bool isNotOpposite=!isOpposite(fsegdir,begdir);
+    bool isBadCollision=fsegdir==begdir && m_poses[0]!=1;
+    Direction dir=getSide(m_boxes[1]->collisionRect(),m_preview[m_preview_amount-1]->model()->p2());
+    bool directed_right=dir==D_TOP || dir==D_LEFT || dir==D_BOTTOM;
+    bool canplace=canPlacePreviews();
+    Arrow * lastpreview=m_preview[m_preview_amount-1];
+    Direction lsegdir=lastpreview->model()->direction();
+    bool    notcollideswithbox=lsegdir!=dir;
+    if (isNotOpposite && !isBadCollision && directed_right && canplace && notcollideswithbox)
+    {
+        disconnectAllPreviews();
+        QVector<DiagramObject *> v;
+        if (fsegdir==begdir)
+        {
+            m_arrows[0]->model()->enlarge(fpreview->model()->p2());
+            m_scene->removeItem(fpreview);
+            m_preview[0]=m_arrows[0];
+            m_preview[0]->regenerate();
+        }
+        else
+        {
+            m_arrows[0]->model()->addConnector(fpreview->model(),m_poses[0],C_OUTPUT);
+            m_preview[0]->model()->addConnector(m_arrows[0]->model(),0.0,C_INPUT);
+        }
+        for (int i=1;i<m_preview_amount;i++)
+        {
+            m_preview[i-1]->model()->addConnector(m_preview[i]->model(),1.0,C_OUTPUT);
+            m_preview[i]->model()->addConnector  (m_preview[i-1]->model(),0.0,C_INPUT);
+        }
+        //Get position
+        ObjectConnector * bx=m_boxes[1]->getBySide(dir);
+        qreal pos=position( *(bx) ,m_preview[m_preview_amount-1]->model()->p2());
+        //Add connectors
+        bx->addConnector(m_preview[m_preview_amount-1]->model(),pos,C_INPUT);
+        m_preview[m_preview_amount-1]->model()->addConnector(bx,1,C_OUTPUT);
+        //Perform addition
+        addPreviewsToDiagram();
+        removeOddSegments();
+        initState();
+    }
 }
 
 void ArrowTool::connectBoxToNone()
