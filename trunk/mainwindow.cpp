@@ -172,7 +172,16 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         this->selectTool(new DiagramTestTool());
         handled=true;
     }
-
+    else if (event->modifiers()==Qt::ControlModifier)
+    {
+        Qt::Key arr[6]={Qt::Key_1,Qt::Key_2,Qt::Key_3,Qt::Key_4,Qt::Key_5,Qt::Key_6};
+        for (int i=0;i<6 && !handled;i++)
+            if (event->key()==arr[i])
+            {
+               m_tool_table_items[i]->scene()->select();
+               handled=true;
+            }
+    }
     if (!handled)
         this->QMainWindow::keyPressEvent(event);
 }

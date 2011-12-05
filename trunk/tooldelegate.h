@@ -39,6 +39,9 @@ class ToolSceneData
       /*! Returns an icon for data
        */
       inline QImage * icon() const { return m_icon; }
+      /*! Returns a scene for data
+       */
+      inline ToolScene * scene() { return m_scene; }
       /*! Sets a scene for data
           \param[in] data tool data
        */
