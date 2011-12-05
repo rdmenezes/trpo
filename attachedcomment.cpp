@@ -3,8 +3,18 @@
 
 void AttachedComment::paint(QPainter *p)
 {
- //!< Do not implement, this class cannot be drawn
- assert("Do not draw attached comment!" && false);
+  if (m_comment)
+  {
+        p->translate(m_comment->pos());
+        m_comment->DiagramObject::paint(p,NULL,NULL);
+        p->resetTransform();
+  }
+  if (m_line)
+  {
+      p->translate(m_line->pos());
+      m_line->DiagramObject::paint(p,NULL,NULL);
+      p->resetTransform();
+  }
 }
 
 QRectF AttachedComment::boundingRect() const

@@ -24,7 +24,7 @@ protected:
 public:
          /*! Default constructor for Serizalizable
           */
-         inline AttachedComment() : DiagramObject(ST_COMPLEX) {}
+         inline AttachedComment() : DiagramObject(ST_COMPLEX) { setPos(0,0); }
          /*! Common constructor
              \param[in] comment comment data
              \param[in] line    line data
@@ -35,6 +35,7 @@ public:
              setDiagram(comment->diagram());
              m_comment=comment;
              m_line=line;
+             setPos(0,0);
          }
          /*!  Saves a data to document
               \param[in] doc     document data
