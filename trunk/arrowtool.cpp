@@ -21,6 +21,20 @@ ArrowTool::ArrowTool()
     m_drawarr[10]=&ArrowTool::drawTopBottomDirected;
     m_drawarr[11]=&ArrowTool::drawVHDirected;
     m_drawarr[12]=&ArrowTool::drawHVDirected;
+
+    m_connection_cbs<<QVector<ArrowTool::Callback>()
+                    <<QVector<ArrowTool::Callback>()
+                    <<QVector<ArrowTool::Callback>();
+
+    m_connection_cbs[ATS_NONE ]<<&ArrowTool::connectNoneToNone
+                               <<&ArrowTool::connectNoneToLine
+                               <<&ArrowTool::connectNoneToBox;
+    m_connection_cbs[ATS_ARROW]<<&ArrowTool::connectLineToNone
+                               <<&ArrowTool::connectLineToLine
+                               <<&ArrowTool::connectLineToBox;
+    m_connection_cbs[ATS_BOX  ]<<&ArrowTool::connectBoxToNone
+                               <<&ArrowTool::connectBoxToLine
+                               <<&ArrowTool::connectBoxToBox;
 }
 
 
@@ -40,8 +54,8 @@ void ArrowTool::clearState()
 {
  if (m_state==ATS_FIRSTPOINT)
  {
-   m_scene->removeItem(m_preview[0]);
-   m_scene->removeItem(m_preview[1]);
+   for (int i=0;i<3;i++)
+       delete m_preview[0];
    m_state=ATS_START;
    m_scene->update();
  }
@@ -280,6 +294,8 @@ bool ArrowTool::onClick(const QPointF &p, QGraphicsItem *  item )
           if (item->type()==IsArrow)
           {
             m_arrows[1]=static_cast<Arrow*>(item);
+            if (m_arrows[1]==m_preview[0] || m_arrows[1]==m_preview[1] || m_arrows[1]==m_preview[2])
+                return false;
             QPointF  ppos=m_preview[m_preview_amount-1]->model()->p2();
             m_poses[1]=position(*(m_arrows[1]->model()),ppos);
             m_loc[1]=ATS_ARROW;
@@ -291,7 +307,8 @@ bool ArrowTool::onClick(const QPointF &p, QGraphicsItem *  item )
           }
           return true;
       } else m_loc[1]=ATS_NONE;
-
+      ArrowTool::Callback cb=m_connection_cbs[m_loc[0]][m_loc[1]];
+      (this->*cb)();
   }
   return true;
 }
@@ -305,8 +322,8 @@ bool ArrowTool::onKeyDown(QKeyEvent *  event, QGraphicsItem * /* item */)
 {
   if (m_state==ATS_FIRSTPOINT && event->key()==Qt::Key_Escape)
   {
-     m_scene->removeItem(m_preview[0]);
-     m_scene->removeItem(m_preview[1]);
+     for (int i=0;i<3;i++)
+        delete m_preview[i];
      m_scene->update();
      static_cast<MainWindow*>(m_scene->view()->window())->setActionText("Click to place start point of arrow");
      m_state=ATS_START;
@@ -333,6 +350,8 @@ void ArrowTool::redrawLines(const QPointF & pos,bool canBeZero)
     {
         qreal apos=position(*(arrow->model()),p2);
         p2=position(*(arrow->model()),apos);
+        QString id=QString::number(p2.x())+QString(" ")+QString::number(p2.y())+QString(" ")+QString::number(apos);
+        static_cast<MainWindow*>(m_scene->view()->window())->setActionText(id);
     }
     if (box)
     {
@@ -370,6 +389,7 @@ void ArrowTool::redrawLines(const QPointF & pos,bool canBeZero)
               || direction==10
               || direction==11)  p1.setY(m_boxes[0]->collisionRect().bottom());
     }
+    direction=clockwiseDirection(p2,canBeZero);
     void (ArrowTool::*ptr)(const QPointF&, const QPointF&)=m_drawarr[direction];
     (this->*ptr)(p1,p2);
 }
@@ -382,4 +402,151 @@ void ArrowTool::onMove(const QPointF & /* lastpos */ , const QPointF &pos)
      redrawLines(pos,true);
   }
 }
+
+
+bool ArrowTool::canPlacePreviews()
+{
+    QVector<int> exctypes; exctypes<<IsArrow<<IsCommentLine;
+    QVector<CollisionObject *> excobjs;
+    if (m_loc[0]==ATS_ARROW) excobjs<<m_arrows[0];
+    if (m_loc[0]==ATS_BOX) excobjs<<m_boxes[0];
+    if (m_loc[1]==ATS_ARROW) excobjs<<m_arrows[1];
+    if (m_loc[1]==ATS_BOX) excobjs<<m_boxes[1];
+    bool canplace=true;
+    for (int i=0;i<m_preview_amount;i++)
+    {
+        canplace=canplace && m_diagram->canPlace(m_preview[i],exctypes,excobjs);
+    }
+    return canplace;
+}
+
+void ArrowTool::addPreviewsToDiagram()
+{
+   for (int i=0;i<m_preview_amount;i++)
+       m_diagram->add(m_preview[i]);
+}
+
+void ArrowTool::disconnectAllPreviews()
+{
+  for (int i=0;i<m_preview_amount;i++)
+      m_preview[i]->model()->clear();
+}
+
+void ArrowTool::connectNoneToNone()
+{
+  if (canPlacePreviews())
+  {
+    addPreviewsToDiagram();
+    m_loc[0]=ATS_ARROW;
+    m_points[0]=m_preview[m_preview_amount-1]->model()->p2();
+    m_poses[0]=1;
+    m_arrows[0]=m_preview[m_preview_amount-1];
+    removeOddSegments();
+    generatePreview(m_points[0]);
+  }
+}
+
+void ArrowTool::connectNoneToLine()
+{
+    Arrow * lastpreview=m_preview[m_preview_amount-1];
+    Direction lsegdir=lastpreview->model()->direction();
+    Direction enddir=m_arrows[1]->model()->direction();
+    bool isNotOpposite=isOpposite(lsegdir,enddir);
+    bool isBadCollision=lsegdir==enddir && m_poses[1]!=0;
+    bool canplace=canPlacePreviews();
+    if (isNotOpposite && !isBadCollision && canplace)
+    {
+        disconnectAllPreviews();
+
+    }
+}
+
+void ArrowTool::connectNoneToBox()
+{
+
+}
+
+void ArrowTool::connectLineToNone()
+{
+    Arrow * fpreview=m_preview[0];
+    Direction fsegdir=fpreview->model()->direction();
+    Direction begdir=m_arrows[0]->model()->direction();
+    bool isNotOpposite=!isOpposite(fsegdir,begdir);
+    bool isBadCollision=fsegdir==begdir && m_poses[0]!=1;
+    bool canplace=canPlacePreviews();
+    if (isNotOpposite && !isBadCollision && canplace)
+    {
+        disconnectAllPreviews();
+        QVector<DiagramObject *> v;
+        if (fsegdir==begdir)
+        {
+            m_arrows[0]->model()->enlarge(fpreview->model()->p2());
+            m_scene->removeItem(fpreview);
+            m_preview[0]=m_arrows[0];
+        }
+        else
+        {
+            m_arrows[0]->model()->addConnector(fpreview->model(),1.0,C_OUTPUT);
+            m_preview[0]->model()->addConnector(m_arrows[0]->model(),0.0,C_INPUT);
+        }
+        for (int i=1;i<m_preview_amount;i++)
+        {
+            m_preview[i-1]->model()->addConnector(m_preview[i]->model(),1.0,C_OUTPUT);
+            m_preview[i]->model()->addConnector  (m_preview[i-1]->model(),0.0,C_INPUT);
+        }
+        //Perform addition
+        addPreviewsToDiagram();
+        m_loc[0]=ATS_ARROW;
+        m_points[0]=m_preview[m_preview_amount-1]->model()->p2();
+        m_poses[0]=1;
+        m_arrows[0]=m_preview[m_preview_amount-1];
+        removeOddSegments();
+        generatePreview(m_points[0]);
+    }
+}
+
+void ArrowTool::connectLineToLine()
+{
+
+}
+
+void ArrowTool::connectLineToBox()
+{
+
+}
+
+void ArrowTool::connectBoxToNone()
+{
+  Direction dir=getSide(m_boxes[0]->collisionRect(),m_preview[0]->model()->p1());
+  bool directed_right=dir==D_RIGHT || dir==D_BOTTOM;
+  bool canplace=canPlacePreviews();
+  if (directed_right && canplace)
+  {
+      //Get position
+      ObjectConnector * bx=m_boxes[0]->getBySide(dir);
+      qreal pos=position( *(bx) ,m_preview[0]->model()->p1());
+      //Add connectors
+      bx->addConnector(m_preview[0]->model(),pos,C_OUTPUT);
+      m_preview[0]->model()->addConnector(bx,0,C_INPUT);
+      //Perform addition
+      addPreviewsToDiagram();
+      m_loc[0]=ATS_ARROW;
+      m_points[0]=m_preview[m_preview_amount-1]->model()->p2();
+      m_poses[0]=1;
+      m_arrows[0]=m_preview[m_preview_amount-1];
+      removeOddSegments();
+      generatePreview(m_points[0]);
+  }
+}
+
+void ArrowTool::connectBoxToLine()
+{
+
+}
+
+void ArrowTool::connectBoxToBox()
+{
+
+}
+
 

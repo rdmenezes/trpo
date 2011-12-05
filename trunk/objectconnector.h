@@ -22,15 +22,6 @@ class ObjectConnector: public QLineF
          /*! Relative positions of connected objects
           */
          QVector< QPair<qreal,ObjectConnector*> > m_connected[2];
-         /*! Directions of objects, which are acceptable
-          */
-         QVector<Direction>       m_acceptable_directions;
-         /*! Acceptable connection types
-          */
-         QVector<Connection>      m_acceptable_connections;
-         /*! Acceptable types
-          */
-         QVector<int>             m_acceptable_types;
  protected:
         /*! Broadcasts move signal for each positions of units
             \return true on success
@@ -66,17 +57,13 @@ class ObjectConnector: public QLineF
          */
         bool tryMove(const QPointF & l);
         /*! Resizes a line, saving absolute object coordinates
-            \param[in] l  new line
+            \param[in] newend  new ending position
          */
-        void enlarge(const QLineF & l);
+        void enlarge(const QPointF & newend);
         /*! Returns a direction of connector
             \return direction
          */
         Direction direction() const;
-        /*! Merges one connector with another
-            \param[in] o other connector
-         */
-        void merge(ObjectConnector * o);
         /*! Tests, whether we should draw roundings for items
          */
         inline bool drawRoundings() const
@@ -105,6 +92,9 @@ class ObjectConnector: public QLineF
             \param[in] o other connector
          */
         void remove(ObjectConnector * o);
+        /*! Clears all references other connectors
+         */
+        void clear();
 };
 
 

@@ -48,6 +48,11 @@ enum BlockEnteringType
 #define BLOCK_SIDES 4
 
 
+/*! Returns a side of rectangle, where the point is located
+    \param[in]   r rectangle
+    \param[in]   p point
+ */
+Direction getSide(const QRectF & r, const QPointF & p);
 
 
 /*! \class Box
