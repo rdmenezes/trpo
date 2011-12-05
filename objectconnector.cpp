@@ -1,4 +1,5 @@
 #include "objectconnector.h"
+#include "arrow.h"
 #include <math.h>
 #include <assert.h>
 Direction ObjectConnector::direction() const
@@ -71,4 +72,26 @@ void ObjectConnector::remove(ObjectConnector *o)
             }
         }
     }
+}
+
+
+void ObjectConnector::enlarge(const QPointF & newend)
+{
+  QLineF oldline(p1(),p2());
+  QLineF newline(p1(),newend);
+  for (int i=0;i<2;i++)
+  {
+      for (int j=0;j<m_connected[i].size();j++)
+      {
+        QPointF oldpos=position(oldline,m_connected[i][j].first);
+        m_connected[i][j].first=position(newline,oldpos);
+      }
+  }
+  this->setP2(newend);
+}
+
+void ObjectConnector::clear()
+{
+  for (int i=0;i<2;i++)
+      m_connected[i].clear();
 }

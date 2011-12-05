@@ -39,7 +39,7 @@ enum StartPointLocation
  */
 class ArrowTool : public Tool
 {
-typedef  void (ArrowTool::*Callback)(const QPointF &, const QPointF &);
+typedef  void (ArrowTool::*Callback)();
 private:
          ArrowToolState          m_state;        //!< State of arrow tool
          Arrow *                 m_preview[MAX_PREVIEW_SEGMENTS];   //!< Previewed arrows
@@ -53,6 +53,16 @@ private:
          Arrow *                 m_arrows[2];    //!< Arrows, where points are located
          qreal                   m_poses[2];     //!< Positions on points of data
          QPointF                 m_points[2];    //!< Specified positions of data
+
+         /*! Disconnect every preview
+          */
+         void disconnectAllPreviews();
+         /*! Puts a previews arrows to diagram
+          */
+         void addPreviewsToDiagram();
+         /*! Tests, whether previews can be placed
+          */
+         bool canPlacePreviews();
          /*! Removes odd segments
           */
          void removeOddSegments();

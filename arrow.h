@@ -43,11 +43,20 @@ inline qreal position(const QLineF & l,
   return (pos-begpos)/(endpos-begpos);
 }
 
+#include <QMessageBox>
 
 inline QPointF position(const QLineF & l,
                         qreal p)
 {
- return l.p1()*p+l.p2()*(1-p);
+ QLineF unitVector=l.unitVector();
+ QPointF unit(unitVector.dx(),unitVector.dy());
+
+ qreal begpos=unit.x()*l.x1()+unit.y()*l.y1();
+ qreal endpos=unit.x()*l.x2()+unit.y()*l.y2();
+
+ qreal pos=p*(endpos-begpos);
+
+ return l.p1()+QPointF(unit.x()*pos,unit.y()*pos);
 }
 
 /*! \class Arrow
@@ -145,6 +154,9 @@ public:
             \param[in] y2 y second point
          */
         void setLine(qreal x1, qreal y1, qreal x2, qreal y2);
+        /*! Regenerates an amount
+         */
+        void regenerate();
         /*! Destructs an arrow
          */
         ~Arrow();

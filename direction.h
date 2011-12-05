@@ -29,4 +29,17 @@ inline bool isNotCollinear(Direction input,Direction self)
    return is_not_eq && is_not_oph && is_not_opv;
 }
 
+/*! Tests, when directions are exactly opposite
+    \param[in] d1 first direction
+    \param[in] d2 second direction
+ */
+inline bool isOpposite(Direction dir1, Direction dir2)
+{
+    if (   (dir1==D_LEFT && dir2==D_RIGHT)
+        || (dir2==D_LEFT && dir1==D_RIGHT) ) return true;
+    if (   (dir1==D_TOP && dir2==D_BOTTOM)
+        || (dir2==D_TOP && dir1==D_BOTTOM) ) return true;
+    return false;
+}
+
 #endif // DIRECTION_H

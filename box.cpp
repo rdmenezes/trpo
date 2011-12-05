@@ -270,6 +270,8 @@ void Box::createConnectors()
                                     crect.bottomLeft().y(),
                                     crect.topLeft().x(),
                                     crect.topLeft().y());
+  for (int i=0;i<m_connectors.size();i++)
+      m_connectors[i]->setParent(this);
 
 }
 
@@ -458,3 +460,14 @@ void Box::attachAllPoints(const QVector<ArrowPoint *> pts)
   }
   */
 }
+
+
+Direction getSide(const QRectF & r, const QPointF & p)
+{
+    if (fabs(p.x()-r.left())<0.01) return D_LEFT;
+    if (fabs(p.x()-r.right())<0.01) return D_RIGHT;
+    if (fabs(p.y()-r.bottom())<0.01) return D_BOTTOM;
+    return D_TOP;
+}
+
+

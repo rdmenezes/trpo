@@ -107,6 +107,7 @@ MainWindow::MainWindow(QWidget *parent,
     connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),this,SLOT(scale(int)));
     m_path = NULL;
 
+    ui->view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
     //Perform test of box
     //GraphicUnitTests gut(diag);
