@@ -99,3 +99,19 @@ void ObjectConnector::clear()
   for (int i=0;i<2;i++)
       m_connected[i].clear();
 }
+
+
+bool hasWay(ObjectConnector * start, ObjectConnector * goal)
+{
+  if (start==goal)
+      return true;
+  {
+    bool result=false;
+    const QVector< QPair<qreal, ObjectConnector*> > & v=start->getConnected(C_INPUT);
+    for (int i=0;i<v.size() && !result;i++)
+    {
+        result=result || hasWay(v[i].second,goal);
+    }
+    return result;
+  }
+}

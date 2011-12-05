@@ -123,5 +123,10 @@ inline void freeConnectors( const QVector<ObjectConnector*> & cts)
        delete cts[i];
 }
 
+/*! Tests, whether from start to goal exists some way
+    \param[in] start starting point
+    \param[in] goal  ending point
+ */
+bool hasWay(ObjectConnector * start, ObjectConnector * goal);
 
 #endif // OBJECTCONNECTOR_H
