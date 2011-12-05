@@ -7,7 +7,7 @@
 #include "tool.h"
 #include "box.h"
 #include "arrow.h"
-
+#include <QVector>
 /*! State for arrow tool
  */
 enum ArrowToolState
@@ -20,9 +20,9 @@ enum ArrowToolState
  */
 enum StartPointLocation
 {
-    ATS_NONE,               //!< First point was found at no placed
-    ATS_BOX,                //!< Box data
-    ATS_ARROW               //!< Arrow data
+    ATS_NONE=0,              //!< First point was found at no placed
+    ATS_ARROW=1,             //!< Arrow data
+    ATS_BOX=2                //!< Box data
 };
 /*! Arrow sensivity on x
  */
@@ -30,29 +30,74 @@ enum StartPointLocation
 /*! Arrow  sensivity on y
  */
 #define ARROW_SENSIVITY_Y 3
+
+/*! maximum preview segments used
+ */
+#define MAX_PREVIEW_SEGMENTS 3
 /*! \class ArrowTool
     A tool, used to create arrows
  */
 class ArrowTool : public Tool
 {
+typedef  void (ArrowTool::*Callback)(const QPointF &, const QPointF &);
 private:
          ArrowToolState          m_state;        //!< State of arrow tool
-         Arrow *                 m_preview[2];   //!< Previewed arrows
+         Arrow *                 m_preview[MAX_PREVIEW_SEGMENTS];   //!< Previewed arrows
+         int                     m_preview_amount;  //!< Current view amount
          void                   (ArrowTool::* m_drawarr[13])(const QPointF & ,
                                                              const QPointF & ); //!< Array of drawing functions
+         QVector< QVector<ArrowTool::Callback> >  m_connection_cbs; //!< Connection callbacks
 
          StartPointLocation      m_loc[2];       //!< Where is starting point located
          Box *                   m_boxes[2];     //!< Boxes, where points are located
          Arrow *                 m_arrows[2];    //!< Arrows, where points are located
          qreal                   m_poses[2];     //!< Positions on points of data
          QPointF                 m_points[2];    //!< Specified positions of data
-
+         /*! Removes odd segments
+          */
+         void removeOddSegments();
+         /*! Generates a new preview arrow triplet
+             \param[in] p position
+          */
+         void generatePreview(const QPointF & p);
+         /*! Connects none to none
+          */
+         void connectNoneToNone();
+         /*! Connect none to line
+          */
+         void connectNoneToLine();
+         /*! Connect none to box
+          */
+         void connectNoneToBox();
+         /*! Connect line to none
+          */
+         void connectLineToNone();
+         /*! Connect line to  line
+          */
+         void connectLineToLine();
+         /*! Connects box to box
+          */
+         void connectLineToBox();
+         /*! Connects box to none
+          */
+         void connectBoxToNone();
+         /*! Connects box to line
+          */
+         void connectBoxToLine();
+         /*! Connects box to box
+          */
+         void connectBoxToBox();
+         /*! Redraws a lines
+             \param[in] pos        position
+             \param[on] canBeZero  whether it can be zero
+          */
+         void redrawLines(const QPointF & pos,bool canBeZero);
          /*! Makes only first line of preview visible
           */
          void makeOneLineVisible();
          /*! Makes all lines of preview visible
           */
-         void makeAllVisible();
+         void makeTwoLinesVisible();
          /*! Draws zero length arrow
              \param[in] p1 first point
              \param[in] p2 second point

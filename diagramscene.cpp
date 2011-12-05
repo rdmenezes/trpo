@@ -141,23 +141,22 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void DiagramScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-
-QPointF pointTmp=event->scenePos();
-double x1 = pointTmp.x();
-double y1 = pointTmp.y();
-
-QString   textX;
-textX.setNum(x1);
-QString   textY;
-textY.setNum(y1);
-QString text;
-text.append(textX);
-text.append(" ");
-text.append(textY);
-MainWindow *parentwin = static_cast <MainWindow*>(this->views()[0]->window());
-parentwin->ui->cursorCoordinates->clear();
-parentwin->ui->cursorCoordinates->setText(text);
-
+ {
+  QPointF pointTmp=event->scenePos();
+  double x1 = pointTmp.x();
+  double y1 = pointTmp.y();
+  QString   textX;
+  textX.setNum(x1);
+  QString   textY;
+  textY.setNum(y1);
+  QString text;
+  text.append(textX);
+  text.append(" ");
+  text.append(textY);
+  MainWindow *parentwin = static_cast <MainWindow*>(this->views()[0]->window());
+  parentwin->ui->cursorCoordinates->clear();
+  parentwin->ui->cursorCoordinates->setText(text);
+ }
  if (m_tool)
         m_tool->onMove(event->lastScenePos(),event->scenePos());
 
