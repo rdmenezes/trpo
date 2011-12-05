@@ -591,7 +591,42 @@ void ArrowTool::connectBoxToNone()
 
 void ArrowTool::connectBoxToLine()
 {
-
+    Direction dir=getSide(m_boxes[0]->collisionRect(),m_preview[0]->model()->p1());
+    bool directed_right=dir==D_RIGHT || dir==D_BOTTOM;
+    bool canplace=canPlacePreviews();
+    Arrow * lastpreview=m_preview[m_preview_amount-1];
+    Direction lsegdir=lastpreview->model()->direction();
+    Direction enddir=m_arrows[1]->model()->direction();
+    bool isNotOpposite=!isOpposite(lsegdir,enddir);
+    bool isBadCollision=lsegdir==enddir && m_poses[1]!=0;
+    if (isNotOpposite && !isBadCollision && directed_right && canplace)
+    {
+        disconnectAllPreviews();
+        QVector<DiagramObject *> v;
+        if (lsegdir==enddir)
+        {
+            m_arrows[1]->model()->enlarge(lastpreview->model()->p1());
+            delete lastpreview;
+            m_preview[m_preview_amount-1]=m_arrows[1];
+        }
+        else
+        {
+            m_arrows[1]->model()->addConnector(lastpreview->model(),m_poses[1],C_INPUT);
+            m_preview[m_preview_amount-1]->model()->addConnector(m_arrows[1]->model(),1.0,C_OUTPUT);
+        }
+        for (int i=1;i<m_preview_amount;i++)
+        {
+            m_preview[i-1]->model()->addConnector(m_preview[i]->model(),1.0,C_OUTPUT);
+            m_preview[i]->model()->addConnector  (m_preview[i-1]->model(),0.0,C_INPUT);
+        }
+        m_poses[0]=position(*(m_boxes[0]->getBySide(dir)),m_preview[0]->model()->p1());
+        m_boxes[0]->getBySide(dir)->addConnector(m_preview[0]->model(),m_poses[0],C_OUTPUT);
+        m_preview[0]->model()->addConnector(m_boxes[0]->getBySide(dir),0.0,C_INPUT);
+        //Perform addition
+        addPreviewsToDiagram();
+        removeOddSegments();
+        initState();
+    }
 }
 
 void ArrowTool::connectBoxToBox()
