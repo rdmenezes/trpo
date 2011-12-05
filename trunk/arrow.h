@@ -69,10 +69,11 @@ private:
         bool              m_tunneled_end;   //!< Whether object is connected at  end
         /*! Constructs an input roundings
             \param[in] input  input line
+            \param[in] pivot  pivot point
             \param[in] p1     point
             \param[in] angle  angular points
          */
-        void constructInputRounding(ObjectConnector * input,QRectF & p1, qreal & angle);
+        void constructInputRounding(ObjectConnector * input,const QPointF & pivot,QRectF & p1, qreal & angle);
         /*! Draws a brackets
             \param[in] p painter
             \param[in] point point

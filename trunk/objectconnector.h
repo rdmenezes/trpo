@@ -93,6 +93,12 @@ class ObjectConnector: public QLineF
             \return    new   object
          */
         QVector<ObjectConnector *>  getConnected(qreal point,Connection type);
+        /*!  Returns a connected objects
+             \param[in] type connection type
+             \return new type
+         */
+        inline const QVector< QPair<qreal,ObjectConnector*> > & getConnected(Connection type) const
+        { return m_connected[type]; }
         /*! Determines,whether connector has connected another connector
             \param[in] o other connector
          */

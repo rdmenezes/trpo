@@ -114,10 +114,29 @@ void Arrow::paint(QPainter * p)
             //Actual drawing is done here
             QRectF dp;
             qreal angle=0.0f;
-            constructInputRounding(m_input,dp,angle);
+            constructInputRounding(m_input,m_self->p1(),dp,angle);
             p->drawArc(dp,angle,90*DEGREE);
           } else mustmovefirstpoint=false;
          }
+    }
+    //Draw other inputs
+    const QVector< QPair<qreal,ObjectConnector*> > & inputs=m_self->getConnected(C_INPUT);
+    for (int i=0;i<inputs.size();i++)
+    {
+        bool pos=fabs(inputs[i].first)>0.001;
+        ObjectConnector * input=inputs[i].second;
+        qreal distance=QLineF(input->p1(),input->p2()).length();
+        Direction inputdir=input->direction();
+        if ( pos && distance>A_ROUNDING_RADIUS
+                 && isNotCollinear(inputdir,self)
+                 && checkDistance
+                 && input->drawRoundings())
+        {
+            QRectF dp;
+            qreal angle=0.0f;
+            constructInputRounding(input,input->p2(),dp,angle);
+            p->drawArc(dp,angle,90*DEGREE);
+        }
     }
     if (mustmovefirstpoint)
     {
@@ -183,34 +202,34 @@ void Arrow::paint(QPainter * p)
 typedef QPair<Direction,Direction> DirectionPair;
 typedef QPair<QPointF,qreal>       InputPair;
 
-void Arrow::constructInputRounding(ObjectConnector * input,QRectF & p1, qreal & angle)
+void Arrow::constructInputRounding(ObjectConnector * input,const QPointF & pivot,QRectF & p1, qreal & angle)
 {
 
   QHash< QPair<Direction,Direction>,QPair<QPointF,qreal> > points;
   points.insert(DirectionPair(D_BOTTOM,D_RIGHT),
-                InputPair(translate(m_self->p1())+QPointF(A_ROUNDING_RADIUS,-A_ROUNDING_RADIUS),180*DEGREE)
+                InputPair(translate(pivot)+QPointF(A_ROUNDING_RADIUS,-A_ROUNDING_RADIUS),180*DEGREE)
                );
   points.insert(DirectionPair(D_TOP,D_RIGHT),
-                InputPair(translate(m_self->p1())+QPointF(A_ROUNDING_RADIUS,A_ROUNDING_RADIUS),90*DEGREE)
+                InputPair(translate(pivot)+QPointF(A_ROUNDING_RADIUS,A_ROUNDING_RADIUS),90*DEGREE)
                );
   points.insert(DirectionPair(D_BOTTOM,D_LEFT),
-                InputPair(translate(m_self->p1())+QPointF(- A_ROUNDING_RADIUS, - A_ROUNDING_RADIUS),270*DEGREE)
+                InputPair(translate(pivot)+QPointF(- A_ROUNDING_RADIUS, - A_ROUNDING_RADIUS),270*DEGREE)
                );
   points.insert(DirectionPair(D_TOP,D_LEFT),
-                InputPair(translate(m_self->p1())+QPointF(- A_ROUNDING_RADIUS, A_ROUNDING_RADIUS),0*DEGREE)
+                InputPair(translate(pivot)+QPointF(- A_ROUNDING_RADIUS, A_ROUNDING_RADIUS),0*DEGREE)
                );
 
   points.insert(DirectionPair(D_RIGHT,D_TOP),
-                InputPair(translate(m_self->p1())+QPointF(- A_ROUNDING_RADIUS,- A_ROUNDING_RADIUS),270*DEGREE)
+                InputPair(translate(pivot)+QPointF(- A_ROUNDING_RADIUS,- A_ROUNDING_RADIUS),270*DEGREE)
                );
   points.insert(DirectionPair(D_LEFT,D_TOP),
-                InputPair(translate(m_self->p1())+QPointF(A_ROUNDING_RADIUS,- A_ROUNDING_RADIUS),180*DEGREE)
+                InputPair(translate(pivot)+QPointF(A_ROUNDING_RADIUS,- A_ROUNDING_RADIUS),180*DEGREE)
                );
   points.insert(DirectionPair(D_RIGHT,D_BOTTOM),
-                InputPair(translate(m_self->p1())+QPointF(- A_ROUNDING_RADIUS,A_ROUNDING_RADIUS),0*DEGREE)
+                InputPair(translate(pivot)+QPointF(- A_ROUNDING_RADIUS,A_ROUNDING_RADIUS),0*DEGREE)
                );
   points.insert(DirectionPair(D_LEFT,D_BOTTOM),
-                InputPair(translate(m_self->p1())+QPointF(A_ROUNDING_RADIUS,A_ROUNDING_RADIUS),90*DEGREE)
+                InputPair(translate(pivot)+QPointF(A_ROUNDING_RADIUS,A_ROUNDING_RADIUS),90*DEGREE)
                );
   // Uncomment this for debug
   //Direction inpd=input->direction();
