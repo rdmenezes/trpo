@@ -274,7 +274,10 @@ void Box::createConnectors()
       m_connectors[i]->setParent(this);
 
 }
-
+bool Box::drawTrianglePart() const
+{
+    return true;
+}
 ObjectConnector * Box::getBySide(Direction d)
 {
     if (d==D_TOP)

@@ -151,8 +151,11 @@ void Arrow::paint(QPainter * p)
         p2=points_access[self];
     }
     p->drawLine(translate(p1),translate(p2));
+    bool drawTriangle=false;
+    for (int i=0;i<outputctrs.size();i++)
+        drawTriangle=drawTriangle || outputctrs[i]->drawTriangle();
     //Draw an arrow
-    if (!(outputctrs.size()))
+    if (!(outputctrs.size()) || drawTriangle )
     {
         QPointF pts[3]={m_self->p2(),m_self->p2(),m_self->p2()};
         QLineF  m_pvec=m_self->unitVector();

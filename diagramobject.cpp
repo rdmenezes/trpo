@@ -29,6 +29,11 @@ bool DiagramObject::deleteOnRemoval()
   return true;
 }
 
+bool DiagramObject::drawTrianglePart() const
+{
+    return false;
+}
+
 int DiagramObject::collisionObjectType() const
 {
     return type();

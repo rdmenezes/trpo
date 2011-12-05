@@ -181,6 +181,9 @@ public:
         \return connector
      */
     ObjectConnector * getBySide(Direction d);
+    /*! Detects, whether we should draw an arrow
+     */
+    virtual bool drawTrianglePart() const;
     /*! Destructor
      */
     virtual ~Box();
