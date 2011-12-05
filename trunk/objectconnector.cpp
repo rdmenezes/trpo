@@ -75,10 +75,11 @@ void ObjectConnector::remove(ObjectConnector *o)
 }
 
 
-void ObjectConnector::enlarge(const QPointF & newend)
+void ObjectConnector::enlarge(const QPointF & newend,bool end)
 {
   QLineF oldline(p1(),p2());
-  QLineF newline(p1(),newend);
+  QLineF newline;
+  if (end) newline=QLineF(p1(),newend); else newline=QLineF(newend,p2());
   for (int i=0;i<2;i++)
   {
       for (int j=0;j<m_connected[i].size();j++)
@@ -87,7 +88,10 @@ void ObjectConnector::enlarge(const QPointF & newend)
         m_connected[i][j].first=position(newline,oldpos);
       }
   }
-  this->setP2(newend);
+  if (end)
+    this->setP2(newend);
+  else
+    this->setP1(newend);
 }
 
 void ObjectConnector::clear()

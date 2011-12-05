@@ -157,6 +157,9 @@ public:
         /*! Regenerates an amount
          */
         void regenerate();
+        /*! Tests, whether arrow is under cursor
+         */
+        bool contains ( const QPointF & point ) const;
         /*! Destructs an arrow
          */
         ~Arrow();

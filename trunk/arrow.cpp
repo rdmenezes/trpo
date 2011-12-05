@@ -39,6 +39,7 @@ QRectF Arrow::sceneDrawingBounds() const
                   };
      rct=bound(pa,4);
     }
+    Q_ASSERT(rct.width()>=0 && rct.height()>=0);
     return rct;
 }
 
@@ -63,6 +64,11 @@ QRectF Arrow::boundingRect() const
                                                           rct.height()+2*A_ROUNDING_PADDING);
 }
 
+bool Arrow::contains ( const QPointF & point ) const
+{
+    QRectF rct=boundingRect();
+    return point.x()>=rct.x() && point.y()>=rct.y() && point.x()<=rct.right() && point.y()<=rct.bottom();
+}
 
 #define DEGREE 16
 
@@ -80,6 +86,7 @@ void Arrow::drawBracket(QPainter * p,const QPointF & point ,qreal angle)
 
 void Arrow::paint(QPainter * p)
 {
+    //p->drawRect(boundingRect());
     p->setPen(QPen(QBrush(A_COLOR),A_PEN_WIDTH));
 
     if (m_tunneled_end)
