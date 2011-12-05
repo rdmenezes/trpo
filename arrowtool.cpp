@@ -673,7 +673,27 @@ void ArrowTool::connectBoxToLine()
 
 void ArrowTool::connectBoxToBox()
 {
-
+    Direction dir_input=getSide(m_boxes[0]->collisionRect(),m_preview[0]->model()->p1());
+    bool directed_right_i=dir_input==D_RIGHT || dir_input==D_BOTTOM;
+    Direction dir_output=getSide(m_boxes[1]->collisionRect(),m_preview[m_preview_amount-1]->model()->p2());
+    bool directed_right_o=dir_output==D_TOP || dir_output==D_LEFT || dir_output==D_BOTTOM;
+    bool canplace=canPlacePreviews();
+    if (directed_right_i && directed_right_o && canplace)
+    {
+        //Fill connections
+        ObjectConnector * bxin=m_boxes[0]->getBySide(dir_input);
+        qreal inpos=position(*bxin,m_preview[0]->model()->p1());
+        bxin->addConnector(m_preview[0]->model(),inpos,C_OUTPUT);
+        m_preview[0]->model()->addConnector(bxin,0.0,C_INPUT);
+        ObjectConnector * bxout=m_boxes[1]->getBySide(dir_output);
+        qreal outpos=position(*bxout,m_preview[m_preview_amount-1]->model()->p2());
+        bxout->addConnector(m_preview[m_preview_amount-1]->model(),outpos,C_INPUT);
+        m_preview[m_preview_amount-1]->model()->addConnector(bxout,1.0,C_OUTPUT);
+        //Perform addition
+        addPreviewsToDiagram();
+        removeOddSegments();
+        initState();
+    }
 }
 
 
