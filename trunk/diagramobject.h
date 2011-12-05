@@ -83,6 +83,9 @@ public:
     /*! Clones a diagram object
      */
     virtual DiagramObject * clone()=0;
+    /*! Detects, whether we should draw an arrow
+     */
+    virtual bool drawTrianglePart() const;
     /*! Used to perfom a custom actions, before dying
         \return true (default implementation) if just remove it from scene, false - if delete
      */

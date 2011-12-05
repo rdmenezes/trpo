@@ -73,7 +73,15 @@ class ObjectConnector: public QLineF
             else
                 return m_parent->drawRoundings();
         }
-
+        /*! Tests,whether we should draw triangle
+         */
+        inline bool drawTriangle() const
+        {
+            if (!m_parent)
+                return true;
+            else
+                return m_parent->drawTrianglePart();
+        }
         /*! Adds a new connector
             \param[in] c     connector
             \param[in] point adding point

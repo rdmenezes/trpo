@@ -305,7 +305,7 @@ bool ArrowTool::onClick(const QPointF &p, QGraphicsItem *  item )
               m_boxes[1]=static_cast<Box*>(item);
               m_loc[1]=ATS_BOX;
           }
-          return true;
+          else return true;
       } else m_loc[1]=ATS_NONE;
       ArrowTool::Callback cb=m_connection_cbs[m_loc[0]][m_loc[1]];
       (this->*cb)();
@@ -463,7 +463,22 @@ void ArrowTool::connectNoneToLine()
 
 void ArrowTool::connectNoneToBox()
 {
-
+    Direction dir=getSide(m_boxes[1]->collisionRect(),m_preview[m_preview_amount-1]->model()->p2());
+    bool directed_right=dir==D_TOP || dir==D_LEFT || dir==D_BOTTOM;
+    bool canplace=canPlacePreviews();
+    if (directed_right && canplace)
+    {
+        //Get position
+        ObjectConnector * bx=m_boxes[1]->getBySide(dir);
+        qreal pos=position( *(bx) ,m_preview[m_preview_amount-1]->model()->p2());
+        //Add connectors
+        bx->addConnector(m_preview[m_preview_amount-1]->model(),pos,C_INPUT);
+        m_preview[m_preview_amount-1]->model()->addConnector(bx,1,C_OUTPUT);
+        //Perform addition
+        addPreviewsToDiagram();
+        removeOddSegments();
+        initState();
+    }
 }
 
 void ArrowTool::connectLineToNone()
