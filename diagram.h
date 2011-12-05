@@ -216,8 +216,9 @@ public:
             \param[in] b     box
          */
         void changeBlockNumber(int delta, Box * b);
-
-
+        /*! Get types of items under position
+         */
+        void items(const QPointF & pos, QList<QGraphicsItem *>  & lst);
 
         /*! Returns an annotation labels
          */

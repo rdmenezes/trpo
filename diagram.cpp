@@ -6,6 +6,7 @@
 #include "arrowpoint.h"
 #include "arrowsegment.h"
 #include "diagramset.h"
+#include "attachedcomment.h"
 #include "collisiondetector.h"
 
 int Diagram::id() const
@@ -113,6 +114,28 @@ void Diagram::clear()
             delete m_objects[i];
     }
     m_objects.clear();
+}
+
+void Diagram::items(const QPointF & pos, QList<QGraphicsItem *>  & lst)
+{
+    for (int i=0;i<m_objects.size();i++)
+    {
+        if (m_objects[i]->type()==IsAttachedComment)
+        {
+            AttachedComment * ac=static_cast<AttachedComment *>(m_objects[i]);
+            if (ac->comment())
+                if (ac->comment()->contains(pos-ac->comment()->pos()) && !(lst.contains(ac->comment())))
+                    lst<<ac->comment();
+            if (ac->line())
+                if (ac->line()->contains(pos-ac->line()->pos()) && !(lst.contains(ac->line())))
+                    lst<<ac->line();
+        }
+        else
+        {
+          if (m_objects[i]->contains(pos-m_objects[i]->pos()) && !lst.contains(m_objects[i]))
+              lst<<m_objects[i];
+        }
+    }
 }
 
 void Diagram::changeBlockNumber(int delta, Box * b)

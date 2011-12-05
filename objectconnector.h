@@ -58,8 +58,9 @@ class ObjectConnector: public QLineF
         bool tryMove(const QPointF & l);
         /*! Resizes a line, saving absolute object coordinates
             \param[in] newend  new ending position
+            \param[in] end     end data
          */
-        void enlarge(const QPointF & newend);
+        void enlarge(const QPointF & newend,bool end=true);
         /*! Returns a direction of connector
             \return direction
          */
