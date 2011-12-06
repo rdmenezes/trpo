@@ -7,13 +7,40 @@
 #include "tool.h"
 #include "box.h"
 #include "freecomment.h"
+#include "commentline.h"
+/*! Select tool state, representing current user action
+ */
+enum SelectToolState
+{
+    STS_NONE,
+    STS_MOVEFREECOMMENT
+};
+
+/*! Data about free comment move
+ */
+class FreeCommentMove
+{
+public:
+    FreeComment * m_obj;                  //!< Moving object
+    CommentLine * m_line;                 //!< Line
+    QLineF        m_startlinepos;         //!< Starting line pos
+    QPointF       m_startcommentpos;      //!< Starting commented pos
+    QPointF       m_clickpos;             //!< Click position
+    /*! Default constructor */
+    inline FreeCommentMove() {}
+    /*! Restores a positions of object */
+    void restorePosition();
+};
+
 
 /*! \class SelectTool
     A selection tool, chosen by user
  */
 class SelectTool : public Tool
 {
-
+private:
+        SelectToolState  m_state; //!< State data
+        FreeCommentMove  m_fcm;   //!< Free comment move data
 public:
     /*! A selection tool
      */

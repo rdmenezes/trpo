@@ -5,6 +5,7 @@
 #include "diagramscene.h"
 #include "diagram.h"
 #include "keytest.h"
+#include "collision.h"
 #include <QPainter>
 #include <QGraphicsProxyWidget>
 #include <QFontMetricsF>
@@ -128,6 +129,89 @@ void FreeComment::setText(const QString &text)
     this->scene()->update();
 }
 
+void FreeComment::setPosWithoutCheck(const QPointF & pos)
+{
+    QRectF oldrect(this->pos(),m_size);
+    setX(pos.x());
+    setY(pos.y());
+    QRectF rect(this->pos(),m_size);
+    CommentLine * line=NULL;
+    QPointF       line_old_point;
+    if (parentComment()->line())
+    {
+      line=parentComment()->line();
+      line_old_point=line->out();
+
+
+      //Compute old point position
+      Direction side=getSide(oldrect,line_old_point);
+      QLineF oldline=getLineBySide(oldrect,side);
+      qreal  posx=position(oldline,line_old_point);
+
+      //Compute and set new position
+      QPointF newpoint=position(getLineBySide(rect,side),posx);
+      if (collides(collisionRect(),QLineF(line->in(),line->out())))
+      {
+          newpoint=getLastCollisionPoint(QLineF(line->in(),line->out()),collisionRect(),line->out());
+      }
+      line->setLine(line->in().x(),line->in().y(),newpoint.x(),newpoint.y());
+
+      //Set new input position
+      DiagramObject * input=line->getInputObject();
+      if (input)
+      {
+       QPointF newin=input->receiveCommentLineMove(line);
+       line->setLine(newin.x(),newin.y(),line->out().x(),line->out().y());
+
+       Q_ASSERT( line->model()->getConnected(C_INPUT).size() );
+      }
+    }
+
+}
+
+bool FreeComment::checkPos(const QPointF & pos)
+{
+    QRectF oldrect=collisionRect();
+    setX(pos.x());
+    setY(pos.y());
+    QRectF rect=collisionRect();
+    //Tests, whether we can place a free comment
+    QVector<CollisionObject *> exc; exc<<this;
+    if (parentComment()->line()) exc<<parentComment()->line();
+    bool canPlaceFreeComment=this->diagram()->canPlace(this,QVector<int>(),exc);
+
+    //Save old position of line
+    CommentLine * line=NULL;
+    QPointF       line_old_point;
+    if (parentComment()->line())
+    {
+      line=parentComment()->line();
+      line_old_point=line->out();
+
+      //Compute old point position
+      Direction side=getSide(oldrect,line_old_point);
+      QLineF oldline=getLineBySide(oldrect,side);
+      qreal  posx=position(oldline,line_old_point);
+
+      //Compute and set new position
+      QPointF newpoint=position(getLineBySide(rect,side),posx);
+      line->setLine(line->in().x(),line->in().y(),newpoint.x(),newpoint.y());
+
+      //Check for collisions
+       QVector<CollisionObject *> clexc; clexc<<this<<line;
+       QVector<int>   clexctypes; clexctypes<<IsCommentLine<<IsArrow;
+       DiagramObject * obj=line->getInputObject();
+       if (obj) clexc<<obj;
+       bool canPlaceCommentLine=this->diagram()->canPlace(line,clexctypes,clexc);
+       canPlaceFreeComment=canPlaceFreeComment && canPlaceCommentLine;
+
+       line->setLine(line->in().x(),line->in().y(),line_old_point.x(),line_old_point.y());
+       setX(oldrect.x());
+       setY(oldrect.y());
+    }
+    return canPlaceFreeComment;
+}
+
 void FreeComment::moveTo(const QPointF &p)
 {
    setX(p.x()-m_size.width()/2);
@@ -174,8 +258,4 @@ QString  FreeComment::getEditableText() const
   return m_text;
 }
 
-void FreeComment::setRect(const QRectF & rect)
-{
-   //m_rect=rect;
-}
 

@@ -102,11 +102,14 @@ public:
      */
     QString  getEditableText() const;
 
-
     /*! Tries setting rect to label item
+        \param[in] pos sets a position with no check
      */
-    void setRect(const QRectF & rect);
-
+    void setPosWithoutCheck(const QPointF & pos);
+    /*! Checks,  whether it can be placed here
+        \param[in] pos new position
+     */
+    bool checkPos(const QPointF & pos);
 signals:
 
 public slots:

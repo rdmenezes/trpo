@@ -90,8 +90,10 @@ class ObjectConnector: public QLineF
         /*! Adds a new connector
             \param[in] c     connector
             \param[in] point adding point
+            \param[in] type  type data
+            \param[in] debug debug data
          */
-        bool addConnector(ObjectConnector * c, qreal point,Connection type);
+        bool addConnector(ObjectConnector * c, qreal point,Connection type,bool debug=true);
         /*! Returns a connected objects
             \param[in] point point
             \return    new   object
