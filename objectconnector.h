@@ -118,7 +118,13 @@ class ObjectConnector: public QLineF
         void clear();
 };
 
-
+/*! Removes references from connector and kills annotation lines
+    \param[in] removing removing object connector
+    \param[in] o  connector
+    \param[in] dir  direction
+    \param[in] d    diagram
+ */
+void removeReferencesAndKillLines(ObjectConnector * removing,ObjectConnector * o,Connection dir,Diagram * d);
 
 /*! Free all connectors
     \param[in] cts connectors

@@ -90,6 +90,11 @@ public:
         \return true (default implementation) if just remove it from scene, false - if delete
      */
     virtual bool deleteOnRemoval();
+    /*! Kills self if equal to object
+        \param[in] o object to compare
+        \return true if will die
+     */
+    virtual bool dieIfEqualTo(DiagramObject * o)=0;
     /*! Receives comment line event, when it changes it's direction to set it's
         input to correct position
         \param[in] obj  comment line

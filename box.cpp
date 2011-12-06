@@ -382,6 +382,20 @@ QPointF Box::receiveCommentLineMove(DiagramObject * obj)
    return result;
 }
 
+bool Box::dieIfEqualTo(DiagramObject * o)
+{
+    if (o!=this)
+        return false;
+
+    for (int i=0;i<m_connectors.size();i++)
+    {
+     removeReferencesAndKillLines(m_connectors[i],m_connectors[i],C_INPUT,this->diagram());
+     removeReferencesAndKillLines(m_connectors[i],m_connectors[i],C_OUTPUT,this->diagram());
+    }
+    return true;
+}
+
+
 void Box::updateString(const QString & text)
 {
    if (!text.isEmpty())

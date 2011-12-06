@@ -70,3 +70,26 @@ bool AttachedComment::deleteOnRemoval()
   return false;
 }
 
+bool AttachedComment::dieIfEqualTo(DiagramObject * o)
+{
+  if (m_comment->dieIfEqualTo(o))
+  {
+      if (m_line)
+      {
+          CommentLine * line=m_line;
+          line->dieIfEqualTo(line);
+          delete line;
+      }
+      return true;
+  }
+  else
+  {
+      CommentLine * line=m_line;
+      if (m_line->dieIfEqualTo(o))
+      {
+          delete line;
+          m_line=NULL;
+      }
+      return false;
+  }
+}
