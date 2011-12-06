@@ -18,6 +18,7 @@ CommentLine::CommentLine(const QPointF & in,
     m_in=in;
     m_out=out;
     m_self=new ObjectConnector();
+    m_self->setParent(this);
     if (oin)
         m_self->addConnector(oin,0,C_INPUT);
     m_parentcomment=attach;

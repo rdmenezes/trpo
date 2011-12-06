@@ -80,6 +80,7 @@ bool AttachedComment::dieIfEqualTo(DiagramObject * o)
           line->dieIfEqualTo(line);
           delete line;
       }
+      delete m_comment;
       return true;
   }
   else
