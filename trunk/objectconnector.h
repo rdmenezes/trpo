@@ -48,6 +48,10 @@ class ObjectConnector: public QLineF
             \param[in] parent parent object
          */
         inline void setParent(DiagramObject * parent) { m_parent=parent;}
+        /*! Returns a parent object for connector
+            \return parent object
+         */
+        inline DiagramObject * parent() { return m_parent; }
         /*! Resizes a line without saving absolute coordinates
             \param[in] l   new line
          */

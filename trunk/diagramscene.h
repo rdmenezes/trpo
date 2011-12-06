@@ -140,10 +140,6 @@ private:
         \param[in] newid  new block id
     */
     void processChangeBlockID(Box * block, char previd, char newid);
-    /*! Processes removing of items
-        \param[in] items clicked items
-     */
-    void processRemoving(const QList<QGraphicsItem *> & items);
     /*! Determines dragging box action
         \param[in] item item data
         \param[in] pos  position
@@ -161,57 +157,7 @@ private:
     /*! Leaves arrow moving action
         \param[in] pos position
      */
-    void arrowMoveLeave(const QPointF & pos);
-    /*! Processes arrow joining
-     */
-    void processArrowJoin(const QPointF & pos,ArrowSegment * seg);
-    /*! Proecessed arrow merge
-        \param[in] pos  last arrow position, that will move to
-        \param[in] seg  segment
-        \param[in] mydir direction of adding segment
-        \param[in] segdir  direction of segment
-     */
-    void processArrowMerge(const QPointF & pos, ArrowSegment * seg, ArrowDirection * mydir, ArrowDirection  * segdir);
-    /*! Processes arrow joining
-        \param[in] p position
-        \param[in] seg segment
-     */
-    void processArrowJoinSegments(const QPointF & pos, ArrowSegment * seg);
-    /*! Adds arrow, pointing to block
-        \param[in] p   new point
-        \param[om] box block
-     */
-    void addArrowPointingToBlock(ArrowPoint * p,Box * box);
-    /*! Prolongs arrow to block edge
-        \param[in] p    point
-        \param[in] box  block
-     */
-    void prolongArrowToBlockEdge(ArrowPoint * p,Box * box);
-    /*! Processes arrow addition, pointing to block
-        \param[in] p position
-        \param[in] box  box
-     */
-    void processArrowPointingToBlock(ArrowPoint * p, Box * box);
-    /*! Process common arrow building
-        \param[in] pos  pointf
-     */
-    void processArrowCommonBuilding(const QPointF & scenePos);
-    /*! Process arrow operation while clicking on blank space
-        \param[in] event event
-     */
-    void processArrowClickOnBlankSpace(QGraphicsSceneMouseEvent * event);
-    /*! Process arrow operation while clicking on block space
-        \param[in] event event
-     */
-    void processArrowClickOnBox(QGraphicsSceneMouseEvent * event,Box * box);
-    /*! Process arrow operation while clicking on block space
-        \param[in] event event
-     */
-    void processArrowClickOnLine(QGraphicsSceneMouseEvent * event,ArrowSegment * seg);
-    /*! Process escape pressing on blank space
-        \param[in] pos position
-     */
-    void processArrowEscapePress(const QPointF & pos);
+    void arrowMoveLeave(const QPointF & pos);;
 protected:
     /*! Handles a beginning of dragging item
         \param[in] event event data

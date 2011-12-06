@@ -16,10 +16,10 @@ void loadBlockRef(QDomElement * el,Box * box, int &i, int &j)
 
 
  QDomNamedNodeMap map=el->attributes();
- if (map.contains("value"))
-     box->getLineRef(i,j)=reinterpret_cast<ArrowPoint*>(stringToPtr(
-                          map.namedItem("value").toAttr().value()
-                          ));
+ //if (map.contains("value"))
+ //    box->getLineRef(i,j)=reinterpret_cast<ArrowPoint*>(stringToPtr(
+ //                         map.namedItem("value").toAttr().value()
+ //                         ));
 
   ++j;
   if (j==MAX_LINE_REFERENCES)
