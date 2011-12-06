@@ -22,6 +22,20 @@ ArrowTool::ArrowTool()
     m_drawarr[11]=&ArrowTool::drawVHDirected;
     m_drawarr[12]=&ArrowTool::drawHVDirected;
 
+    m_drawllr[0]=&ArrowTool::drawZeroDirected;
+    m_drawllr[1]=&ArrowTool::drawRightLeftDirected;
+    m_drawllr[2]=&ArrowTool::drawHorizontalDirected3;
+    m_drawllr[3]=&ArrowTool::drawVerticalDirected3;
+    m_drawllr[4]=&ArrowTool::drawTopBottomDirected;
+    m_drawllr[5]=&ArrowTool::drawVerticalDirected3;
+    m_drawllr[6]=&ArrowTool::drawHorizontalDirected3;
+    m_drawllr[7]=&ArrowTool::drawRightLeftDirected;
+    m_drawllr[8]=&ArrowTool::drawHorizontalDirected3;
+    m_drawllr[9]=&ArrowTool::drawVerticalDirected3;
+    m_drawllr[10]=&ArrowTool::drawTopBottomDirected;
+    m_drawllr[11]=&ArrowTool::drawVerticalDirected3;
+    m_drawllr[12]=&ArrowTool::drawHorizontalDirected3;
+
     m_connection_cbs<<QVector<ArrowTool::Callback>()
                     <<QVector<ArrowTool::Callback>()
                     <<QVector<ArrowTool::Callback>();
@@ -167,6 +181,21 @@ void ArrowTool::makeTwoLinesVisible()
     m_preview_amount=2;
 }
 
+void ArrowTool::makeAllLinesVisible()
+{
+    m_preview[0]->setVisible(true);
+    m_preview[1]->setVisible(true);
+    m_preview[2]->setVisible(true);
+    m_preview_amount=3;
+    disconnectAllPreviews();
+    for (int i=1;i<3;i++)
+    {
+        m_preview[i-1]->model()->addConnector(m_preview[i]->model(),1.0,C_OUTPUT);
+        m_preview[i]->model()->addConnector(m_preview[i-1]->model(),0.0,C_INPUT);
+    }
+}
+
+
 void    ArrowTool::drawZeroDirected(const QPointF & p1, const QPointF & p2)
 {
    m_preview[0]->setVisible(false);
@@ -175,6 +204,8 @@ void    ArrowTool::drawZeroDirected(const QPointF & p1, const QPointF & p2)
    m_preview_amount=0;
    m_scene->update();
 }
+
+
 
 void  ArrowTool::drawRightLeftDirected(const QPointF &p1, const QPointF &p2)
 {
@@ -207,6 +238,25 @@ void ArrowTool::drawVHDirected(const QPointF &p1, const QPointF &p2)
     m_scene->update();
 }
 
+void ArrowTool::drawVerticalDirected3(const QPointF & p1, const QPointF & p2)
+{
+    makeAllLinesVisible();
+    QPointF mid1=QPointF(p1.x(),(p1.y()+p2.y())/2);
+    QPointF mid2=QPointF(p2.x(),(p1.y()+p2.y())/2);
+    m_preview[0]->setLine(p1.x(),p1.y(),mid1.x(),mid1.y());
+    m_preview[1]->setLine(mid1.x(),mid1.y(),mid2.x(),mid2.y());
+    m_preview[2]->setLine(mid2.x(),mid2.y(),p2.x(),p2.y());
+}
+
+void  ArrowTool::drawHorizontalDirected3(const QPointF & p1, const QPointF & p2)
+ {
+     makeAllLinesVisible();
+     QPointF mid1=QPointF((p1.x()+p2.x())/2,p1.y());
+     QPointF mid2=QPointF((p1.x()+p2.x())/2,p2.y());
+     m_preview[0]->setLine(p1.x(),p1.y(),mid1.x(),mid1.y());
+     m_preview[1]->setLine(mid1.x(),mid1.y(),mid2.x(),mid2.y());
+     m_preview[2]->setLine(mid2.x(),mid2.y(),p2.x(),p2.y());
+ }
 
 QVector<int> ArrowTool::getClickableItems()
 {
@@ -404,7 +454,8 @@ void ArrowTool::redrawLines(const QPointF & pos,bool canBeZero)
               || direction==11)  p1.setY(m_boxes[0]->collisionRect().bottom());
     }
     direction=clockwiseDirection(p2,canBeZero);
-    void (ArrowTool::*ptr)(const QPointF&, const QPointF&)=m_drawarr[direction];
+    void (ArrowTool::*ptr)(const QPointF&, const QPointF&);
+    if (m_loc[0]==ATS_ARROW && arrow)  ptr=m_drawllr[direction];  else  ptr=m_drawarr[direction];
     (this->*ptr)(p1,p2);
 }
 
