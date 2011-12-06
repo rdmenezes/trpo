@@ -186,6 +186,12 @@ public:
     /*! Detects, whether we should draw an arrow
      */
     virtual bool drawTrianglePart() const;
+    /*! Receives comment line event, when it changes it's direction to set it's
+        input to correct position
+        \param[in] obj  comment line
+        \return new input position for it. By default, it's old position
+     */
+    virtual QPointF receiveCommentLineMove(DiagramObject * obj);
     /*! Destructor
      */
     virtual ~Box();

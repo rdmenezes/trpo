@@ -1,6 +1,8 @@
 #include "box.h"
+#include "commentline.h"
 #include "diagramscene.h"
 #include "keytest.h"
+#include "arrow.h"
 #include "objecttexteditor.h"
 #include "arrowpoint.h"
 #include <QFontMetricsF>
@@ -331,6 +333,41 @@ void Box::setText(const QString & text)
     m_real_text=text;
     regenerate();
     this->scene()->update();
+}
+
+QPointF Box::receiveCommentLineMove(DiagramObject * obj)
+{
+   CommentLine * line=static_cast<CommentLine*>(obj);
+   line->model()->clear();
+   for (int i=0;i<4;i++)
+       m_connectors[i]->remove(line->model());
+   QLineF testline(line->in(),line->out());
+   QPointF  * point=NULL;
+   int side=0;
+   bool exit=false;
+   do
+   {
+    delete point;
+    point=getCollisionPoint(testline,QRectF(pos(),m_size));
+    ++side;
+
+    exit=point==NULL;
+    if (point)
+          exit=fabs(line->in().x()-point->x())>0.01
+            || fabs(line->in().y()-point->y())<0.01;
+   } while (!exit);
+
+   QPointF result;
+   if (point) result=*point; else result=line->in();
+   delete point;
+
+   Direction clside=getSide(QRectF(pos(),m_size),result);
+   ObjectConnector * output=getBySide(clside);
+   qreal clpos=position(*output,result);
+   output->addConnector(line->model(),clpos,C_OUTPUT);
+   line->model()->addConnector(output,0,C_INPUT);
+
+   return result;
 }
 
 void Box::updateString(const QString & text)
