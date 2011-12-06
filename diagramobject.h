@@ -90,6 +90,12 @@ public:
         \return true (default implementation) if just remove it from scene, false - if delete
      */
     virtual bool deleteOnRemoval();
+    /*! Receives comment line event, when it changes it's direction to set it's
+        input to correct position
+        \param[in] obj  comment line
+        \return new input position for it. By default, it's old position
+     */
+    virtual QPointF receiveCommentLineMove(DiagramObject * obj);
 };
 
 #endif // DIAGRAMOBJECT_H

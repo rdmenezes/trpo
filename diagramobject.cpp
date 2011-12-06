@@ -1,4 +1,5 @@
 #include "diagramobject.h"
+#include "commentline.h"
 
 void DiagramObject::setText(const QString & /*text*/)
 {
@@ -37,4 +38,9 @@ bool DiagramObject::drawTrianglePart() const
 int DiagramObject::collisionObjectType() const
 {
     return type();
+}
+
+QPointF DiagramObject::receiveCommentLineMove(DiagramObject * obj)
+{
+  return static_cast<CommentLine*>(obj)->in();
 }

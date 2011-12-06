@@ -37,7 +37,7 @@ QRectF FreeComment::boundingRect() const
 
 void FreeComment::paint(QPainter *p)
 {
-    p->drawText(boundingRect(),Qt::AlignCenter,m_text);
+    p->drawText(boundingRect(),Qt::AlignVCenter | Qt::AlignLeft,m_text);
 }
 
 
@@ -112,6 +112,18 @@ void FreeComment::setText(const QString &text)
         if (line)
             line->setLine(line->in().x(),line->in().y(),line_old_point.x(),
                                                         line_old_point.y());
+    }
+    else
+    {
+       if (line)
+       {
+          DiagramObject * input=line->getInputObject();
+          if (input)
+          {
+           QPointF newin=input->receiveCommentLineMove(line);
+           line->setLine(newin.x(),newin.y(),line->out().x(),line->out().y());
+          }
+       }
     }
     this->scene()->update();
 }

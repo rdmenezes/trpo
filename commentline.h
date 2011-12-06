@@ -30,7 +30,7 @@ class DiagramLoadData;
     \param[i]  r rectangle
     \return   point
  */
-inline QPointF * getCollisionPoint(const QLineF &  l, const QRectF & r)
+inline QPointF * getCollisionPoint(const QLineF &  l, const QRectF & r,int ibeg=0)
 {
     QLineF lines[4]={ QLineF(r.topLeft(),r.topRight()),
                       QLineF(r.topRight(),r.bottomRight()),
@@ -38,7 +38,7 @@ inline QPointF * getCollisionPoint(const QLineF &  l, const QRectF & r)
                       QLineF(r.topLeft(),r.bottomLeft())
                     };
     QPointF result;
-    for (int i=0;i<4;i++)
+    for (int i=ibeg;i<4;i++)
     { 
         if (l.intersect(lines[i],&result)==QLineF::BoundedIntersection)
             return new QPointF(result);
@@ -173,6 +173,9 @@ public:
             \return NULL if not found
          */
         DiagramObject  * getInputObject();
+        /*! Returns self connector
+         */
+        inline ObjectConnector * model()  { return m_self; }
         /*! Sets a line for item
             \param[in] x1 first pos
             \param[in] y1 first pos

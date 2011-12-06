@@ -53,7 +53,7 @@
 #define FC_FONT_SIZE  12
 /*! Default rectangle padding between text
  */
-#define FC_PADDING 1
+#define FC_PADDING 0.5
 /*! Default font color
  */
 #define FC_FONT_COLOR  QColor(0,0,0)
