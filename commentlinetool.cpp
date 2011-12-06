@@ -16,7 +16,8 @@ void CommentLineTool::clearState()
 {
   if (m_state==CLTS_FIRSTPOINT)
   {
-     m_scene->removeItem(m_line);
+     delete m_line;
+     m_scene->update();
   }
   static_cast<MainWindow*>(m_scene->view()->window())->setActionText("");
 }

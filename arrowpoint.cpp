@@ -15,7 +15,7 @@ void ArrowPoint::die()
 {
     //if (m_block)
     //    m_block->removePointReference(this);
-    m_diag->removeArrowPoint(this);
+    //m_diag->removeArrowPoint(this);
     delete this;
 }
 
@@ -161,11 +161,6 @@ bool ArrowPoint::tryRemoveSegment(ArrowSegment * segment, bool correct_arcs)
         if (m_out[index]->out()==this) m_out[index]->setOut(NULL);
         }
         m_out.remove(index);
-      }
-      if (canDie)
-      {
-          for (int i=0;i<m_lines.size();i++)
-              m_lines[i]->die();
       }
       return true;
     }

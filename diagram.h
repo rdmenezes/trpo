@@ -6,6 +6,7 @@
 #include <QPair>
 #include <QVector>
 #include <QRectF>
+#include <QImage>
 #include <time.h>
 #include "diagramobject.h"
 #include "box.h"
@@ -138,18 +139,6 @@ private:
         /*! An id of diagram
          */
         int m_id;
-        /*! Determines, whether item, doesn't collide with blocks
-         */
-        bool testForNoBlockCollision(const QRectF & rect,QGraphicsItem * pointer);
-        /*! Determines, whether item, doesn't collide with blocks
-         */
-        bool testForNoALabelCollision(const QRectF & rect,QGraphicsItem * pointer);
-        /*! Determines, whether item can be placed
-         */
-        bool canBePlaced(const QRectF & rect, QGraphicsItem * pointer);
-        /*! Determines, whether item can be placed, without collision with lines
-         */
-        bool doesntCollideWithLines(const QRectF & rect);
 public:
         /*! Returns a parent location
          */
@@ -245,100 +234,13 @@ public:
         /*! Determines, whether diagram is empty
          */
         bool empty() const;
-        /*! Determines, whether we can add a new box
+        /*! Exports a diagram to an image
+            \param[in] img image to export to
          */
-        bool canAddBoxes() const;
-        /*! Adds a new Box
-            \param[in] box box to be added
-         */
-        void addBox(Box * box);
-        /*! Adds a new Annotation Label
-            \param[in] label annotation label  to be added
-         */
-        void addAnnotationLabel(FreeComment * label);
-        /*! Determines, whether block can be placed or not
-            \param[in] rect   bounding rect geometry
-            \param[in] pointer NULL if don't check
-         */
-        bool canBePlaced(const QRectF & rect, Box * pointer=NULL);
-        /*! Determines, whether block can be placed or not
-            \param[in] rect   bounding rect geometry
-            \param[in] pointer NULL if don't check
-         */
-        bool canBePlaced(const QRectF & rect, FreeComment * pointer=NULL);
-        /*! Determines, whether arrow can be placed ot not
-            \param[in] point1  first point
-            \param[in] point2  second point
-            \param[in] block   block, which will colliding with
-            \param[in] always_check_bounds determines, whether bounds needs to be checked
-         */
-        bool canPlaceSegment(ArrowPoint * point1, ArrowPoint * point2,
-                             Box * block=NULL,
-                             bool always_check_bounds=false );
-        /*! Determines, whether annotation line can be placed ot not
-            \param[in] point1  first point
-            \param[in] point2  second point
-         */
-        bool canPlaceAnnotationLine(const QPointF * point1,const QPointF * point);
-
-        /*! Gets an index id for box
-         */
-        int getBoxID() const;
-        /*! Returns a block by id
-            \param[in] id block id
-         */
-        Box * getBlockByID(int id);
-        /*! Sets a blocks id
-         */
-        void setBlockID(Box * item, char pos);
-        /*! Removes an annotation label
-            \param[in] label label item
-         */
-        void removeAnnotationLabel(FreeComment * label);
-        /*! Adds a new annotation line
-            \param[in] line annotation line
-         */
-        void addAnnotationLine(CommentLine * line);
-        /*! Adds a new arrow point
-            \param[in]  point arrow point
-         */
-        void addArrowPoint(ArrowPoint * point);
-        /*! Adds a new arrow segment
-            \param[in]  segment arrow segment
-         */
-        void addArrowSegment(ArrowSegment * segment);
-        /*! Removes an annotation line from diagram
-            \param[in] line  annotationline
-         */
-        void removeAnnotationLine(CommentLine * line);
-        /*! Removes an arrow point from diagram
-            \param[in] point arrow point
-         */
-        void removeArrowPoint(ArrowPoint * point);
-        /*! Removes an arrow segment from digram
-            \param[in] segment arrow segment
-         */
-        void  removeArrowSegment(ArrowSegment * segment);
-        /*! Returns a vector of near arrow points
-            \param[in] rect rectangle
-         */
-        QVector<ArrowPoint *> getNearArrowPoints(const QRectF & rect);
-        /*! Check whether block can be correctly placed around blocks
-            \param[in] rect rectangle block
-            \param[in] pts points
-         */
-        bool canBePlacedAroundPoints(const QRectF & rect, const QVector<ArrowPoint *> pts);
+        void exportTo(QImage & img);
         /*! Tests, whether diagram is correct (has at least one block)
          */
         bool isCorrect();
-        /*! Saves a diagram
-            \param[in] doc document
-            \param[in] sete set
-         */
-        //void save(QDomDocument * doc,QDomElement * sete);
-        /*! Loads a diagram
-         */
-        //void load(QDomElement * diag,DiagramSet * parent);
         /*! Destructor
          */
         ~Diagram();

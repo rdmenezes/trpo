@@ -265,7 +265,7 @@ int ArrowSegment::type() const
 
 void ArrowSegment::die()
 {
-  m_diag->removeArrowSegment(this);
+  //m_diag->removeArrowSegment(this);
   this->scene()->removeItem(this);
 }
 
