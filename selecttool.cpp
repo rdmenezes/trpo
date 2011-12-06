@@ -40,7 +40,7 @@ QVector<int> SelectTool::getKeyDownItems()
 }
 
 
-bool SelectTool::onClick(const QPointF &p, QGraphicsItem * /* item */)
+bool SelectTool::onClick(const QPointF & /* p */, QGraphicsItem * /* item */)
 {
  return true;
 }
