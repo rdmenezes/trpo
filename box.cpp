@@ -4,6 +4,7 @@
 #include "keytest.h"
 #include "arrow.h"
 #include "objecttexteditor.h"
+#include "mainwindow.h"
 #include "arrowpoint.h"
 #include <QFontMetricsF>
 #include <math.h>
@@ -335,6 +336,31 @@ void Box::setText(const QString & text)
     this->scene()->update();
 }
 
+QPointF getLastCollisionPoint(const QLineF & l ,const QRectF & r, const QPointF & beg)
+{
+    QPointF  * point=NULL;
+    int side=0;
+    bool exit=false;
+    do
+    {
+     delete point;
+     point=getCollisionPoint(l,r,side);
+     ++side;
+
+     exit=point==NULL;
+     if (point)
+           exit=fabs(beg.x()-point->x())>0.01
+             || fabs(beg.y()-point->y())>0.01;
+    } while (!exit);
+    QPointF result=beg;
+    if (point)
+    {
+        result=*point;
+        delete point;
+    }
+    return result;
+}
+
 QPointF Box::receiveCommentLineMove(DiagramObject * obj)
 {
    CommentLine * line=static_cast<CommentLine*>(obj);
@@ -342,30 +368,16 @@ QPointF Box::receiveCommentLineMove(DiagramObject * obj)
    for (int i=0;i<4;i++)
        m_connectors[i]->remove(line->model());
    QLineF testline(line->in(),line->out());
-   QPointF  * point=NULL;
-   int side=0;
-   bool exit=false;
-   do
-   {
-    delete point;
-    point=getCollisionPoint(testline,QRectF(pos(),m_size));
-    ++side;
-
-    exit=point==NULL;
-    if (point)
-          exit=fabs(line->in().x()-point->x())>0.01
-            || fabs(line->in().y()-point->y())<0.01;
-   } while (!exit);
-
-   QPointF result;
-   if (point) result=*point; else result=line->in();
-   delete point;
+   QPointF   result=getLastCollisionPoint(testline,QRectF(pos(),m_size),line->in());
 
    Direction clside=getSide(QRectF(pos(),m_size),result);
    ObjectConnector * output=getBySide(clside);
    qreal clpos=position(*output,result);
-   output->addConnector(line->model(),clpos,C_OUTPUT);
-   line->model()->addConnector(output,0,C_INPUT);
+   output->addConnector(line->model(),clpos,C_OUTPUT,false);
+   line->model()->addConnector(output,0,C_INPUT,false);
+
+   Q_ASSERT(line->model()->getConnected(C_INPUT).size());
+   static_cast<MainWindow*>(this->scene()->views()[0]->window())->setActionText(QString::number((int)output));
 
    return result;
 }

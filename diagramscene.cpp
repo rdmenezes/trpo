@@ -118,7 +118,7 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     // Затем сцена получает список объектов под курсором (метод QGraphicsScene::items)
     QList<QGraphicsItem *> lst=this->items(pos);
     this->diagram()->items(pos,lst);
-    if (lst.size()==0 || m_editor!=NULL || m_tool==NULL)
+    if (m_editor!=NULL || m_tool==NULL)
     {
        this->QGraphicsScene::mouseReleaseEvent(event);
        return;
@@ -409,7 +409,7 @@ void DiagramScene::annnotationLabelMoveLeave(const QPointF & pos)
  bool can_placed=m_diag->canBePlaced(newrect,m_moving_label);
  if(can_placed)
  {
-  m_moving_label->setRect(newrect);
+  //m_moving_label->setRect(newrect);
   this->update();
  }
  m_dragstate=DS_NONE;

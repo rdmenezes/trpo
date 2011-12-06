@@ -17,11 +17,11 @@ Direction ObjectConnector::direction() const
     return dir;
 }
 
-bool ObjectConnector::addConnector(ObjectConnector * c, qreal point,Connection type)
+bool ObjectConnector::addConnector(ObjectConnector * c, qreal point,Connection type,bool debug)
 {
-    if (!isNotCollinear(c->direction(),this->direction()))
+    if (!isNotCollinear(c->direction(),this->direction()) && debug)
     {
-        assert("ERROR AT OBJECTCONNECTOR");
+        Q_ASSERT("ERROR AT OBJECTCONNECTOR" && false);
         return false;
     }
     QVector< QPair<qreal,ObjectConnector *> > * connected=&(this->m_connected[(int)type]);

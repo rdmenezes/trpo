@@ -46,6 +46,12 @@ inline QPointF * getCollisionPoint(const QLineF &  l, const QRectF & r,int ibeg=
     return NULL;
 }
 
+/*! Returns a last collision point
+    \param[in] l line
+    \param[in] r rectangle
+    \param[in] beg begin point
+ */
+QPointF getLastCollisionPoint(const QLineF & l ,const QRectF & r,const QPointF & beg);
 class AttachedComment;
 /*! \class CommentLine
     Declares an annotation line item
