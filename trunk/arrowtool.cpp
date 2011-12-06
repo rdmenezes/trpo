@@ -530,7 +530,7 @@ void ArrowTool::connectLineToNone()
         if (fsegdir==begdir)
         {
             m_arrows[0]->model()->enlarge(fpreview->model()->p2());
-            m_scene->removeItem(fpreview);
+            delete fpreview;
             m_preview[0]=m_arrows[0];
             m_preview[0]->regenerate();
         }
@@ -580,7 +580,7 @@ void ArrowTool::connectLineToBox()
         if (fsegdir==begdir)
         {
             m_arrows[0]->model()->enlarge(fpreview->model()->p2());
-            m_scene->removeItem(fpreview);
+            delete fpreview;
             m_preview[0]=m_arrows[0];
             m_preview[0]->regenerate();
         }
