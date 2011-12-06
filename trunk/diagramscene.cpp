@@ -188,8 +188,7 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
   }
   if (objectClick==false)
   {
-     if (! ( m_tool->onKeyDown(event,NULL )))
-         QGraphicsScene::keyPressEvent(event);
+     static_cast<MainWindow*>(this->view()->window())->keyPressEvent(event);
   }
 }
 
@@ -260,29 +259,6 @@ void DiagramScene::processChangeBlockID(Box * block, char /* previd */, char  ne
 
 void DiagramScene::processRemoving(const QList<QGraphicsItem *> & items)
  {
-    for (int i=0;i<items.size();i++)
-    {
-        //if (items[i]->type()==Box::USERTYPE)
-        {
-            char id=static_cast<Box *>(items[i])->id();
-            static_cast<Box *>(items[i])->clearPointReferences();
-            m_diag->removeBlock(id);
-            this->removeItem(items[i]);
-        }
-        //if (items[i]->type()==FreeComment::USERTYPE)
-        {
-            m_diag->removeAnnotationLabel(static_cast<FreeComment *>(items[i]));
-            this->removeItem(items[i]);
-        }
-        //if (items[i]->type()==ArrowSegment::USERTYPE)
-        {
-          removeArrowSegment(static_cast<ArrowSegment *>(items[i]));
-        }
-        //if (items[i]->type()==CommentLine::USERTYPE)
-        {
-            removeAnnotationLine(static_cast<CommentLine *>(items[i]));
-        }
-    }
  }
 
 
