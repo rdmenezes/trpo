@@ -235,3 +235,9 @@ DiagramObject * CommentLine::clone()
     return new CommentLine(m_in,m_out,NULL,NULL,this->diagram());
 }
 
+DiagramObject  * CommentLine::getInputObject()
+{
+  QVector<ObjectConnector *> connections= m_self->getConnected(0,C_INPUT);
+  if (!connections.size()) return NULL;
+  return connections[0]->parent();
+}

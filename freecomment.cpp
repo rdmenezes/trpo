@@ -1,4 +1,6 @@
 #include "freecomment.h"
+#include "attachedcomment.h"
+#include "arrow.h"
 #include "objecttexteditor.h"
 #include "diagramscene.h"
 #include "diagram.h"
@@ -68,13 +70,48 @@ void FreeComment::setText(const QString &text)
     setY(rect.y());
     m_size=rect.size();
     m_text=text;
+
+    //Tests, whether we can place a free comment
     QVector<CollisionObject *> exc; exc<<this;
-    if (! this->diagram()->canPlace(this,QVector<int>(),exc))
+    if (parentComment()->line()) exc<<parentComment()->line();
+    bool canPlaceFreeComment=this->diagram()->canPlace(this,QVector<int>(),exc);
+
+    //Save old position of line
+    CommentLine * line=NULL;
+    QPointF       line_old_point;
+    if (parentComment()->line())
+    {
+      line=parentComment()->line();
+      line_old_point=line->out();
+
+      //Compute old point position
+      Direction side=getSide(oldrect,line_old_point);
+      QLineF oldline=getLineBySide(oldrect,side);
+      qreal  posx=position(oldline,line_old_point);
+
+      //Compute and set new position
+      QPointF newpoint=position(getLineBySide(rect,side),posx);
+      line->setLine(line->in().x(),line->in().y(),newpoint.x(),newpoint.y());
+
+      //Check for collisions
+       QVector<CollisionObject *> clexc; clexc<<this<<line;
+       QVector<int>   clexctypes; clexctypes<<IsCommentLine<<IsArrow;
+       DiagramObject * obj=line->getInputObject();
+       if (obj) clexc<<obj;
+       bool canPlaceCommentLine=this->diagram()->canPlace(line,clexctypes,clexc);
+       canPlaceFreeComment=canPlaceFreeComment && canPlaceCommentLine;
+    }
+
+    //Revert any changes
+    if (! canPlaceFreeComment)
     {
         setX(oldrect.x());
         setY(oldrect.y());
         m_size=oldrect.size();
         m_text=oldtext;
+        if (line)
+            line->setLine(line->in().x(),line->in().y(),line_old_point.x(),
+                                                        line_old_point.y());
     }
     this->scene()->update();
 }

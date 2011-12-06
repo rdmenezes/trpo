@@ -20,7 +20,6 @@ SOURCES += main.cpp \
     arrowsegment.cpp \
     arrowpoint.cpp \
     moverange.cpp \
-    diagramscenearrowhandling.cpp \
     diagramscenesaveload.cpp \
     diagramscenealinehandling.cpp \
     diagramsave.cpp \

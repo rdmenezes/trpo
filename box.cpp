@@ -353,20 +353,6 @@ void Box::setRect(const QRectF & rect)
 }
 */
 
-void Box::clearPointReferences()
-{
-  for (int i=0;i<BLOCK_SIDES;i++)
-  {
-    for (int j=0;j<MAX_LINE_REFERENCES;j++)
-    {
-      if (m_line_refs[i][j])
-      {
-       m_line_refs[i][j]->deattachFromBlock();
-       m_line_refs[i][j]=NULL;
-      }
-    }
-  }
-}
 
 BoxSide Box::sideOfPoint(ArrowPoint * point, const QRectF & m_rect)
 {
@@ -385,52 +371,6 @@ BoxSide Box::sideOfPoint(ArrowPoint *point)
 {
     return BIS_BOTTOM;
     //return sideOfPoint(point,m_rect);
-}
-
-void Box::removePointReference(ArrowPoint * point)
-{
-    for (int i=0;i<BLOCK_SIDES;i++)
-    {
-      for (int j=0;j<MAX_LINE_REFERENCES;j++)
-      {
-         if (m_line_refs[i][j]==point)
-               m_line_refs[i][j]=NULL;
-      }
-    }
-}
-
-void Box::addPointReference(ArrowPoint * point)
-{
-    BoxSide bis=sideOfPoint(point);
-    bool handled=false;
-    for (int j=0;(j<MAX_LINE_REFERENCES) && (!handled); j++)
-    {
-        if (m_line_refs[bis][j]==NULL)
-        {
-            m_line_refs[bis][j]=point;
-            handled=true;
-        }
-    }
-    if (handled)
-        point->attachBlock(this);
-}
-
-
-bool Box::canAddToSide(BoxSide side)
-{
-  int cnt=0;
-  for (int i=0;i<MAX_LINE_REFERENCES;i++) if (m_line_refs[side][i]!=NULL) ++cnt;
-  return cnt!=MAX_LINE_REFERENCES;
-}
-
-bool Box::canAddPointReference(ArrowPoint * point,
-                                   BlockEnteringType enter)
-{
-  BoxSide bis=sideOfPoint(point);
-  if (bis==BIS_LEFT || bis==BIS_TOP) return enter==BET_INPUT && canAddToSide(bis);
-  if (bis==BIS_BOTTOM)               return canAddToSide(bis);
-  if (bis==BIS_RIGHT)                return enter==BET_OUTPUT && canAddToSide(bis);
-  return false;
 }
 
 MoveRange Box::getRange(ArrowPoint * point)
@@ -473,4 +413,11 @@ Direction getSide(const QRectF & r, const QPointF & p)
     return D_TOP;
 }
 
+QLineF    getLineBySide(const QRectF & r, Direction dir)
+{
+  if (dir==D_LEFT)   return QLineF(r.topLeft(),r.bottomLeft());
+  if (dir==D_RIGHT)  return QLineF(r.topRight(),r.bottomRight());
+  if (dir==D_TOP)    return QLineF(r.topLeft(),r.topRight());
+  return QLineF(r.bottomLeft(),r.bottomRight());
+}
 

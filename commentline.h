@@ -169,6 +169,10 @@ public:
             m_self->addConnector(c,0,C_INPUT);
             c->addConnector(m_self,a,C_OUTPUT);
         }
+        /*! Returns a binded input item
+            \return NULL if not found
+         */
+        DiagramObject  * getInputObject();
         /*! Sets a line for item
             \param[in] x1 first pos
             \param[in] y1 first pos
@@ -176,6 +180,16 @@ public:
             \param[in] y2 second pos
          */
         void setLine(qreal x1,qreal y1,qreal x2,qreal y2);
+        /*! Returns input point for a comment line
+            \return input
+         */
+        inline const QPointF& in() const { return m_in;}
+        /*! Returns output point for a comment line
+            \return input
+         */
+        inline const QPointF& out() const { return m_out;}
+
+
         /*! A free point, that is pointed into air
          */
         inline QPointF & accessFree() { return m_freepoint; }

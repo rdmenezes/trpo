@@ -54,6 +54,11 @@ enum BlockEnteringType
  */
 Direction getSide(const QRectF & r, const QPointF & p);
 
+/*!   Computes a line of side of block
+      \param[in] r rectangle
+      \param[in] dir  side of block
+ */
+QLineF    getLineBySide(const QRectF & r, Direction dir);
 
 /*! \class Box
 
@@ -101,9 +106,6 @@ private:
         /*! Location of child diagram (-1 is default)
          */
         int m_childdiagram;
-        /*! Referenced points to a box
-         */
-        ArrowPoint * m_line_refs[BLOCK_SIDES][MAX_LINE_REFERENCES] ;
         /*! Propagates a label editing
             \param[in] event event editing
          */
@@ -189,7 +191,6 @@ public:
     virtual ~Box();
 
 
-    ArrowPoint *& getLineRef(int side,int pos)  { return m_line_refs[side][pos]; }    
     /*! Creates an item position at scene
         \param[in] pos    position of creation of box
         \param[in] scene  scene data
@@ -208,17 +209,6 @@ public:
         \param[in]  id diagram id
      */
     inline void setChildDiagram(int id) { m_childdiagram=id; }
-    /*! Clears all references
-     */
-    void clearPointReferences();
-    /*! Removes a point reference from item
-        \param[in] point
-     */
-    void removePointReference(ArrowPoint * point);
-    /*! Adds a point reference to a block
-        \param[in] point point to be added
-     */
-    void addPointReference(ArrowPoint * point);
     /*! Determines, thich size of box this point
         is belong to.
         \param[in] point point
@@ -231,13 +221,6 @@ public:
         \return side
      */
     BoxSide sideOfPoint(ArrowPoint * point);
-    /*! Tests, whether it can add a point reference
-        \param[in] point point data
-        \param[in] enter entering type of point
-        \return true, if can
-     */
-    bool canAddPointReference(ArrowPoint * point,
-                              BlockEnteringType enter);
     /*! Attaches all points from vector
         \param[in] pts, a vector, whose points are attached
      */

@@ -257,9 +257,7 @@ void DiagramScene::processChangeBlockID(Box * block, char /* previd */, char  ne
  m_diag->setBlockID(block,newid);
 }
 
-void DiagramScene::processRemoving(const QList<QGraphicsItem *> & items)
- {
- }
+
 
 
 
@@ -443,7 +441,7 @@ void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
          QVector<ArrowPoint *> lst=m_diag->getNearArrowPoints(oldrect);
          if (m_diag->canBePlacedAroundPoints(oldrect,lst))
          {
-           m_draggingblock->clearPointReferences();
+           //m_draggingblock->clearPointReferences();
            //m_draggingblock->setRect(oldrect);
            m_draggingblock->attachAllPoints(lst);
            this->update();
@@ -467,7 +465,7 @@ void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
        if(can_placed)
        {
           //m_draggingblock->setRect(newrect);
-          m_draggingblock->clearPointReferences();
+          //m_draggingblock->clearPointReferences();
           this->update();
        }
        m_dragstate=DS_NONE;
