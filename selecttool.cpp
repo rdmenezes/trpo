@@ -2,6 +2,7 @@
 #include "diagramscene.h"
 #include "mainwindow.h"
 #include "keytest.h"
+#include "arrow.h"
 
 SelectTool::SelectTool()
 {
@@ -35,7 +36,7 @@ QVector<int> SelectTool::getReleaseableItems()
 }
 QVector<int> SelectTool::getKeyDownItems()
 {
-    QVector<int> v; v<<IsBox<<IsFreeComment;
+    QVector<int> v; v<<IsBox<<IsFreeComment<<IsArrow;
     return v;
 }
 
@@ -88,11 +89,21 @@ bool SelectTool::onKeyDown(QKeyEvent *  event , QGraphicsItem *  item )
                                      event,
                                      static_cast<FreeComment*>(item));
     }
+    if (item->type()==IsArrow && event->key()==Qt::Key_B)
+    {
+        static_cast<Arrow*>(item)->toggleTunneledBegin();
+        this->m_scene->update();
+    }
+    if (item->type()==IsArrow && event->key()==Qt::Key_E)
+    {
+        static_cast<Arrow*>(item)->toggleTunneledEnd();
+        this->m_scene->update();
+    }
   }
   return true;
 }
 
-void SelectTool::onMove(const QPointF & /* lastpos */ , const QPointF &pos)
+void SelectTool::onMove(const QPointF & /* lastpos */ , const QPointF & /* pos */)
 {
 
 }

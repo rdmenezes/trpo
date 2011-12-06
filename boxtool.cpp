@@ -67,8 +67,21 @@ bool BoxTool::onRelease(const QPointF & /* p */, QGraphicsItem * /* item */)
   return true;
 }
 
-bool BoxTool::onKeyDown(QKeyEvent * /* event */, QGraphicsItem * /* item */)
+bool BoxTool::onKeyDown(QKeyEvent *  event , QGraphicsItem *  item )
 {
+  if (item)
+  {
+      if (item==m_obj)
+          return false;
+      if (event->modifiers()==Qt::AltModifier)
+      {
+        Box * copiedobj=static_cast<Box *>(item);
+        Box * copy=static_cast<Box*>(copiedobj->clone());
+        delete m_obj;
+        m_obj=copy;
+        m_scene->addItem(copy);
+      }
+  }
   return true;
 }
 

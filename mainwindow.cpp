@@ -284,6 +284,7 @@ void MainWindow::selectTool(Tool * tool)
  for (int i=0;i<m_tool_table_items.size();i++)
      m_tool_table_items[i]->deselect();
  static_cast<DiagramScene *>(ui->view->scene())->setTool(tool);
+ ui->view->setFocus();
 }
 
 void MainWindow::selectTool(ToolSceneData * toolData)

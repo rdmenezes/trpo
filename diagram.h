@@ -288,10 +288,6 @@ public:
         /*! Sets a blocks id
          */
         void setBlockID(Box * item, char pos);
-        /*! Removes a block with id
-            \param[in] id id of removing block
-         */
-        inline void removeBlock(int id) { /*m_boxes[id]=NULL;*/ }
         /*! Removes an annotation label
             \param[in] label label item
          */

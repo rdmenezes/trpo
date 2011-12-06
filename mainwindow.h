@@ -71,13 +71,7 @@ protected:
         \param[in] e event params
      */
     void changeEvent(QEvent *e);
-    /*! Event, that occurs, when user presses the key
-        \param[in] event paremeters
-     */
-    void keyPressEvent(QKeyEvent *event);
-    
-
-    
+        
 protected slots:
     void open();
     void save();
@@ -90,6 +84,11 @@ protected slots:
 
 public:
     Ui::MainWindow *ui;  //!< UI
+
+    /*! Event, that occurs, when user presses the key
+        \param[in] event paremeters
+     */
+    void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // MAINWINDOW_H

@@ -208,7 +208,7 @@ bool CommentLine::contains ( const QPointF & point ) const
     QPointF p2=translate(m_out);
 
     qreal ht=getNormalArcHeight();
-    qreal minh,maxh,minv,maxv;
+    qreal minh=0,maxh=0,minv=0,maxv=0;
     {
       QPointF p[4]={p1-ht*normal,p1+ht*normal,p2-ht*normal,p2+ht*normal};
       for (int i=0;i<4;i++)

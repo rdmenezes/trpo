@@ -77,8 +77,24 @@ bool FreeCommentTool::onRelease(const QPointF & /* p */, QGraphicsItem * /* item
   return true;
 }
 
-bool FreeCommentTool::onKeyDown(QKeyEvent * /* event */, QGraphicsItem * /* item */)
+bool FreeCommentTool::onKeyDown(QKeyEvent *  event , QGraphicsItem *  item )
 {
+  if (item)
+  {
+    if (item==m_obj)
+        return false;
+    if (event->modifiers()==Qt::AltModifier)
+    {
+          FreeComment * copiedobj=static_cast<FreeComment *>(item);
+          FreeComment * copy=static_cast<FreeComment*>(copiedobj->clone());
+          delete m_obj->parentComment();
+          delete m_obj;
+          AttachedComment * newparent=new AttachedComment(copy,NULL);
+          copy->setParentComment(newparent);
+          m_obj=copy;
+          m_scene->addItem(copy);
+    }
+  }
   return true;
 }
 
