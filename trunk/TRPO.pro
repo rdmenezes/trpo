@@ -43,7 +43,8 @@ SOURCES += main.cpp \
     freecommenttool.cpp \
     selecttool.cpp \
     arrowtool.cpp \
-    commentlinetool.cpp
+    commentlinetool.cpp \
+    erasertool.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
@@ -82,7 +83,8 @@ HEADERS += mainwindow.h \
     freecommenttool.h \
     selecttool.h \
     arrowtool.h \
-    commentlinetool.h
+    commentlinetool.h \
+    erasertool.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc
