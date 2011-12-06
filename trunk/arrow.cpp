@@ -1,4 +1,5 @@
 #include "arrow.h"
+#include "objectconnector.h"
 #include <algorithm>
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -287,4 +288,13 @@ void Arrow::resolvePointers(QMap<void *, Serializable *> &
 }
 
 
+bool Arrow::dieIfEqualTo(DiagramObject * o)
+{
+    if (o!=this)
+            return false;
+
+    removeReferencesAndKillLines(m_self,m_self,C_INPUT,this->diagram());
+    removeReferencesAndKillLines(m_self,m_self,C_OUTPUT,this->diagram());
+    return true;
+}
 

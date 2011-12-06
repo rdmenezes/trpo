@@ -177,6 +177,30 @@ void Diagram::changeBlockNumber(int delta, Box * b)
     b->setNumber(newid);
 }
 
+void Diagram::remove(DiagramObject * obj)
+{
+    bool removed=false;
+    DiagramObject * tobj=NULL;
+    for (int i=0;i<m_objects.size() && !removed;i++)
+    {
+        if (tobj->dieIfEqualTo(obj))
+        {
+            tobj=m_objects[i];
+            delete tobj;
+            removed=true;
+        }
+    }
+    for (int i=0;i<m_objects.size();i++)
+    {
+     if (m_objects[i]==tobj)
+     {
+        m_objects.remove(i);
+        --i;
+     }
+    }
+}
+
+
 
 
 bool Diagram::canAddBoxes() const

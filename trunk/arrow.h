@@ -161,6 +161,11 @@ public:
         /*! Tests, whether arrow is under cursor
          */
         bool contains ( const QPointF & point ) const;
+        /*! Kills self if equal to object
+            \param[in] o object to compare
+            \return true if will die
+         */
+        virtual bool dieIfEqualTo(DiagramObject * o);
         /*! Destructs an arrow
          */
         ~Arrow();

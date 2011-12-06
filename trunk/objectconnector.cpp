@@ -115,3 +115,16 @@ bool hasWay(ObjectConnector * start, ObjectConnector * goal)
     return result;
   }
 }
+
+void removeReferencesAndKillLines(ObjectConnector * removing,ObjectConnector * o,Connection dir,Diagram * d)
+{
+    QVector< QPair<qreal, ObjectConnector *> > cts=o->getConnected(dir);
+    for (int i=0;i<cts.size();i++)
+    {
+        cts[i].second->remove(removing);
+        DiagramObject * parent=cts[i].second->parent();
+        if (parent)
+            if (parent->type()==IsCommentLine)
+                d->remove(parent);
+    }
+}

@@ -233,6 +233,11 @@ public:
          /*! Is attached to line
           */
          inline bool isAttachedToLine() const { return m_isbindedtoline; }
+         /*! Kills self if equal to object
+             \param[in] o object to compare
+             \return true if will die
+          */
+         virtual bool dieIfEqualTo(DiagramObject * o);
          /*! Kills a line item, removing it from any of places
           */
          void die();

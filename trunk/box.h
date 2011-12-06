@@ -192,6 +192,11 @@ public:
         \return new input position for it. By default, it's old position
      */
     virtual QPointF receiveCommentLineMove(DiagramObject * obj);
+    /*! Kills self if equal to object
+        \param[in] o object to compare
+        \return true if will die
+     */
+    virtual bool dieIfEqualTo(DiagramObject * o);
     /*! Destructor
      */
     virtual ~Box();

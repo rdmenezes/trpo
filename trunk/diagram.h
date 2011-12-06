@@ -208,6 +208,9 @@ public:
         /*! Adds new object to diagram
          */
         void add(DiagramObject * obj);
+        /*! Removes an object from diagram
+         */
+        void remove(DiagramObject * obj);
         /*! Clears a diagram
          */
         void clear();

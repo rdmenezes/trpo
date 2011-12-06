@@ -241,3 +241,21 @@ DiagramObject  * CommentLine::getInputObject()
   if (!connections.size()) return NULL;
   return connections[0]->parent();
 }
+
+
+bool CommentLine::dieIfEqualTo(DiagramObject * o)
+{
+   if (o!=this) return false;
+
+   const QVector<QPair<qreal,ObjectConnector*>  > * in;
+   for (int i=0;i<2;i++)
+   {
+       in=&( m_self->getConnected((Connection)i) );
+       for(int j=0;j<in->size();j++)
+       {
+            (*in)[j].second->remove(m_self);
+       }
+   }
+   return true;
+}
+

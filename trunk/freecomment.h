@@ -110,6 +110,11 @@ public:
         \param[in] pos new position
      */
     bool checkPos(const QPointF & pos);
+    /*! Kills self if equal to object
+        \param[in] o object to compare
+        \return true if will die
+     */
+    virtual bool dieIfEqualTo(DiagramObject * o);
 signals:
 
 public slots:

@@ -258,4 +258,9 @@ QString  FreeComment::getEditableText() const
   return m_text;
 }
 
-
+bool FreeComment::dieIfEqualTo(DiagramObject * o)
+{
+   if (this!=o)
+       return false;
+   return true;
+}
