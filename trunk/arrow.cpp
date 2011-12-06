@@ -40,7 +40,7 @@ QRectF Arrow::sceneDrawingBounds() const
                   };
      rct=bound(pa,4);
     }
-    Q_ASSERT(rct.width()>=0 && rct.height()>=0);
+    //Q_ASSERT(rct.width()>=0 && rct.height()>=0);
     return rct;
 }
 

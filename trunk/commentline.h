@@ -238,9 +238,6 @@ public:
              \return true if will die
           */
          virtual bool dieIfEqualTo(DiagramObject * o);
-         /*! Kills a line item, removing it from any of places
-          */
-         void die();
 
 };
 

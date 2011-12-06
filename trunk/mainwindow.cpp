@@ -273,8 +273,24 @@ void MainWindow::exportDiagram() {
         
         QGraphicsView *view =  ui->view;
         DiagramScene *scene = (DiagramScene *)view->scene();
-        
-        if (!(scene->exportTo(temp))) {
+        QImage img;
+        scene->diagram()->exportTo(img);
+        QString format="png";
+        QStringList lst=temp.split('.');
+        //If supplied filename
+        if (lst.size()>1)
+        {
+            QString lastformat=lst[lst.size()-1].toUpper();
+            if (lastformat=="JPG"
+                || lastformat=="JPEG"
+                || lastformat=="GIF"
+                || lastformat=="BMP")
+                format=lastformat.toLower();
+        }
+        //Save image
+        bool success=img.save(temp,format.toStdString().c_str());
+        if (!success)
+        {
             QMessageBox::warning(NULL, QString("Error"), QString("Can't export diagram."));
         }
     }

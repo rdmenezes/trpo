@@ -215,51 +215,6 @@ QRectF DiagramScene::getDefaultAnnotationLabelSize(const QPointF & pos)
   return result;
 }
 
-void DiagramScene::addBlock(QGraphicsSceneMouseEvent *event)
-{
- if (m_diag->canAddBoxes())
- {
-  QRectF size=getDefaultBlockSize(event->scenePos());
-  if (m_diag->canBePlaced(size,(Box*)NULL))
-  {
-   QVector<ArrowPoint *> list=m_diag->getNearArrowPoints(size);
-   if (m_diag->canBePlacedAroundPoints(size,list))
-   {
-    //Box * b=new Box(event->scenePos(),this);
-    //this->addItem(b);
-    //m_diag->addBox(b);
-    //b->attachAllPoints(list);
-   }
-  }
- }
-}
-
-void DiagramScene::addAnnotationLabel(QGraphicsSceneMouseEvent *event)
-{
- QRectF size=getDefaultAnnotationLabelSize(event->scenePos());
- if (m_diag->canBePlaced(size,(FreeComment*)NULL))
- {
-     //FreeComment * a=new FreeComment(size);
-     //this->addItem(a);
-     //m_diag->addAnnotationLabel(a);
- }
-}
-
-
-void DiagramScene::processChangeBlockID(Box * block, char /* previd */, char  newid)
-{
- //m_diag->undoIfSwapped(block,previd);
- if (m_diag->getBlockByID(newid))
- {
-        //BoxItem * oldblock=m_diag->getBlockByID(newid);
-        //m_diag->addNewSwap(oldblock,previd,block,newid);
- }
- m_diag->setBlockID(block,newid);
-}
-
-
-
-
 
 void  DiagramScene::blockResizeMoveEnter ( QGraphicsSceneMouseEvent * event )
 {
@@ -396,30 +351,12 @@ void resizeUpper(QRectF & oldrect, QPointF & pos)
 }
 
 
-void DiagramScene::annnotationLabelMoveLeave(const QPointF & pos)
-{
- QRectF oldrect=m_moving_label->boundingRect();
- qreal x=pos.x()-m_blockmovingparams[0]*oldrect.width();
- qreal y=pos.y()-m_blockmovingparams[1]*oldrect.height();
- if (x<0) x=0;
- if (y<0) y=0;
- if (x+oldrect.width()>this->width()) x=this->width()-oldrect.width();
- if (y+oldrect.height()>this->height()) y=this->height()-oldrect.height();
- QRectF newrect(x,y,oldrect.width(),oldrect.height());
- bool can_placed=m_diag->canBePlaced(newrect,m_moving_label);
- if(can_placed)
- {
-  //m_moving_label->setRect(newrect);
-  this->update();
- }
- m_dragstate=DS_NONE;
- m_moving_label=NULL;
-}
 
 
 
 void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
 {
+  /*
     this->QGraphicsScene::mouseReleaseEvent(event);
     QPointF pos=event->scenePos();
     if (m_dragstate==DS_BLOCK_RESIZE)
@@ -472,6 +409,7 @@ void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
        m_draggingblock=NULL;
        m_resizingblockcorner=BC_LOWERLEFT;
     }
+    */
 }
 
 

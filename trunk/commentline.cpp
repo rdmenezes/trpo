@@ -192,11 +192,6 @@ void CommentLine::deattachFromLine()
 
 
 
-void CommentLine::die()
-{
-    m_diagram->removeAnnotationLine(this);
-    this->scene()->removeItem(this);
-}
 
 bool CommentLine::contains ( const QPointF & point ) const
 {
