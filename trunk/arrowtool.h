@@ -46,6 +46,9 @@ private:
          int                     m_preview_amount;  //!< Current view amount
          void                   (ArrowTool::* m_drawarr[13])(const QPointF & ,
                                                              const QPointF & ); //!< Array of drawing functions
+         void                   (ArrowTool::* m_drawllr[13])(const QPointF & ,
+                                                             const QPointF & ); //!< Array of drawing functions for line to line case
+
          QVector< QVector<ArrowTool::Callback> >  m_connection_cbs; //!< Connection callbacks
 
          StartPointLocation      m_loc[2];       //!< Where is starting point located
@@ -105,9 +108,12 @@ private:
          /*! Makes only first line of preview visible
           */
          void makeOneLineVisible();
-         /*! Makes all lines of preview visible
+         /*! Makes two lines of preview visible
           */
          void makeTwoLinesVisible();
+         /*! Makes all lines of preview visible
+          */
+         void makeAllLinesVisible();
          /*! Draws zero length arrow
              \param[in] p1 first point
              \param[in] p2 second point
@@ -133,6 +139,16 @@ private:
              \param[in] p2 second point
           */
          void    drawVHDirected(const QPointF & p1, const QPointF & p2);
+         /*! Draws a vertical three lines connections
+             \param[in] p1 first point
+             \param[in] p2 second point
+          */
+         void    drawVerticalDirected3(const QPointF & p1, const QPointF & p2);
+         /*! Draws a horizontal three lines connections
+             \param[in] p1 first point
+             \param[in] p2 second point
+          */
+         void    drawHorizontalDirected3(const QPointF & p1, const QPointF & p2);
 protected:
          /*! Returns a clockwise directions for arrow number - 0-12
              \param[in] pos               position
