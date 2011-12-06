@@ -39,7 +39,7 @@ DiagramObject * DiagramObjectTest::clone()
     return new DiagramObjectTest(this->pos(),this->diagram());
 }
 
-bool DiagramObjectTest::dieIfEqualTo(DiagramObject * o)
+bool DiagramObjectTest::dieIfEqualTo(DiagramObject * /*o*/)
 {
     return false;
 }
