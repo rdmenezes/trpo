@@ -2,8 +2,6 @@
 #include "diagram.h"
 #include "freecomment.h"
 #include "commentline.h"
-#include "arrowpoint.h"
-#include "arrowsegment.h"
 #include "box.h"
 #include "saveloadutils.h"
 #include "loadelements.h"

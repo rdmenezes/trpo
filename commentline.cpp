@@ -1,7 +1,5 @@
 #include "commentline.h"
 #include "diagram.h"
-#include "arrowsegment.h"
-#include "arrowpoint.h"
 #include <QGraphicsScene>
 #include <QPainter>
 #include <algorithm>
@@ -161,36 +159,6 @@ void CommentLine::resolvePointers(QMap<void *, Serializable *> &
 {
     //!< TODO: Implement this later
 }
-
-
-
-CommentLine::CommentLine(const QPointF & bindedpoint,const QPointF & freepoint) : DiagramObject(ST_LINE)
-{
-    m_bindedpoint=new QPointF(bindedpoint);
-    m_freepoint=freepoint;
-    m_isbindedtoline=false;
-}
-
-CommentLine::CommentLine(QPointF * bindedpoint,const QPointF & freepoint) : DiagramObject(ST_LINE)
-{
-  m_bindedpoint=bindedpoint;
-  m_freepoint=freepoint;
-  static_cast<ArrowPoint *>(bindedpoint)->attachAnnotation(this);
-  m_isbindedtoline=true;
-}
-
-void CommentLine::deattachFromLine()
-{
-  if (m_isbindedtoline)
-  {
-      ArrowPoint * p=static_cast<ArrowPoint *>(m_bindedpoint);
-      m_bindedpoint=new QPointF(m_bindedpoint->x(),m_bindedpoint->y());
-      m_isbindedtoline=false;
-      p->removeAnnotation(this);
-  }
-}
-
-
 
 
 bool CommentLine::contains ( const QPointF & point ) const

@@ -2,8 +2,6 @@
 #include "diagram.h"
 #include "freecomment.h"
 #include "commentline.h"
-#include "arrowpoint.h"
-#include "arrowsegment.h"
 #include "box.h"
 #include "saveloadutils.h"
 #include <QDomDocument>
@@ -114,6 +112,7 @@ void CommentLine::save(QDomDocument * doc,QDomElement * diagram)
  diagram->appendChild(aline);
 }
 */
+/*
 void ArrowSegment::save(QDomDocument * doc,QDomElement * diagram)
 {
  QDomElement  aseg=doc->createElement("segment");
@@ -150,3 +149,4 @@ void ArrowPoint::save(QDomDocument * doc,QDomElement * diagram)
  }
  diagram->appendChild(apoint);
 }
+*/

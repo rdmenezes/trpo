@@ -12,7 +12,6 @@
 #include <QKeyEvent>
 #include "diagram.h"
 #include "box.h"
-#include "arrowsegment.h"
 #include "diagramobject.h"
 
 #include "tool.h"
