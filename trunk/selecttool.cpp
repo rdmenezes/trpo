@@ -100,7 +100,8 @@ bool SelectTool::onRelease(const QPointF &  p , QGraphicsItem * /* item */ )
         }
         else m_fcm.restorePosition();
      }
-     Q_ASSERT( m_fcm.m_line->model()->getConnected(C_INPUT).size() );
+     if (m_fcm.m_line)
+            Q_ASSERT( m_fcm.m_line->model()->getConnected(C_INPUT).size() );
      static_cast<MainWindow*>(m_scene->view()->window())->setActionText("Using select instrument...");
      this->m_scene->update();
      this->m_state=STS_NONE;
