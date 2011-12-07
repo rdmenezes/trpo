@@ -1,5 +1,6 @@
 #include "attachedcomment.h"
 #include <assert.h>
+#include <QMessageBox>
 
 void AttachedComment::paint(QPainter *p)
 {
