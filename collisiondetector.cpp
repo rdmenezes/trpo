@@ -1,8 +1,10 @@
 #include "collisiondetector.h"
 
 CollisionDetector::CollisionDetector(const QVector<int> & exctypes,
-                                     const QVector<CollisionObject *> & objects)
+                                     const QVector<CollisionObject *> & objects,
+                                     CollisionObject * object)
 {
+    m_tested_object=object;
     m_exctypes=exctypes;
     m_objects=objects;
     m_map.insert(QPair<ShapeType,ShapeType>(ST_RECTANGLE,ST_RECTANGLE),&CollisionDetector::testRectangles);
@@ -42,8 +44,8 @@ bool CollisionDetector::testComplexAndOther(CollisionObject *o1, CollisionObject
 
 bool CollisionDetector::test(CollisionObject * o1, CollisionObject * o2)
 {
-    if (m_exctypes.contains(o1->collisionObjectType())
-        || m_exctypes.contains(o2->collisionObjectType())
+    if (  ( m_exctypes.contains(o1->collisionObjectType() ) && o1!=m_tested_object )
+        || ( m_exctypes.contains(o2->collisionObjectType()) && o2!=m_tested_object )
         || m_objects.contains(o1)
         || m_objects.contains(o2))
         return false;

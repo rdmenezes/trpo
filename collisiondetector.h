@@ -19,8 +19,9 @@ private:
                bool (CollisionDetector::*) (CollisionObject *, CollisionObject *)
              > m_map; //!< Map data
 
-        QVector<int> m_exctypes; //!< Excluded types from scan
-        QVector<CollisionObject *> m_objects; //!< Excluded collision objects
+        QVector<int> m_exctypes;                   //!< Excluded types from scan
+        QVector<CollisionObject *> m_objects;      //!< Excluded collision objects
+        CollisionObject        *   m_tested_object;  //!< Object, used for testing
         /*! Tests a collision between rectangles
             \param[in] o1 first object
             \param[in] o2 second object
@@ -49,9 +50,11 @@ public:
     /*! Constructs a collision detector
         \param[in] exctypes excluded types
         \param[in] objects  excluded objects
+        \param[in] object   tested object
      */
     CollisionDetector(const QVector<int> & exctypes,
-                      const QVector<CollisionObject *> & objects);
+                      const QVector<CollisionObject *> & objects,
+                      CollisionObject * object);
 
     /*! Tests an object for collision
      */

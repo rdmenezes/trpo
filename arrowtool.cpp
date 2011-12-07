@@ -550,8 +550,13 @@ void ArrowTool::connectNoneToBox()
 {
     Direction dir=getSide(m_boxes[1]->collisionRect(),m_preview[m_preview_amount-1]->model()->p2());
     bool directed_right=dir==D_TOP || dir==D_LEFT || dir==D_BOTTOM;
+    Direction lastsegmentdirection=m_preview[m_preview_amount-1]->model()->direction();
+    bool directed_non_properly=(dir==D_TOP  && lastsegmentdirection==D_TOP)
+                           ||  (dir==D_LEFT && lastsegmentdirection==D_LEFT)
+                           ||  (dir==D_BOTTOM && lastsegmentdirection==D_BOTTOM);
+    bool directed_properly=!directed_non_properly;
     bool canplace=canPlacePreviews();
-    if (directed_right && canplace)
+    if (directed_right && canplace && directed_properly)
     {
         //Get position
         ObjectConnector * bx=m_boxes[1]->getBySide(dir);
