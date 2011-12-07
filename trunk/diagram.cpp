@@ -57,7 +57,7 @@ bool Diagram::canPlace(DiagramObject * obj,
                       )
 {
     bool can=true;
-    CollisionDetector * detector=new CollisionDetector(exctypes,excobjs);
+    CollisionDetector * detector=new CollisionDetector(exctypes,excobjs,obj);
     for (int i=0;i<m_objects.size();i++)
     {
         DiagramObject * d=m_objects[i];
