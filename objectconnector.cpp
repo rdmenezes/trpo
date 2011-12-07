@@ -2,6 +2,8 @@
 #include "arrow.h"
 #include <math.h>
 #include <assert.h>
+#include <QMessageBox>
+
 Direction ObjectConnector::direction() const
 {
    Direction dir=D_LEFT;
@@ -125,6 +127,8 @@ void removeReferencesAndKillLines(ObjectConnector * removing,ObjectConnector * o
         DiagramObject * parent=cts[i].second->parent();
         if (parent)
             if (parent->type()==IsCommentLine)
+            {
                 d->remove(parent);
+            }
     }
 }

@@ -241,6 +241,11 @@ public:
         /*! Tests, whether diagram is correct (has at least one block)
          */
         bool isCorrect();
+        /*! Remove box from numbers
+            \param[in] box box to remove
+         */
+        inline void removeBoxFromNumbers(Box * box)
+        { m_boxes.remove(box); }
         /*! Destructor
          */
         ~Diagram();

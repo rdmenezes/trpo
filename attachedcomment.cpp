@@ -93,7 +93,7 @@ bool AttachedComment::dieIfEqualTo(DiagramObject * o)
           delete line;
           m_line=NULL;
       }
-      return false;
     }
+    return false;
   }
 }

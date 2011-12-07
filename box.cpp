@@ -387,6 +387,8 @@ bool Box::dieIfEqualTo(DiagramObject * o)
     if (o!=this)
         return false;
 
+    this->diagram()->removeBoxFromNumbers(this);
+
     for (int i=0;i<m_connectors.size();i++)
     {
      removeReferencesAndKillLines(m_connectors[i],m_connectors[i],C_INPUT,this->diagram());
