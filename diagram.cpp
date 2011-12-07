@@ -181,18 +181,20 @@ void Diagram::remove(DiagramObject * obj)
 {
     bool removed=false;
     DiagramObject * tobj=NULL;
+    DiagramObject * removedobj=NULL;
     for (int i=0;i<m_objects.size() && !removed;i++)
     {
         tobj=m_objects[i];
         if (tobj->dieIfEqualTo(obj))
         {
+            removedobj=tobj;
             delete tobj;
             removed=true;
         }
     }
     for (int i=0;i<m_objects.size();i++)
     {
-     if (m_objects[i]==tobj)
+     if (m_objects[i]==removedobj)
      {
         m_objects.remove(i);
         --i;
