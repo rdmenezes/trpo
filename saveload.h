@@ -20,28 +20,21 @@ template<typename T >
 class SaveLoad
 {
   /*! Сохраняет объект в строку
-           \param[in] object объект для сохранения
-           \return строка с содержимым объекта
+       \param[in] object объект для сохранения
+       \return строка с содержимым объекта
    */
-  static QString save(const T & object)
+  static QString save(const T & /*object*/)
   {
-      QString result=s;
-
+      QString result("Test string");
       return result;
   }
   /*! Загружает объект из строки
-           \param[in]  string строка с содержимым объекта
-           \return  восстановленный объект
+       \param[in]  string строка с содержимым объекта
+       \return  восстановленный объект
    */
   static T load(const QString & string)
   {
-     T result=string;
-      /*
-      for (int i=escape_len-1;i>-1;i--)
-          result.replace(escape_to[i],escape_from[i]);
-      */
-      return T;
-
+      return T();
   }
 };
 
