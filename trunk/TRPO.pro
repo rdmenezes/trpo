@@ -44,7 +44,8 @@ SOURCES += main.cpp \
     selecttool.cpp \
     arrowtool.cpp \
     commentlinetool.cpp \
-    erasertool.cpp
+    erasertool.cpp \
+    saveload.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
@@ -84,7 +85,10 @@ HEADERS += mainwindow.h \
     selecttool.h \
     arrowtool.h \
     commentlinetool.h \
-    erasertool.h
+    erasertool.h \
+    saveload.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc
+
+
