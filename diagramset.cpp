@@ -67,19 +67,19 @@ void DiagramSet::save(QDomDocument * doc,
 
      QHash<int,Diagram *>::iterator i = m_set.begin();
      QPair<int, Diagram*> key_val;
-     QString id;
-     Diagram *d;
+     QString id;   
 
      while (i!=m_set.end())
      {
          key_val.first=i.key();
          key_val.second=i.value();
          diagramset.setAttribute(id.setNum(i.value()->id()), i.key());
-         //d.save(doc, &diagramset);
+         i.value()->save(doc, &diagramset);
          i++;
      }
      element->appendChild(diagramset);
 }
+
 
 void DiagramSet::load(QDomElement * /* element */,
                       QMap<void *, Serializable *> & /* addressMap */ )
