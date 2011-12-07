@@ -1,6 +1,5 @@
 #include "diagramscene.h"
 #include "diagramset.h"
-#include "arrowsegment.h"
 #include "freecomment.h"
 #include "commentline.h"
 #include <math.h>

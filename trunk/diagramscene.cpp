@@ -2,8 +2,6 @@
 #include "helpwindow.h"
 #include "objecttexteditor.h"
 #include "commentline.h"
-#include "arrowsegment.h"
-#include "arrowpoint.h"
 #include "freecomment.h"
 #include <QTextEdit>
 #include <QGraphicsSceneMouseEvent>

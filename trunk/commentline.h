@@ -87,24 +87,6 @@ private:
             \param[in]  hx   horizontal arc height
          */
         void drawArcs(QPainterPath & path,qreal l, qreal x,qreal hx);
-
-
-        /*! A free point, that is pointed into air
-         */
-        QPointF m_freepoint;
-        /*! A more complicated, binded point to line, or pushed into air
-            (if attached into block)
-         */
-        QPointF * m_bindedpoint;
-        /*! Declares, whether an item binded into line
-         */
-        bool      m_isbindedtoline;
-        /*! Diagram, where item is placed;
-         */
-        Diagram * m_diagram;
-        /*! Casts a point into binded point
-         */
-        ArrowPoint * binded();
 protected:
         /*! Paints a line
             \param[in] p painter
@@ -197,42 +179,6 @@ public:
             \return input
          */
         inline const QPointF& out() const { return m_out;}
-
-
-        /*! A free point, that is pointed into air
-         */
-        inline QPointF & accessFree() { return m_freepoint; }
-        /*! A more complicated, binded point to line, or pushed into air
-            (if attached into block)
-         */
-        inline QPointF *& accessBinded() { return m_bindedpoint; }
-        /*! Declares, whether an item binded into line
-         */
-        inline bool  &   accessIsBinded() { return m_isbindedtoline; }
-        /*! Declares a type of item
-         */
-        enum ItemType
-        {
-            USERTYPE=QGraphicsItem::UserType+3
-        };
-         inline QPointF * begin() { return m_bindedpoint;}
-         inline QPointF * end()   { return &m_freepoint; }
-         /*! Constructs an annotation line, not binded into any of points
-            \param[in] bindedpoint free binded point (first)
-            \param[in] freepoint   free point (second)
-          */
-         CommentLine(const QPointF & bindedpoint,const QPointF & freepoint);
-         /*! Constructs an annotation line, binded into a line
-            \param[in] bindedpoint  non-free binded point (first)
-            \param[in] freepoint    free point (second)
-          */
-         CommentLine(QPointF * bindedpoint,const QPointF & freepoint);
-         /*! Deattaches an item from line
-          */
-         void deattachFromLine();
-         /*! Is attached to line
-          */
-         inline bool isAttachedToLine() const { return m_isbindedtoline; }
          /*! Kills self if equal to object
              \param[in] o object to compare
              \return true if will die

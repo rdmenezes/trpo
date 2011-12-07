@@ -17,11 +17,8 @@ SOURCES += main.cpp \
     objecttexteditor.cpp \
     freecomment.cpp \
     commentline.cpp \
-    arrowsegment.cpp \
-    arrowpoint.cpp \
     moverange.cpp \
     diagramscenesaveload.cpp \
-    diagramscenealinehandling.cpp \
     diagramsave.cpp \
     saveloadutils.cpp \
     diagramload.cpp \
@@ -56,8 +53,6 @@ HEADERS += mainwindow.h \
     objecttexteditor.h \
     freecomment.h \
     commentline.h \
-    arrowsegment.h \
-    arrowpoint.h \
     moverange.h \
     compare.h \
     saveloadutils.h \
@@ -70,7 +65,6 @@ HEADERS += mainwindow.h \
     box.h \
     connection.h \
     direction.h \
-    boxconnectortype.h \
     objectconnector.h \
     drawingconstants.h \
     graphicunittests.h \

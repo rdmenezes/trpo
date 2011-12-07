@@ -5,7 +5,6 @@
 #include "arrow.h"
 #include "objecttexteditor.h"
 #include "mainwindow.h"
-#include "arrowpoint.h"
 #include <QFontMetricsF>
 #include <math.h>
 #include <string.h>
@@ -22,6 +21,7 @@ Box::Box(const QPointF & p, Diagram * d, const QString & txt)
   m_view_text=txt;
   m_id=d->getBoxNumber(this);
 
+  m_child=-1;
 
   std::auto_ptr<QFont>  numberFont(new QFont(scene->font()));
   numberFont->setPointSize(BOX_NUMBER_FONT_SIZE);
@@ -396,79 +396,6 @@ bool Box::dieIfEqualTo(DiagramObject * o)
     }
     return true;
 }
-
-
-void Box::updateString(const QString & text)
-{
-   if (!text.isEmpty())
-   {
-        m_real_text=text;
-        m_view_text=text;
-        regenerate();
-        update();
-   }
-}
-
-
-/*
-void Box::setRect(const QRectF & rect)
-{
-    //m_rect=rect;
-    regenerate();
-}
-*/
-
-
-BoxSide Box::sideOfPoint(ArrowPoint * point, const QRectF & m_rect)
-{
- QPointF center=m_rect.center();
- qreal dx=point->x()-center.x();
- qreal dy=point->y()-center.y();
- qreal fdx=fabs(dx);
- qreal fdy=fabs(dy);
- BoxSide result=BIS_BOTTOM;
- if (fdx>=fdy) {  if (dx<0) result=BIS_LEFT; else result=BIS_RIGHT;  }
- else          {  if (dy<0) return result=BIS_TOP;   }
- return result;
-}
-
-BoxSide Box::sideOfPoint(ArrowPoint *point)
-{
-    return BIS_BOTTOM;
-    //return sideOfPoint(point,m_rect);
-}
-
-MoveRange Box::getRange(ArrowPoint * point)
-{
-  /*
-  BoxSide bis=sideOfPoint(point);
-  if (bis==BIS_LEFT)
-      return createVerticalRange(m_rect.top(),m_rect.bottom(),m_rect.left());
-  if (bis==BIS_RIGHT)
-      return createVerticalRange(m_rect.top(),m_rect.bottom(),m_rect.right());
-  if (bis==BIS_TOP)
-      return createHorizontalRange(m_rect.left(),m_rect.right(),m_rect.top());
-  */
-  return MoveRange(0,0,0,0);
-  //return createHorizontalRange(m_rect.left(),m_rect.right(),m_rect.bottom());
-}
-
-void Box::attachAllPoints(const QVector<ArrowPoint *> pts)
-{
-  /*
-  for (int i=0;i<pts.size();i++)
-  {
-      BoxSide bis=sideOfPoint(pts[i]);
-      if (bis==BIS_LEFT) pts[i]->setX(m_rect.left());
-      if (bis==BIS_RIGHT) pts[i]->setX(m_rect.right());
-      if (bis==BIS_TOP)    pts[i]->setY(m_rect.top());
-      if (bis==BIS_BOTTOM) pts[i]->setY(m_rect.bottom());
-      pts[i]->update();
-      addPointReference(pts[i]);
-  }
-  */
-}
-
 
 Direction getSide(const QRectF & r, const QPointF & p)
 {

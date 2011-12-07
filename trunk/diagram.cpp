@@ -3,8 +3,6 @@
 #include "collision.h"
 #include "freecomment.h"
 #include "commentline.h"
-#include "arrowpoint.h"
-#include "arrowsegment.h"
 #include "diagramset.h"
 #include "attachedcomment.h"
 #include "collisiondetector.h"

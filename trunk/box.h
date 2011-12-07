@@ -17,14 +17,10 @@
 #include "direction.h"
 //Class of scene
 class DiagramScene;
-//Arrow points
-class ArrowPoint;
 //Dom element
 class QDomElement;
 //Dom document
 class QDomDocument;
-//Loading data
-class DiagramLoadData;
 
 /*! \class BoxSide
     Declares a box item side
@@ -88,6 +84,9 @@ private:
         /*! Box id
          */
         int      m_id;
+        /*! Location of child diagram (-1 is default)
+         */
+        int m_child;
         /*! Box connector vector
          */
         QVector<ObjectConnector *> m_connectors;
@@ -101,18 +100,6 @@ protected:
         /*! Paints a box
          */
         void paint(QPainter * p);
-private:
-
-        /*! Location of child diagram (-1 is default)
-         */
-        int m_childdiagram;
-        /*! Propagates a label editing
-            \param[in] event event editing
-         */
-        void addObjectTextEditor(QKeyEvent * event);
-        /*! Declares, whether point can be added to side
-         */
-        bool canAddToSide(BoxSide side);
 public:
     /*! Constructs empty box.
         Used by serializable factory.
@@ -197,49 +184,17 @@ public:
         \return true if will die
      */
     virtual bool dieIfEqualTo(DiagramObject * o);
-    /*! Destructor
-     */
-    virtual ~Box();
-
-
-    /*! Creates an item position at scene
-        \param[in] pos    position of creation of box
-        \param[in] scene  scene data
-    */
-    Box(const QPointF & pos,DiagramScene * scene);
-
-    /*! Updates an item string
-     */
-    void updateString(const QString & text);
-
     /*! Returns a child diagram
         \return id
      */
-    inline int childDiagram() const { return m_childdiagram;}
+    inline int childDiagram() const { return m_child;}
     /*! Sets a childdiagram
         \param[in]  id diagram id
      */
-    inline void setChildDiagram(int id) { m_childdiagram=id; }
-    /*! Determines, thich size of box this point
-        is belong to.
-        \param[in] point point
-        \return side
+    inline void setChildDiagram(int id) { m_child=id; }
+    /*! Destructor
      */
-    static BoxSide sideOfPoint(ArrowPoint * point, const QRectF & m_rect);
-    /*! Determines, thich size of box this point
-        is belong to.
-        \param[in] point point
-        \return side
-     */
-    BoxSide sideOfPoint(ArrowPoint * point);
-    /*! Attaches all points from vector
-        \param[in] pts, a vector, whose points are attached
-     */
-    void attachAllPoints(const QVector<ArrowPoint *> pts);
-    /*! Returns a range for a point
-        \param[in] point point
-     */
-    MoveRange getRange(ArrowPoint * point);
+    virtual ~Box();
 };
 
 #endif // BOXITEM_H

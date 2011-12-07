@@ -1,5 +1,4 @@
 #include "collision.h"
-#include "arrowpoint.h"
 #include "compare.h"
 
 static bool collides1D(float x11, float x12, float x21, float x22)
