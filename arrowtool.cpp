@@ -659,7 +659,8 @@ void ArrowTool::connectLineToLine()
         }
         //Perform addition
         addPreviewsToDiagram();
-        removeOddSegments();
+        for (int i=m_preview_amount;i<MAX_PREVIEW_SEGMENTS;i++)
+            m_scene->removeItem(m_preview[i]);
         initState();
     }
 }
