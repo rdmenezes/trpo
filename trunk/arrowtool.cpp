@@ -69,7 +69,7 @@ void ArrowTool::clearState()
  if (m_state==ATS_FIRSTPOINT)
  {
    for (int i=0;i<3;i++)
-       delete m_preview[0];
+       delete m_preview[i];
    m_state=ATS_START;
    m_scene->update();
  }
