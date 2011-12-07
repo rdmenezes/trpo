@@ -5,18 +5,10 @@
 #include "arrow.h"
 #include "attachedcomment.h"
 
-void FreeCommentMove::restorePosition()
-{
-  if (m_line)
-  {
-     m_line->setLine(m_startlinepos.x1(),m_startlinepos.y1(),m_startlinepos.x2(),m_startlinepos.y2());
-  }
-  m_obj->setPos(m_startcommentpos.x(),m_startcommentpos.y());
-  m_obj->setPosWithoutCheck(m_startcommentpos);
-}
 
 SelectTool::SelectTool()
 {
+    m_state=NULL;
 }
 
 
@@ -25,21 +17,24 @@ SelectTool::~SelectTool()
 
 }
 
+
+
+
 void SelectTool::clearState()
 {
   static_cast<MainWindow*>(m_scene->view()->window())->setActionText("");
-  if (m_state==STS_MOVEFREECOMMENT)
+  if (m_state)
   {
-     m_fcm.restorePosition();
-     m_scene->update();
-     m_state=STS_NONE;
+      m_state->clearState();
+      delete m_state;
+      m_state=NULL;
   }
 }
 
 void SelectTool::initState()
 {
   static_cast<MainWindow*>(m_scene->view()->window())->setActionText("Using select instrument...");
-  m_state=STS_NONE;
+  m_state=NULL;
 }
 
 
@@ -62,49 +57,28 @@ QVector<int> SelectTool::getKeyDownItems()
 
 bool SelectTool::onClick(const QPointF &  p , QGraphicsItem *  item )
 {
- if (item && m_state==STS_NONE)
+ if (item && !m_state)
  {
      if (item->type()==IsFreeComment)
      {
-         m_fcm.m_clickpos=p;
-         m_fcm.m_obj=static_cast<FreeComment*>(item);
-         m_fcm.m_line=m_fcm.m_obj->parentComment()->line();
-         if (m_fcm.m_line)
-         {
-             m_fcm.m_startlinepos=QLineF(m_fcm.m_line->in(),m_fcm.m_line->out());
-         }
-         m_fcm.m_startcommentpos=m_fcm.m_obj->pos();
-         m_state=STS_MOVEFREECOMMENT;
-         static_cast<MainWindow*>(m_scene->view()->window())->setActionText("Release comment where you would place it...");
+        m_state=new FreeCommentMoving(m_diagram,p,
+                                      static_cast<FreeComment*>(item));
      }
  }
  return true;
 }
 
+
 #define FCM_MOVE_SENSIVITY 2
 
 bool SelectTool::onRelease(const QPointF &  p , QGraphicsItem * /* item */ )
 {
-  if (m_state==STS_MOVEFREECOMMENT)
+  if (m_state)
   {
-     if (fabs(p.x()-m_fcm.m_startcommentpos.x())<=FCM_MOVE_SENSIVITY && fabs(p.y()-m_fcm.m_startcommentpos.y())<FCM_MOVE_SENSIVITY)
-     {
-         m_fcm.restorePosition();
-     }
-     else
-     {
-        QPointF newpos=m_fcm.m_startcommentpos+p-m_fcm.m_clickpos;
-        if (m_fcm.m_obj->checkPos(newpos))
-        {
-            m_fcm.m_obj->setPosWithoutCheck(newpos);
-        }
-        else m_fcm.restorePosition();
-     }
-     if (m_fcm.m_line)
-            Q_ASSERT( m_fcm.m_line->model()->getConnected(C_INPUT).size() );
+     m_state->onRelease(p);
+     delete m_state;
+     m_state=NULL;
      static_cast<MainWindow*>(m_scene->view()->window())->setActionText("Using select instrument...");
-     this->m_scene->update();
-     this->m_state=STS_NONE;
   }
   return true;
 }
@@ -113,7 +87,7 @@ bool SelectTool::onRelease(const QPointF &  p , QGraphicsItem * /* item */ )
 
 bool SelectTool::onKeyDown(QKeyEvent *  event , QGraphicsItem *  item )
 {
-  if (item && m_state==STS_NONE)
+  if (item && !m_state)
   {
     //If we are pressed it on box
     if (item->type()==IsBox)
@@ -163,17 +137,73 @@ bool SelectTool::onKeyDown(QKeyEvent *  event , QGraphicsItem *  item )
 
 void SelectTool::onMove(const QPointF & /* lastpos */ , const QPointF &  pos )
 {
-  if (m_state==STS_MOVEFREECOMMENT)
+  if (m_state)
   {
-      if (fabs(pos.x()-m_fcm.m_startcommentpos.x())<=FCM_MOVE_SENSIVITY && fabs(pos.y()-m_fcm.m_startcommentpos.y())<FCM_MOVE_SENSIVITY)
-      {
-          m_fcm.restorePosition();
-      }
-      else
-      {
-         QPointF newpos=m_fcm.m_startcommentpos+pos-m_fcm.m_clickpos;
-         m_fcm.m_obj->setPosWithoutCheck(newpos);
-      }
+      m_state->onMove(pos);
   }
 }
 
+
+FreeCommentMoving::FreeCommentMoving(Diagram *diagram, const QPointF &clickpos, FreeComment *obj)
+                  : DynamicEditState(diagram,clickpos)
+{
+    m_obj=obj;
+    m_line=m_obj->parentComment()->line();
+    if (m_line)
+    {
+        m_startlinepos=QLineF(m_line->in(),m_line->out());
+    }
+    m_startcommentpos=m_obj->pos();
+    static_cast<MainWindow*>(m_diagram->scene()->view()->window())->setActionText("Release comment where you would place it...");
+}
+
+void FreeCommentMoving::restorePosition()
+{
+  if (m_line)
+  {
+     m_line->setLine(m_startlinepos.x1(),m_startlinepos.y1(),m_startlinepos.x2(),m_startlinepos.y2());
+  }
+  m_obj->setPos(m_startcommentpos.x(),m_startcommentpos.y());
+  m_obj->setPosWithoutCheck(m_startcommentpos);
+}
+
+void  FreeCommentMoving::clearState()
+{
+  this->restorePosition();
+  this->m_diagram->scene()->update();
+}
+
+void  FreeCommentMoving::onMove(const QPointF & pos)
+{
+    if (fabs(pos.x()-m_startcommentpos.x())<=FCM_MOVE_SENSIVITY
+        && fabs(pos.y()-m_startcommentpos.y())<FCM_MOVE_SENSIVITY)
+    {
+        restorePosition();
+    }
+    else
+    {
+       QPointF newpos=m_startcommentpos+pos-m_clickpos;
+       m_obj->setPosWithoutCheck(newpos);
+    }
+}
+
+void FreeCommentMoving::onRelease(const QPointF &p)
+{
+    if (fabs(p.x()-m_startcommentpos.x())<=FCM_MOVE_SENSIVITY
+        && fabs(p.y()-m_startcommentpos.y())<FCM_MOVE_SENSIVITY)
+    {
+        restorePosition();
+    }
+    else
+    {
+       QPointF newpos=m_startcommentpos+p-m_clickpos;
+       if (m_obj->checkPos(newpos))
+       {
+           m_obj->setPosWithoutCheck(newpos);
+       }
+       else restorePosition();
+    }
+    if (m_line)
+           Q_ASSERT( m_line->model()->getConnected(C_INPUT).size() );
+    this->m_diagram->scene()->update();
+}

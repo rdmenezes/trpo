@@ -107,38 +107,6 @@ private:
         \param[in] item item, that is being analyzed
      */
     void enterAnnotationLineResize(const QPointF & pos, CommentLine * item);
-    /*! Removes annotation line
-        \param[in] line annotation line to be removed
-     */
-    void removeAnnotationLine(CommentLine * line);
-    /*! Processes pressing annotation line to segment
-        \param[in] pos position
-        \param[in] seg segment
-     */
-    void processAnnotationLineToSegment(const QPointF & pos, ArrowSegment * seg);
-    /*! Processes pressing annotation line to box
-        \param[in] pos position
-        \param[in] box  box item
-     */
-    void processAnnotationLineToBox(const QPointF & pos,Box * box);
-    /*! Processes pressing annotation line on blank space (setting second point)
-        \param[in] pos position
-     */
-    void processAnnotationLineSecondPointOnBlank(const QPointF & pos);
-    /*! Processes pressing annotation line on blank space (setting first point)
-        \param[in] pos position
-     */
-    void processAnnotationLinePointOnBlank(const QPointF & pos);
-    /*! Processes pressing annotation line, when escape is pressed
-        \param[in] pos position
-     */
-    void processAnnotationLineEscapePress(const QPointF & pos);
-    /*! Processes changing block id
-        \param[in] block block, whose id is changing
-        \param[in] previd previous block id
-        \param[in] newid  new block id
-    */
-    void processChangeBlockID(Box * block, char previd, char newid);
     /*! Determines dragging box action
         \param[in] item item data
         \param[in] pos  position
@@ -208,35 +176,6 @@ public:
     /*! Returns a diagram
      */
     inline Diagram * diagram() { return m_diag; }
-
-
-
-    /*! Computes a default block sizes;
-     */
-    QRectF getDefaultBlockSize(const QPointF & pos);
-    /*! Returns a default block numer size
-     */
-    const QRectF & getDefaultBlockNumberSize() const;
-    /*! Returns a default annotation label size
-        \param[in] pos  center position of label
-     */
-    QRectF getDefaultAnnotationLabelSize(const QPointF & pos);
-    /*! Adds a block at specified place
-        \param[in] event event data
-     */
-    void addBlock(QGraphicsSceneMouseEvent *event);
-    /*! Adds an annotation at specified place
-        \param[in] event event data
-     */
-    void addAnnotationLabel(QGraphicsSceneMouseEvent *event);
-    /*! Gets a new edit state
-        \param[in] edit state
-     */
-    inline TextEditState editState() const { return m_edit_state; }
-    /*! Toggles editing state off
-     */
-    void toggleEditStateOff();
-
     /*! Tries to save a diagram to file
         \param[in] filename name of file
         \return true on success
@@ -247,11 +186,6 @@ public:
         \return true on success
      */
     bool load(const QString & filename);
-    /*! Exports a diagram to file
-        \param[in] filename name of file
-        \return true on success
-     */
-    bool exportTo(const QString & filename);
     /*! Hides UI (Panel and text edit, if needed)
      */
     void hideUI();
