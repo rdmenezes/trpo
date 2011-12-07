@@ -85,6 +85,8 @@ bool AttachedComment::dieIfEqualTo(DiagramObject * o)
   }
   else
   {
+    if (m_line)
+    {
       CommentLine * line=m_line;
       if (m_line->dieIfEqualTo(o))
       {
@@ -92,5 +94,6 @@ bool AttachedComment::dieIfEqualTo(DiagramObject * o)
           m_line=NULL;
       }
       return false;
+    }
   }
 }
