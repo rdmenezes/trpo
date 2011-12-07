@@ -640,6 +640,8 @@ void ArrowTool::connectLineToLine()
             m_arrows[0]->model()->addConnector(fpreview->model(),m_poses[0],C_OUTPUT);
             m_preview[0]->model()->addConnector(m_arrows[0]->model(),0.0,C_INPUT);
         }
+        lastpreview=m_preview[m_preview_amount-1];
+        lsegdir=lastpreview->model()->direction();
         if (lsegdir==enddir)
         {
             m_arrows[1]->model()->enlarge(lastpreview->model()->p1());
