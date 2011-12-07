@@ -59,7 +59,7 @@ enum AnnotationLineDrawingState
     ALDS_SPECIFIEDFIRSTPOINT
 };
 
-enum ArrowDirection;
+//enum ArrowDirection;
 /*! A class of panel for tool selection
  */
 class ToolPanel;

@@ -198,7 +198,7 @@ bool FreeComment::checkPos(const QPointF & pos)
       line->setLine(line->in().x(),line->in().y(),newpoint.x(),newpoint.y());
 
       //Check for collisions
-       QVector<CollisionObject *> clexc; clexc<<this<<line;
+       QVector<CollisionObject *> clexc; clexc<<this;
        QVector<int>   clexctypes; clexctypes<<IsCommentLine<<IsArrow;
        DiagramObject * obj=line->getInputObject();
        if (obj) clexc<<obj;

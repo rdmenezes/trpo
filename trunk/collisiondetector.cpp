@@ -46,10 +46,14 @@ bool CollisionDetector::test(CollisionObject * o1, CollisionObject * o2)
 {
     bool exctypes1=( m_exctypes.contains(o1->collisionObjectType() ) && o1!=m_tested_object );
     bool exctypes2=( m_exctypes.contains(o2->collisionObjectType()) && o2!=m_tested_object );
+    bool cont_objs1=m_objects.contains(o1);
+    bool cont_objs2=m_objects.contains(o2);
+    bool me_tested_with_me=(o1==m_tested_object) && (o2==m_tested_object);
     if ( exctypes1
         || exctypes2
-        || m_objects.contains(o1)
-        || m_objects.contains(o2))
+        || cont_objs1
+        || cont_objs2
+        || me_tested_with_me)
         return false;
     QPair<ShapeType,ShapeType> me(o1->collisionShape(),o2->collisionShape());
     QPair<ShapeType,ShapeType> rev(o2->collisionShape(),o1->collisionShape());
