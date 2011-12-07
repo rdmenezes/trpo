@@ -5,32 +5,73 @@
 #ifndef SELECTTOOL_H
 #define SELECTTOOL_H
 #include "tool.h"
+#include "arrow.h"
+#include "objectconnector.h"
 #include "box.h"
 #include "freecomment.h"
 #include "commentline.h"
-/*! Select tool state, representing current user action
+
+/*! \class DynamicEditState
+    Represents a dynamic editing state of select tool
  */
-enum SelectToolState
+class DynamicEditState
 {
-    STS_NONE,
-    STS_MOVEFREECOMMENT
+ protected:
+            Diagram * m_diagram;   //!< Diagram testing tool
+            QPointF   m_clickpos;  //!< Click position data
+ public:
+          /*! Constructs a dynamic editing state
+              \param[in] diagram   diagram data
+              \param[in] clickpos  click  position
+           */
+          inline DynamicEditState(Diagram * diagram, const QPointF & clickpos)
+          { m_diagram=diagram; m_clickpos=clickpos; }
+          /*! Clears an inner dynamic state
+           */
+          virtual void clearState()=0;
+          /*! An action, which is performed, when releasing on action
+              \param[in] p releasing point
+           */
+          virtual void onRelease(const QPointF & p)=0;
+          /*! An action, which is performed, when moving
+           */
+          virtual void onMove(const QPointF & p)=0;
 };
+
+
 
 /*! Data about free comment move
  */
-class FreeCommentMove
+class FreeCommentMoving : public DynamicEditState
 {
-public:
+private:
     FreeComment * m_obj;                  //!< Moving object
     CommentLine * m_line;                 //!< Line
     QLineF        m_startlinepos;         //!< Starting line pos
     QPointF       m_startcommentpos;      //!< Starting commented pos
-    QPointF       m_clickpos;             //!< Click position
-    /*! Default constructor */
-    inline FreeCommentMove() {}
     /*! Restores a positions of object */
     void restorePosition();
+public:
+    /*! Default constructor
+        \param[in] diagram   diagram data
+        \param[in] clickpos  click  position
+     */
+    FreeCommentMoving(Diagram * diagram,
+                      const QPointF & clickpos,
+                      FreeComment * obj);
+    /*! Clears an inner dynamic state
+     */
+    virtual void clearState();
+    /*! An action, which is performed, when releasing on action
+        \param[in] p releasing point
+     */
+    virtual void onRelease(const QPointF & p);
+    /*! An action, which is performed, when moving
+     */
+    virtual void onMove(const QPointF & p);
+
 };
+
 
 
 /*! \class SelectTool
@@ -39,8 +80,7 @@ public:
 class SelectTool : public Tool
 {
 private:
-        SelectToolState  m_state; //!< State data
-        FreeCommentMove  m_fcm;   //!< Free comment move data
+        DynamicEditState * m_state; //!< State data
 public:
     /*! A selection tool
      */

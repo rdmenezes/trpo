@@ -70,10 +70,6 @@ void DiagramScene::hideUI()
         this->removeItem(m_editor);
 }
 
-const QRectF & DiagramScene::getDefaultBlockNumberSize() const
-{
-    return this->m_default_number_size;
-}
 /*! Cравнивает два объекта и возвращает объект с меньшим типом
     \param[in] i1 элемент1
     \param[in] i2 элемент2
@@ -190,32 +186,9 @@ void DiagramScene::keyPressEvent(QKeyEvent * event)
   }
 }
 
-
-
-
-QRectF DiagramScene::getDefaultBlockSize(const QPointF & pos)
-{
-  QRectF result;
-  result.setX(pos.x()-m_default_block_size.width()/2);
-  result.setY(pos.y()-m_default_block_size.height()/2);
-  result.setWidth(m_default_block_size.width());
-  result.setHeight(m_default_block_size.height());
-  return result;
-}
-
-QRectF DiagramScene::getDefaultAnnotationLabelSize(const QPointF & pos)
-{
-  QRectF result;
-  result.setX(pos.x()-m_alabel_block_size.width()/2);
-  result.setY(pos.y()-m_alabel_block_size.height()/2);
-  result.setWidth(m_alabel_block_size.width());
-  result.setHeight(m_alabel_block_size.height());
-  return result;
-}
-
-
 void  DiagramScene::blockResizeMoveEnter ( QGraphicsSceneMouseEvent * event )
 {
+  /*
    QList<QGraphicsItem *> lst=items(event->scenePos());
    bool isWidgetClicked=false;
    for (int i=0;i<lst.size();i++)
@@ -237,16 +210,17 @@ void  DiagramScene::blockResizeMoveEnter ( QGraphicsSceneMouseEvent * event )
           }
           //if (lst[i]->type()==FreeComment::USERTYPE)
           {
-              m_dragstate=DS_ALABEL_MOVE;
-              QPointF pos=event->scenePos();
-              FreeComment * item=static_cast<FreeComment *>(lst[i]);
-              m_moving_label=item;
-              QRectF       rct=item->boundingRect();
-              m_blockmovingparams[0]=(pos.x()-rct.left())/rct.width();
-              m_blockmovingparams[1]=(pos.y()-rct.top())/rct.height();
-          }
+          //    m_dragstate=DS_ALABEL_MOVE;
+          //    QPointF pos=event->scenePos();
+          //    FreeComment * item=static_cast<FreeComment *>(lst[i]);
+          //    m_moving_label=item;
+          //    QRectF       rct=item->boundingRect();
+          //    m_blockmovingparams[0]=(pos.x()-rct.left())/rct.width();
+         //     m_blockmovingparams[1]=(pos.y()-rct.top())/rct.height();
+          //}
         }
    }
+   */
 }
 
 #define CORNER_PRECISE 7

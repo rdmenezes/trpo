@@ -44,8 +44,10 @@ bool CollisionDetector::testComplexAndOther(CollisionObject *o1, CollisionObject
 
 bool CollisionDetector::test(CollisionObject * o1, CollisionObject * o2)
 {
-    if (  ( m_exctypes.contains(o1->collisionObjectType() ) && o1!=m_tested_object )
-        || ( m_exctypes.contains(o2->collisionObjectType()) && o2!=m_tested_object )
+    bool exctypes1=( m_exctypes.contains(o1->collisionObjectType() ) && o1!=m_tested_object );
+    bool exctypes2=( m_exctypes.contains(o2->collisionObjectType()) && o2!=m_tested_object );
+    if ( exctypes1
+        || exctypes2
         || m_objects.contains(o1)
         || m_objects.contains(o2))
         return false;
