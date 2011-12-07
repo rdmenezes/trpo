@@ -114,7 +114,9 @@ void CommentLineTool::tryConnectWith(const QPointF & pos, FreeComment * fc)
             if (fabs(tmp->x()-crect.right())<0.001) dir=D_RIGHT;
             if (fabs(tmp->y()-crect.top())<0.001) dir=D_TOP;
             if (fabs(tmp->y()-crect.bottom())<0.001) dir=D_BOTTOM;
-            toConnectWith=m_box->getBySide(dir);
+            ObjectConnector * tmpconnector=m_box->getBySide(dir);
+            Q_ASSERT( tmpconnector );
+            toConnectWith=tmpconnector;
             startpoint=*tmp;
             delete tmp;
         }
