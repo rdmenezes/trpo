@@ -525,7 +525,7 @@ void ArrowTool::connectNoneToLine()
         QVector<DiagramObject *> v;
         if (lsegdir==enddir)
         {
-            m_arrows[1]->model()->enlarge(lastpreview->model()->p1());
+            m_arrows[1]->model()->enlarge(lastpreview->model()->p1(),false);
             delete lastpreview;
             m_preview[m_preview_amount-1]=m_arrows[1];
         }
@@ -601,7 +601,6 @@ void ArrowTool::connectLineToNone()
         m_points[0]=m_preview[m_preview_amount-1]->model()->p2();
         m_poses[0]=1;
         m_arrows[0]=m_preview[m_preview_amount-1];
-        removeOddSegments();
         generatePreview(m_points[0]);
     }
 }
@@ -644,7 +643,7 @@ void ArrowTool::connectLineToLine()
         lsegdir=lastpreview->model()->direction();
         if (lsegdir==enddir)
         {
-            m_arrows[1]->model()->enlarge(lastpreview->model()->p1());
+            m_arrows[1]->model()->enlarge(lastpreview->model()->p1(),false);
             delete lastpreview;
             m_preview[m_preview_amount-1]=m_arrows[1];
         }
@@ -752,7 +751,7 @@ void ArrowTool::connectBoxToLine()
         QVector<DiagramObject *> v;
         if (lsegdir==enddir)
         {
-            m_arrows[1]->model()->enlarge(lastpreview->model()->p1());
+            m_arrows[1]->model()->enlarge(lastpreview->model()->p1(),false);
             delete lastpreview;
             m_preview[m_preview_amount-1]=m_arrows[1];
         }
