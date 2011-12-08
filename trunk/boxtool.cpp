@@ -54,6 +54,7 @@ bool BoxTool::onClick(const QPointF &p, QGraphicsItem * /* item */)
       if (m_diagram->canPlace(m_obj))
       {
           m_diagram->add(m_obj);
+          m_diagram->commit();
           m_obj=new Box(p,m_diagram);
           m_scene->addItem(m_obj);
       }

@@ -124,6 +124,7 @@ void FreeComment::setText(const QString &text)
            QPointF newin=input->receiveCommentLineMove(line);
            line->setLine(newin.x(),newin.y(),line->out().x(),line->out().y());
           }
+          this->diagram()->commit();
        }
     }
     this->scene()->update();

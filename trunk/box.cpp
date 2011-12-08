@@ -333,6 +333,7 @@ void Box::setText(const QString & text)
 {
     m_real_text=text;
     regenerate();
+    this->diagram()->commit();
     this->scene()->update();
 }
 

@@ -41,7 +41,10 @@ bool EraserTool::onClick(const QPointF & /* p */, QGraphicsItem *  item )
         if (item->type()==IsDefaultItem)
             delete item;
         else
+        {
             m_diagram->remove(static_cast<DiagramObject*>(item));
+            m_diagram->commit();
+        }
   }
   return true;
 }
