@@ -246,6 +246,12 @@ public:
          */
         inline void removeBoxFromNumbers(Box * box)
         { m_boxes.remove(box); }
+        /*! Commits changes to a diagram, saving her state
+         */
+        void commit();
+        /*! Rollbacks, changes ti a diagram, retrieving her state
+         */
+        void rollback();
         /*! Destructor
          */
         ~Diagram();

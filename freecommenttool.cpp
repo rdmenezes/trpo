@@ -66,6 +66,7 @@ bool FreeCommentTool::onClick(const QPointF &p, QGraphicsItem * /* item */)
           AttachedComment * parent=new AttachedComment(m_obj,NULL);
           m_obj->setParentComment(parent);
           m_scene->addItem(m_obj);
+          m_diagram->commit();
       }
       m_scene->update();
   }

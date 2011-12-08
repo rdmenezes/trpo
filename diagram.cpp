@@ -223,6 +223,18 @@ void Diagram::exportTo(QImage & img)
    }
 }
 
+
+void Diagram::commit()
+{
+    //! TODO: Implement it
+}
+
+
+void Diagram::rollback()
+{
+    //! TODO: Implement it
+}
+
 Diagram::~Diagram()
 {
   clear();

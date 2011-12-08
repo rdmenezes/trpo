@@ -96,11 +96,13 @@ bool SelectTool::onKeyDown(QKeyEvent *  event , QGraphicsItem *  item )
         if (event->key()==Qt::Key_Left)
         {
             m_diagram->changeBlockNumber(-1,static_cast<Box*>(item));
+            m_diagram->commit();
         }
         //Increment number
         else if (event->key()==Qt::Key_Right)
         {
             m_diagram->changeBlockNumber(1,static_cast<Box*>(item));
+            m_diagram->commit();
         }
         //Change text
         else if (isTextEditKey(event))
@@ -124,11 +126,13 @@ bool SelectTool::onKeyDown(QKeyEvent *  event , QGraphicsItem *  item )
     if (item->type()==IsArrow && event->key()==Qt::Key_B)
     {
         static_cast<Arrow*>(item)->toggleTunneledBegin();
+        m_diagram->commit();
         this->m_scene->update();
     }
     if (item->type()==IsArrow && event->key()==Qt::Key_E)
     {
         static_cast<Arrow*>(item)->toggleTunneledEnd();
+        m_diagram->commit();
         this->m_scene->update();
     }
   }
@@ -200,6 +204,7 @@ void FreeCommentMoving::onRelease(const QPointF &p)
        if (m_obj->checkPos(newpos))
        {
            m_obj->setPosWithoutCheck(newpos);
+           m_diagram->commit();
        }
        else restorePosition();
     }

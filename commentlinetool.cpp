@@ -150,6 +150,7 @@ void CommentLineTool::tryConnectWith(const QPointF & pos, FreeComment * fc)
             m_line->setInput(toConnectWith,cpos);
         }
         initState();
+        m_diagram->commit();
     }
     m_scene->update();
 }

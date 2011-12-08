@@ -489,6 +489,7 @@ void ArrowTool::addPreviewsToDiagram()
 {
    for (int i=0;i<m_preview_amount;i++)
        m_diagram->add(m_preview[i]);
+   m_diagram->commit();
 }
 
 void ArrowTool::disconnectAllPreviews()
