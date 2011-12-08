@@ -55,6 +55,7 @@ public:
     /*! Default constructor
         \param[in] diagram   diagram data
         \param[in] clickpos  click  position
+        \param[in] obj       object
      */
     FreeCommentMoving(Diagram * diagram,
                       const QPointF & clickpos,
@@ -72,6 +73,128 @@ public:
 
 };
 
+/*! Data for object changing
+ */
+class ObjectChangingData
+{
+  protected:
+             QVector<CommentLine *> m_commentlines;            //!< Connected comment lines
+             QVector<QLineF>        m_startingposition;        //!< Starting position
+
+             QVector< QVector< ObjectConnector* > > m_connected_objects;  //!< Connected objects
+             QVector< Connection >      m_connection_direction;           //!< Connected directions
+             QVector< QVector<Arrow*> > m_previews;                       //!< Previewed parts
+  public:
+             /*! Data for object changing
+              */
+             inline ObjectChangingData() {}
+};
+/*! Data for box changing
+ */
+class BoxChangingData: public ObjectChangingData
+{
+ protected:
+            Box * m_box;           //!< Box
+            QRectF m_rect;         //!< Rectangle
+ public:
+            /*! Data for object changing
+                \param[in] box box data
+             */
+            inline BoxChangingData(Box * box) { m_box=box; m_rect=m_box->collisionRect(); }
+};
+
+/*! \class ArrowSegmentMoving
+    A data abount arrow segment moving
+ */
+class ArrowSegmentMoving: public DynamicEditState,public ObjectChangingData
+{
+private:
+    Arrow * m_obj;                              //!< Moving object
+    QLineF  m_statingpos;                       //!< Starting object position
+public:
+    /*! Default constructor
+        \param[in] diagram   diagram data
+        \param[in] clickpos  click  position
+        \param[in] obj       object
+     */
+    ArrowSegmentMoving(Diagram * diagram,
+                      const QPointF & clickpos,
+                      Arrow * obj);
+    /*! Clears an inner dynamic state
+     */
+    virtual void clearState();
+    /*! An action, which is performed, when releasing on action
+        \param[in] p releasing point
+     */
+    virtual void onRelease(const QPointF & p);
+    /*! An action, which is performed, when moving
+     */
+    virtual void onMove(const QPointF & p);
+};
+
+/*! \class BoxMoving
+    A state,used when moving a box
+ */
+class BoxMoving: public DynamicEditState, public BoxChangingData
+{
+public:
+    /*! Default constructor
+        \param[in] diagram   diagram data
+        \param[in] clickpos  click  position
+        \param[in] obj       object
+     */
+    BoxMoving(Diagram * diagram,
+              const QPointF & clickpos,
+              Box * obj);
+    /*! Clears an inner dynamic state
+     */
+    virtual void clearState();
+    /*! An action, which is performed, when releasing on action
+        \param[in] p releasing point
+     */
+    virtual void onRelease(const QPointF & p);
+    /*! An action, which is performed, when moving
+     */
+    virtual void onMove(const QPointF & p);
+};
+
+/*! \enum BoxCorner
+    BoxCorner, used for resizing
+ */
+enum BlockCorner
+{
+    BC_UPPERLEFT,
+    BC_UPPERRIGHT,
+    BC_LOWERLEFT,
+    BC_LOWERRIGHT
+};
+
+
+/*! \class BoxMoving
+    A state,used when moving a box
+ */
+class BoxResize: public DynamicEditState, public BoxChangingData
+{
+public:
+    /*! Default constructor
+        \param[in] diagram   diagram data
+        \param[in] clickpos  click  position
+        \param[in] obj       object
+     */
+    BoxResize(Diagram * diagram,
+              const QPointF & clickpos,
+              Box * obj);
+    /*! Clears an inner dynamic state
+     */
+    virtual void clearState();
+    /*! An action, which is performed, when releasing on action
+        \param[in] p releasing point
+     */
+    virtual void onRelease(const QPointF & p);
+    /*! An action, which is performed, when moving
+     */
+    virtual void onMove(const QPointF & p);
+};
 
 
 /*! \class SelectTool

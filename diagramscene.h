@@ -16,48 +16,6 @@
 
 #include "tool.h"
 
-//Defines a default block space
-#define BLOCK_SPACE_Y 3
-//Defines a block space x
-#define BLOCK_SPACE_X 3
-
-enum TextEditState
-{
-   TES_NONE,
-   TES_EDIT
-};
-
-enum DragState
-{
-    DS_NONE,
-    DS_BLOCK_RESIZE,
-    DS_BLOCK_MOVE,
-    DS_ALABEL_MOVE,
-    DS_ARROW_MOVE,
-    DS_ALINE_RESIZE
-};
-
-enum BlockCorner
-{
-    BC_UPPERLEFT,
-    BC_UPPERRIGHT,
-    BC_LOWERLEFT,
-    BC_LOWERRIGHT
-};
-
-/*! Arrow Editing state
- */
-enum ArrowEditState
-{
-    AES_NONE,
-    AES_EDIT
-};
-
-enum AnnotationLineDrawingState
-{
-    ALDS_SPECIFIEDNONE,
-    ALDS_SPECIFIEDFIRSTPOINT
-};
 
 //enum ArrowDirection;
 /*! A class of panel for tool selection
@@ -75,22 +33,6 @@ private:
     QGraphicsProxyWidget *   m_editor;             //!< A current text editor
 
 
-    QGraphicsView *          m_view;               //!< View widget pointer for data
-    QRectF                   m_default_block_size; //!< Default block size tool
-    QRectF                   m_default_number_size; //!< Default number size for block
-    TextEditState            m_edit_state;         //!< Text edit state
-    QGraphicsProxyWidget *   m_label_editor_in_scene; //!< A label editor in scene
-    DragState                m_dragstate;          //!< Dragging state work
-    Box                  *   m_draggingblock;      //!< Dragged block
-    BlockCorner              m_resizingblockcorner; //!< Resizing corner of block
-    qreal                    m_blockmovingparams[2]; //!< Defines an x and y relevance to moving
-    QRectF                   m_alabel_block_size;   //!< Size of annotation label
-    FreeComment           *   m_moving_label;        //!< Moving annotation label
-    ArrowEditState           m_arrow_state;         //!< Arrow editing state
-    AnnotationLineDrawingState  m_alds;            //!< Annotation line drawing state
-    QPointF                  m_aline_firstpoint;   //!< Annotation line first point
-    //Arguments for resizing annotation line
-    CommentLine           *    m_resizing_aline;     //!< Resizing annotation line
 
     void annnotationLabelMoveLeave(const QPointF & pos);
     /*! Enters into annotation line resizing state
