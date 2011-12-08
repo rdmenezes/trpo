@@ -136,8 +136,8 @@ class SaveLoad <QPair <T1,T2> >
  public:
    static QString save( const QPair<T1,T2>  & p)
    {
-     QString result1=save(p.first) ;
-     QString result2=save(p.second) ;
+     QString result1=SaveLoad<T1>::save(p.first) ;
+     QString result2=SaveLoad<T2>::save(p.second) ;
      QString result;
      result.append(result1);
      result.append("@");

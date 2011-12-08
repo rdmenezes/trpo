@@ -83,14 +83,20 @@ class ObjectChangingData
 
              QVector< QVector< ObjectConnector* > > m_connected_objects;  //!< Connected objects
              QVector< Connection >      m_connection_direction;           //!< Connected directions
+             QVector< qreal >           m_poses;                          //!< Position
+             QVector< ObjectConnector * > m_attachedconnector;            //!< Attached connectors
              QVector< QVector<Arrow*> > m_previews;                       //!< Previewed parts
-  public:
-             /*! Data for object changing
-              */
-             inline ObjectChangingData() {}
+
              /*! Gets all connected data, filling object connector
               */
              void extractData(ObjectConnector * c);
+             /*! Extracts a data from one vector
+              */
+             void extractData(ObjectConnector * c,Connection ct,const QVector< QPair<qreal,ObjectConnector *> > & from);
+public:
+             /*! Data for object changing
+              */
+             inline ObjectChangingData() {}
 };
 /*! Data for box changing
  */
