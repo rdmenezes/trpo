@@ -15,7 +15,7 @@
 /*! \class ObjectConnector
     Class, which creates a connectors for data
  */
-class ObjectConnector: public QLineF
+class ObjectConnector: public QLineF, Serializable
 {
  private:
          DiagramObject        *   m_parent;
@@ -116,6 +116,21 @@ class ObjectConnector: public QLineF
         /*! Clears all references other connectors
          */
         void clear();
+        /*!  Saves a data to document
+             \param[in] doc     document data
+             \param[in] element parent element data
+         */
+        virtual  void save(QDomDocument * doc,QDomElement * element);
+        /*! Loads a default data from document populating address map
+            \param[in] element element data
+            \param[in] addressMap adressedMap
+         */
+        virtual  void load(QDomElement * element,
+                           QMap<void *, Serializable *> & addressMap);
+        /*! Resolves inner pointers, from stored in adress map
+            \param[in] addressMap map of addresses
+         */
+        virtual  void resolvePointers(QMap<void *, Serializable *> & adressMap);
 };
 
 /*! Removes references from connector and kills annotation lines

@@ -87,10 +87,6 @@ private:
     QRectF                   m_alabel_block_size;   //!< Size of annotation label
     FreeComment           *   m_moving_label;        //!< Moving annotation label
     ArrowEditState           m_arrow_state;         //!< Arrow editing state
-    ArrowPoint           *   m_last_arrow_point;          //!< Last point added to scene
-    ArrowSegment         *   m_moving_segment;      //!< Segment that can be moved
-    //Arguments for adding annotation line
-    ArrowSegment         *   m_aline_segment;      //!< Segment, where is binded annotation
     AnnotationLineDrawingState  m_alds;            //!< Annotation line drawing state
     QPointF                  m_aline_firstpoint;   //!< Annotation line first point
     //Arguments for resizing annotation line
@@ -112,15 +108,6 @@ private:
         \param[in] pos  position
      */
     void determineDraggingBoxAction(Box * item,const QPointF & pos);
-    /*! Removes arrow segment
-        \param[in] seg segment
-     */
-    void removeArrowSegment(ArrowSegment * seg);
-    /*! Enables arrow moving action
-        \param[in] pos position
-        \param[in] seg segment
-     */
-    void enterArrowMove(const QPointF & pos,ArrowSegment * seg);
     /*! Leaves arrow moving action
         \param[in] pos position
      */
