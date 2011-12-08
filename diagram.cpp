@@ -53,7 +53,7 @@ void Diagram::save(QDomDocument *doc,
     buf=::save(m_set);
     diagram.setAttribute("diagram set", buf);
 
-    buf=::save(&m_parent);
+    buf=::save(m_parent);
     diagram.setAttribute("parent location", buf);
 
     // vector of boxes
@@ -68,7 +68,7 @@ void Diagram::save(QDomDocument *doc,
     j=1;
     for (int i = 0; i < m_swaps.size(); ++i)
     {
-        //buf=save(&m_swaps.at(i));
+        buf=::save(m_swaps.at(i));
         bufName.clear();
         bufName.setNum(j);
         diagram.setAttribute(bufName.prepend("swap "), buf);
