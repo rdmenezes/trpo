@@ -133,10 +133,39 @@ void removeReferencesAndKillLines(ObjectConnector * removing,ObjectConnector * o
     }
 }
 
-void ObjectConnector::save(QDomDocument * /* doc */,
-                      QDomElement *  /* element */)
+void ObjectConnector::save(QDomDocument *  doc,
+                      QDomElement *  element)
 {
-    //!< TODO: Implement this later
+    QDomElement objectConnector;
+    objectConnector=doc->createElement("ObjectConnector");
+    QString buf, bufName;
+
+    buf=save::(m_parent);   // DiagramObject   *   m_parent
+    objectConnector.setAttribute("diagram object", buf);
+
+    // 1 vector of box connectors  QVector< QPair<qreal,ObjectConnector*> > m_connected[2]
+    int j=1;
+    for (int i = 0; i < m_connected[1].size(); ++i)
+    {
+        buf=save::(m_connected[1].at(i));
+        bufName.clear();
+        bufName.setNum(j);
+        objectConnector.setAttribute(bufName.prepend("m_connected_1 "), buf);
+        j++;
+    }
+
+    // 2 vector of box connectors
+    int j=1;
+    for (int i = 0; i < m_connected[2].size(); ++i)
+    {
+        buf=save::(m_connected[2].at(i));
+        bufName.clear();
+        bufName.setNum(j);
+        objectConnector.setAttribute(bufName.prepend("m_connected_2 "), buf);
+        j++;
+    }
+
+    element->appendChild(objectConnector);
 }
 
 void ObjectConnector::load(QDomElement * /* element */,
