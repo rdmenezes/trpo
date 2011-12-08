@@ -79,12 +79,14 @@ class ObjectChangingData
 {
   protected:
              QVector<CommentLine *> m_commentlines;            //!< Connected comment lines
-             QVector<QLineF>        m_startingposition;        //!< Starting position
+             QVector<QLineF>        m_commentlinesposition;        //!< Starting position
 
-             QVector< QVector< ObjectConnector* > > m_connected_objects;  //!< Connected objects
+             QVector< ObjectConnector*  > m_connected_objects;            //!< Connected objects
              QVector< Connection >      m_connection_direction;           //!< Connected directions
              QVector< qreal >           m_poses;                          //!< Position
-             QVector< ObjectConnector * > m_attachedconnector;            //!< Attached connectors
+             QVector< ObjectConnector * > m_attachedconnectors;           //!< Attached connectors
+             QVector< QPointF >           m_reachedpos;                   //!< Reachable position
+
              QVector< QVector<Arrow*> > m_previews;                       //!< Previewed parts
 
              /*! Gets all connected data, filling object connector
