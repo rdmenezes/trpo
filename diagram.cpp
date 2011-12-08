@@ -50,7 +50,7 @@ void Diagram::save(QDomDocument *doc,
         j++;
     }
 
-    //buf=save(m_set);
+    buf=::save(m_set);
     diagram.setAttribute("diagram set", buf);
 
 
