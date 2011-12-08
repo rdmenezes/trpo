@@ -156,4 +156,11 @@ class SaveLoad <QPointF>
 //    return result;
 //}
 
+
+
+template<typename T>
+QString save(const T & obj)          { return SaveLoad<T>::save(obj); }
+template<typename T>
+T       load(const QString & string) { return SaveLoad<T>::load(string); }
+
 #endif // SAVELOAD_H
