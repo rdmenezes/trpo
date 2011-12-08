@@ -21,10 +21,6 @@ class Box;
 class FreeComment;
 //Annoation lint item
 class CommentLine;
-//Arrow points item
-class ArrowPoint;
-//Arrow segments item
-class ArrowSegment;
 //A set of diagram
 class DiagramSet;
 //Diagram sce
@@ -123,22 +119,6 @@ private:
         /*! Swap entries data
          */
         QVector<SwapEntry>     m_swaps;
-
-        /*! Vector  of annotation labels
-         */
-        QVector<FreeComment *>   m_alabels;
-        /*! Vector of annotation lines
-         */
-        QVector<CommentLine *>    m_alines;
-        /*! Vector of arrow points
-         */
-        QVector<ArrowPoint *>   m_arrow_points;
-        /*! Vector if arrow segments
-         */
-        QVector<ArrowSegment *> m_arrow_segments;
-        /*! An id of diagram
-         */
-        int m_id;
 public:
         /*! Returns a parent location
          */
@@ -211,19 +191,6 @@ public:
         /*! Get types of items under position
          */
         void items(const QPointF & pos, QList<QGraphicsItem *>  & lst);
-
-        /*! Returns an annotation labels
-         */
-        inline QVector<FreeComment *> & annotationLabels() { return  m_alabels; }
-        /*! Returns an annotatione lines
-         */
-        inline QVector<CommentLine *> &  annotationLines() { return m_alines; }
-        /*! Returns an arrow points
-         */
-        inline QVector<ArrowPoint *> &  arrowPoints()    { return  m_arrow_points; }
-        /*! Returns an arrow segments
-         */
-        inline QVector<ArrowSegment *> & arrowSegments() { return m_arrow_segments; }
         /*! Inits an empty diagram
          */
         Diagram();

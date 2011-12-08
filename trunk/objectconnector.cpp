@@ -132,3 +132,22 @@ void removeReferencesAndKillLines(ObjectConnector * removing,ObjectConnector * o
             }
     }
 }
+
+void ObjectConnector::save(QDomDocument * /* doc */,
+                      QDomElement *  /* element */)
+{
+    //!< TODO: Implement this later
+}
+
+void ObjectConnector::load(QDomElement * /* element */,
+                      QMap<void *, Serializable *> & /* addressMap */ )
+{
+    //!< TODO: Implement this later
+}
+
+void ObjectConnector::resolvePointers(QMap<void *, Serializable *> &
+                                 /* adressMap */)
+{
+    //!< TODO: Implement this later
+}
+
