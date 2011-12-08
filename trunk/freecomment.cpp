@@ -220,10 +220,22 @@ void FreeComment::moveTo(const QPointF &p)
    this->scene()->update();
 }
 
-void FreeComment::save(QDomDocument * /* doc */,
-               QDomElement *  /* element */)
+void FreeComment::save(QDomDocument * doc,
+               QDomElement *  element)
 {
-    //!< TODO: Implement this later
+    QDomElement freeComment;
+    freeComment=doc->createElement("FreeComment");
+    QString buf, bufName, bufVal;
+
+    freeComment.setAttribute("default string", m_text);
+
+    buf=QString("%1 %2").arg(m_size.width()).arg(m_size.height());
+    freeComment.setAttribute("size of rect", buf);
+
+    //buf=::save(m_parentcomment);      //AttachedComment * m_parentcomment
+    freeComment.setAttribute("attached comment", buf);
+
+    element->appendChild(freeComment);
 }
 
 void FreeComment::load(QDomElement * /* element */,
