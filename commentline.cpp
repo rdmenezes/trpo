@@ -147,7 +147,7 @@ void CommentLine::save(QDomDocument * doc,
 {
     QDomElement commentLine;
     commentLine=doc->createElement("CommentLine");
-    QString buf, bufName, bufVal;
+    QString buf;
 
     m_self->save(doc,&commentLine);
 
