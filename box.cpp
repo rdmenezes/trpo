@@ -113,10 +113,43 @@ QRectF  Box::collisionRect() const
     return  QRectF(pos(),m_size);
 }
 
-void Box::save(QDomDocument * /* doc */,
-               QDomElement *  /* element */)
+void Box::save(QDomDocument * doc,
+               QDomElement * element)
 {
-    //!< TODO: Implement this later
+    QDomElement box;
+    box=doc->createElement("Box");
+    QString buf, bufName, bufVal;
+
+    box.setAttribute("real text", m_real_text);
+    box.setAttribute("viewed text", m_view_text);
+
+    buf=QString("%1 %2 %3 %4").arg(m_text_rect.left()).arg(m_text_rect.right()).arg(m_text_rect.bottom()).arg(m_text_rect.top());
+    box.setAttribute("text position", buf);
+
+    buf=QString("%1 %2 %3 %4").arg(m_number_rect.left()).arg(m_number_rect.right()).arg(m_number_rect.bottom()).arg(m_number_rect.top());
+    box.setAttribute("number position", buf);
+
+    buf=QString("%1 %2").arg(m_size.width()).arg(m_size.height());
+    box.setAttribute("size of rect", buf);
+
+    box.setAttribute("is visible", m_number_is_visible);
+    box.setAttribute("box id", m_id);
+    box.setAttribute("location of child", m_child);
+
+
+    // vector of box connectors
+    int j=1;
+    for (int i = 0; i < m_connectors.size(); ++i)
+    {
+        //bufVal=save(&m_connectors.at(i));
+        bufName.clear();
+        bufName.setNum(j);
+        box.setAttribute(bufName.prepend("box connector "), bufVal);
+        j++;
+        //m_connectors.at(i)->save(doc, &box);
+    }
+
+    element->appendChild(box);
 }
 
 void Box::load(QDomElement * /* element */,

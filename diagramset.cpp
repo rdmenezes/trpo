@@ -73,7 +73,7 @@ void DiagramSet::save(QDomDocument * doc,
      {
          key_val.first=i.key();
          key_val.second=i.value();
-         diagramset.setAttribute(id.setNum(i.value()->id()), i.key());
+         //diagramset.setAttribute(id.setNum(i.value()->id()), i.key());
          i.value()->save(doc, &diagramset);
          i++;
      }
