@@ -129,7 +129,7 @@ void Box::save(QDomDocument * doc,
     buf=QString("%1 %2 %3 %4").arg(m_number_rect.left()).arg(m_number_rect.right()).arg(m_number_rect.bottom()).arg(m_number_rect.top());
     box.setAttribute("number position", buf);
 
-    buf=::save(m_size);
+    //buf=::save(m_size);
     box.setAttribute("size of rect", buf);
 
     box.setAttribute("is visible", m_number_is_visible);
@@ -141,7 +141,7 @@ void Box::save(QDomDocument * doc,
     int j=1;
     for (int i = 0; i < m_connectors.size(); ++i)
     {
-        bufVal=::save(m_connectors.at(i));
+        //bufVal=::save(m_connectors.at(i));
         bufName.clear();
         bufName.setNum(j);
         box.setAttribute(bufName.prepend("box connector "), bufVal);
