@@ -117,25 +117,28 @@ QString SaveLoad<double>::save(const double & object)
     bool ok=true;
     return QPointF(lst[0].toDouble(&ok),lst[1].toDouble(&ok));
 }
-//template<typename T1, typename T2>
-//   QString SaveLoad <QPair <T1,T2> >:: save( const QPair  & p)
-//   {
-//       QString result;
 
-//       return result;
-//   }
-//     QString  SaveLoad <QPair.T1, QPair.T2 >::save( const QPair  & p)
-//     {
-////         int t=10;
-////         QString result=save(t) ;
-////         return result;
-//     }
+QString SaveLoad <QSize>::save(const QSize & s)
+{
+ int heightTmp=s.height();
+ int widthTmp=s.width();
+ QString sHeight=QString("%1").arg(heightTmp);
+ QString sWidth=QString("%1").arg(widthTmp);
+ QString result1;
+ result1.append(sHeight);
+ result1.append(":");
+ result1.append(sWidth);
+ return result1;
+}
 
-
- //inline QString locationToString( DiagramParent & loc)
- //{
- //    QString result=QString::number(loc.diagramID(),10);
- //    result+=";";
- //    result+=QString::number(loc.blockID(),10);
- //    return result;
- //}
+QSize SaveLoad <QSize>::load(const QString & string)
+{
+ QSize tmpSize;
+ QString str1 =   string.section(':', 0, 0);
+ int heightTmp=str1.toInt();
+ QString str2 =   string.section(':', 1, 1);
+ int widthTmp=str2.toInt();
+ tmpSize.setHeight(heightTmp);
+ tmpSize.setWidth(widthTmp);
+ return tmpSize;
+}
