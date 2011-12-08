@@ -129,7 +129,7 @@ void Box::save(QDomDocument * doc,
     buf=QString("%1 %2 %3 %4").arg(m_number_rect.left()).arg(m_number_rect.right()).arg(m_number_rect.bottom()).arg(m_number_rect.top());
     box.setAttribute("number position", buf);
 
-    buf=QString("%1 %2").arg(m_size.width()).arg(m_size.height());
+    //buf=
     box.setAttribute("size of rect", buf);
 
     box.setAttribute("is visible", m_number_is_visible);
