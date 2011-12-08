@@ -103,22 +103,6 @@ QString SaveLoad<double>::save(const double & object)
                      lst[3].toDouble(&ok));
    }
 
-   QString SaveLoad <QSize>::save(const QSize & s)
-   {
-       QString result=QString("%1 %2").arg(s.width()).arg(s.height());
-       return result;
-   }
-
-   QSize  SaveLoad <QSize>:: load(const QString & string)
-   {
-       QStringList lst=string.split(" ");
-       if (lst.size()!=2) return QSize();
-       bool ok=true;
-       return QSize(lst[0].toInt(&ok),lst[1].toInt(&ok));
-   }
-
-
-
     QString SaveLoad <QPointF>:: save( const QPointF & p)
     {
         QString result=QString::number(p.x());
@@ -133,6 +117,19 @@ QString SaveLoad<double>::save(const double & object)
     bool ok=true;
     return QPointF(lst[0].toDouble(&ok),lst[1].toDouble(&ok));
 }
+//template<typename T1, typename T2>
+//   QString SaveLoad <QPair <T1,T2> >:: save( const QPair  & p)
+//   {
+//       QString result;
+
+//       return result;
+//   }
+//     QString  SaveLoad <QPair.T1, QPair.T2 >::save( const QPair  & p)
+//     {
+////         int t=10;
+////         QString result=save(t) ;
+////         return result;
+//     }
 
 
  //inline QString locationToString( DiagramParent & loc)
