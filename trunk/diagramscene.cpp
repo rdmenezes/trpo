@@ -226,6 +226,7 @@ void  DiagramScene::blockResizeMoveEnter ( QGraphicsSceneMouseEvent * event )
 #define CORNER_PRECISE 7
 void DiagramScene::determineDraggingBoxAction(Box * item,const QPointF & pos)
 {
+  /*
   bool handled=false;
   if (   pos.x()-item->boundingRect().x() < CORNER_PRECISE
          &&  pos.y()-item->boundingRect().y() < CORNER_PRECISE
@@ -281,6 +282,7 @@ void DiagramScene::determineDraggingBoxAction(Box * item,const QPointF & pos)
       m_blockmovingparams[0]=((qreal)pos.x()-rct.left())/rct.width();
       m_blockmovingparams[1]=((qreal)pos.y()-rct.top())/rct.height();
   }
+  */
 }
 
 void resizeLeft(QRectF & oldrect, QPointF & pos)
