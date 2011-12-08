@@ -19,7 +19,7 @@
 template<typename T >
 class SaveLoad
 {
-private:
+public:
   /*! Сохраняет объект в строку
        \param[in] object объект для сохранения
        \return строка с содержимым объекта
