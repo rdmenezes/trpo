@@ -120,6 +120,16 @@ public:
    static QPointF load( const QString & string);
 };
 
+
+template<>
+class SaveLoad <QSize>
+{
+public:
+   static QString save(const QSize & s);
+   static QSize load(const QString & string);
+};
+
+
 template<typename T1, typename T2>
 class SaveLoad <QPair <T1,T2> >
 {
@@ -144,6 +154,37 @@ class SaveLoad <QPair <T1,T2> >
        tmpPair.second=str2;
        return tmpPair;
    }
+};
+
+
+
+template<typename T>
+class SaveLoad <QVector <T> >
+{
+    public:
+
+
+    static QString save( const QVector <T> & v)
+    {
+      QString tmpVec;
+      for (int i=0;i<v.size();i++)
+      {
+            tmpVec.append(SaveLoad<T>::save(v[i]));
+            if (i!=v.size()-1)
+            tmpVec.append("@");
+      };
+      return tmpVec;
+    }
+    static QVector <T> load( const QString & string)
+    {
+      QVector<QString> vecloadTmp;
+      QStringList tmp=string.split("@");
+       for (int i=0;i<tmp.size();i++)
+       {
+          vecloadTmp.append(tmp[i]);
+       }
+       return  vecloadTmp;
+    }
 };
 
 template<typename T>

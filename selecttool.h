@@ -88,6 +88,9 @@ class ObjectChangingData
              /*! Data for object changing
               */
              inline ObjectChangingData() {}
+             /*! Gets all connected data, filling object connector
+              */
+             void extractData(ObjectConnector * c);
 };
 /*! Data for box changing
  */
