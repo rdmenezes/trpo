@@ -3,7 +3,7 @@
 #include <QGraphicsScene>
 #include <QPainter>
 #include <algorithm>
-
+#include "saveload.h"
 
 CommentLine::CommentLine(const QPointF & in,
                          const QPointF & out,
@@ -142,10 +142,26 @@ QLineF CommentLine::collisionLine() const
     return QLineF(m_in,m_out);
 }
 
-void CommentLine::save(QDomDocument * /* doc */,
-               QDomElement *  /* element */)
+void CommentLine::save(QDomDocument * doc,
+               QDomElement *  element)
 {
-    //!< TODO: Implement this later
+    QDomElement commentLine;
+    commentLine=doc->createElement("CommentLine");
+    QString buf, bufName, bufVal;
+
+    m_self->save(doc,&commentLine);
+
+    buf=::save(m_parentcomment);      // AttachedComment
+    commentLine.setAttribute("parent comment", buf);
+
+    buf=::save(m_in);                 // QPointF
+    commentLine.setAttribute("input connector", buf);
+
+    buf=::save(m_out);                // QPointF
+    commentLine.setAttribute("output connector", buf);
+
+
+    element->appendChild(commentLine);
 }
 
 void CommentLine::load(QDomElement * /* element */,
