@@ -43,7 +43,7 @@ void Diagram::save(QDomDocument *doc,
     j=1;
     for (int i = 0; i < m_objects.size(); ++i)
     {
-        //buf=&m_objects.at(i)
+        buf=::save(m_objects.at(i));
         bufName.clear();
         bufName.setNum(j);
         diagram.setAttribute(bufName.prepend("diargamObject "), buf);
@@ -53,13 +53,8 @@ void Diagram::save(QDomDocument *doc,
     buf=::save(m_set);
     diagram.setAttribute("diagram set", buf);
 
-
-    //buf=save(m_parent);
+    buf=::save(&m_parent);
     diagram.setAttribute("parent location", buf);
-
-    //buf=save(m_scene);
-    diagram.setAttribute("scene", buf);
-
 
     // vector of boxes
     QMapIterator<Box *, int> i(m_boxes);
