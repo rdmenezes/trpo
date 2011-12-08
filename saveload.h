@@ -19,6 +19,7 @@
 template<typename T >
 class SaveLoad
 {
+private:
   /*! Сохраняет объект в строку
        \param[in] object объект для сохранения
        \return строка с содержимым объекта
@@ -42,6 +43,7 @@ class SaveLoad
 template<>
 class SaveLoad<int>
 {
+public:
   /*! Сохраняет int в строку
            \param[in] object объект для сохранения
            \return строка с содержимым объекта
@@ -65,6 +67,7 @@ class SaveLoad<int>
 template<>
 class SaveLoad<double>
 {
+public:
     static QString save(const double & object);
 
     /*! Загружает int из строки
@@ -83,6 +86,7 @@ class SaveLoad<double>
 template<>
 class SaveLoad<DiagramParent>
 {
+public:
     static QString save(const DiagramParent & loc);
 
     /*! Загружает int из строки
@@ -101,16 +105,27 @@ template<>
 class SaveLoad <void *>
 
 {
-    static QString save( void * ptr);
+public:
+   static QString save( void * ptr);
    static void * load(const QString & string);
 };
+
+
+template<typename T>
+class SaveLoad< T* >
+{
+public:
+    static QString save(T * ptr)                { return SaveLoad<void*>::save(ptr); }
+    static T*      load(const QString & string) { return (T*)(SaveLoad<void*>::load(string)); }
+};
+
+
 template<>
 class SaveLoad <QRect>
 {
-
-
+public:
    static QString save(const QRect & r);
-  static QRect load(const QString & string);
+   static QRect load(const QString & string);
 };
 
 
@@ -118,6 +133,7 @@ class SaveLoad <QRect>
 template<>
 class SaveLoad <QSize>
 {
+public:
    static QString save(const QSize & s);
    static QSize load(const QString & string);
 };
@@ -125,10 +141,9 @@ class SaveLoad <QSize>
 template<>
 class SaveLoad <QRectF>
 {
-
-
+public:
    static QString save(const QRectF & r);
-  static QRectF load(const QString & string);
+   static QRectF load(const QString & string);
 };
 
 
@@ -136,6 +151,7 @@ class SaveLoad <QRectF>
 template<>
 class SaveLoad <QPointF>
 {
+public:
    static QString save( const QPointF & p);
    static QPointF load( const QString & string);
 };
