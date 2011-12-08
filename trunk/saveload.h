@@ -112,6 +112,16 @@ class SaveLoad <QRect>
    static QString save(const QRect & r);
   static QRect load(const QString & string);
 };
+
+
+
+template<>
+class SaveLoad <QSize>
+{
+   static QString save(const QSize & s);
+   static QSize load(const QString & string);
+};
+
 template<>
 class SaveLoad <QRectF>
 {

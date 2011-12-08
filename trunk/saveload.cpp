@@ -103,6 +103,22 @@ QString SaveLoad<double>::save(const double & object)
                      lst[3].toDouble(&ok));
    }
 
+   QString SaveLoad <QSize>::save(const QSize & s)
+   {
+       QString result=QString("%1 %2").arg(s.width()).arg(s.height());
+       return result;
+   }
+
+   QSize  SaveLoad <QSize>:: load(const QString & string)
+   {
+       QStringList lst=string.split(" ");
+       if (lst.size()!=2) return QSize();
+       bool ok=true;
+       return QSize(lst[0].toInt(&ok),lst[1].toInt(&ok));
+   }
+
+
+
     QString SaveLoad <QPointF>:: save( const QPointF & p)
     {
         QString result=QString::number(p.x());
