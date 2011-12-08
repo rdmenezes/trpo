@@ -19,23 +19,29 @@
 template<typename T >
 class SaveLoad
 {
-public:
   /*! Сохраняет объект в строку
-       \param[in] object объект для сохранения
-       \return строка с содержимым объекта
+           \param[in] object объект для сохранения
+           \return строка с содержимым объекта
    */
-  static QString save(const T & /*object*/)
+  static QString save(const T & object)
   {
-      QString result("Test string");
+      QString result=s;
+
       return result;
   }
   /*! Загружает объект из строки
-       \param[in]  string строка с содержимым объекта
-       \return  восстановленный объект
+           \param[in]  string строка с содержимым объекта
+           \return  восстановленный объект
    */
   static T load(const QString & string)
   {
-      return T();
+     T result=string;
+      /*
+      for (int i=escape_len-1;i>-1;i--)
+          result.replace(escape_to[i],escape_from[i]);
+      */
+      return T;
+
   }
 };
 
@@ -43,7 +49,6 @@ public:
 template<>
 class SaveLoad<int>
 {
-public:
   /*! Сохраняет int в строку
            \param[in] object объект для сохранения
            \return строка с содержимым объекта
@@ -67,7 +72,6 @@ public:
 template<>
 class SaveLoad<double>
 {
-public:
     static QString save(const double & object);
 
     /*! Загружает int из строки
@@ -86,7 +90,6 @@ public:
 template<>
 class SaveLoad<DiagramParent>
 {
-public:
     static QString save(const DiagramParent & loc);
 
     /*! Загружает int из строки
@@ -105,45 +108,24 @@ template<>
 class SaveLoad <void *>
 
 {
-public:
-   static QString save( void * ptr);
+    static QString save( void * ptr);
    static void * load(const QString & string);
 };
-
-
-template<typename T>
-class SaveLoad< T* >
-{
-public:
-    static QString save(T * ptr)                { return SaveLoad<void*>::save(ptr); }
-    static T*      load(const QString & string) { return (T*)(SaveLoad<void*>::load(string)); }
-};
-
-
 template<>
 class SaveLoad <QRect>
 {
-public:
+
+
    static QString save(const QRect & r);
-   static QRect load(const QString & string);
+  static QRect load(const QString & string);
 };
-
-
-
-template<>
-class SaveLoad <QSize>
-{
-public:
-   static QString save(const QSize & s);
-   static QSize load(const QString & string);
-};
-
 template<>
 class SaveLoad <QRectF>
 {
-public:
+
+
    static QString save(const QRectF & r);
-   static QRectF load(const QString & string);
+  static QRectF load(const QString & string);
 };
 
 
@@ -151,17 +133,38 @@ public:
 template<>
 class SaveLoad <QPointF>
 {
-public:
    static QString save( const QPointF & p);
    static QPointF load( const QString & string);
 };
+template<typename T1, typename T2>
+class SaveLoad <QPair <T1,T2> >
+{
+   static QString save( const QPair  & p)
+   {
 
-//template<>
-//class SaveLoad <QPair <Key, Value>>
-//{/*
-//   static QString save( const QPair & p);
-//   static QPair load( const QString & string);*/
-//};
+               QString result1=save(p.first) ;
+               QString result2=save(p.second) ;
+               QString result;
+               result.append(result1,"@",result2);
+               return result;
+   }
+   static QPair load( const QString & string)
+   {
+       QPair tmpPair;
+
+
+        QString str1 =   string.section('@', 0, 0);
+         QString str2 =   string.section('@', 1, 1);
+
+tmpPair.first=str1;
+tmpPair.second=str2;
+ return tmpPair;
+
+
+
+
+   }
+};
 
 
 //inline QString locationToString( DiagramParent & loc)
@@ -171,12 +174,5 @@ public:
 //    result+=QString::number(loc.blockID(),10);
 //    return result;
 //}
-
-
-
-template<typename T>
-QString save(const T & obj)          { return SaveLoad<T>::save(obj); }
-template<typename T>
-T       load(const QString & string) { return SaveLoad<T>::load(string); }
 
 #endif // SAVELOAD_H
