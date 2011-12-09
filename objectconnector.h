@@ -120,6 +120,11 @@ class ObjectConnector: public QLineF, Serializable
         /*! Returns a position of objects
          */
         qreal getPosition(ObjectConnector * c);
+        /*! Sets a position for an object
+            \param[in] c connector
+            \param[in] pos position
+         */
+        void setPosition(ObjectConnector * c, qreal pos);
         /*! Determines,whether connector has connected another connector
             \param[in] o other connector
          */
@@ -177,10 +182,18 @@ class ObjectConnector: public QLineF, Serializable
             object to place
             \param[in] c object connector
          */
-        bool canMove(ObjectConnector * c,const QLineF & newpos);
+        bool canMove(ObjectConnector * c,const QPointF & connectionpoint);
         /*! Tests, whether we can resize self
          */
         bool canResize(ObjectConnector * sender,const QLineF & line );
+        /*!
+         */
+        void moveOrResize(ObjectConnector * sender,const QPointF & connectionpoint);
+        /*! Resizes a connector
+            \param[in] sender sender data
+            \param[in] line   line
+         */
+        void resize(ObjectConnector * sender, const QLineF & line);
 };
 
 /*! Removes references from connector and kills annotation lines

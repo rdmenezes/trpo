@@ -185,7 +185,9 @@ public:
              \return true if will die
           */
          virtual bool dieIfEqualTo(DiagramObject * o);
-
+         /*! Returns a parent comment
+          */
+         inline AttachedComment * parentComment() { return m_parentcomment;}
 };
 
 #endif // ALINEITEM_H
