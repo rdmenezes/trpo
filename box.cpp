@@ -123,14 +123,14 @@ void Box::save(QDomDocument * doc,
     box.setAttribute("real text", m_real_text);    // Real text string
     box.setAttribute("viewed text", m_view_text);  // Viewed text string
 
-    buf=QString("%1 %2 %3 %4").arg(m_text_rect.left()).arg(m_text_rect.right()).arg(m_text_rect.bottom()).arg(m_text_rect.top());
-    box.setAttribute("text position", buf);
+    buf=::save(m_text_rect);
+    box.setAttribute("text position", buf);      //position on a screen
 
-    buf=QString("%1 %2 %3 %4").arg(m_number_rect.left()).arg(m_number_rect.right()).arg(m_number_rect.bottom()).arg(m_number_rect.top());
-    box.setAttribute("number position", buf);
+    buf=buf=::save(m_number_rect);
+    box.setAttribute("number position", buf);    //rendered number position
 
-    //buf=::save(m_size);
-    box.setAttribute("size of rect", buf);
+    buf=::save(m_size);
+    box.setAttribute("size of rect", buf);       //Size of bounding rect of box
 
     box.setAttribute("is visible", m_number_is_visible);
     box.setAttribute("box id", m_id);
