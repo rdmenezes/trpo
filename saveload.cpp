@@ -143,7 +143,7 @@ QSize SaveLoad <QSize>::load(const QString & string)
  return tmpSize;
 }
 
-template<>
+
 QString SaveLoad <QSizeF>::save(const QSizeF & s)
 {
     QString result;
@@ -151,7 +151,6 @@ QString SaveLoad <QSizeF>::save(const QSizeF & s)
     return result;
 }
 
-template<>
 QSizeF SaveLoad <QSizeF>::load(const QString & string)
 {
     QSizeF tmpSize;
