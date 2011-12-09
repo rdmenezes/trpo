@@ -90,7 +90,7 @@ class SaveLoad<T*>
 {
 public:
     static QString save( T * ptr)               { return SaveLoad<void*>::save(ptr);}
-    static void * load(const QString & string)  { return (T*)(SaveLoad<void*>::load(string));}
+    static T * load(const QString & string)  { return (T*)(SaveLoad<void*>::load(string));}
 
 };
 
