@@ -76,7 +76,7 @@ void DiagramSet::save(QDomDocument * doc,
          key_val.second=i.value();
          buf=::save(key_val);
 
-         bufName=QString("%1").arg(j).prepend("Diagram");
+         bufName=QString("%1").arg(j).prepend("Diagram ");
          diagramset.setAttribute(bufName, buf);           //Set of diagram
          i.value()->save(doc, &diagramset);
          i++;
