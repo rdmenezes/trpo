@@ -197,6 +197,15 @@ class SaveLoad <QVector <T> >
 };
 
 
+template<>
+class SaveLoad <SwapEntry>
+{
+public:
+   static QString save( const SwapEntry & p);
+   static SwapEntry load( const QString & string);
+};
+
+
 template<typename T>
 QString save(const T & obj) { return SaveLoad<T>::save(obj); }
 
