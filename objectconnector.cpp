@@ -311,6 +311,22 @@ void ObjectConnector::resize(ObjectConnector * sender, const QLineF & line)
     setLine(line.x1(),line.y1(),line.x2(),line.y2());
 }
 
+
+bool ObjectConnector::testCanMove(const QPointF & vector)
+{
+    bool can=true;
+    for (int i=0;i<2;i++)
+    {
+        for (int j=0;j<m_connected[i].size();j++)
+        {
+            QPointF pos=position(*this,m_connected[i][j].first);
+            bool test=m_connected[i][j].second->canMove(this,pos+vector);
+            can= can && test;
+        }
+    }
+    return can;
+}
+
 void ObjectConnector::save(QDomDocument *  doc,
                       QDomElement *  element)
 {

@@ -175,6 +175,10 @@ class ObjectConnector: public QLineF, Serializable
             if (!parent()) return false;
             return parent()->type()==IsArrow;
         }
+        /*! Tests, whether we can move self
+            \param[in] vector delta vector
+         */
+        bool testCanMove(const QPointF & vector);
         /*! Tests, whether it's can be moved orthogonal
          */
         bool canMoveCollinear();
