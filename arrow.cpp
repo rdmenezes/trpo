@@ -269,10 +269,24 @@ DiagramObject * Arrow::clone()
     return new Arrow(new ObjectConnector(*m_self),this->diagram(),m_tunneled_begin,m_tunneled_end);
 }
 
-void Arrow::save(QDomDocument * /* doc */,
-               QDomElement *  /* element */)
+void Arrow::save(QDomDocument * doc ,
+               QDomElement *  element)
 {
-    //!< TODO: Implement this later
+    //ObjectConnector * m_self;     //!< Self object connector
+    //bool              m_tunneled_begin; //!< Tunneled object connector
+    //bool              m_tunneled_end;   //!< Whether object is connected at  end
+
+    QDomElement arrow;
+    arrow=doc->createElement("Box");
+    QString buf;
+
+    m_self->save(doc, &arrow);
+    buf=::save(m_self);                                //Self object connector
+    arrow.setAttribute("object connector", buf);
+    arrow.setAttribute("tunnel start", m_tunneled_begin);  //Tunneled object connector
+    arrow.setAttribute("tunnel finish", m_tunneled_end);   //Whether object is connected at  end
+
+    element->appendChild(arrow);
 }
 
 void Arrow::load(QDomElement * /* element */,
