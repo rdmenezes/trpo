@@ -13,6 +13,7 @@
 #include "diagramobject.h"
 #include "objectconnector.h"
 #include <stdio.h>
+#include "attachedcomment.h"
 //A point of line segment
 class ArrowPoint;
 //A diagram data
