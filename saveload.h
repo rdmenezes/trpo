@@ -130,6 +130,15 @@ public:
 };
 
 
+template<>
+class SaveLoad <QSizeF>
+{
+public:
+   static QString save(const QSizeF & s);
+   static QSizeF load(const QString & string);
+};
+
+
 template<typename T1, typename T2>
 class SaveLoad <QPair <T1,T2> >
 {
