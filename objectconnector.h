@@ -117,6 +117,9 @@ class ObjectConnector: public QLineF, Serializable
                     return C_OUTPUT;
             return C_OUTPUT;
         }
+        /*! Returns a position of objects
+         */
+        qreal getPosition(ObjectConnector * c);
         /*! Determines,whether connector has connected another connector
             \param[in] o other connector
          */

@@ -134,6 +134,20 @@ void removeReferencesAndKillLines(ObjectConnector * removing,ObjectConnector * o
     }
 }
 
+
+qreal ObjectConnector::getPosition(ObjectConnector * c)
+{
+    QVector< QPair<qreal,ObjectConnector*> > v=m_connected[0];
+    for (int i=0;i<v.size();i++)
+        if (v[i].second==c)
+            return v[i].first;
+    v=m_connected[1];
+    for (int i=0;i<v.size();i++)
+        if (v[i].second==c)
+            return v[i].first;
+    return -1;
+}
+
 void ObjectConnector::save(QDomDocument *  doc,
                       QDomElement *  element)
 {
