@@ -36,7 +36,8 @@ void Diagram::save(QDomDocument *doc,
 {
     QDomElement diagram;
     diagram=doc->createElement("Diagram");
-    QString id, buf, bufName;
+    QString buf, bufName;
+    QPair<Box *, int> key_val;;
     int j;
 
     // vector of diagram objects; no method of saving of diagram objects
@@ -44,9 +45,8 @@ void Diagram::save(QDomDocument *doc,
     for (int i = 0; i < m_objects.size(); ++i)
     {
         buf=::save(m_objects.at(i));
-        bufName.clear();
-        bufName.setNum(j);
-        diagram.setAttribute(bufName.prepend("diargamObject "), buf);
+        bufName=QString("%1").arg(j).prepend("diargamObject ");
+        diagram.setAttribute(bufName, buf);         //Set of objects
         j++;
     }
 
@@ -61,17 +61,22 @@ void Diagram::save(QDomDocument *doc,
     while (i.hasNext())
     {
         i.next();
-        diagram.setAttribute(id.setNum(i.value()), i.value());
+        bufName=QString("%1").arg(j).prepend("box ");
+        key_val.first=i.key();
+        key_val.second=i.value();
+        buf=::save(key_val);
+
+        diagram.setAttribute(buf, i.value());
         i.key()->save(doc, &diagram);
     }
+
     // vector  of swap entries data; no method of saving of swap
     j=1;
     for (int i = 0; i < m_swaps.size(); ++i)
     {
         buf=::save(m_swaps.at(i));
-        bufName.clear();
-        bufName.setNum(j);
-        diagram.setAttribute(bufName.prepend("swap "), buf);
+        bufName=QString("%1").arg(j).prepend("swap ");
+        diagram.setAttribute(bufName, buf);
         j++;
     }
 

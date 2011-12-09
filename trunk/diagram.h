@@ -6,6 +6,7 @@
 #include <QPair>
 #include <QVector>
 #include <QRectF>
+#include <QPair>
 #include <QImage>
 #include <time.h>
 #include "diagramobject.h"
