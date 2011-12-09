@@ -6,6 +6,7 @@
 #include <QHash>
 #include "diagram.h"
 #include "serializable.h"
+#include "saveload.h"
 #ifndef DIAGRAMSET_H
 #define DIAGRAMSET_H
 
