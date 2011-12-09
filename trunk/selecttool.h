@@ -72,22 +72,52 @@ public:
     virtual void onMove(const QPointF & p);
 
 };
+/*! Data for connector changing
+ */
+class ConnectorChangingData
+{
+ public:
+         ObjectConnector *  m_connected;             //!< Connected object connector, where we should put out object
+         qreal              m_position_on_moved;     //!< Position on moved object
+         qreal              m_position_on_connected; //!< Position on connected object
+         Connection         m_connectiontype;        //!< Connection type data
+
+         QVector<Arrow *>   m_previews;              //!< Previews for a data
+
+         inline ConnectorChangingData() {}
+         /*! Checks a resize position
+             \param[in] moveposition moving position
+             \param[in] resizeposition resizing position
+          */
+         bool checkResize(const QLineF & moveposition, const QLineF & resizeposition);
+};
+
+class ArrowChangingData
+{
+ public:
+         ObjectConnector *  m_moved_object;          //!< Object, that position is currently changed by user
+         QLineF             m_moved_starting_state;  //!< Starting state position
+
+         QVector<ConnectorChangingData> m_incident_segment_changes; //!< Incident segment changes
+
+         QVector<CommentLine *> m_commentlines;           //!< CommentLines data
+         QVector<QLineF>        m_commentlinesposition;   //!< Comment lines position
+         QVector<qreal>         m_commentlinesonline;     //!< Comment lines on position
+
+         inline ArrowChangingData() {}
+         /*! Checks a resize position
+             \param[in] moveposition moving position
+             \param[in] resizeposition resizing position
+          */
+         bool checkResize(const QLineF & moveposition, const QLineF & resizeposition);
+};
 
 /*! Data for object changing
  */
 class ObjectChangingData
 {
   protected:
-             QVector<CommentLine *> m_commentlines;            //!< Connected comment lines
-             QVector<QLineF>        m_commentlinesposition;        //!< Starting position
-
-             QVector< ObjectConnector*  > m_connected_objects;            //!< Connected objects
-             QVector< Connection >      m_connection_direction;           //!< Connected directions
-             QVector< qreal >           m_poses;                          //!< Position
-             QVector< ObjectConnector * > m_attachedconnectors;           //!< Attached connectors
-             QVector< QPointF >           m_reachedpos;                   //!< Reachable position
-
-             QVector< QVector<Arrow*> > m_previews;                       //!< Previewed parts
+             QVector<ArrowChangingData>  m_changes;
 
              /*! Gets all connected data, filling object connector
               */
