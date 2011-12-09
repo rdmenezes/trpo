@@ -149,10 +149,11 @@ void CommentLine::save(QDomDocument * doc,
     commentLine=doc->createElement("CommentLine");
     QString buf;
 
-    m_self->save(doc,&commentLine);
+    m_self->save(doc,&commentLine);  // ObjectConnector*
 
     buf=::save(m_parentcomment);      // AttachedComment
     commentLine.setAttribute("parent comment", buf);
+    m_parentcomment->save(doc,&commentLine);
 
     buf=::save(m_in);                 // QPointF
     commentLine.setAttribute("input connector", buf);
