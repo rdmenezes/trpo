@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <QMessageBox>
 #include "saveload.h"
-
+#include "attachedcomment.h"
 
 Direction direction(const QLineF & line)
 {
@@ -201,12 +201,8 @@ bool ObjectConnector::canMoveCollinear()
 bool contains(const QLineF & line, const QPointF & point);
 
 
-bool ObjectConnector::canMove(ObjectConnector * sender,const QLineF & newpos)
+bool ObjectConnector::canMove(ObjectConnector * sender,const QPointF & connectionpoint)
 {
-     Connection contn=this->connectionFor(sender);
-     QPointF connectionpoint=newpos.p1();
-     if (contn==C_INPUT)
-         connectionpoint=newpos.p2();
      if (isAttachedToCommentLine())
          return true;
      if (isAttachedToBox())
@@ -246,6 +242,73 @@ bool ObjectConnector::canResize(ObjectConnector * sender,
         }
     }
     return can;
+}
+
+void ObjectConnector::setPosition(ObjectConnector * c, qreal pos)
+{
+ for (int i=0;i<2;i++)
+ {
+   for (int j=0;j<m_connected[i].size();j++)
+   {
+      if (m_connected[i][j].second==c)
+          m_connected[i][j].first=pos;
+   }
+ }
+}
+
+
+void ObjectConnector::moveOrResize(ObjectConnector * sender,const QPointF & connectionpoint)
+{
+    if (isAttachedToCommentLine())
+    {
+        setP1(connectionpoint);
+        CommentLine * cline=static_cast<CommentLine*>(parent());
+        cline->setLine(cline->in().x(),cline->in().y(),connectionpoint.x(),
+                                                       connectionpoint.y());
+        cline->parentComment()->comment()->setPosWithoutCheck(
+                cline->parentComment()->comment()->pos()
+                );
+    }
+    if (isAttachedToBox())
+    {
+        qreal pos=position(*this,connectionpoint);
+        setPosition(sender,pos);
+    }
+    if (isAttachedToSegment())
+    {
+        qreal pos=getPosition(sender);
+        if (fabs(pos)>0.0001
+           && fabs(pos-1)>0.0001)
+        {
+            qreal pos=position(*this,connectionpoint);
+            setPosition(sender,pos);
+        }
+        else
+        {
+         QLineF line(this->p1(),connectionpoint);
+         if (fabs(pos)<0.001)
+            line=QLineF(connectionpoint,this->p2());
+         setPosition(sender,pos);
+         resize(sender,line);
+         static_cast<Arrow*>(parent())->regenerate();
+        }
+    }
+}
+
+void ObjectConnector::resize(ObjectConnector * sender, const QLineF & line)
+{
+    for (int i=0;i<2;i++)
+    {
+        for (int j=0;j<m_connected[i].size();j++)
+        {
+            if (m_connected[i][j].second!=sender)
+            {
+                QPointF pos=position(*this,m_connected[i][j].first);
+                m_connected[i][j].first=position(*this,pos);
+            }
+        }
+    }
+    setLine(line.x1(),line.y1(),line.x2(),line.y2());
 }
 
 void ObjectConnector::save(QDomDocument *  doc,
