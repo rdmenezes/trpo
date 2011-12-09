@@ -116,15 +116,9 @@ class ArrowChangingData
  */
 class ObjectChangingData
 {
-  protected:
+protected:
              QVector<ArrowChangingData>  m_changes;
 
-             /*! Gets all connected data, filling object connector
-              */
-             void extractData(ObjectConnector * c);
-             /*! Extracts a data from one vector
-              */
-             void extractData(ObjectConnector * c,Connection ct,const QVector< QPair<qreal,ObjectConnector *> > & from);
 public:
              /*! Data for object changing
               */
@@ -134,6 +128,12 @@ public:
                  \param[in] resizeposition resizing position
               */
              bool checkResize(const QLineF & moveposition, const QLineF & resizeposition);
+             /*! Gets all connected data, filling object connector
+              */
+             void extractData(ObjectConnector * c);
+             /*! Extracts a data from one vector
+              */
+             void extractData(ObjectConnector * c,Connection ct,const QVector< QPair<qreal,ObjectConnector *> > & from);
 };
 /*! Data for box changing
  */
@@ -156,7 +156,7 @@ class ArrowSegmentMoving: public DynamicEditState,public ObjectChangingData
 {
 private:
     Arrow * m_obj;                              //!< Moving object
-    QLineF  m_statingpos;                       //!< Starting object position
+    QLineF  m_startingpos;                       //!< Starting object position
 public:
     /*! Default constructor
         \param[in] diagram   diagram data

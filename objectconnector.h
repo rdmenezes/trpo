@@ -146,6 +146,41 @@ class ObjectConnector: public QLineF, Serializable
             \param[in] addressMap map of addresses
          */
         virtual  void resolvePointers(QMap<void *, Serializable *> & adressMap);
+        /*! Regenerates a positions of connected objects
+         */
+        void regeneratePositions();
+        /*! Is attached to comment line
+         */
+        inline bool isAttachedToCommentLine()
+        {
+            if (!parent()) return false;
+            return parent()->type()==IsCommentLine;
+        }
+        /*! Tests, whether is attached to box
+         */
+        inline bool isAttachedToBox()
+        {
+            if (!parent()) return false;
+            return parent()->type()==IsBox;
+        }
+        /*! Tests, whether is attached to segment
+         */
+        inline bool isAttachedToSegment()
+        {
+            if (!parent()) return false;
+            return parent()->type()==IsArrow;
+        }
+        /*! Tests, whether it's can be moved orthogonal
+         */
+        bool canMoveCollinear();
+        /*! Tests, whether we can move connection point of this
+            object to place
+            \param[in] c object connector
+         */
+        bool canMove(ObjectConnector * c,const QLineF & newpos);
+        /*! Tests, whether we can resize self
+         */
+        bool canResize(ObjectConnector * sender,const QLineF & line );
 };
 
 /*! Removes references from connector and kills annotation lines
