@@ -156,7 +156,7 @@ public:
             \param[in] y2 y second point
          */
         void setLine(qreal x1, qreal y1, qreal x2, qreal y2);
-        /*! Regenerates an amount
+        /*! Regenerates a bounding rect for an items
          */
         void regenerate();
         /*! Tests, whether arrow is under cursor

@@ -43,7 +43,8 @@ SOURCES += main.cpp \
     commentlinetool.cpp \
     erasertool.cpp \
     saveload.cpp \
-    selecttoolstates.cpp
+    selecttoolstates.cpp \
+    arrowsegmentmoving.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \

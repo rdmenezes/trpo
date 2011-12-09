@@ -5,19 +5,26 @@
 #include <QMessageBox>
 #include "saveload.h"
 
+
+Direction direction(const QLineF & line)
+{
+    Direction dir=D_LEFT;
+     if (fabs(line.p1().x()-line.p2().x())<0.0001)
+     {
+        if (line.p1().y()>line.p2().y()) dir=D_TOP;
+        else dir=D_BOTTOM;
+     }
+     else
+     {
+         if (line.p2().x()>line.p1().x()) dir=D_RIGHT;
+     }
+     return dir;
+}
+
+
 Direction ObjectConnector::direction() const
 {
-   Direction dir=D_LEFT;
-    if (fabs(this->p1().x()-this->p2().x())<0.0001)
-    {
-       if (p1().y()>p2().y()) dir=D_TOP;
-       else dir=D_BOTTOM;
-    }
-    else
-    {
-        if (p2().x()>p1().x()) dir=D_RIGHT;
-    }
-    return dir;
+    return ::direction(*this);
 }
 
 bool ObjectConnector::addConnector(ObjectConnector * c, qreal point,Connection type,bool debug)
@@ -146,6 +153,99 @@ qreal ObjectConnector::getPosition(ObjectConnector * c)
         if (v[i].second==c)
             return v[i].first;
     return -1;
+}
+
+void ObjectConnector::regeneratePositions()
+{
+    for (int i=0;i<m_connected[0].size();i++)
+    {
+        QPair<qreal,ObjectConnector*> tmp=m_connected[0][i];
+        tmp.first=position(*this,tmp.second->p2());
+        m_connected[0][i]=tmp;
+    }
+    for (int i=0;i<m_connected[1].size();i++)
+    {
+        QPair<qreal,ObjectConnector*> tmp=m_connected[1][i];
+        tmp.first=position(*this,tmp.second->p1());
+        m_connected[1][i]=tmp;
+    }
+}
+
+
+bool ObjectConnector::canMoveCollinear()
+{
+    bool can=true;
+    for (int i=0;i<m_connected[0].size();i++)
+    {
+         QPair<qreal,ObjectConnector*> tmp=m_connected[0][i];
+         if (tmp.second->isAttachedToBox()
+             ||
+             ( (fabs(tmp.first)<0.001
+             || fabs(tmp.first-1)<0.001)
+             && tmp.second->isAttachedToSegment()))
+             can=false;
+    }
+    for (int i=0;i<m_connected[1].size();i++)
+    {
+         QPair<qreal,ObjectConnector*> tmp=m_connected[1][i];
+         if (tmp.second->isAttachedToBox()
+             ||
+             ( (fabs(tmp.first)<0.001
+             || fabs(tmp.first-1)<0.001)
+             && tmp.second->isAttachedToSegment()))
+             can=false;
+    }
+    return can;
+}
+
+bool contains(const QLineF & line, const QPointF & point);
+
+
+bool ObjectConnector::canMove(ObjectConnector * sender,const QLineF & newpos)
+{
+     Connection contn=this->connectionFor(sender);
+     QPointF connectionpoint=newpos.p1();
+     if (contn==C_INPUT)
+         connectionpoint=newpos.p2();
+     if (isAttachedToCommentLine())
+         return true;
+     if (isAttachedToBox())
+         return contains(*this,connectionpoint);
+     if (isAttachedToSegment())
+     {
+         qreal pos=getPosition(sender);
+         if (fabs(pos)>0.0001
+            && fabs(pos-1)>0.0001)
+             return contains(*this,connectionpoint);
+
+         QLineF line(this->p1(),connectionpoint);
+         if (fabs(pos)<0.001)
+             line=QLineF(connectionpoint,this->p2());
+         if (::direction(line)!=direction())
+             return false;
+         return canResize(sender,line);
+     }
+     return true;
+}
+
+
+bool ObjectConnector::canResize(ObjectConnector * sender,
+                                const QLineF & line )
+{
+    bool can=true;
+    for (int i=0;i<2;i++)
+    {
+        for (int j=0;j<m_connected[i].size();j++)
+        {
+            QPair<qreal,ObjectConnector *> test=m_connected[i][j];
+            if (test.second!=sender)
+            {
+                bool cont=contains(line,position(*this,test.first));
+                can=can && cont;
+            }
+        }
+    }
+    return can;
 }
 
 void ObjectConnector::save(QDomDocument *  doc,
