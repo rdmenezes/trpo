@@ -141,10 +141,9 @@ void Box::save(QDomDocument * doc,
     int j=1;
     for (int i = 0; i < m_connectors.size(); ++i)
     {
-        //bufVal=::save(m_connectors.at(i));
-        bufName.clear();
-        bufName.setNum(j);
-        box.setAttribute(bufName.prepend("box connector "), bufVal);
+        bufVal=::save(m_connectors.at(i));
+        bufName=QString("%1").arg(j).prepend("box connector ");
+        box.setAttribute(bufName, bufVal);
         j++;
         m_connectors.at(i)->save(doc, &box);
     }
