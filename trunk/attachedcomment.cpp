@@ -23,10 +23,22 @@ QRectF AttachedComment::boundingRect() const
     return QRectF();
 }
 
-void AttachedComment::save(QDomDocument * /* doc */,
-               QDomElement *  /* element */)
+void AttachedComment::save(QDomDocument * doc,
+               QDomElement *  element)
 {
-    //!< TODO: Implement this later
+    QDomElement attachedComment;
+    attachedComment=doc->createElement("AttachedComment");
+    QString buf;
+
+    buf=::save(m_comment);
+    attachedComment.setAttribute("comment", buf);  //Comment data
+
+    buf=::save(m_line);
+    attachedComment.setAttribute("line", buf);     //Line data
+
+    attachedComment.setAttribute("iterator", m_iterator);  //Iterator state
+
+    element->appendChild(attachedComment);
 }
 
 void AttachedComment::load(QDomElement * /* element */,

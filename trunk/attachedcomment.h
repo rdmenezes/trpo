@@ -7,6 +7,7 @@
 #define ATTACHEDCOMMENT_H
 #include "freecomment.h"
 #include "commentline.h"
+#include "saveload.h"
 
 /*! \class AttachedComment
     Attached comment
