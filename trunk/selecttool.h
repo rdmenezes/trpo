@@ -129,6 +129,11 @@ public:
              /*! Data for object changing
               */
              inline ObjectChangingData() {}
+             /*! Checks a resize position
+                 \param[in] moveposition moving position
+                 \param[in] resizeposition resizing position
+              */
+             bool checkResize(const QLineF & moveposition, const QLineF & resizeposition);
 };
 /*! Data for box changing
  */

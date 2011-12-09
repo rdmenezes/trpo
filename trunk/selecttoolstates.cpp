@@ -47,7 +47,21 @@ bool ArrowChangingData::checkResize(const QLineF & moveposition, const QLineF & 
  return ok;
 }
 
-/*
+bool ObjectChangingData::checkResize(const QLineF & moveposition,
+                                     const QLineF & resizeposition)
+{
+    bool ok=true;
+    for (int i=0;i<m_changes.size();i++)
+    {
+        bool canResize=m_changes[i].checkResize(moveposition,
+                                                resizeposition);
+        ok=ok && canResize;
+    }
+    return ok;
+}
+
+
+
 void ObjectChangingData::extractData(ObjectConnector * c)
 {
  QVector< QPair<qreal,ObjectConnector*> > input=c->getConnected(C_INPUT);
@@ -57,10 +71,14 @@ void ObjectChangingData::extractData(ObjectConnector * c)
 }
 
 
+
 void ObjectChangingData::extractData(ObjectConnector * c,
                                      Connection ct,
                                      const QVector< QPair<qreal,ObjectConnector *> > & from)
 {
+  ArrowChangingData data;
+  data.m_moved_object=c;
+  data.m_moved_starting_state=*c;
   for (int i=0;i<from.size();i++)
   {
     QPair<qreal,ObjectConnector *> temp=from[i];
@@ -69,20 +87,27 @@ void ObjectChangingData::extractData(ObjectConnector * c,
     if (con->parent() && con->parent()->type()==IsCommentLine)
     {
         CommentLine * cl=static_cast<CommentLine*>(con->parent());
-        m_commentlines<<cl;
-        m_commentlinesposition<<QLineF(cl->in().x(),cl->in().y(),cl->out().x(),cl->out().y());
+        data.m_commentlines<<cl;
+        data.m_commentlinesposition<<QLineF(cl->in().x(),
+                                            cl->in().y(),
+                                            cl->out().x(),
+                                            cl->out().y());
+        data.m_commentlinesonline<<pos;
     }
     else
     {
-        m_attachedconnectors<<c;
-        m_connected_objects<<con;
-        m_connection_direction<<ct;
-        m_poses<<pos;
-        if (ct==C_INPUT)
-            m_reachedpos<<c->p2();
-        else
-            m_reachedpos<<c->p1();
+        ConnectorChangingData ccd;
+        ccd.m_connected=con;
+        ccd.m_position_on_moved=pos;
+        ccd.m_position_on_connected=con->getPosition(c);
+        ccd.m_connectiontype=ct;
+        ccd.m_previews.clear();
+        data.m_incident_segment_changes<<ccd;
     }
   }
+
+  m_changes<<data;
 }
-*/
+
+
+
