@@ -196,6 +196,7 @@ class SaveLoad <QVector <T> >
     }
 };
 
+
 template<typename T>
 QString save(const T & obj) { return SaveLoad<T>::save(obj); }
 

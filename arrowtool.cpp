@@ -683,8 +683,13 @@ void ArrowTool::connectLineToBox()
     bool canplace=canPlacePreviews();
     Arrow * lastpreview=m_preview[m_preview_amount-1];
     Direction lsegdir=lastpreview->model()->direction();
+    Direction lastsegmentdirection=m_preview[m_preview_amount-1]->model()->direction();
+    bool directed_non_properly=(dir==D_TOP  && lastsegmentdirection==D_TOP)
+                           ||  (dir==D_LEFT && lastsegmentdirection==D_LEFT)
+                           ||  (dir==D_BOTTOM && lastsegmentdirection==D_BOTTOM);
+    bool directed_properly=!directed_non_properly;
     bool    notcollideswithbox=lsegdir!=dir;
-    if (isNotOpposite && !isBadCollision && directed_right && canplace && notcollideswithbox)
+    if (isNotOpposite && !isBadCollision && directed_right && canplace && notcollideswithbox && directed_properly)
     {
         disconnectAllPreviews();
         QVector<DiagramObject *> v;
@@ -790,7 +795,12 @@ void ArrowTool::connectBoxToBox()
     bool directed_right_o=dir_output==D_TOP || dir_output==D_LEFT || dir_output==D_BOTTOM;
     bool canplace=canPlacePreviews();
     bool notsamebox=m_boxes[0]!=m_boxes[1];
-    if (directed_right_i && directed_right_o && canplace && notsamebox)
+    Direction lastsegmentdirection=m_preview[m_preview_amount-1]->model()->direction();
+    bool directed_non_properly=(dir_output==D_TOP  && lastsegmentdirection==D_TOP)
+                           ||  (dir_output==D_LEFT && lastsegmentdirection==D_LEFT)
+                           ||  (dir_output==D_BOTTOM && lastsegmentdirection==D_BOTTOM);
+    bool directed_properly=!directed_non_properly;
+    if (directed_right_i && directed_right_o && canplace && notsamebox && directed_properly)
     {
         //Fill connections
         ObjectConnector * bxin=m_boxes[0]->getBySide(dir_input);
