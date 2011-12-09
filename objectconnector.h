@@ -105,6 +105,18 @@ class ObjectConnector: public QLineF, Serializable
          */
         inline const QVector< QPair<qreal,ObjectConnector*> > & getConnected(Connection type) const
         { return m_connected[type]; }
+        /*! Returns  a connection direction for connected object
+         */
+        inline Connection connectionFor(ObjectConnector * c) const
+        {
+            for (int i=0;i<c->m_connected[0].size();i++)
+                if (c->m_connected[0][i].second==c)
+                    return C_INPUT;
+            for (int i=0;i<c->m_connected[1].size();i++)
+                if (c->m_connected[1][i].second==c)
+                    return C_OUTPUT;
+            return C_OUTPUT;
+        }
         /*! Determines,whether connector has connected another connector
             \param[in] o other connector
          */
