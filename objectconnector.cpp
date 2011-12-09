@@ -141,27 +141,19 @@ void ObjectConnector::save(QDomDocument *  doc,
     objectConnector=doc->createElement("ObjectConnector");
     QString buf, bufName;
 
+    buf=::save(this);
+    objectConnector.setAttribute("selfPointer", buf);
+
     buf=::save(m_parent);   // DiagramObject   *   m_parent
-    objectConnector.setAttribute("diagram object", buf);
+    objectConnector.setAttribute("diagramObject", buf);
 
     // 1 vector of box connectors    QVector< QPair<qreal,ObjectConnector*> > m_connected[2]
-    for (int i = 0; i < m_connected[1].size(); ++i)
-    {
-        buf=::save(m_connected[1].at(i));
-        bufName.clear();
-        bufName.setNum(i);
-        objectConnector.setAttribute(bufName.prepend("m_connected_1 "), buf);
-
-    }
+    buf=::save(m_connected[1]);
+    objectConnector.setAttribute("m_connected_1", buf);
 
     // 2 vector of box connectors
-    for (int j = 0; j < m_connected[2].size(); ++j)
-    {
-        buf=::save(m_connected[2].at(j));
-        bufName.clear();
-        bufName.setNum(j);
-        objectConnector.setAttribute(bufName.prepend("m_connected_2 "), buf);
-    }
+    buf=::save(m_connected[2]);
+    objectConnector.setAttribute("m_connected_2", buf);
 
     element->appendChild(objectConnector);
 }

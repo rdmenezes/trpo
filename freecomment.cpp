@@ -227,13 +227,16 @@ void FreeComment::save(QDomDocument * doc,
     freeComment=doc->createElement("FreeComment");
     QString buf, bufName, bufVal;
 
-    freeComment.setAttribute("default string", m_text);
+    buf=::save(this);
+    freeComment.setAttribute("selfPointer", buf);
+
+    freeComment.setAttribute("defaultString", m_text);
 
     buf=::save(m_size);
-    freeComment.setAttribute("size of rect", buf);
+    freeComment.setAttribute("sizeRect", buf);
 
     buf=::save(m_parentcomment);
-    freeComment.setAttribute("attached comment", buf);  //AttachedComment * m_parentcomment
+    freeComment.setAttribute("attachedComment", buf);  //AttachedComment * m_parentcomment
 
     element->appendChild(freeComment);
 }

@@ -63,11 +63,16 @@ void DiagramSet::save(QDomDocument * doc,
 {
      QDomElement diagramset;
      diagramset=doc->createElement("DiagramSet");
-     diagramset.setAttribute("max diagrams", m_max_id);   //Max diagrams in set
 
      QHash<int,Diagram *>::iterator i = m_set.begin();
      QPair<int, Diagram*> key_val;
      QString buf, bufName;
+
+     buf=::save(this);
+     diagramset.setAttribute("selfPointer", buf);
+
+     diagramset.setAttribute("maxDiagrams", m_max_id);   //Max diagrams in set
+
 
      int j=1;
      while (i!=m_set.end())
@@ -76,7 +81,7 @@ void DiagramSet::save(QDomDocument * doc,
          key_val.second=i.value();
          buf=::save(key_val);
 
-         bufName=QString("%1").arg(j).prepend("Diagram ");
+         bufName=QString("%1").arg(j).prepend("Diagram");
          diagramset.setAttribute(bufName, buf);           //Set of diagram
          i.value()->save(doc, &diagramset);
          i++;
@@ -86,8 +91,8 @@ void DiagramSet::save(QDomDocument * doc,
 }
 
 
-void DiagramSet::load(QDomElement * /* element */,
-                      QMap<void *, Serializable *> & /* addressMap */ )
+void DiagramSet::load(QDomElement * element,
+                      QMap<void *, Serializable *> &  addressMap)
 {
     //!< TODO: Implement this later
 }

@@ -40,34 +40,40 @@ void Diagram::save(QDomDocument *doc,
     QPair<Box *, int> key_val;;
     int j;
 
+    buf=::save(this);
+    diagram.setAttribute("selfPointer", buf);
+
     // vector of diagram objects; no method of saving of diagram objects
     j=1;
     for (int i = 0; i < m_objects.size(); ++i)
     {
+        m_objects.at(i)->save(doc, &diagram);
         buf=::save(m_objects.at(i));
-        bufName=QString("%1").arg(j).prepend("diargamObject ");
+        bufName=QString("%1").arg(j).prepend("diargamObject");
         diagram.setAttribute(bufName, buf);         //Set of objects
         j++;
     }
 
     buf=::save(m_set);
-    diagram.setAttribute("diagram set", buf);
+    diagram.setAttribute("diagramSet", buf);
 
     buf=::save(m_parent);
-    diagram.setAttribute("parent location", buf);
+    diagram.setAttribute("parentLocation", buf);
 
     // vector of boxes
     QMapIterator<Box *, int> i(m_boxes);
+    j=1;
     while (i.hasNext())
     {
         i.next();
-        bufName=QString("%1").arg(j).prepend("box ");
+        bufName=QString("%1").arg(j).prepend("box");
         key_val.first=i.key();
         key_val.second=i.value();
         buf=::save(key_val);
 
-        diagram.setAttribute(buf, i.value());
+        diagram.setAttribute(bufName, buf);
         i.key()->save(doc, &diagram);
+        j++;
     }
 
     // vector  of swap entries data; no method of saving of swap
@@ -75,7 +81,7 @@ void Diagram::save(QDomDocument *doc,
     for (int i = 0; i < m_swaps.size(); ++i)
     {
         buf=::save(m_swaps.at(i));
-        bufName=QString("%1").arg(j).prepend("swap ");
+        bufName=QString("%1").arg(j).prepend("swap");
         diagram.setAttribute(bufName, buf);
         j++;
     }

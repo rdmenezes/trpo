@@ -276,11 +276,15 @@ void Arrow::save(QDomDocument * doc ,
     arrow=doc->createElement("Box");
     QString buf;
 
+    buf=::save(this);
+    arrow.setAttribute("selfPointer", buf);
+
     m_self->save(doc, &arrow);
+
     buf=::save(m_self);                                //Self object connector
-    arrow.setAttribute("object connector", buf);
-    arrow.setAttribute("tunnel start", m_tunneled_begin);  //Tunneled object connector
-    arrow.setAttribute("tunnel finish", m_tunneled_end);   //Whether object is connected at  end
+    arrow.setAttribute("objectConnector", buf);
+    arrow.setAttribute("tunnelStart", m_tunneled_begin);  //Tunneled object connector
+    arrow.setAttribute("tunnelFinish", m_tunneled_end);   //Whether object is connected at  end
 
     element->appendChild(arrow);
 }
