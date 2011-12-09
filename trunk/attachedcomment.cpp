@@ -30,9 +30,11 @@ void AttachedComment::save(QDomDocument * doc,
     attachedComment=doc->createElement("AttachedComment");
     QString buf;
 
+    m_comment->save(doc, &attachedComment);
     buf=::save(m_comment);
     attachedComment.setAttribute("comment", buf);  //Comment data
 
+    m_line->save(doc, &attachedComment);
     buf=::save(m_line);
     attachedComment.setAttribute("line", buf);     //Line data
 
