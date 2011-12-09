@@ -160,3 +160,22 @@ QSizeF SaveLoad <QSizeF>::load(const QString & string)
     return tmpSize;
 }
 
+QString SaveLoad < SwapEntry>:: save(const SwapEntry & obj)
+{
+
+ QString swap=QString("%1").arg( obj.m_time);
+ swap.append("@");
+ swap.append(SaveLoad<Box*>::save(obj.m_box1));
+ swap.append("@");
+ swap.append(SaveLoad<Box*>::save(obj.m_box2));
+ return  swap;
+}
+   SwapEntry SaveLoad < SwapEntry>::load(const QString & string)
+   {
+     SwapEntry tmpSwap;
+     tmpSwap.m_time =( string.section('@', 0, 0)).toLong();
+     tmpSwap.m_box2 =SaveLoad <Box*>::load(string.section('@', 2, 2));
+     tmpSwap.m_box1 =SaveLoad < Box* >::load(string.section('@', 1, 1));
+     return tmpSwap;
+
+   }
