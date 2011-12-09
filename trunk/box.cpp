@@ -120,21 +120,25 @@ void Box::save(QDomDocument * doc,
     box=doc->createElement("Box");
     QString buf, bufName, bufVal;
 
-    box.setAttribute("real text", m_real_text);    // Real text string
-    box.setAttribute("viewed text", m_view_text);  // Viewed text string
+    buf=::save(this);
+    box.setAttribute("selfPointer", buf);
+
+
+    box.setAttribute("realText", m_real_text);    // Real text string
+    box.setAttribute("viewedText", m_view_text);  // Viewed text string
 
     buf=::save(m_text_rect);
-    box.setAttribute("text position", buf);      //position on a screen
+    box.setAttribute("textPosition", buf);      //position on a screen
 
     buf=buf=::save(m_number_rect);
-    box.setAttribute("number position", buf);    //rendered number position
+    box.setAttribute("numberPosition", buf);    //rendered number position
 
     buf=::save(m_size);
-    box.setAttribute("size of rect", buf);       //Size of bounding rect of box
+    box.setAttribute("sizeRect", buf);       //Size of bounding rect of box
 
-    box.setAttribute("is visible", m_number_is_visible);
-    box.setAttribute("box id", m_id);
-    box.setAttribute("location of child", m_child);
+    box.setAttribute("isVisible", m_number_is_visible);
+    box.setAttribute("id", m_id);
+    box.setAttribute("childLocation", m_child);
 
 
     // vector of box connectors
@@ -142,7 +146,7 @@ void Box::save(QDomDocument * doc,
     for (int i = 0; i < m_connectors.size(); ++i)
     {
         bufVal=::save(m_connectors.at(i));
-        bufName=QString("%1").arg(j).prepend("box connector ");
+        bufName=QString("%1").arg(j).prepend("boxConnector");
         box.setAttribute(bufName, bufVal);
         j++;
         m_connectors.at(i)->save(doc, &box);

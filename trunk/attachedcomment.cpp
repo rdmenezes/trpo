@@ -30,6 +30,9 @@ void AttachedComment::save(QDomDocument * doc,
     attachedComment=doc->createElement("AttachedComment");
     QString buf;
 
+    buf=::save(this);
+    attachedComment.setAttribute("selfPointer", buf);
+
     m_comment->save(doc, &attachedComment);
     buf=::save(m_comment);
     attachedComment.setAttribute("comment", buf);  //Comment data
