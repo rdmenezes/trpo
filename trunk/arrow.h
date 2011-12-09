@@ -12,6 +12,7 @@
 #include "drawingconstants.h"
 #include "itemtypes.h"
 #include <math.h>
+#include "saveload.h"
 
 #define POSITION_SENSIVITY 4
 
