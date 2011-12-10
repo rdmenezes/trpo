@@ -7,7 +7,7 @@
 #include "attachedcomment.h"
 #include "collisiondetector.h"
 #include "saveload.h"
-
+#include "arrow.h"
 int Diagram::id() const
 {
   return m_set->find(this);
@@ -35,60 +35,107 @@ void Diagram::save(QDomDocument *doc,
                       QDomElement *  element)
 {
     QDomElement diagram;
-    diagram=doc->createElement("Diagram");
-    QString buf, bufName;
-    QPair<Box *, int> key_val;;
-    int j;
+    diagram=doc->createElement("diagram");
+    diagram.setAttribute("this",::save(this));
+    diagram.setAttribute("set",::save(m_set));
+    diagram.setAttribute("parent",::save(m_parent));
+    diagram.setAttribute("boxhash",::save(m_boxes));
+    diagram.setAttribute("swaps",::save(m_swaps));
+    diagram.setAttribute("objects",::save(m_objects));
 
-    buf=::save(this);
-    diagram.setAttribute("selfPointer", buf);
-
-    // vector of diagram objects; no method of saving of diagram objects
-    j=1;
-    for (int i = 0; i < m_objects.size(); ++i)
-    {
-        m_objects.at(i)->save(doc, &diagram);
-        buf=::save(m_objects.at(i));
-        bufName=QString("%1").arg(j).prepend("diargamObject");
-        diagram.setAttribute(bufName, buf);         //Set of objects
-        j++;
-    }
-
-    buf=::save(m_set);
-    diagram.setAttribute("diagramSet", buf);
-
-    buf=::save(m_parent);
-    diagram.setAttribute("parentLocation", buf);
-
-    // vector of boxes
-    QMapIterator<Box *, int> i(m_boxes);
-    j=1;
-    while (i.hasNext())
-    {
-        i.next();
-        bufName=QString("%1").arg(j).prepend("box");
-        key_val.first=i.key();
-        key_val.second=i.value();
-        buf=::save(key_val);
-
-        diagram.setAttribute(bufName, buf);
-        i.key()->save(doc, &diagram);
-        j++;
-    }
-
-    // vector  of swap entries data; no method of saving of swap
-    j=1;
-    for (int i = 0; i < m_swaps.size(); ++i)
-    {
-        buf=::save(m_swaps.at(i));
-        bufName=QString("%1").arg(j).prepend("swap");
-        diagram.setAttribute(bufName, buf);
-        j++;
-    }
+    for (int i=0;i<m_objects.size();i++)
+        m_objects[i]->save(doc,&diagram);
 
     element->appendChild(diagram);
 }
 
+void Diagram::load(QDomElement *  element ,
+                      QMap<void *, Serializable *> &  addressMap  )
+{
+    QDomNamedNodeMap attributes=element->attributes();
+    if (attributes.contains("this"))
+    {
+     addressMap.insert(::load<void*>(getValue(attributes,"this")),
+                       this);
+    }
+    if (attributes.contains("set"))
+    {
+        m_set=::load<DiagramSet*>(getValue(attributes,"set"));
+    }
+    if (attributes.contains("parent"))
+    {
+        m_parent=::load<DiagramParent>(getValue(attributes,"parent"));
+    }
+    if (attributes.contains("boxhash"))
+    {
+        m_boxes=::load< QHash<Box *, int> >(getValue(attributes,"boxhash"));
+    }
+    if (attributes.contains("swaps"))
+    {
+        m_swaps=::load< QVector<SwapEntry> >(getValue(attributes,"swaps"));
+        clock_t stamp=0;
+        for (int i=m_swaps.size()-1;i>-1;i--)
+        {
+            if (i==m_swaps.size()-1)
+            { stamp=m_swaps[i].m_time; m_swaps[i].m_time=clock(); }
+            else
+            { m_swaps[i].m_time=clock()+m_swaps[i].m_time-stamp;}
+        }
+    }
+    if (attributes.contains("objects"))
+    {
+        m_objects=::load< QVector<DiagramObject *> >(getValue(attributes,"objects"));
+    }
+
+    //Proceed loading objects
+    QDomNode diagram=element->firstChild();
+    while(! (diagram.isNull()))
+    {
+        if (diagram.isElement())
+        {
+            QDomElement el=diagram.toElement();
+            if (el.tagName()=="box")
+            {
+                Box * box=new Box();
+                box->load(&el,addressMap);
+            }
+            if (el.tagName()=="attachedcomment")
+            {
+                AttachedComment * ac=new AttachedComment();
+                ac->load(&el,addressMap);
+            }
+            if (el.tagName()=="arrow")
+            {
+                Arrow * ac=new Arrow();
+                ac->load(&el,addressMap);
+            }
+        }
+        diagram=diagram.nextSibling();
+    }
+}
+
+void Diagram::resolvePointers(QMap<void *, Serializable *> &
+                                  adressMap )
+{
+    m_set=(DiagramSet*)(adressMap[m_set]);
+    for (int i=0;i<m_objects.size();i++)
+    {
+        m_objects[i]=(DiagramObject*)(adressMap[m_objects[i]]);
+        m_objects[i]->resolvePointers(adressMap);
+    }
+    QHash<Box*,int> newhash;
+    for (QHash<Box*,int>::iterator it=m_boxes.begin();
+           it!=m_boxes.end();it++)
+    {
+        newhash.insert((Box*)(adressMap[it.key()]),it.value());
+    }
+    m_boxes=newhash;
+    for (int i=0;i<m_swaps.size();i++)
+    {
+        m_swaps[i].m_box1=(Box*)(adressMap[m_swaps[i].m_box1]);
+        m_swaps[i].m_box2=(Box*)(adressMap[m_swaps[i].m_box2]);
+    }
+}
 
 void Diagram::fillScene(DiagramScene * scene)
 {
@@ -98,17 +145,7 @@ void Diagram::fillScene(DiagramScene * scene)
       m_objects[i]->addToScene(scene);
 }
 
-void Diagram::load(QDomElement * /* element */,
-                      QMap<void *, Serializable *> & /* addressMap */ )
-{
-    //!< TODO: Implement this later
-}
 
-void Diagram::resolvePointers(QMap<void *, Serializable *> &
-                                 /* adressMap */)
-{
-    //!< TODO: Implement this later
-}
 
 
 bool Diagram::canPlace(DiagramObject * obj,
