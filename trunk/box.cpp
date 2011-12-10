@@ -528,7 +528,7 @@ bool Box::canResize(BlockCorner bc, const QPointF & p)
     {
        errorx=p.x()<=currect.left()+MIN_SIZE_X;
     }
-    if (bc==BC_UPPERRIGHT || BC_UPPERLEFT)
+    if (bc==BC_UPPERRIGHT || bc==BC_UPPERLEFT)
     {
         errory=p.y()>=currect.bottom()-MIN_SIZE_Y;
     }
@@ -579,7 +579,7 @@ bool Box::canResize(BlockCorner bc, const QPointF & p)
         else
         {
             QPointF deltax(newrect.right()-currect.right(),0);
-            horok=m_connectors[0]->testCanMove(deltax);
+            horok=m_connectors[1]->testCanMove(deltax);
         }
         ok=vertok && horok;
     }
@@ -623,7 +623,7 @@ void Box::resize(BlockCorner bc, const QPointF & p)
    else
    {
        QPointF deltax(newrect.right()-currect.right(),0);
-       moveConnector(m_connectors[0],deltax);
+       moveConnector(m_connectors[1],deltax);
    }
 
    setRect(newrect);
