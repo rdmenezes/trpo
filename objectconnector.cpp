@@ -399,35 +399,52 @@ void ObjectConnector::save(QDomDocument *  doc,
                       QDomElement *  element)
 {
     QDomElement objectConnector;
-    objectConnector=doc->createElement("ObjectConnector");
-    QString buf, bufName;
+    objectConnector=doc->createElement("object_connector");
 
-    buf=::save(this);
-    objectConnector.setAttribute("selfPointer", buf);
-
-    buf=::save(m_parent);   // DiagramObject   *   m_parent
-    objectConnector.setAttribute("diagramObject", buf);
-
-    // 1 vector of box connectors    QVector< QPair<qreal,ObjectConnector*> > m_connected[2]
-    buf=::save(m_connected[1]);
-    objectConnector.setAttribute("m_connected_1", buf);
-
-    // 2 vector of box connectors
-    buf=::save(m_connected[2]);
-    objectConnector.setAttribute("m_connected_2", buf);
+    objectConnector.setAttribute("this", ::save(this));
+    objectConnector.setAttribute("parent", ::save(m_parent));
+    // Vectors of box connectors    QVector< QPair<qreal,ObjectConnector*> > m_connected[2]
+    objectConnector.setAttribute("connected0",::save(m_connected[0]));
+    objectConnector.setAttribute("connected1",::save(m_connected[1]));
 
     element->appendChild(objectConnector);
 }
 
-void ObjectConnector::load(QDomElement * /* element */,
-                      QMap<void *, Serializable *> & /* addressMap */ )
+void ObjectConnector::load(QDomElement *  element,
+                      QMap<void *, Serializable *> &  addressMap  )
 {
-    //!< TODO: Implement this later
+    QDomNamedNodeMap attributes=element->attributes();
+    if (attributes.contains("this"))
+    {
+     addressMap.insert(::load<void*>(getValue(attributes,"this")),
+                       this);
+    }
+    if (attributes.contains("parent"))
+    {
+        m_parent=::load<DiagramObject*>(getValue(attributes,"parent"));
+    }
+    if (attributes.contains("connected0"))
+    {
+        m_connected[0]=::load< QVector< QPair<qreal,ObjectConnector*> > >(getValue(attributes,"connected0"));
+    }
+    if (attributes.contains("connected1"))
+    {
+        m_connected[1]=::load< QVector< QPair<qreal,ObjectConnector*> > >(getValue(attributes,"connected1"));
+    }
 }
 
 void ObjectConnector::resolvePointers(QMap<void *, Serializable *> &
-                                 /* adressMap */)
+                                  adressMap )
 {
-    //!< TODO: Implement this later
+    m_parent=reinterpret_cast<DiagramObject*>(adressMap[m_parent]);
+    for (int i=0;i<2;i++)
+    {
+        for (int j=0;j<m_connected[i].size();j++)
+        {
+            ObjectConnector * np=m_connected[i][j].second;
+            np=reinterpret_cast<ObjectConnector*>(adressMap[np]);
+            m_connected[i][j].second=np;
+        }
+    }
 }
 
