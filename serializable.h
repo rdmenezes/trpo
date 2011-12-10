@@ -50,16 +50,14 @@ public:
           \param[in] addressMap map of addresses
        */
       virtual  void resolvePointers(QMap<void *, Serializable *> & adressMap)=0;
+      /*! Serializable destructor data
+       */
+      virtual ~Serializable();
 
       inline void pushThis(QDomElement & el)
       {
           el.setAttribute("this",::save(this));
       }
-
-
-      /*! Serializable destructor data
-       */
-      virtual ~Serializable();
 };
 
 

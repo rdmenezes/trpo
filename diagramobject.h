@@ -105,6 +105,11 @@ public:
         \return new input position for it. By default, it's old position
      */
     virtual QPointF receiveCommentLineMove(DiagramObject * obj);
+
+    inline void pushThis(QDomElement & el)
+    {
+        el.setAttribute("this",::save(this));
+    }
 };
 
 #endif // DIAGRAMOBJECT_H

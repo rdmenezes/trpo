@@ -234,10 +234,8 @@ void MainWindow::open() {
         if (m_path) delete m_path;
         m_path = new QString(temp);
         
-        QGraphicsView *view = ui->view;
-        DiagramScene *scene = (DiagramScene *)view->scene();
-        
-        if (!(scene->load(*m_path))) {
+
+        if (!load(*m_path)) {
             QMessageBox::warning(NULL, QString("Error"), QString("Can't open file."));
         }
     }
@@ -269,6 +267,43 @@ bool  MainWindow::saveTo(const QString & str)
     QString string=doc.toString();
     stream<<string;
     file.close();
+    return true;
+}
+
+bool MainWindow::load(const QString & str)
+{
+    QDomDocument  doc("IDEFML");
+    QFile file(str);
+    if (!file.open(QIODevice::ReadOnly))
+        return false;
+    if (!doc.setContent(&file))
+    {
+        file.close();
+        return false;
+    }
+    QDomElement root=doc.documentElement();
+    if (root.tagName()!="root")
+        return false;
+
+    DiagramSet * newset=new DiagramSet();
+    QDomElement el=root.firstChildElement("diagram_set");
+    QMap<void *,Serializable*> addrmap;
+    newset->load(&el,addrmap);
+    DiagramScene * scene=static_cast<DiagramScene*>(ui->view->scene());
+    scene->clear();
+    if (m_own)
+    {
+        delete m_set;
+    }
+    m_own=true;
+    m_set=newset;
+    Diagram * diagram=m_set->get((int)0);
+    scene->setDiagram(diagram);
+    diagram->bind(scene,m_set);
+    diagram->fillScene(scene);
+    for (int i=0;i<m_tool_table_items.size();i++)
+        m_tool_table_items[i]->tool()->setDiagramData(scene,diagram);
+    scene->tool()->initState();
     return true;
 }
 

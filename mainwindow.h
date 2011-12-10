@@ -77,6 +77,7 @@ protected slots:
     void save();
     void saveAs();
     bool saveTo(const QString & str);
+    bool load(const QString & str);
     void exportDiagram();
     void scale(int coef);
     /*! Shows a help dialog
