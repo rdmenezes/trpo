@@ -9,12 +9,14 @@
 #include <QImage>
 #include <time.h>
 #include "diagramobject.h"
+#include <QDomDocument>
+#include <QDomElement>
 #include "box.h"
+
+
 
 #ifndef DIAGRAM_H
 #define DIAGRAM_H
-//Graphics item
-class QGraphicsItem;
 //Box item
 class Box;
 //Annotation label item
@@ -25,10 +27,7 @@ class CommentLine;
 class DiagramSet;
 //Diagram sce
 class DiagramScene;
-//Dom element
-class QDomElement;
-//Dom document
-class QDomDocument;
+
 
 /*! Declares a location of parent block
  */
@@ -115,7 +114,7 @@ private:
         DiagramScene    *      m_scene;
         /*! Box data info
          */
-        QMap<Box *, int>       m_boxes;
+        QHash<Box *, int>       m_boxes;
         /*! Swap entries data
          */
         QVector<SwapEntry>     m_swaps;
