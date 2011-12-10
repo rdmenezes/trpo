@@ -145,41 +145,61 @@ QLineF CommentLine::collisionLine() const
 void CommentLine::save(QDomDocument * doc,
                QDomElement *  element)
 {
-    QDomElement commentLine;
-    commentLine=doc->createElement("CommentLine");
-    QString buf;
+    QDomElement line;
+    line=doc->createElement("line");
+    pushThis(line);
+    line.setAttribute("pos", ::save(this->pos()));
+    line.setAttribute("diagram",::save(m_diag));
+    line.setAttribute("in",::save(m_in));
+    line.setAttribute("out",::save(m_out));
+    line.setAttribute("parent",::save(m_parentcomment));
+    line.setAttribute("self",::save(m_self));
 
-    buf=::save(this);
-    commentLine.setAttribute("selfPointer", buf);
+    m_self->save(doc,&line);
 
-    buf=::save(this->pos());
-    commentLine.setAttribute("pos", buf);
-
-    m_self->save(doc,&commentLine);  // ObjectConnector*
-
-    buf=::save(m_parentcomment);      // AttachedComment
-    commentLine.setAttribute("parentComment", buf);
-
-    buf=::save(m_in);                 // QPointF
-    commentLine.setAttribute("inputConnector", buf);
-
-    buf=::save(m_out);                // QPointF
-    commentLine.setAttribute("outputConnector", buf);
-
-
-    element->appendChild(commentLine);
+    element->appendChild(line);
 }
 
-void CommentLine::load(QDomElement * /* element */,
-               QMap<void *, Serializable *> & /* addressMap */ )
+void CommentLine::load(QDomElement *  element ,
+               QMap<void *, Serializable *> &  addressMap  )
 {
-    //!< TODO: Implement this later
+    Serializable *p=NULL;
+    QDomNamedNodeMap attributes=element->attributes();
+    qload(attributes,"this",p);
+    addressMap.insert(p,this);
+    QPointF pos;
+    qload(attributes,"pos",pos);
+    setPos(pos);
+    qload(attributes,"diagram",m_diag);
+    qload(attributes,"in",m_in);
+    qload(attributes,"out",m_out);
+    qload(attributes,"parent",m_parentcomment);
+    qload(attributes,"self",m_self);
+
+    QDomNode diagram=element->firstChild();
+    while(! (diagram.isNull()))
+    {
+        if (diagram.isElement())
+        {
+            QDomElement el=diagram.toElement();
+            if (el.tagName()=="object_connector")
+            {
+                ObjectConnector * oc=new ObjectConnector();
+                oc->load(&el,addressMap);
+            }
+        }
+        diagram=diagram.nextSibling();
+    }
+
 }
 
 void CommentLine::resolvePointers(QMap<void *, Serializable *> &
-                          /* adressMap */)
+                           adressMap )
 {
-    //!< TODO: Implement this later
+    m_diag=static_cast<Diagram*>(adressMap[m_diag]);
+    m_self=static_cast<ObjectConnector*>(adressMap[m_self]);
+    m_self->resolvePointers(adressMap);
+    m_parentcomment=static_cast<AttachedComment*>(adressMap[m_parentcomment]);
 }
 
 
