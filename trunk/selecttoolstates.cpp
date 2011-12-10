@@ -13,6 +13,16 @@ bool contains(const QLineF & line, const QPointF & point)
     }
     else
     {
+        if (fabs(line.x1()-line.x2())<0.01)
+        {
+          double py=(point.y()-line.y2())/(line.y1()-line.y2());
+          return 0<=py && py<=1;
+        }
+        if (fabs(line.y1()<line.y2())<0.01)
+        {
+           double px=(point.x()-line.x2())/(line.x1()-line.x2());
+           return 0<=px && px<=1;
+        }
         double px=(point.x()-line.x2())/(line.x1()-line.x2());
         double py=(point.y()-line.y2())/(line.y1()-line.y2());
         if (fabs(px-py)<0.01)
