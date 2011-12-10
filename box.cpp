@@ -520,13 +520,13 @@ bool Box::canResize(BlockCorner bc, const QPointF & p)
     QRectF currect=collisionRect();
     bool errorx=false;
     bool errory=false;
-    if (bc==BC_UPPERLEFT || bc==BC_LOWERRIGHT)
+    if (bc==BC_UPPERLEFT || bc==BC_LOWERLEFT)
     {
-        errorx=p.x()>=currect.right()-MIN_SIZE_X;
+       errorx=p.x()>=currect.right()-MIN_SIZE_X;
     }
     else
     {
-        errorx=p.x()<=currect.left()+MIN_SIZE_X;
+       errorx=p.x()<=currect.left()+MIN_SIZE_X;
     }
     if (bc==BC_UPPERRIGHT || BC_UPPERLEFT)
     {
@@ -534,7 +534,7 @@ bool Box::canResize(BlockCorner bc, const QPointF & p)
     }
     else
     {
-        errory=p.y()>=currect.top()+MIN_SIZE_Y;
+        errory=p.y()<=currect.top()+MIN_SIZE_Y;
     }
     if (errorx || errory)
         return false;
