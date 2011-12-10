@@ -80,6 +80,8 @@ protected slots:
     bool load(const QString & str);
     void exportDiagram();
     void scale(int coef);
+    void undo();
+    void redo();
     /*! Shows a help dialog
      */
     void showHelp();

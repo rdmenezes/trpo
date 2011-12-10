@@ -101,6 +101,7 @@ MainWindow::MainWindow(QWidget *parent,
         static_cast<ToolScene*>(views[i]->scene())->setData(m_tool_table_items[i]);
     }
     static_cast<ToolScene*>(views[2]->scene())->select();
+    diag->commit();
     //Set some signals
     connect(ui->actionSave,SIGNAL(triggered()),this,SLOT(save()));
     connect(ui->actionSave_as,SIGNAL(triggered()),this,SLOT(saveAs()));
@@ -108,6 +109,9 @@ MainWindow::MainWindow(QWidget *parent,
     connect(ui->actionExport_to_PNF_Ctrl_E,SIGNAL(triggered()),this,SLOT(exportDiagram()));
     connect(ui->actionShow_Help_F1,SIGNAL(triggered()),this,SLOT(showHelp()));
     connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),this,SLOT(scale(int)));
+    connect(ui->actionUndo,SIGNAL(triggered()),this,SLOT(undo()));
+    connect(ui->actionRedo,SIGNAL(triggered()),this,SLOT(redo()));
+
     m_path = NULL;
 
     ui->view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
@@ -154,6 +158,14 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     //If Pressed F1 show help
     if (event->key() == Qt::Key_F1) {
         showHelp();
+        handled=true;
+    }
+    else if (event->key() == Qt::Key_Z && event->modifiers() == Qt::ControlModifier) {
+        this->undo();
+        handled=true;
+    }
+    else if (event->key() == Qt::Key_R && event->modifiers() == Qt::ControlModifier) {
+        this->redo();
         handled=true;
     }
     else if (event->key() == Qt::Key_O && event->modifiers() == Qt::ControlModifier) {
@@ -304,6 +316,8 @@ bool MainWindow::load(const QString & str)
     for (int i=0;i<m_tool_table_items.size();i++)
         m_tool_table_items[i]->tool()->setDiagramData(scene,diagram);
     scene->tool()->initState();
+    diagram->commit();
+    file.close();
     return true;
 }
 
@@ -365,3 +379,13 @@ void MainWindow::setActionText(const QString & text)
     ui->currentAction->setText(text);
 }
 
+void MainWindow::undo()
+{
+   DiagramScene * scene=static_cast<DiagramScene*>(ui->view->scene());
+   scene->diagram()->rollback();
+}
+void MainWindow::redo()
+{
+    DiagramScene * scene=static_cast<DiagramScene*>(ui->view->scene());
+    scene->diagram()->redo();
+}
