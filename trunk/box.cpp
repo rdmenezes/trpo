@@ -315,6 +315,56 @@ void Box::createConnectors()
       m_connectors[i]->setParent(this);
 
 }
+
+bool Box::canMove(const QPointF & delta)
+{
+    bool results[4]={true,true,true,true};
+    if (fabs(delta.y())<0.01)
+    {
+        results[0]=m_connectors[0]->canShiftCollinear(delta);
+        results[1]=m_connectors[1]->testCanMove(delta);
+        results[2]=m_connectors[2]->canShiftCollinear(delta);
+        results[3]=m_connectors[3]->testCanMove(delta);
+    }
+    else
+    {
+        results[0]=m_connectors[0]->testCanMove(delta);
+        results[1]=m_connectors[1]->canShiftCollinear(delta);
+        results[2]=m_connectors[2]->testCanMove(delta);
+        results[3]=m_connectors[3]->canShiftCollinear(delta);
+    }
+    bool ok=results[0] && results[1] && results[2] && results[3];
+    return ok;
+}
+
+void moveConnector(ObjectConnector * m_obj, const QPointF & vector)
+{
+    QLineF line=*m_obj;
+    line.setP1(line.p1()+vector);
+    line.setP2(line.p2()+vector);
+    m_obj->setLine(line.x1(),line.y1(),line.x2(),line.y2());
+    m_obj->moveSelfRegeneratingOrResizing();
+}
+
+void Box::moveBy(const QPointF & vector)
+{
+    if (fabs(vector.y())<0.01)
+    {
+        m_connectors[0]->shiftCollinear(vector);
+        moveConnector(m_connectors[1],vector);
+        m_connectors[2]->shiftCollinear(vector);
+        moveConnector(m_connectors[3],vector);
+    }
+    else
+    {
+        moveConnector(m_connectors[0],vector);
+        m_connectors[1]->shiftCollinear(vector);
+        moveConnector(m_connectors[2],vector);
+        m_connectors[3]->shiftCollinear(vector);
+    }
+    QGraphicsItem::setPos(pos()+vector);
+}
+
 bool Box::drawTrianglePart() const
 {
     return true;

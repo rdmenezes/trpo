@@ -192,6 +192,13 @@ public:
         \param[in]  id diagram id
      */
     inline void setChildDiagram(int id) { m_child=id; }
+    /*! Tests, whether can move box by vector
+     */
+    bool canMove(const QPointF & delta);
+    /*! Moves by vector
+        \param[in] p point
+     */
+    void moveBy(const QPointF & vector);
     /*! Destructor
      */
     virtual ~Box();
