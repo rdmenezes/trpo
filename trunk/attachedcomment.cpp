@@ -1,6 +1,7 @@
 #include "attachedcomment.h"
 #include <assert.h>
 #include <QMessageBox>
+#include "freecomment.h"
 
 void AttachedComment::paint(QPainter *p)
 {
@@ -26,39 +27,68 @@ QRectF AttachedComment::boundingRect() const
 void AttachedComment::save(QDomDocument * doc,
                QDomElement *  element)
 {
-    QDomElement attachedComment;
-    attachedComment=doc->createElement("AttachedComment");
-    QString buf;
+    QDomElement ac;
+    ac=doc->createElement("attachedcomment");
+    pushThis(ac);
+    ac.setAttribute("pos", ::save(this->pos()));
+    ac.setAttribute("diagram",::save(m_diag));
+    ac.setAttribute("fc",::save(m_comment));
+    ac.setAttribute("line",::save(m_line));
+    ac.setAttribute("iterator",::save(m_iterator));
 
-    buf=::save(this);
-    attachedComment.setAttribute("selfPointer", buf);
 
-    buf=::save(this->pos());
-    attachedComment.setAttribute("pos", buf);
+    if (m_comment) m_comment->save(doc,&ac);
+    if (m_line) m_line->save(doc,&ac);
 
-    m_comment->save(doc, &attachedComment);
-    buf=::save(m_comment);
-    attachedComment.setAttribute("comment", buf);  //Comment data
-
-    m_line->save(doc, &attachedComment);
-    buf=::save(m_line);
-    attachedComment.setAttribute("line", buf);     //Line data
-
-    attachedComment.setAttribute("iterator", m_iterator);  //Iterator state
-
-    element->appendChild(attachedComment);
+    element->appendChild(ac);
 }
 
-void AttachedComment::load(QDomElement * /* element */,
-               QMap<void *, Serializable *> & /* addressMap */ )
+void AttachedComment::load(QDomElement *  element ,
+               QMap<void *, Serializable *> &  addressMap  )
 {
-    //!< TODO: Implement this later
+    Serializable *p=NULL;
+    QDomNamedNodeMap attributes=element->attributes();
+    qload(attributes,"this",p);
+    addressMap.insert(p,this);
+    QPointF pos;
+    qload(attributes,"pos",pos);
+    setPos(pos);
+    qload(attributes,"diagram",m_diag);
+    qload(attributes,"fc",m_comment);
+    qload(attributes,"line",m_line);
+    qload(attributes,"iterator",m_iterator);
+    QDomNode diagram=element->firstChild();
+    while(! (diagram.isNull()))
+    {
+        if (diagram.isElement())
+        {
+            QDomElement el=diagram.toElement();
+            if (el.tagName()=="fc")
+            {
+                FreeComment * fc=new FreeComment();
+                fc->load(&el,addressMap);
+            }
+            if (el.tagName()=="line")
+            {
+                CommentLine * fc=new CommentLine();
+                fc->load(&el,addressMap);
+            }
+        }
+        diagram=diagram.nextSibling();
+    }
 }
 
 void AttachedComment::resolvePointers(QMap<void *, Serializable *> &
-                          /* adressMap */)
+                           adressMap )
 {
-    //!< TODO: Implement this later
+    m_diag=static_cast<Diagram*>(adressMap[m_diag]);
+    m_comment=static_cast<FreeComment*>(adressMap[m_comment]);
+    m_comment->resolvePointers(adressMap);
+    if (m_line)
+    {
+        m_line=static_cast<CommentLine*>(adressMap[m_line]);
+        m_line->resolvePointers(adressMap);
+    }
 }
 
 CollisionObject *    AttachedComment::firstObject()
