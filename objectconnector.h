@@ -178,10 +178,14 @@ class ObjectConnector: public QLineF, Serializable
         /*! Tests, whether we can move self
             \param[in] vector delta vector
          */
-        bool testCanMove(const QPointF & vector);
+        bool testCanMove(const QPointF & vector,ObjectConnector * exc=NULL);
         /*! Tests, whether it's can be moved orthogonal
+            (for block move)
          */
-        bool canMoveCollinear();
+        bool canShiftCollinear(const QPointF & vector);
+        /*! Shifts object collinear
+         */
+        void shiftCollinear(const QPointF & vector);
         /*! Tests, whether we can move connection point of this
             object to place
             \param[in] c object connector
@@ -190,6 +194,9 @@ class ObjectConnector: public QLineF, Serializable
         /*! Tests, whether we can resize self
          */
         bool canResize(ObjectConnector * sender,const QLineF & line );
+        /*! Tests, whether we can move collinear
+         */
+        bool canMoveCollinear();
         /*! Moves or resizes self regenerating position
          */
         void moveOrResize(ObjectConnector * sender,const QPointF & connectionpoint);
