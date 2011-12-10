@@ -58,6 +58,12 @@ private:
         /*! Swap entries data
          */
         QVector<SwapEntry>     m_swaps;
+        /*! History iterator
+         */
+        int m_historyiterator;
+        /*! History data
+         */
+        QVector<QDomDocument*> m_history;
 public:
         /*! Returns a parent location
          */
@@ -158,6 +164,9 @@ public:
         /*! Rollbacks, changes ti a diagram, retrieving her state
          */
         void rollback();
+        /*! Redos some changes
+         */
+        void redo();
         /*! Fills a scene with own items
             \param[in] scene scene to fill
          */

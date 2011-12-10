@@ -337,6 +337,11 @@ void Diagram::rollback()
     //! TODO: Implement it
 }
 
+void Diagram::redo()
+{
+    //! TODO: Implement it
+}
+
 Diagram::~Diagram()
 {
   clear();
