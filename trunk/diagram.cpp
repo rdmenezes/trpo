@@ -180,11 +180,13 @@ bool Diagram::isCorrect()
 Diagram::Diagram()
 {
     m_parent=DiagramParent(-1,-1);
+    m_historyiterator=0;
 }
 
 Diagram::Diagram(const DiagramParent&  l)
 {
     m_parent=l;
+    m_historyiterator=0;
 }
 
 
@@ -211,6 +213,9 @@ void Diagram::clear()
     m_boxes.clear();
     for (int i=0;i<m_objects.size();i++)
     {
+      m_objects[i]->deleteOnRemoval();
+      if (m_scene==m_objects[i]->scene())
+          m_scene->removeItem(m_objects[i]);
       delete m_objects[i];
     }
     m_objects.clear();
@@ -326,15 +331,52 @@ void Diagram::exportTo(QImage & img)
 }
 
 
+QDomDocument * Diagram::getStateDocument()
+{
+    QDomDocument *  doc =new QDomDocument("IDEFML");
+    QDomElement  root=doc->createElement("root");
+    doc->appendChild(root);
+    save(doc,&root);
+    return doc;
+}
+
+void Diagram::restoreFromDocument(QDomDocument * doc)
+{
+    scene()->tool()->clearState();
+    clear();
+    scene()->update();
+
+    QDomElement root=doc->documentElement();
+
+    QDomElement el=root.firstChildElement("diagram");
+
+    DiagramSet * set=m_set;
+
+    QMap<void*,Serializable*> addressMap;
+    this->load(&el,addressMap);
+    m_set=set;
+    this->resolvePointers(addressMap);
+
+    fillScene(this->scene());
+    scene()->tool()->initState();
+    scene()->update();
+}
+
 void Diagram::commit()
 {
-    //! TODO: Implement it
+    for (int i=m_historyiterator;i<m_history.size();i++)
+        delete m_history[i];
+    m_history<<getStateDocument();
+    ++m_historyiterator;
 }
 
 
 void Diagram::rollback()
 {
-    //! TODO: Implement it
+    if (m_historyiterator>1)
+        restoreFromDocument(m_history[m_historyiterator-2]);
+    if (m_historyiterator>1)
+        --m_historyiterator;
 }
 
 void Diagram::redo()
@@ -345,5 +387,7 @@ void Diagram::redo()
 Diagram::~Diagram()
 {
   clear();
+  for (int i=0;i<m_history.size();i++)
+      delete m_history[i];
 }
 

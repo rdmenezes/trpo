@@ -64,6 +64,10 @@ private:
         /*! History data
          */
         QVector<QDomDocument*> m_history;
+
+        QDomDocument * getStateDocument();
+
+        void restoreFromDocument(QDomDocument * doc);
 public:
         /*! Returns a parent location
          */
