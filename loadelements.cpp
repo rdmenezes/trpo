@@ -7,22 +7,7 @@
 #include "loadelements.h"
 #include <QDomAttr>
 
-void loadBlockRef(QDomElement * el,Box * box, int &i, int &j)
-{
-  if(i==BLOCK_SIDES)
-      return;
 
-
- QDomNamedNodeMap map=el->attributes();
- //if (map.contains("value"))
- //    box->getLineRef(i,j)=reinterpret_cast<ArrowPoint*>(stringToPtr(
- //                         map.namedItem("value").toAttr().value()
- //                         ));
-
-  ++j;
-  if (j==MAX_LINE_REFERENCES)
-       { j=0; ++i; }
-}
 
 QString getAttr(QDomNamedNodeMap & map,const QString & name)
 {
