@@ -89,3 +89,4 @@ HEADERS += mainwindow.h \
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc
+RC_FILE = trpo.rc
