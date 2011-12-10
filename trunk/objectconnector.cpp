@@ -319,7 +319,7 @@ void ObjectConnector::resize(ObjectConnector * sender, const QLineF & line)
             if (m_connected[i][j].second!=sender)
             {
                 QPointF pos=position(*this,m_connected[i][j].first);
-                m_connected[i][j].first=position(*this,pos);
+                m_connected[i][j].first=position(line,pos);
             }
         }
     }
