@@ -327,19 +327,72 @@ void ObjectConnector::resize(ObjectConnector * sender, const QLineF & line)
 }
 
 
-bool ObjectConnector::testCanMove(const QPointF & vector)
+bool ObjectConnector::testCanMove(const QPointF & vector,ObjectConnector * exc)
 {
     bool can=true;
     for (int i=0;i<2;i++)
     {
         for (int j=0;j<m_connected[i].size();j++)
         {
+          if (m_connected[i][j].second!=exc)
+          {
             QPointF pos=position(*this,m_connected[i][j].first);
             bool test=m_connected[i][j].second->canMove(this,pos+vector);
             can= can && test;
+          }
         }
     }
     return can;
+}
+
+bool ObjectConnector::canShiftCollinear(const QPointF & vector)
+{
+    bool can=true;
+    for (int i=0;i<2;i++)
+    {
+        for (int j=0;j<m_connected[i].size();j++)
+        {
+          if (!(m_connected[i][j].second->isAttachedToCommentLine()))
+          {
+            bool test=m_connected[i][j].second->testCanMove(vector,this);
+            can= can && test;
+          }
+        }
+    }
+    return can;
+}
+
+void ObjectConnector::shiftCollinear(const QPointF & vector)
+{
+    setLine(x1()+vector.x(),y1()+vector.y(),x2()+vector.x(),y2()+vector.y());
+    for (int i=0;i<2;i++)
+    {
+        for (int j=0;j<m_connected[i].size();j++)
+        {
+          if (!(m_connected[i][j].second->isAttachedToCommentLine()))
+          {
+            ObjectConnector * tmp=m_connected[i][j].second;
+            tmp->setLine(tmp->x1()+vector.x(),tmp->y1()+vector.y(),
+                         tmp->x2()+vector.x(),tmp->y2()+vector.y());
+            m_connected[i][j].second->moveSelfRegeneratingOrResizing();
+            if (tmp->isAttachedToSegment())
+                static_cast<Arrow*>(tmp->parent())->regenerate();
+          }
+          else
+          {
+            ObjectConnector * tmp=m_connected[i][j].second;
+            CommentLine * cline=static_cast<CommentLine*>(tmp->parent());
+            QPointF connectionpoint=cline->in()+vector;
+            cline->setLine(connectionpoint.x(),
+                             connectionpoint.y(),
+                             cline->out().x(),
+                             cline->out().y());
+            cline->parentComment()->comment()->setPosWithoutCheck(
+                      cline->parentComment()->comment()->pos()
+                      );
+          }
+        }
+    }
 }
 
 void ObjectConnector::save(QDomDocument *  doc,
