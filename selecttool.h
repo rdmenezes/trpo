@@ -216,6 +216,10 @@ BlockCorner determineCorner(const QPointF & clickpos,const QRectF & r);
  */
 class BoxResize: public DynamicEditState, public BoxChangingData
 {
+private:
+        QRectF m_boxrect;               //!< Old rect of box
+        QPointF m_cornerstartingpos;    //!< Corner starting position
+        BlockCorner m_bc;               //!< Block corner data
 public:
     /*! Default constructor
         \param[in] diagram   diagram data
@@ -224,7 +228,7 @@ public:
      */
     BoxResize(Diagram * diagram,
               const QPointF & clickpos,
-              Box * obj);
+              Box * obj,BlockCorner bc);
     /*! Clears an inner dynamic state
      */
     virtual void clearState();

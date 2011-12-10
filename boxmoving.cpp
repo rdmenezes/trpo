@@ -8,7 +8,7 @@ BoxMoving::BoxMoving(Diagram * diagram,
                      Box * obj)
           :DynamicEditState(diagram,clickpos),BoxChangingData(obj)
 {
-
+  static_cast<MainWindow*>(m_diagram->scene()->view()->window())->setActionText("Release box where you want to place it...");
 }
 
 
