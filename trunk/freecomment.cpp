@@ -223,37 +223,40 @@ void FreeComment::moveTo(const QPointF &p)
 void FreeComment::save(QDomDocument * doc,
                QDomElement *  element)
 {
-    QDomElement freeComment;
-    freeComment=doc->createElement("FreeComment");
-    QString buf, bufName, bufVal;
+    QDomElement fc;
+    fc=doc->createElement("fc");
+    pushThis(fc);
+    fc.setAttribute("pos", ::save(this->pos()));
+    fc.setAttribute("diagram",::save(m_diag));
+    fc.setAttribute("text",::save(m_text));
+    fc.setAttribute("size",::save(m_size));
+    fc.setAttribute("parent",::save(m_parentcomment));
 
-    buf=::save(this);
-    freeComment.setAttribute("selfPointer", buf);
-
-    buf=::save(this->pos());
-    freeComment.setAttribute("pos", buf);
-
-    freeComment.setAttribute("defaultString", m_text);
-
-    buf=::save(m_size);
-    freeComment.setAttribute("sizeRect", buf);
-
-    buf=::save(m_parentcomment);
-    freeComment.setAttribute("attachedComment", buf);  //AttachedComment * m_parentcomment
-
-    element->appendChild(freeComment);
+    element->appendChild(fc);
 }
 
-void FreeComment::load(QDomElement * /* element */,
-               QMap<void *, Serializable *> & /* addressMap */ )
+void FreeComment::load(QDomElement *  element ,
+               QMap<void *, Serializable *> &  addressMap  )
 {
-    //!< TODO: Implement this later
+    Serializable *p=NULL;
+    QDomNamedNodeMap attributes=element->attributes();
+    qload(attributes,"this",p);
+    addressMap.insert(p,this);
+    QPointF pos;
+    qload(attributes,"pos",pos);
+    setPos(pos);
+    qload(attributes,"diagram",m_diag);
+    qload(attributes,"text",m_text);
+    qload(attributes,"size",m_size);
+    qload(attributes,"parent",m_parentcomment);
+
 }
 
 void FreeComment::resolvePointers(QMap<void *, Serializable *> &
-                          /* adressMap */)
+                           adressMap )
 {
-    //!< TODO: Implement this later
+    m_diag=static_cast<Diagram*>(adressMap[m_diag]);
+    m_parentcomment=static_cast<AttachedComment*>(adressMap[m_parentcomment]);
 }
 
 int FreeComment::type() const
