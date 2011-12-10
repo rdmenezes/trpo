@@ -141,12 +141,12 @@ class BoxChangingData: public ObjectChangingData
 {
  protected:
             Box * m_box;           //!< Box
-            QRectF m_rect;         //!< Rectangle
+            QPointF m_boxpos;         //!< Rectangle
  public:
             /*! Data for object changing
                 \param[in] box box data
              */
-            inline BoxChangingData(Box * box) { m_box=box; m_rect=m_box->collisionRect(); }
+            inline BoxChangingData(Box * box) { m_box=box; m_boxpos=m_box->pos(); }
 };
 
 /*! \class ArrowSegmentMoving
@@ -214,9 +214,13 @@ enum BlockCorner
     BC_UPPERLEFT,
     BC_UPPERRIGHT,
     BC_LOWERLEFT,
-    BC_LOWERRIGHT
+    BC_LOWERRIGHT,
+
+    BC_CENTER //!< Special value for center click
 };
 
+
+BlockCorner determineCorner(const QPointF & clickpos,const QRectF & r);
 
 /*! \class BoxMoving
     A state,used when moving a box
