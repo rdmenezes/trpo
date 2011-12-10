@@ -129,10 +129,12 @@ public:
       if (m_tool)
             m_tool->clearState();
       m_tool=tool;
-      m_tool->setDiagramData(this,m_diag);
+      if (m_tool)
+            m_tool->setDiagramData(this,m_diag);
       if (m_tool)
             m_tool->initState();
     }
+    inline Tool * tool() { return m_tool;}
 signals:
 
 public slots:

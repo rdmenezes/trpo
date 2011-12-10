@@ -145,6 +145,7 @@ void Box::load(QDomElement *  element ,
     QDomNamedNodeMap attributes=element->attributes();
     qload(attributes,"this",p);
     addressMap.insert(p,this);
+    Q_ASSERT(addressMap[p]==this);
     QPointF pos;
     qload(attributes,"pos",pos);
     setPos(pos);
@@ -172,7 +173,6 @@ void Box::load(QDomElement *  element ,
         }
         diagram=diagram.nextSibling();
     }
-
 }
 
 void Box::resolvePointers(QMap<void *, Serializable *> &

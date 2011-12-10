@@ -393,7 +393,6 @@ void DiagramScene::clear()
  if (m_tool)
  {
      m_tool->clearState();
-     m_tool->initState();
  }
  this->m_diag->clear();
  this->QGraphicsScene::clear();

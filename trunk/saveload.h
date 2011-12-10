@@ -223,6 +223,8 @@ class SaveLoad <QVector <T> >
     static QVector <T> load( const QString & string)
     {
       QVector<T> vecloadTmp;
+      if (string.isEmpty())
+          return vecloadTmp;
       QStringList tmp=string.split("^");
        for (int i=0;i<tmp.size();i++)
        {
@@ -275,5 +277,8 @@ QString save(const T & obj) { return SaveLoad<T>::save(obj); }
 template<typename T>
 T load(const QString & string) { return SaveLoad<T>::load(string); }
 
+
+template<typename T>
+void refload(const QString & string, T & ref) { ref=SaveLoad<T>::load(string); }
 
 #endif // SAVELOAD_H

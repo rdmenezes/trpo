@@ -117,23 +117,29 @@ void Diagram::load(QDomElement *  element ,
 void Diagram::resolvePointers(QMap<void *, Serializable *> &
                                   adressMap )
 {
-    m_set=(DiagramSet*)(adressMap[m_set]);
+    m_set=static_cast<DiagramSet*>(adressMap[m_set]);
     for (int i=0;i<m_objects.size();i++)
     {
-        m_objects[i]=(DiagramObject*)(adressMap[m_objects[i]]);
+        //DiagramObject * tmpa=m_objects[i];
+        m_objects[i]=static_cast<DiagramObject*>(adressMap[m_objects[i]]);
+        //DiagramObject * tmpp=m_objects[i];
         m_objects[i]->resolvePointers(adressMap);
     }
     QHash<Box*,int> newhash;
     for (QHash<Box*,int>::iterator it=m_boxes.begin();
            it!=m_boxes.end();it++)
     {
-        newhash.insert((Box*)(adressMap[it.key()]),it.value());
+        Serializable * ser=adressMap[it.key()];
+        Box * bx=static_cast<Box*>(ser);
+        newhash.insert(bx,it.value());
     }
     m_boxes=newhash;
     for (int i=0;i<m_swaps.size();i++)
     {
-        m_swaps[i].m_box1=(Box*)(adressMap[m_swaps[i].m_box1]);
-        m_swaps[i].m_box2=(Box*)(adressMap[m_swaps[i].m_box2]);
+        Serializable * s1=adressMap[m_swaps[i].m_box1];
+        Serializable * s2=adressMap[m_swaps[i].m_box2];
+        m_swaps[i].m_box1=static_cast<Box*>(s1);
+        m_swaps[i].m_box2=static_cast<Box*>(s2);
     }
 }
 

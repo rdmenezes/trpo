@@ -424,10 +424,7 @@ void ObjectConnector::load(QDomElement *  element,
      addressMap.insert(::load<void*>(getValue(attributes,"this")),
                        this);
     }
-    if (attributes.contains("parent"))
-    {
-        m_parent=::load<DiagramObject*>(getValue(attributes,"parent"));
-    }
+    qload(attributes,"parent",m_parent);
     if (attributes.contains("connected0"))
     {
         m_connected[0]=::load< QVector< QPair<qreal,ObjectConnector*> > >(getValue(attributes,"connected0"));
@@ -451,13 +448,13 @@ void ObjectConnector::load(QDomElement *  element,
 void ObjectConnector::resolvePointers(QMap<void *, Serializable *> &
                                   adressMap )
 {
-    m_parent=reinterpret_cast<DiagramObject*>(adressMap[m_parent]);
+    m_parent=static_cast<DiagramObject*>(adressMap[m_parent]);
     for (int i=0;i<2;i++)
     {
         for (int j=0;j<m_connected[i].size();j++)
         {
             ObjectConnector * np=m_connected[i][j].second;
-            np=reinterpret_cast<ObjectConnector*>(adressMap[np]);
+            np=static_cast<ObjectConnector*>(adressMap[np]);
             m_connected[i][j].second=np;
         }
     }
