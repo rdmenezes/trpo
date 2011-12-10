@@ -123,6 +123,8 @@ void Box::save(QDomDocument * doc,
     buf=::save(this);
     box.setAttribute("selfPointer", buf);
 
+    buf=::save(this->pos());
+    box.setAttribute("pos", buf);
 
     box.setAttribute("realText", m_real_text);    // Real text string
     box.setAttribute("viewedText", m_view_text);  // Viewed text string
