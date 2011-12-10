@@ -6,6 +6,22 @@
 #include <QHash>
 #include <QPair>
 
+QRectF bound(QPointF  ps[], int n)
+{
+    qreal minx=ps[0].x(),miny=ps[0].y(),maxx=ps[0].x(),maxy=ps[0].y();
+    for (int i=1;i<n;i++)
+    {
+        if (ps[i].x()<minx) minx=ps[i].x();
+        if (ps[i].y()<miny) miny=ps[i].y();
+        if (ps[i].x()>maxx) maxx=ps[i].x();
+        if (ps[i].y()>maxy) maxy=ps[i].y();
+    }
+    if (maxx-minx<0 || maxy-miny<0)
+    {
+        Q_ASSERT(false);
+    }
+    return QRectF(minx,miny,maxx-minx,maxy-miny);
+}
 
 Arrow::Arrow(ObjectConnector * self, Diagram * d, bool tunneled,bool tunneled_end)
       :DiagramObject(ST_LINE)
@@ -40,7 +56,7 @@ QRectF Arrow::sceneDrawingBounds() const
                   };
      rct=bound(pa,4);
     }
-    //Q_ASSERT(rct.width()>=0 && rct.height()>=0);
+    Q_ASSERT(rct.width()>=0 && rct.height()>=0);
     return rct;
 }
 
