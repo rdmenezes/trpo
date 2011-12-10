@@ -50,6 +50,23 @@ public:
    static int load(const QString & string);
 };
 
+template<>
+class SaveLoad<QString>
+{
+public:
+    /*! Сохраняет int в строку
+           \param[in] object объект для сохранения
+           \return строка с содержимым объекта
+   */
+  static inline QString save(const QString & object)
+  { return object; }
+  /*! Загружает int из строки
+           \param[in]  string строка с содержимым объекта
+           \return  восстановленный объект
+   */
+  static inline QString load(const QString & string)
+  { return string; }
+};
 
 template<>
 class SaveLoad<bool>

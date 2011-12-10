@@ -17,6 +17,8 @@
 #include "freecommenttool.h"
 #include "erasertool.h"
 #include "graphicunittests.h"
+#include <QFile>
+#include <QTextStream>
 #define VIEW_WIDTH_X 102
 #define VIEW_WIDTH_Y 102
 
@@ -247,13 +249,27 @@ void MainWindow::save() {
         this->saveAs();
     }
     else {
-        QGraphicsView *view = ui->view;
-        DiagramScene *scene = (DiagramScene *)view->scene();
-        bool success=scene->save(*m_path);
+        bool success=saveTo(*m_path);
         if (!success) {
             QMessageBox::warning(NULL, QString("Error"), QString("Can't save file."));
         }
     }
+}
+
+bool  MainWindow::saveTo(const QString & str)
+{
+    QDomDocument  doc("IDEFML");
+    QDomElement  root=doc.createElement("root");
+    doc.appendChild(root);
+    m_set->save(&doc,&root);
+    QFile file(str);
+    if (!file.open(QIODevice::WriteOnly))
+        return false;
+    QTextStream stream(&file);
+    QString string=doc.toString();
+    stream<<string;
+    file.close();
+    return true;
 }
 
 void MainWindow::saveAs() {
