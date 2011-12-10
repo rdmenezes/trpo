@@ -542,5 +542,24 @@ bool Box::canResize(BlockCorner bc, const QPointF & p)
     //Check resizes and moves
     bool ok=true;
 
+    QRectF newrect=resize(currect,bc,p);
+
+    bool canresize[4]={true,true,true,true};
+
+    QLineF resizes[4];
+    resizes[0].setLine(newrect.left(),currect.top(),newrect.right(),currect.top());
+    resizes[1].setLine(currect.right(),newrect.top(),currect.right(),newrect.bottom());
+    resizes[2].setLine(newrect.right(),currect.bottom(),newrect.left(),currect.bottom());
+    resizes[3].setLine(currect.left(),newrect.bottom(),currect.left(),newrect.top());
+
+    for (int i=0;i<4;i++)
+    {
+        canresize[i]=m_connectors[i]->canResize(NULL,resizes[i]);
+    }
+    if (canresize[0] && canresize[1] && canresize[2] && canresize[3])
+    {
+
+    }
+    else ok=false;
     return ok;
 }
