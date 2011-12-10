@@ -73,6 +73,8 @@ bool SelectTool::onClick(const QPointF &  p , QGraphicsItem *  item )
          BlockCorner corner=determineCorner(p,static_cast<Box*>(item)->collisionRect());
          if (corner==BC_CENTER)
              m_state=new BoxMoving(m_diagram,p,static_cast<Box*>(item));
+         else
+             m_state=new BoxResize(m_diagram,p,static_cast<Box*>(item),corner);
      }
  }
  return true;
