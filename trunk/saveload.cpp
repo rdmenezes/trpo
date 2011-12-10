@@ -147,14 +147,14 @@ QSize SaveLoad <QSize>::load(const QString & string)
 QString SaveLoad <QSizeF>::save(const QSizeF & s)
 {
     QString result;
-    result=QString("%1 %2").arg(s.width()).arg(s.height());
+    result=QString("%1:%2").arg(s.width()).arg(s.height());
     return result;
 }
 
 QSizeF SaveLoad <QSizeF>::load(const QString & string)
 {
     QSizeF tmpSize;
-    QStringList list = string.split(" ");
+    QStringList list = string.split(":");
     tmpSize.setWidth(list[1].toFloat());
     tmpSize.setHeight(list[0].toFloat());
     return tmpSize;

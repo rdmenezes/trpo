@@ -7,6 +7,7 @@
 #include <QRectF>
 #include <QPointF>
 #include <QPair>
+#include <QHash>
 #include "diagram.h"
 
 
@@ -180,14 +181,14 @@ class SaveLoad <QVector <T> >
       {
             tmpVec.append(SaveLoad<T>::save(v[i]));
             if (i!=v.size()-1)
-            tmpVec.append("@");
+            tmpVec.append("^");
       };
       return tmpVec;
     }
     static QVector <T> load( const QString & string)
     {
       QVector<QString> vecloadTmp;
-      QStringList tmp=string.split("@");
+      QStringList tmp=string.split("^");
        for (int i=0;i<tmp.size();i++)
        {
           vecloadTmp.append(tmp[i]);
@@ -205,6 +206,33 @@ public:
    static SwapEntry load( const QString & string);
 };
 
+
+template<typename T1,typename T2>
+class SaveLoad< QHash<T1,T2> >
+{
+public:
+   static QString save( const QHash<T1,T2> & p)
+   {
+       QVector< QPair<T1,T2> > vector;
+       typename QHash<T1,T2>::const_iterator it=p.begin();
+       for (; it!=p.end();it++)
+       {
+           vector<<QPair<T1,T2>(it.key(),it.value());
+       }
+       return SaveLoad< QVector< QPair<T1,T2> > >::save(vector);
+   }
+
+   static QHash<T1,T2> load( const QString & string)
+   {
+         QVector< QPair<T1,T2> > vector=SaveLoad< QVector< QPair<T1,T2> > >::load(string);
+         QHash<T1,T2> hash;
+         for (int i=0;i<vector.size();i++)
+         {
+             hash.insert(vector[i].first,vector[i].second);
+         }
+         return hash;
+   }
+};
 
 template<typename T>
 QString save(const T & obj) { return SaveLoad<T>::save(obj); }
