@@ -334,9 +334,10 @@ void Diagram::exportTo(QImage & img)
 QDomDocument * Diagram::getStateDocument()
 {
     QDomDocument *  doc =new QDomDocument("IDEFML");
-    QDomElement  root=doc->createElement("root");
-    doc->appendChild(root);
-    save(doc,&root);
+    QDomElement * root=new QDomElement;
+    *root=doc->createElement("root");
+    doc->appendChild(*root);
+    save(doc,root);
     return doc;
 }
 
@@ -364,8 +365,11 @@ void Diagram::restoreFromDocument(QDomDocument * doc)
 
 void Diagram::commit()
 {
-    for (int i=m_historyiterator;i<m_history.size();i++)
-        delete m_history[i];
+    while(m_historyiterator<m_history.size())
+    {
+        delete m_history[m_historyiterator];
+        m_history.remove(m_historyiterator);
+    }
     m_history<<getStateDocument();
     ++m_historyiterator;
 }
@@ -374,14 +378,19 @@ void Diagram::commit()
 void Diagram::rollback()
 {
     if (m_historyiterator>1)
+    {
         restoreFromDocument(m_history[m_historyiterator-2]);
-    if (m_historyiterator>1)
         --m_historyiterator;
+    }
 }
 
 void Diagram::redo()
 {
-    //! TODO: Implement it
+    if (m_historyiterator<m_history.size())
+    {
+        restoreFromDocument(m_history[m_historyiterator]);
+        ++m_historyiterator;
+    }
 }
 
 Diagram::~Diagram()
