@@ -49,6 +49,7 @@ void ArrowSegmentMoving::onRelease(const QPointF &p)
     m_obj->model()->setLine(line.x1(),line.y1(),line.x2(),line.y2());
     m_obj->model()->moveSelfRegeneratingOrResizing();
     m_obj->setDrawInput(true);
+    m_diagram->commit();
   }
   m_obj->regenerate();
   this->m_obj->scene()->update();

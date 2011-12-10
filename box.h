@@ -200,6 +200,11 @@ public:
         \param[in] p position
      */
     bool canResize(BlockCorner bc, const QPointF & p);
+    /*! Resizes a box
+        \param[in] bc block corner
+        \param[in] p  position
+     */
+    void resize(BlockCorner bc, const QPointF & p);
     /*! Destructor
      */
     virtual ~Box();

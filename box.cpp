@@ -542,7 +542,7 @@ bool Box::canResize(BlockCorner bc, const QPointF & p)
     //Check resizes and moves
     bool ok=true;
 
-    QRectF newrect=resize(currect,bc,p);
+    QRectF newrect=::resize(currect,bc,p);
 
     bool canresize[4]={true,true,true,true};
 
@@ -585,4 +585,47 @@ bool Box::canResize(BlockCorner bc, const QPointF & p)
     }
     else ok=false;
     return ok;
+}
+
+
+void Box::resize(BlockCorner bc, const QPointF & p)
+{
+   QRectF currect=collisionRect();
+   QRectF newrect=::resize(currect,bc,p);
+
+   QLineF resizes[4];
+   resizes[0].setLine(newrect.left(),currect.top(),newrect.right(),currect.top());
+   resizes[1].setLine(currect.right(),newrect.top(),currect.right(),newrect.bottom());
+   resizes[2].setLine(newrect.right(),currect.bottom(),newrect.left(),currect.bottom());
+   resizes[3].setLine(currect.left(),newrect.bottom(),currect.left(),newrect.top());
+
+   for (int i=0;i<4;i++)
+   {
+       m_connectors[i]->resize(NULL,resizes[i]);
+   }
+
+   if (bc==BC_UPPERLEFT || bc==BC_UPPERRIGHT)
+   {
+       QPointF deltay(0,newrect.top()-currect.top());
+       moveConnector(m_connectors[0],deltay);
+   }
+   else
+   {
+       QPointF deltay(0,newrect.bottom()-currect.bottom());
+       moveConnector(m_connectors[2],deltay);
+   }
+
+   if (bc==BC_LOWERLEFT || bc==BC_UPPERLEFT)
+   {
+       QPointF deltax(newrect.left()-currect.left(),0);
+       moveConnector(m_connectors[3],deltax);
+   }
+   else
+   {
+       QPointF deltax(newrect.right()-currect.right(),0);
+       moveConnector(m_connectors[0],deltax);
+   }
+
+   setRect(newrect);
+   this->scene()->update();
 }
