@@ -407,10 +407,8 @@ void ObjectConnector::save(QDomDocument *  doc,
     objectConnector.setAttribute("connected0",::save(m_connected[0]));
     objectConnector.setAttribute("connected1",::save(m_connected[1]));
 
-    buf=::save(this->p1());
-    objectConnector.setAttribute("p1", buf);
-    buf=::save(this->p2());
-    objectConnector.setAttribute("p2", buf);
+    objectConnector.setAttribute("p1",::save(this->p1()));
+    objectConnector.setAttribute("p2", ::save(this->p2()));
 
     element->appendChild(objectConnector);
 }
