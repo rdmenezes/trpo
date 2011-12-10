@@ -190,9 +190,12 @@ class ObjectConnector: public QLineF, Serializable
         /*! Tests, whether we can resize self
          */
         bool canResize(ObjectConnector * sender,const QLineF & line );
-        /*!
+        /*! Moves or resizes self regenerating position
          */
         void moveOrResize(ObjectConnector * sender,const QPointF & connectionpoint);
+        /*! Regenerates positions of size
+         */
+        void moveSelfRegeneratingOrResizing();
         /*! Resizes a connector
             \param[in] sender sender data
             \param[in] line   line

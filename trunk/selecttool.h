@@ -155,8 +155,10 @@ class BoxChangingData: public ObjectChangingData
 class ArrowSegmentMoving: public DynamicEditState,public ObjectChangingData
 {
 private:
-    Arrow * m_obj;                              //!< Moving object
+    Arrow * m_obj;                               //!< Moving object
     QLineF  m_startingpos;                       //!< Starting object position
+    Direction m_direction;                       //!< Direction data
+    bool      m_collinear;                       //!< Whether can move collinear
 public:
     /*! Default constructor
         \param[in] diagram   diagram data

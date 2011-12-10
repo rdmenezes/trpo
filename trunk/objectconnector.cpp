@@ -295,6 +295,19 @@ void ObjectConnector::moveOrResize(ObjectConnector * sender,const QPointF & conn
     }
 }
 
+void ObjectConnector::moveSelfRegeneratingOrResizing()
+{
+  for(int i=0;i<2;i++)
+  {
+    for (int j=0;j<m_connected[i].size();j++)
+    {
+        QPair<qreal,ObjectConnector*> pair=m_connected[i][j];
+        QPointF pos=position(*this,pair.first);
+        pair.second->moveOrResize(this,pos);
+    }
+  }
+}
+
 void ObjectConnector::resize(ObjectConnector * sender, const QLineF & line)
 {
     for (int i=0;i<2;i++)
