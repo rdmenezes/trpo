@@ -61,15 +61,15 @@ void DiagramSet::remove(int id)
 void DiagramSet::save(QDomDocument * doc,
                       QDomElement *  element)
 {
-     QDomElement diagramset;
+     QDomElement  diagramset;
      diagramset=doc->createElement("diagram_set");
 
      QHash<int,Diagram *>::iterator i = m_set.begin();
 
-     pushThis(diagramset);
-     diagramset.setAttribute("max_id", ::save(m_max_id));
-     diagramset.setAttribute("hash",::save(m_set));
 
+     pushThis(diagramset);
+     (diagramset).setAttribute("max_id", ::save(m_max_id));
+     (diagramset).setAttribute("hash",::save(m_set));
      while (i!=m_set.end())
      {
          i.value()->save(doc,&diagramset);
