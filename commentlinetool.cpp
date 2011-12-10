@@ -149,6 +149,7 @@ void CommentLineTool::tryConnectWith(const QPointF & pos, FreeComment * fc)
             qreal cpos=position(*toConnectWith,startpoint);
             m_line->setInput(toConnectWith,cpos);
         }
+        m_line->setParentComment(fc->parentComment());
         initState();
         m_diagram->commit();
     }

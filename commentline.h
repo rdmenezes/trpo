@@ -188,6 +188,10 @@ public:
          /*! Returns a parent comment
           */
          inline AttachedComment * parentComment() { return m_parentcomment;}
+         /*! Sets a parent comment
+             \param[in] parent parent comment
+          */
+         inline void setParentComment(AttachedComment * parent) {m_parentcomment=parent;}
 };
 
 #endif // ALINEITEM_H

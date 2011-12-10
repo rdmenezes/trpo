@@ -263,8 +263,10 @@ void ObjectConnector::moveOrResize(ObjectConnector * sender,const QPointF & conn
     {
         setP1(connectionpoint);
         CommentLine * cline=static_cast<CommentLine*>(parent());
-        cline->setLine(cline->in().x(),cline->in().y(),connectionpoint.x(),
-                                                       connectionpoint.y());
+        cline->setLine(connectionpoint.x(),
+                       connectionpoint.y(),
+                       cline->out().x(),
+                       cline->out().y());
         cline->parentComment()->comment()->setPosWithoutCheck(
                 cline->parentComment()->comment()->pos()
                 );
