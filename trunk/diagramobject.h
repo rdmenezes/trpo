@@ -95,6 +95,10 @@ public:
         \return true if will die
      */
     virtual bool dieIfEqualTo(DiagramObject * o)=0;
+    /*! Adds an object to scene
+        \param[in] scene, scene to add to
+     */
+    virtual void addToScene(QGraphicsScene * scene);
     /*! Receives comment line event, when it changes it's direction to set it's
         input to correct position
         \param[in] obj  comment line

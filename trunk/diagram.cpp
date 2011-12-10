@@ -89,6 +89,15 @@ void Diagram::save(QDomDocument *doc,
     element->appendChild(diagram);
 }
 
+
+void Diagram::fillScene(DiagramScene * scene)
+{
+  scene->setDiagram(this);
+  this->m_scene=scene;
+  for (int i=0;i<m_objects.size();i++)
+      m_objects[i]->addToScene(scene);
+}
+
 void Diagram::load(QDomElement * /* element */,
                       QMap<void *, Serializable *> & /* addressMap */ )
 {
@@ -159,10 +168,7 @@ void Diagram::clear()
     m_boxes.clear();
     for (int i=0;i<m_objects.size();i++)
     {
-        if (m_objects[i]->deleteOnRemoval())
-            this->scene()->removeItem(m_objects[i]);
-        else
-            delete m_objects[i];
+      delete m_objects[i];
     }
     m_objects.clear();
 }

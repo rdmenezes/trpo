@@ -219,6 +219,10 @@ public:
         /*! Rollbacks, changes ti a diagram, retrieving her state
          */
         void rollback();
+        /*! Fills a scene with own items
+            \param[in] scene scene to fill
+         */
+        void fillScene(DiagramScene * scene);
         /*! Destructor
          */
         ~Diagram();

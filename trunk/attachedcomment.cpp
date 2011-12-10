@@ -118,3 +118,11 @@ bool AttachedComment::dieIfEqualTo(DiagramObject * o)
     return false;
   }
 }
+
+void AttachedComment::addToScene(QGraphicsScene * scene)
+{
+    if (m_comment)
+        m_comment->addToScene(scene);
+    if (m_line)
+        m_line->addToScene(scene);
+}

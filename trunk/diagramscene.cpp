@@ -390,6 +390,11 @@ void  DiagramScene::blockResizeMoveLeave ( QGraphicsSceneMouseEvent * event )
 void DiagramScene::clear()
 {
  this->hideUI();
+ if (m_tool)
+ {
+     m_tool->clearState();
+     m_tool->initState();
+ }
  this->m_diag->clear();
  this->QGraphicsScene::clear();
 }
