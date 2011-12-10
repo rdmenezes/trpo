@@ -15,7 +15,7 @@
 /*! \class ObjectConnector
     Class, which creates a connectors for data
  */
-class ObjectConnector: public QLineF, Serializable
+class ObjectConnector: public QLineF, public Serializable
 {
  private:
          DiagramObject        *   m_parent;

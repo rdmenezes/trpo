@@ -66,7 +66,7 @@ void DiagramSet::save(QDomDocument * doc,
 
      QHash<int,Diagram *>::iterator i = m_set.begin();
 
-     diagramset.setAttribute("this", ::save(this));
+     pushThis(diagramset);
      diagramset.setAttribute("max_id", ::save(m_max_id));
      diagramset.setAttribute("hash",::save(m_set));
 

@@ -401,7 +401,9 @@ void ObjectConnector::save(QDomDocument *  doc,
     QDomElement objectConnector;
     objectConnector=doc->createElement("object_connector");
 
-    objectConnector.setAttribute("this", ::save(this));
+    pushThis(objectConnector);
+    objectConnector.setAttribute("in", ::save(p1()));
+    objectConnector.setAttribute("out", ::save(p2()));
     objectConnector.setAttribute("parent", ::save(m_parent));
     // Vectors of box connectors    QVector< QPair<qreal,ObjectConnector*> > m_connected[2]
     objectConnector.setAttribute("connected0",::save(m_connected[0]));
@@ -433,6 +435,16 @@ void ObjectConnector::load(QDomElement *  element,
     if (attributes.contains("connected1"))
     {
         m_connected[1]=::load< QVector< QPair<qreal,ObjectConnector*> > >(getValue(attributes,"connected1"));
+    }
+    if (attributes.contains("in"))
+    {
+       QPointF p=::load< QPointF >(getValue(attributes,"in"));
+       setP1(p);
+    }
+    if (attributes.contains("out"))
+    {
+       QPointF p=::load< QPointF >(getValue(attributes,"out"));
+       setP2(p);
     }
 }
 

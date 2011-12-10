@@ -9,12 +9,25 @@
 #include <QMap>
 #include <QString>
 #include <QDomNamedNodeMap>
+#include "saveload.h"
 
 inline QString getValue(QDomNamedNodeMap & attributes,
                         const QString & name)
 {
    return attributes.namedItem(name).toAttr().value();
 }
+
+template<typename T>
+void qload(QDomNamedNodeMap & attributes,
+           const QString & name,
+           T & result)
+{
+    if (attributes.contains(name))
+    {
+        result=SaveLoad<T>::load(getValue(attributes,name));
+    }
+}
+
 
 /*! \class Serializable
     Serializable interface, which describes an item data
@@ -37,6 +50,13 @@ public:
           \param[in] addressMap map of addresses
        */
       virtual  void resolvePointers(QMap<void *, Serializable *> & adressMap)=0;
+
+      inline void pushThis(QDomElement & el)
+      {
+          el.setAttribute("this",::save(this));
+      }
+
+
       /*! Serializable destructor data
        */
       virtual ~Serializable();

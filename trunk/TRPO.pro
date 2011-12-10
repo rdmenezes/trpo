@@ -84,7 +84,8 @@ HEADERS += mainwindow.h \
     arrowtool.h \
     commentlinetool.h \
     erasertool.h \
-    saveload.h
+    saveload.h \
+    diagramdata.h
 FORMS += mainwindow.ui \
     helpwindow.ui
 RESOURCES += data.qrc
