@@ -30,6 +30,7 @@ void BoxMoving::onRelease(const QPointF &p)
   if (m_box->canMove(position))
   {
     m_box->moveBy(position);
+    m_diagram->commit();
   }
   this->m_box->scene()->update();
 }
