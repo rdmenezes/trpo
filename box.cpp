@@ -558,7 +558,30 @@ bool Box::canResize(BlockCorner bc, const QPointF & p)
     }
     if (canresize[0] && canresize[1] && canresize[2] && canresize[3])
     {
+        bool horok=true;
+        bool vertok=true;
+        if (bc==BC_UPPERLEFT || bc==BC_UPPERRIGHT)
+        {
+            QPointF deltay(0,newrect.top()-currect.top());
+            vertok=m_connectors[0]->testCanMove(deltay);
+        }
+        else
+        {
+            QPointF deltay(0,newrect.bottom()-currect.bottom());
+            vertok=m_connectors[2]->testCanMove(deltay);
+        }
 
+        if (bc==BC_LOWERLEFT || bc==BC_UPPERLEFT)
+        {
+            QPointF deltax(newrect.left()-currect.left(),0);
+            horok=m_connectors[3]->testCanMove(deltax);
+        }
+        else
+        {
+            QPointF deltax(newrect.right()-currect.right(),0);
+            horok=m_connectors[0]->testCanMove(deltax);
+        }
+        ok=vertok && horok;
     }
     else ok=false;
     return ok;
