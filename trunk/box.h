@@ -22,26 +22,21 @@ class QDomElement;
 //Dom document
 class QDomDocument;
 
-/*! \class BoxSide
-    Declares a box item side
+/*! \enum BoxCorner
+    BoxCorner, used for resizing
  */
-enum BoxSide
+enum BlockCorner
 {
-    BIS_LEFT=0,
-    BIS_RIGHT=1,
-    BIS_TOP=2,
-    BIS_BOTTOM=3
+    BC_UPPERLEFT,
+    BC_UPPERRIGHT,
+    BC_LOWERLEFT,
+    BC_LOWERRIGHT,
+
+    BC_CENTER //!< Special value for center click
 };
-//Type of arrow, that enters inside the block
-enum BlockEnteringType
-{
- BET_INPUT,   //! Point inputs into block
- BET_OUTPUT   //! Point emerges from a block
-};
-//Maximum references to a side
-#define MAX_LINE_REFERENCES 3
-//Block sides (total)
-#define BLOCK_SIDES 4
+
+
+QRectF resize(const QRectF & r, BlockCorner bc, const QPointF pos);
 
 
 /*! Returns a side of rectangle, where the point is located
@@ -130,6 +125,7 @@ public:
         \param[in] rect new rect
      */
     virtual  void setRect(const QRectF & rect);
+
     /*! Sets a text for box
         \param[in] text new text data
      */
@@ -199,6 +195,11 @@ public:
         \param[in] p point
      */
     void moveBy(const QPointF & vector);
+    /*! Tests, whether we can resize self
+        \param[in] bc block corner
+        \param[in] p position
+     */
+    bool canResize(BlockCorner bc, const QPointF & p);
     /*! Destructor
      */
     virtual ~Box();

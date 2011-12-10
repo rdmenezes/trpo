@@ -409,10 +409,9 @@ void Box::setRect(const QRectF & rect)
 {
     setX(rect.x());
     setY(rect.y());
-    //setPos(QPointF(rect.x(),rect.y()));
     m_size.setWidth(rect.width());
     m_size.setHeight(rect.height());
-    //regenerate();
+    regenerate();
     this->scene()->update();
 }
 
@@ -502,3 +501,46 @@ QLineF    getLineBySide(const QRectF & r, Direction dir)
   return QLineF(r.bottomLeft(),r.bottomRight());
 }
 
+QRectF resize(const QRectF & r, BlockCorner bc, const QPointF pos)
+{
+    QRectF tmp=r;
+    if (bc==BC_UPPERLEFT) { tmp.setTopLeft(pos); }
+    if (bc==BC_UPPERRIGHT) {tmp.setTopRight(pos);}
+    if (bc==BC_LOWERLEFT)  { tmp.setBottomLeft(pos); }
+    if (bc==BC_LOWERRIGHT) { tmp.setBottomRight(pos);}
+    return tmp;
+}
+
+
+#define MIN_SIZE_X 15
+#define MIN_SIZE_Y 15
+
+bool Box::canResize(BlockCorner bc, const QPointF & p)
+{
+    QRectF currect=collisionRect();
+    bool errorx=false;
+    bool errory=false;
+    if (bc==BC_UPPERLEFT || bc==BC_LOWERRIGHT)
+    {
+        errorx=p.x()>=currect.right()-MIN_SIZE_X;
+    }
+    else
+    {
+        errorx=p.x()<=currect.left()+MIN_SIZE_X;
+    }
+    if (bc==BC_UPPERRIGHT || BC_UPPERLEFT)
+    {
+        errory=p.y()>=currect.bottom()-MIN_SIZE_Y;
+    }
+    else
+    {
+        errory=p.y()>=currect.top()+MIN_SIZE_Y;
+    }
+    if (errorx || errory)
+        return false;
+
+    //Check resizes and moves
+    bool ok=true;
+
+    return ok;
+}

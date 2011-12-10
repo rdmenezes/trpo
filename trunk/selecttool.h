@@ -206,18 +206,7 @@ public:
     virtual void onMove(const QPointF & p);
 };
 
-/*! \enum BoxCorner
-    BoxCorner, used for resizing
- */
-enum BlockCorner
-{
-    BC_UPPERLEFT,
-    BC_UPPERRIGHT,
-    BC_LOWERLEFT,
-    BC_LOWERRIGHT,
 
-    BC_CENTER //!< Special value for center click
-};
 
 
 BlockCorner determineCorner(const QPointF & clickpos,const QRectF & r);
