@@ -18,7 +18,7 @@ Arrow::Arrow(ObjectConnector * self, Diagram * d, bool tunneled,bool tunneled_en
     m_tunneled_end=tunneled_end;
 
     QRectF rct=sceneDrawingBounds();
-
+    m_draw_input=true;
     setX(rct.x());
     setY(rct.y());
 }
@@ -110,7 +110,8 @@ void Arrow::paint(QPainter * p)
           ObjectConnector * m_input=inputctrs[i];
           qreal distance=QLineF(m_input->p1(),m_self->p1()).length();
           Direction input=m_input->direction();
-          if (distance>A_ROUNDING_RADIUS && isNotCollinear(input,self) && checkDistance && m_input->drawRoundings())
+          if (distance>A_ROUNDING_RADIUS && isNotCollinear(input,self) && checkDistance && m_input->drawRoundings()
+                                        )
           {
             //Actual drawing is done here
             QRectF dp;
@@ -131,7 +132,8 @@ void Arrow::paint(QPainter * p)
         if ( pos && distance>A_ROUNDING_RADIUS
                  && isNotCollinear(inputdir,self)
                  && checkDistance
-                 && input->drawRoundings())
+                 && input->drawRoundings()
+                 && m_draw_input)
         {
             QRectF dp;
             qreal angle=0.0f;

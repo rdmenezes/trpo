@@ -40,7 +40,7 @@ void SelectTool::initState()
 
 QVector<int> SelectTool::getClickableItems()
 {
-    QVector<int> v; v<<IsFreeComment;
+    QVector<int> v; v<<IsFreeComment<<IsArrow;
     return v;
 }
 
@@ -63,6 +63,10 @@ bool SelectTool::onClick(const QPointF &  p , QGraphicsItem *  item )
      {
         m_state=new FreeCommentMoving(m_diagram,p,
                                       static_cast<FreeComment*>(item));
+     }
+     if (item->type()==IsArrow)
+     {
+         m_state=new ArrowSegmentMoving(m_diagram,p,static_cast<Arrow*>(item));
      }
  }
  return true;

@@ -68,6 +68,7 @@ private:
         ObjectConnector * m_self;     //!< Self object connector
         bool              m_tunneled_begin; //!< Tunneled object connector
         bool              m_tunneled_end;   //!< Whether object is connected at  end
+        bool              m_draw_input;     //!< Draw input roundings
         /*! Constructs an input roundings
             \param[in] input  input line
             \param[in] pivot  pivot point
@@ -90,9 +91,10 @@ protected:
          */
         QRectF sceneDrawingBounds() const;
 public:
+        inline void setDrawInput(bool ok) {m_draw_input=ok;}
         /*! Default constructor, used by SerializableFactory
          */
-        inline Arrow() : DiagramObject(ST_LINE) {}
+        inline Arrow() : DiagramObject(ST_LINE) { m_draw_input=true;}
         /*! Creates an arrow with following output lines
             \param[in] self      self connector
             \param[in] d         diagram
