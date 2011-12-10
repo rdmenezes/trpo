@@ -160,8 +160,8 @@ class SaveLoad <QPair <T1,T2> >
        QString str1 =   string.section('@', 0, 0);
        QString str2 =   string.section('@', 1, 1);
 
-       tmpPair.first=str1;
-       tmpPair.second=str2;
+       tmpPair.first=SaveLoad<T1>::load(str1);
+       tmpPair.second=SaveLoad<T2>::load(str2);
        return tmpPair;
    }
 };
@@ -187,11 +187,11 @@ class SaveLoad <QVector <T> >
     }
     static QVector <T> load( const QString & string)
     {
-      QVector<QString> vecloadTmp;
+      QVector<T> vecloadTmp;
       QStringList tmp=string.split("^");
        for (int i=0;i<tmp.size();i++)
        {
-          vecloadTmp.append(tmp[i]);
+         vecloadTmp.append(SaveLoad<T>::load(tmp[i]));
        }
        return  vecloadTmp;
     }
