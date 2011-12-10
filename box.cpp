@@ -117,56 +117,73 @@ void Box::save(QDomDocument * doc,
                QDomElement * element)
 {
     QDomElement box;
-    box=doc->createElement("Box");
-    QString buf, bufName, bufVal;
-
-    buf=::save(this);
-    box.setAttribute("selfPointer", buf);
-
-    buf=::save(this->pos());
-    box.setAttribute("pos", buf);
-
-    box.setAttribute("realText", m_real_text);    // Real text string
-    box.setAttribute("viewedText", m_view_text);  // Viewed text string
-
-    buf=::save(m_text_rect);
-    box.setAttribute("textPosition", buf);      //position on a screen
-
-    buf=buf=::save(m_number_rect);
-    box.setAttribute("numberPosition", buf);    //rendered number position
-
-    buf=::save(m_size);
-    box.setAttribute("sizeRect", buf);       //Size of bounding rect of box
-
-    box.setAttribute("isVisible", m_number_is_visible);
-    box.setAttribute("id", m_id);
-    box.setAttribute("childLocation", m_child);
+    box=doc->createElement("box");
+    pushThis(box);
+    box.setAttribute("pos", ::save(this->pos()));
+    box.setAttribute("diagram",::save(m_diag));
+    box.setAttribute("real_text",::save(m_real_text));    // Real text string
+    box.setAttribute("view_text",::save(m_view_text));  // Viewed text string
+    box.setAttribute("text_rect",::save(m_text_rect));  // Viewed text string
+    box.setAttribute("num_rect",::save(m_number_rect));  // Viewed text string
+    box.setAttribute("size",::save(m_size));  // Viewed text string
+    box.setAttribute("viz",::save(m_number_is_visible));  // Viewed text string
+    box.setAttribute("id",::save(m_id));  // Viewed text string
+    box.setAttribute("child",::save(m_child));  // Viewed text string
+    box.setAttribute("ctrs",::save(m_connectors));  // Viewed text string
 
 
-    // vector of box connectors
-    int j=1;
-    for (int i = 0; i < m_connectors.size(); ++i)
-    {
-        bufVal=::save(m_connectors.at(i));
-        bufName=QString("%1").arg(j).prepend("boxConnector");
-        box.setAttribute(bufName, bufVal);
-        j++;
-        m_connectors.at(i)->save(doc, &box);
-    }
+    for (int i=0;i<m_connectors.size();i++)
+        m_connectors[i]->save(doc,&box);
 
     element->appendChild(box);
 }
 
-void Box::load(QDomElement * /* element */,
-               QMap<void *, Serializable *> & /* addressMap */ )
+void Box::load(QDomElement *  element ,
+               QMap<void *, Serializable *> &  addressMap  )
 {
-    //!< TODO: Implement this later
+    Serializable *p=NULL;
+    QDomNamedNodeMap attributes=element->attributes();
+    qload(attributes,"this",p);
+    addressMap.insert(p,this);
+    QPointF pos;
+    qload(attributes,"pos",pos);
+    setPos(pos);
+    qload(attributes,"diagram",m_diag);
+    qload(attributes,"real_text",m_real_text);
+    qload(attributes,"view_text",m_view_text);
+    qload(attributes,"text_rect",m_text_rect);
+    qload(attributes,"num_rect",m_number_rect);
+    qload(attributes,"size",m_size);
+    qload(attributes,"viz",m_number_is_visible);
+    qload(attributes,"id",m_id);
+    qload(attributes,"child",m_child);
+    qload(attributes,"ctrs",m_connectors);
+    QDomNode diagram=element->firstChild();
+    while(! (diagram.isNull()))
+    {
+        if (diagram.isElement())
+        {
+            QDomElement el=diagram.toElement();
+            if (el.tagName()=="object_connector")
+            {
+                ObjectConnector * oc=new ObjectConnector();
+                oc->load(&el,addressMap);
+            }
+        }
+        diagram=diagram.nextSibling();
+    }
+
 }
 
 void Box::resolvePointers(QMap<void *, Serializable *> &
-                          /* adressMap */)
+                           adressMap )
 {
-    //!< TODO: Implement this later
+    m_diag=static_cast<Diagram*>(adressMap[m_diag]);
+    for (int i=0;i<m_connectors.size();i++)
+    {
+        m_connectors[i]=static_cast<ObjectConnector*>(adressMap[m_connectors[i]]);
+        m_connectors[i]->resolvePointers(adressMap);
+    }
 }
 
 

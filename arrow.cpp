@@ -275,35 +275,59 @@ void Arrow::save(QDomDocument * doc ,
                QDomElement *  element)
 {
     QDomElement arrow;
-    arrow=doc->createElement("Arrow");
-    QString buf;
+    arrow=doc->createElement("arrow");
+    pushThis(arrow);
+    arrow.setAttribute("pos", ::save(this->pos()));
+    arrow.setAttribute("diagram",::save(m_diag));
+    arrow.setAttribute("self",::save(m_self));
+    arrow.setAttribute("begin",::save(m_tunneled_begin));
+    arrow.setAttribute("end",::save(m_tunneled_end));
+    arrow.setAttribute("di",::save(m_draw_input));
 
-    buf=::save(this);
-    arrow.setAttribute("selfPointer", buf);
-
-    buf=::save(this->pos());
-    arrow.setAttribute("pos", buf);
-
-    m_self->save(doc, &arrow);
-
-    buf=::save(m_self);                                //Self object connector
-    arrow.setAttribute("objectConnector", buf);
-    arrow.setAttribute("tunnelStart", m_tunneled_begin);  //Tunneled object connector
-    arrow.setAttribute("tunnelFinish", m_tunneled_end);   //Whether object is connected at  end
+    m_self->save(doc,&arrow);
 
     element->appendChild(arrow);
 }
 
-void Arrow::load(QDomElement * /* element */,
-               QMap<void *, Serializable *> & /* addressMap */ )
+void Arrow::load(QDomElement *  element ,
+               QMap<void *, Serializable *> &  addressMap  )
 {
-    //!< TODO: Implement this later
+    Serializable *p=NULL;
+    QDomNamedNodeMap attributes=element->attributes();
+    qload(attributes,"this",p);
+    addressMap.insert(p,this);
+    QPointF pos;
+    qload(attributes,"pos",pos);
+    setPos(pos);
+    qload(attributes,"diagram",m_diag);
+    qload(attributes,"self",m_self);
+    qload(attributes,"begin",m_tunneled_begin);
+    qload(attributes,"end",m_tunneled_end);
+    qload(attributes,"di",m_draw_input);
+
+
+    QDomNode diagram=element->firstChild();
+    while(! (diagram.isNull()))
+    {
+        if (diagram.isElement())
+        {
+            QDomElement el=diagram.toElement();
+            if (el.tagName()=="object_connector")
+            {
+                ObjectConnector * oc=new ObjectConnector();
+                oc->load(&el,addressMap);
+            }
+        }
+        diagram=diagram.nextSibling();
+    }
 }
 
 void Arrow::resolvePointers(QMap<void *, Serializable *> &
-                          /* adressMap */)
+                           adressMap )
 {
-    //!< TODO: Implement this later
+    m_diag=static_cast<Diagram*>(adressMap[m_diag]);
+    m_self=static_cast<ObjectConnector*>(adressMap[m_self]);
+    m_self->resolvePointers(adressMap);
 }
 
 

@@ -8,8 +8,7 @@
 #include <QPointF>
 #include <QPair>
 #include <QHash>
-#include "diagram.h"
-
+#include "diagramdata.h"
 
 //Общий класс, создающий единство интерфейса для сериализации и десериализации примитивов
 template<typename T >
@@ -49,6 +48,25 @@ public:
            \return  восстановленный объект
    */
    static int load(const QString & string);
+};
+
+
+template<>
+class SaveLoad<bool>
+{
+public:
+    /*! Сохраняет int в строку
+           \param[in] object объект для сохранения
+           \return строка с содержимым объекта
+   */
+  static inline QString save(bool  object)
+  { int tmp=(object)?1:0; return SaveLoad<int>::save(tmp); }
+  /*! Загружает int из строки
+           \param[in]  string строка с содержимым объекта
+           \return  восстановленный объект
+   */
+  static inline bool load(const QString & string)
+  { return SaveLoad<int>::load(string)==1; }
 };
 
 

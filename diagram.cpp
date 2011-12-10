@@ -36,7 +36,7 @@ void Diagram::save(QDomDocument *doc,
 {
     QDomElement diagram;
     diagram=doc->createElement("diagram");
-    diagram.setAttribute("this",::save(this));
+    pushThis(diagram);
     diagram.setAttribute("set",::save(m_set));
     diagram.setAttribute("parent",::save(m_parent));
     diagram.setAttribute("boxhash",::save(m_boxes));
