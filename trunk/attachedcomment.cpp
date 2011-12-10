@@ -33,6 +33,9 @@ void AttachedComment::save(QDomDocument * doc,
     buf=::save(this);
     attachedComment.setAttribute("selfPointer", buf);
 
+    buf=::save(this->pos());
+    attachedComment.setAttribute("pos", buf);
+
     m_comment->save(doc, &attachedComment);
     buf=::save(m_comment);
     attachedComment.setAttribute("comment", buf);  //Comment data

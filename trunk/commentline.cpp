@@ -152,6 +152,9 @@ void CommentLine::save(QDomDocument * doc,
     buf=::save(this);
     commentLine.setAttribute("selfPointer", buf);
 
+    buf=::save(this->pos());
+    commentLine.setAttribute("pos", buf);
+
     m_self->save(doc,&commentLine);  // ObjectConnector*
 
     buf=::save(m_parentcomment);      // AttachedComment

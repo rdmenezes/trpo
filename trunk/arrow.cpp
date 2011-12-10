@@ -275,11 +275,14 @@ void Arrow::save(QDomDocument * doc ,
                QDomElement *  element)
 {
     QDomElement arrow;
-    arrow=doc->createElement("Box");
+    arrow=doc->createElement("Arrow");
     QString buf;
 
     buf=::save(this);
     arrow.setAttribute("selfPointer", buf);
+
+    buf=::save(this->pos());
+    arrow.setAttribute("pos", buf);
 
     m_self->save(doc, &arrow);
 

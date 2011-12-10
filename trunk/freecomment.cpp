@@ -230,6 +230,9 @@ void FreeComment::save(QDomDocument * doc,
     buf=::save(this);
     freeComment.setAttribute("selfPointer", buf);
 
+    buf=::save(this->pos());
+    freeComment.setAttribute("pos", buf);
+
     freeComment.setAttribute("defaultString", m_text);
 
     buf=::save(m_size);
