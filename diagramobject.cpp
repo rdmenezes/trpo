@@ -44,3 +44,8 @@ QPointF DiagramObject::receiveCommentLineMove(DiagramObject * obj)
 {
   return static_cast<CommentLine*>(obj)->in();
 }
+
+void DiagramObject::addToScene(QGraphicsScene * scene)
+{
+    scene->addItem(this);
+}

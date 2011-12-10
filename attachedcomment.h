@@ -80,6 +80,10 @@ public:
              \return true (default implementation) if just remove it from scene, false - if delete
           */
          virtual bool deleteOnRemoval();
+         /*! Adds an object to scene
+             \param[in] scene, scene to add to
+          */
+         virtual void addToScene(QGraphicsScene * scene);
          /*! Kills self if equal to object
              \param[in] o object to compare
              \return true if will die
