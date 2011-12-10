@@ -40,7 +40,7 @@ void SelectTool::initState()
 
 QVector<int> SelectTool::getClickableItems()
 {
-    QVector<int> v; v<<IsFreeComment<<IsArrow;
+    QVector<int> v; v<<IsFreeComment<<IsArrow<<IsBox;
     return v;
 }
 
@@ -67,6 +67,12 @@ bool SelectTool::onClick(const QPointF &  p , QGraphicsItem *  item )
      if (item->type()==IsArrow)
      {
          m_state=new ArrowSegmentMoving(m_diagram,p,static_cast<Arrow*>(item));
+     }
+     if (item->type()==IsBox)
+     {
+         BlockCorner corner=determineCorner(p,static_cast<Box*>(item)->collisionRect());
+         if (corner==BC_CENTER)
+             m_state=new BoxMoving(m_diagram,p,static_cast<Box*>(item));
      }
  }
  return true;

@@ -44,7 +44,9 @@ SOURCES += main.cpp \
     erasertool.cpp \
     saveload.cpp \
     selecttoolstates.cpp \
-    arrowsegmentmoving.cpp
+    arrowsegmentmoving.cpp \
+    boxmoving.cpp \
+    boxresize.cpp
 HEADERS += mainwindow.h \
     helpwindow.h \
     diagramscene.h \
