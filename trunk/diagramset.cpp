@@ -62,30 +62,18 @@ void DiagramSet::save(QDomDocument * doc,
                       QDomElement *  element)
 {
      QDomElement diagramset;
-     diagramset=doc->createElement("DiagramSet");
+     diagramset=doc->createElement("diagram_set");
 
      QHash<int,Diagram *>::iterator i = m_set.begin();
-     QPair<int, Diagram*> key_val;
-     QString buf, bufName;
 
-     buf=::save(this);
-     diagramset.setAttribute("selfPointer", buf);
+     diagramset.setAttribute("this", ::save(this));
+     diagramset.setAttribute("max_id", ::save(m_max_id));
+     diagramset.setAttribute("hash",::save(m_set));
 
-     diagramset.setAttribute("maxDiagrams", m_max_id);   //Max diagrams in set
-
-
-     int j=1;
      while (i!=m_set.end())
      {
-         key_val.first=i.key();
-         key_val.second=i.value();
-         buf=::save(key_val);
-
-         bufName=QString("%1").arg(j).prepend("Diagram");
-         diagramset.setAttribute(bufName, buf);           //Set of diagram
-         i.value()->save(doc, &diagramset);
+         i.value()->save(doc,&diagramset);
          i++;
-         j++;
      }
      element->appendChild(diagramset);
 }
@@ -94,13 +82,49 @@ void DiagramSet::save(QDomDocument * doc,
 void DiagramSet::load(QDomElement * element,
                       QMap<void *, Serializable *> &  addressMap)
 {
-    //!< TODO: Implement this later
+    QDomNamedNodeMap attributes=element->attributes();
+    if (attributes.contains("this"))
+    {
+        addressMap.insert(::load<void*>(getValue(attributes,"this")),
+                          this);
+    }
+    if (attributes.contains("max_id"))
+    {
+        m_max_id=::load<int>(getValue(attributes,"max_id"));
+    }
+    if (attributes.contains("hash"))
+    {
+        m_set=::load< QHash<int,Diagram *> >(getValue(attributes,"hash"));
+    }
+    //Proceed loading diagrams
+    QDomNode diagram=element->firstChild();
+    while(! (diagram.isNull()))
+    {
+        if (diagram.isElement())
+        {
+            QDomElement el=diagram.toElement();
+            if (el.tagName()=="diagram")
+            {
+                Diagram * diag=new Diagram();
+                diag->load(&el,addressMap);
+            }
+        }
+        diagram=diagram.nextSibling();
+    }
+    //Resolve all pointers
+    resolvePointers(addressMap);
 }
 
 void DiagramSet::resolvePointers(QMap<void *, Serializable *> &
-                                 /* adressMap */)
+                                  adressMap )
 {
-    //!< TODO: Implement this later
+    QHash<int,Diagram*>::iterator it=m_set.begin();
+    for (;it!=m_set.end();it++)
+    {
+        Diagram * diag= static_cast<Diagram*>(adressMap[it.value()]);
+        it.value()=diag;
+        diag->resolvePointers(adressMap);
+    }
 }
 
 DiagramSet::~DiagramSet()

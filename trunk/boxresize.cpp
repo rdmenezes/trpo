@@ -56,5 +56,6 @@ void BoxResize::onRelease(const QPointF &p)
     if (m_box->canResize(m_bc,newcorner))
     {
         m_box->resize(m_bc,newcorner);
+        m_diagram->commit();
     }
 }

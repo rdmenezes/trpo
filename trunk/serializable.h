@@ -8,6 +8,14 @@
 #include <QDomElement>
 #include <QMap>
 #include <QString>
+#include <QDomNamedNodeMap>
+
+inline QString getValue(QDomNamedNodeMap & attributes,
+                        const QString & name)
+{
+   return attributes.namedItem(name).toAttr().value();
+}
+
 /*! \class Serializable
     Serializable interface, which describes an item data
  */
