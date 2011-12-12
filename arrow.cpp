@@ -41,6 +41,11 @@ Arrow::Arrow(ObjectConnector * self, Diagram * d, bool tunneled,bool tunneled_en
 
 QRectF Arrow::sceneDrawingBounds() const
 {
+    if (fabs(m_self->p1().x()-m_self->p2().x())<0.001 &&
+        fabs(m_self->p1().y()-m_self->p2().y())<0.001)
+    {
+        return QRectF(m_self->x1(),m_self->y1(),0,0);
+    }
     QPointF normal;
     {
      QLineF rnormal=m_self->normalVector().unitVector();
@@ -48,15 +53,13 @@ QRectF Arrow::sceneDrawingBounds() const
      normal.setY(rnormal.dy());
     }
     QRectF rct;
-    {
-     QPointF pa[4]={ m_self->p1()+normal*A_ROUNDING_PADDING,
+    QPointF pa[4]={ m_self->p1()+normal*A_ROUNDING_PADDING,
                      m_self->p1()-normal*A_ROUNDING_PADDING,
                      m_self->p2()+normal*A_ROUNDING_PADDING,
                      m_self->p2()-normal*A_ROUNDING_PADDING
                   };
-     rct=bound(pa,4);
-    }
-    Q_ASSERT(rct.width()>=0 && rct.height()>=0);
+    rct=bound(pa,4);
+
     return rct;
 }
 

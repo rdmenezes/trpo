@@ -482,7 +482,7 @@ QPointF Box::receiveCommentLineMove(DiagramObject * obj)
    line->model()->addConnector(output,0,C_INPUT,false);
 
    Q_ASSERT(line->model()->getConnected(C_INPUT).size());
-   static_cast<MainWindow*>(this->scene()->views()[0]->window())->setActionText(QString::number((int)output));
+   //static_cast<MainWindow*>(this->scene()->views()[0]->window())->setActionText(QString::number((int)output));
 
    return result;
 }
