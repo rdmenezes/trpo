@@ -211,13 +211,14 @@ void Diagram::add(DiagramObject * obj)
 void Diagram::clear()
 {
     m_boxes.clear();
+
     for (int i=0;i<m_objects.size();i++)
     {
-      m_objects[i]->deleteOnRemoval();
-      if (m_scene==m_objects[i]->scene())
-          m_scene->removeItem(m_objects[i]);
-      delete m_objects[i];
+      if (m_scene!=m_objects[i]->scene())
+            delete m_objects[i];
     }
+
+    m_scene->QGraphicsScene::clear();
     m_objects.clear();
 }
 
